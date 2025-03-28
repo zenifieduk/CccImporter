@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Classic Car Events | Classic Car Clubs | UK Directory</title>
-  <meta name="description" content="Browse upcoming classic car shows, meets, and events across the UK.">
+  <title>Classic Car Clubs Directory | Classic Car Clubs | UK Directory</title>
+  <meta name="description" content="Browse our comprehensive directory of classic car clubs across the UK.">
   <link rel="icon" type="image/svg+xml" href="/assets/images/ccc-logo.svg">
   
   <!-- Styles -->
@@ -39,7 +39,7 @@
           </li>
         
           <li>
-            <a href="/club-events/" aria-current="page">
+            <a href="/club-events/" >
               Club Events
             </a>
           </li>
@@ -109,7 +109,7 @@
               </li>
             
               <li>
-                <a href="/club-events/" @click="close" aria-current="page">
+                <a href="/club-events/" @click="close" >
                   Club Events
                   <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -165,71 +165,39 @@
   
 
 
-<section class="hero-section event-hero-section">
+<section class="hero-section club-hero-section">
   <div class="hero-overlay"></div>
   <div class="container">
-    <div class="hero-content event-hero-content">
-      <h1 class="hero-title">Classic Car Events</h1>
-      <p class="hero-subtitle">Find classic car shows, meets, and events across the UK</p>
-      
-      
-      
-        
-          
-            
-              
-            
-              
-            
-          
-        
-      
-        
-          
-            
-              
-            
-              
-            
-          
-        
-      
-        
-          
-            
-              
-            
-          
-        
+    <div class="hero-content club-hero-content">
+      <h1 class="hero-title">Classic Car Clubs Directory</h1>
+      <p class="hero-subtitle">Welcome to our comprehensive classic car clubs directory – your ultimate resource for connecting with classic car enthusiasts across the United Kingdom.</p>
       
       
       
       
-      
-      <div x-data="eventSearch" class="hero-search">
-        <div class="search-container event-search">
+      <div x-data="clubSearch" class="hero-search">
+        <div class="search-container">
           <form class="search-form">
             <div class="search-grid">
               <div class="custom-search-group">
-                <label for="search-term" class="sr-only">Event Title</label>
+                <label for="search-term" class="sr-only">Search Term</label>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
                   <circle cx="11" cy="11" r="8"></circle>
                   <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
-                <input type="text" id="search-term" class="custom-search-input search-term" placeholder="Event title (optional)">
+                <input type="text" id="search-term" class="custom-search-input search-term" placeholder="Search..." value="">
               </div>
               
               <div class="custom-search-group">
-                <label for="search-category" class="sr-only">Event Type</label>
+                <label for="search-category" class="sr-only">Category</label>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                  <line x1="3" y1="9" x2="21" y2="9"></line>
-                  <line x1="9" y1="21" x2="9" y2="9"></line>
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                 </svg>
                 <select id="search-category" class="custom-search-input search-category">
-                  <option value="">All Event Types</option>
+                  <option value="">All Categories</option>
                   
-                    <option value=""></option>
+                    <option value="" selected></option>
                   
                 </select>
               </div>
@@ -243,7 +211,7 @@
                 <select id="search-location" class="custom-search-input search-location">
                   <option value="">All Locations</option>
                   
-                    <option value=""></option>
+                    <option value="" selected></option>
                   
                 </select>
               </div>
@@ -264,110 +232,149 @@
   <div class="breadcrumbs-container">
     <ul class="breadcrumbs">
       <li><a href="/">Home</a></li>
-      <li><a href="/club-events/">Club Events</a></li>
+      <li><a href="/club-directory/">Club Directory</a></li>
     </ul>
   </div>
   
-  <div x-data="eventSearch">
+  <div x-data="clubSearch">
+  
+  <div class="az-filter-container">
+    <div class="filter-header">Filter by letter:</div>
+    <div class="az-filter-letters">
+      <a href="#" class="az-filter-letter" data-letter="" @click.prevent="resetFilters()" :class="{ 'active': !letter }">All</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="A" @click.prevent="setLetter('A')" :class="{ 'active': letter === 'A' }" aria-label="Filter by letter A">A</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="B" @click.prevent="setLetter('B')" :class="{ 'active': letter === 'B' }" aria-label="Filter by letter B">B</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="C" @click.prevent="setLetter('C')" :class="{ 'active': letter === 'C' }" aria-label="Filter by letter C">C</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="D" @click.prevent="setLetter('D')" :class="{ 'active': letter === 'D' }" aria-label="Filter by letter D">D</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="E" @click.prevent="setLetter('E')" :class="{ 'active': letter === 'E' }" aria-label="Filter by letter E">E</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="F" @click.prevent="setLetter('F')" :class="{ 'active': letter === 'F' }" aria-label="Filter by letter F">F</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="G" @click.prevent="setLetter('G')" :class="{ 'active': letter === 'G' }" aria-label="Filter by letter G">G</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="H" @click.prevent="setLetter('H')" :class="{ 'active': letter === 'H' }" aria-label="Filter by letter H">H</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="I" @click.prevent="setLetter('I')" :class="{ 'active': letter === 'I' }" aria-label="Filter by letter I">I</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="J" @click.prevent="setLetter('J')" :class="{ 'active': letter === 'J' }" aria-label="Filter by letter J">J</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="K" @click.prevent="setLetter('K')" :class="{ 'active': letter === 'K' }" aria-label="Filter by letter K">K</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="L" @click.prevent="setLetter('L')" :class="{ 'active': letter === 'L' }" aria-label="Filter by letter L">L</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="M" @click.prevent="setLetter('M')" :class="{ 'active': letter === 'M' }" aria-label="Filter by letter M">M</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="N" @click.prevent="setLetter('N')" :class="{ 'active': letter === 'N' }" aria-label="Filter by letter N">N</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="O" @click.prevent="setLetter('O')" :class="{ 'active': letter === 'O' }" aria-label="Filter by letter O">O</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="P" @click.prevent="setLetter('P')" :class="{ 'active': letter === 'P' }" aria-label="Filter by letter P">P</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="Q" @click.prevent="setLetter('Q')" :class="{ 'active': letter === 'Q' }" aria-label="Filter by letter Q">Q</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="R" @click.prevent="setLetter('R')" :class="{ 'active': letter === 'R' }" aria-label="Filter by letter R">R</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="S" @click.prevent="setLetter('S')" :class="{ 'active': letter === 'S' }" aria-label="Filter by letter S">S</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="T" @click.prevent="setLetter('T')" :class="{ 'active': letter === 'T' }" aria-label="Filter by letter T">T</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="U" @click.prevent="setLetter('U')" :class="{ 'active': letter === 'U' }" aria-label="Filter by letter U">U</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="V" @click.prevent="setLetter('V')" :class="{ 'active': letter === 'V' }" aria-label="Filter by letter V">V</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="W" @click.prevent="setLetter('W')" :class="{ 'active': letter === 'W' }" aria-label="Filter by letter W">W</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="X" @click.prevent="setLetter('X')" :class="{ 'active': letter === 'X' }" aria-label="Filter by letter X">X</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="Y" @click.prevent="setLetter('Y')" :class="{ 'active': letter === 'Y' }" aria-label="Filter by letter Y">Y</a>
+      
+        <a href="#" class="az-filter-letter" data-letter="Z" @click.prevent="setLetter('Z')" :class="{ 'active': letter === 'Z' }" aria-label="Filter by letter Z">Z</a>
+      
+    </div>
+  </div>
+  
+  <div x-show="letter" class="search-status">
+    <p x-text="`Showing ${filteredClubs.length} clubs for '${searchQuery || ''}' ${letter ? `starting with '${letter}'` : ''}`"></p>
+    <button @click="resetFilters()" class="exit-search-button">Clear All Filters</button>
+  </div>
   
   <div x-show="isLoading" class="loading-indicator">Loading...</div>
   
   <div x-cloak x-show="!isLoading">
-    <div class="featured-section" x-show="filteredEvents.some(event => event.eventFeatured)">
-      <h2>Featured Events</h2>
+    <div class="featured-section" x-show="filteredClubs.some(club => club.featured)">
+      <h2>Featured Clubs</h2>
       
-      <div class="event-grid">
-        <template x-for="event in filteredEvents.filter(e => e.eventFeatured)" :key="event.eventSlug">
-          <div class="event-card">
-            <div x-show="event.eventFeatured" class="event-featured">Featured</div>
+      <div class="club-grid">
+        <template x-for="club in filteredClubs.filter(c => c.featured)" :key="club.slug">
+          <div class="club-card featured-club-card">
+            <div class="club-featured">Featured</div>
             
-            <div class="event-image">
-              <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
-              
-              <div class="event-date">
-                <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
-                <span class="event-day" x-text="formatDay(event.eventStartDateTime)"></span>
-              </div>
+            <div class="club-image">
+              <img :src="club.imageUrl || '/assets/images/club-placeholder.jpg'" :alt="club.title">
             </div>
             
-            <div class="event-content">
-              <h3 class="event-title" x-text="event.eventTitle"></h3>
+            <div class="club-content">
+              <h3 class="club-title" x-text="club.title"></h3>
               
-              <div class="event-location" x-show="event.eventCity || event.eventState">
+              <div class="club-location" x-show="club.city || club.state">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                   <circle cx="12" cy="10" r="3"></circle>
                 </svg>
-                <span x-text="[event.eventCity, event.eventState].filter(Boolean).join(', ')"></span>
+                <span x-text="[club.city, club.state].filter(Boolean).join(', ')"></span>
               </div>
               
-              <div class="event-time">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-                <span x-text="formatTime(event.eventStartDateTime)"></span>
+              <div class="club-category" x-show="club.category">
+                <span class="category-tag" x-text="club.category"></span>
+                <span class="category-tag" x-text="club.marque" x-show="club.marque"></span>
               </div>
-              
-              <div class="event-price" x-show="event.eventTicketPrice" x-text="event.eventTicketPrice"></div>
             </div>
             
-            <div class="event-actions">
-              <a :href="'/club-events/' + event.eventSlug + '/'" class="button button-primary">View Details</a>
-              <a x-show="event.eventWebsite" :href="event.eventWebsite" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+            <div class="club-actions">
+              <a :href="'/club-directory/' + club.slug + '/'" class="button button-primary">View Details</a>
+              <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
             </div>
           </div>
         </template>
       </div>
     </div>
     
-    <div x-data="pagination" x-effect="items = filteredEvents.filter(e => !e.eventFeatured)">
-      <h2>Upcoming Events</h2>
-      
-      <div class="event-grid" x-show="paginatedItems.length > 0">
-        <template x-for="event in paginatedItems" :key="event.eventSlug">
-          <div class="event-card">
-            <div class="event-image">
-              <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
+    <div x-data="pagination" x-effect="items = filteredClubs.filter(c => !c.featured)">
+      <div class="club-grid" x-show="paginatedItems.length > 0">
+        <template x-for="club in paginatedItems" :key="club.slug">
+          <div class="club-card standard-club-card">
+            <div class="club-content">
+              <h3 class="club-title" x-text="club.title"></h3>
               
-              <div class="event-date">
-                <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
-                <span class="event-day" x-text="formatDay(event.eventStartDateTime)"></span>
-              </div>
-            </div>
-            
-            <div class="event-content">
-              <h3 class="event-title" x-text="event.eventTitle"></h3>
-              
-              <div class="event-location" x-show="event.eventCity || event.eventState">
+              <div class="club-location" x-show="club.city || club.state">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                   <circle cx="12" cy="10" r="3"></circle>
                 </svg>
-                <span x-text="[event.eventCity, event.eventState].filter(Boolean).join(', ')"></span>
+                <span x-text="[club.city, club.state].filter(Boolean).join(', ')"></span>
               </div>
               
-              <div class="event-time">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polyline points="12 6 12 12 16 14"></polyline>
-                </svg>
-                <span x-text="formatTime(event.eventStartDateTime)"></span>
+              <div class="club-category" x-show="club.category">
+                <span class="category-tag" x-text="club.category"></span>
+                <span class="category-tag" x-text="club.marque" x-show="club.marque"></span>
               </div>
-              
-              <div class="event-price" x-show="event.eventTicketPrice" x-text="event.eventTicketPrice"></div>
             </div>
             
-            <div class="event-actions">
-              <a :href="'/club-events/' + event.eventSlug + '/'" class="button button-primary">View Details</a>
-              <a x-show="event.eventWebsite" :href="event.eventWebsite" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+            <div class="club-actions">
+              <a :href="'/club-directory/' + club.slug + '/'" class="button button-primary">View Details</a>
+              <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
             </div>
           </div>
         </template>
       </div>
       
       <div x-show="paginatedItems.length === 0" class="no-results">
-        <p>No events found matching your criteria. Please try different search terms or <button @click="reset" class="reset-link">reset filters</button>.</p>
+        <p>No clubs found matching your criteria. Please try different search terms or <button @click="reset" class="reset-link">reset filters</button>.</p>
       </div>
       
       <div class="pagination" x-show="totalPages > 1">
@@ -398,13 +405,11 @@
           </button>
         </div>
         
-        <div class="pagination-info" x-text="`Showing ${startIndex} to ${endIndex} of ${totalItems} events`"></div>
+        <div class="pagination-info" x-text="`Showing ${startIndex} to ${endIndex} of ${totalItems} clubs`"></div>
       </div>
     </div>
   </div>
 </div>
-
-<script src="/assets/js/club-events.js"></script>
 
 </div>
 

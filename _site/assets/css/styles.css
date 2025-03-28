@@ -618,6 +618,7 @@ a:hover {
 .custom-search-group {
   flex: 1;
   min-width: 180px;
+  position: relative;
 }
 
 .custom-search-group label {
@@ -630,12 +631,29 @@ a:hover {
 
 .custom-search-input {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
   font-size: 1rem;
   border: 1px solid #ddd;
   border-radius: 4px;
   background-color: white;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  z-index: 1;
+}
+
+.custom-search-group label.input-label {
+  position: absolute;
+  left: 12px;
+  top: 13px;
+  color: #666;
+  z-index: 1;
 }
 
 .custom-search-input:focus {
@@ -883,10 +901,18 @@ a:hover {
   z-index: 0;
 }
 
-.club-hero-section, .event-hero-section {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/assets/images/club-hero-background.jpg');
+.club-hero-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/assets/images/aston-martin-car-show.jpg');
   background-size: cover;
   background-position: center;
+  padding: 0;
+}
+
+.event-hero-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/assets/images/classic-car-event-group.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: 0;
 }
 
 .hero-search {

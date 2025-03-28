@@ -74,8 +74,7 @@ document.addEventListener('alpine:init', () => {
       // Filter by location
       if (this.location) {
         filtered = filtered.filter(club => 
-          (club.city && club.city.toLowerCase().includes(this.location.toLowerCase())) ||
-          (club.state && club.state.toLowerCase().includes(this.location.toLowerCase()))
+          (club.city && club.city === this.location)
         );
       }
       
@@ -190,8 +189,7 @@ document.addEventListener('alpine:init', () => {
       // Filter by location
       if (this.location) {
         filtered = filtered.filter(event => 
-          (event.eventCity && event.eventCity.toLowerCase().includes(this.location.toLowerCase())) ||
-          (event.eventState && event.eventState.toLowerCase().includes(this.location.toLowerCase()))
+          (event.eventCity && event.eventCity === this.location)
         );
       }
       
@@ -225,7 +223,7 @@ document.addEventListener('alpine:init', () => {
   
   Alpine.data('pagination', () => ({
     currentPage: 1,
-    itemsPerPage: 12,
+    itemsPerPage: 3,
     totalItems: 0,
     totalPages: 0,
     items: [],
