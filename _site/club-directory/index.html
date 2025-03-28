@@ -168,6 +168,13 @@
 <section class="hero-section club-hero-section">
   <div class="hero-overlay"></div>
   <div class="container">
+    <div class="breadcrumbs-container">
+      <ul class="breadcrumbs">
+        <li><a href="/" style="color: white;">Home</a></li>
+        <li><a href="/club-directory/" style="color: white;">Club Directory</a></li>
+      </ul>
+    </div>
+    
     <div class="hero-content club-hero-content">
       <h1 class="hero-title">Classic Car Clubs Directory</h1>
       <p class="hero-subtitle">Welcome to our comprehensive classic car clubs directory – your ultimate resource for connecting with classic car enthusiasts across the United Kingdom.</p>
@@ -176,7 +183,7 @@
       
       
       <div x-data="clubSearch" class="hero-search">
-        <div class="search-container">
+        <div class="search-container event-search">
           <form class="search-form">
             <div class="search-grid">
               <div class="custom-search-group">
@@ -229,12 +236,6 @@
 </section>
 
 <div class="container">
-  <div class="breadcrumbs-container">
-    <ul class="breadcrumbs">
-      <li><a href="/">Home</a></li>
-      <li><a href="/club-directory/">Club Directory</a></li>
-    </ul>
-  </div>
   
   <div x-data="clubSearch">
   
@@ -299,7 +300,7 @@
   </div>
   
   <div x-show="letter" class="search-status">
-    <p x-text="`Showing ${filteredClubs.length} clubs for '${searchQuery || ''}' ${letter ? `starting with '${letter}'` : ''}`"></p>
+    <p x-text="`Showing ${filteredClubs.length} clubs ${letter ? `starting with '${letter}'` : ''}`"></p>
     <button @click="resetFilters()" class="exit-search-button">Clear All Filters</button>
   </div>
   

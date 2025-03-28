@@ -829,8 +829,14 @@ a:hover {
   text-decoration: none;
 }
 
+.hero-section .breadcrumbs li a {
+  color: white;
+  opacity: 0.9;
+}
+
 .breadcrumbs li a:hover {
   text-decoration: underline;
+  opacity: 1;
 }
 
 .breadcrumbs li:not(:last-child)::after {
@@ -839,9 +845,18 @@ a:hover {
   color: #aaa;
 }
 
+.hero-section .breadcrumbs li:not(:last-child)::after {
+  color: rgba(255, 255, 255, 0.6);
+}
+
 .breadcrumbs li:last-child a {
   color: #666;
   pointer-events: none;
+}
+
+.hero-section .breadcrumbs li:last-child a {
+  color: white;
+  opacity: 0.7;
 }
 
 /* Hero Section Styles */
