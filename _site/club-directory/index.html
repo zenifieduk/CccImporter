@@ -195,7 +195,7 @@
                   </svg>
                   <select id="search-category" class="custom-search-input search-category" x-model="category">
                     <option value="">All Categories</option>
-                    <template x-for="cat in categories" :key="cat">
+                    <template x-for="cat in availableCategories" :key="cat">
                       <option :value="cat" :selected="cat === category" x-text="cat"></option>
                     </template>
                   </select>
@@ -211,7 +211,7 @@
                   </svg>
                   <select id="search-location" class="custom-search-input search-location" x-model="location">
                     <option value="">All Locations</option>
-                    <template x-for="loc in locations" :key="loc">
+                    <template x-for="loc in availableLocations" :key="loc">
                       <option :value="loc" :selected="loc === location" x-text="loc"></option>
                     </template>
                   </select>

@@ -28,6 +28,8 @@ document.addEventListener('alpine:init', () => {
     filteredClubs: [],
     categories: [],
     locations: [],
+    availableCategories: [], // Categories available after filtering
+    availableLocations: [], // Locations available after filtering
     isLoading: true,
     
     async init() {
@@ -47,7 +49,7 @@ document.addEventListener('alpine:init', () => {
         console.log('Loaded clubs:', this.clubs.length);
         console.log('Search term:', this.searchTerm);
         
-        // Extract unique categories and locations for dropdown options
+        // Extract unique categories and locations for dropdown options (all available)
         const categorySet = new Set();
         const locationSet = new Set();
         
@@ -59,20 +61,111 @@ document.addEventListener('alpine:init', () => {
         this.categories = [...categorySet].sort();
         this.locations = [...locationSet].sort();
         
-        console.log('Categories loaded:', this.categories.length);
-        console.log('Locations loaded:', this.locations.length);
+        console.log('All categories loaded:', this.categories.length);
+        console.log('All locations loaded:', this.locations.length);
         
         // Apply filters
         this.filter();
+        
+        // Update available options based on filtered results
+        this.updateAvailableOptions();
 
         // For debugging
         console.log('Filtered clubs:', this.filteredClubs.length);
+        console.log('Available categories after filtering:', this.availableCategories.length);
+        console.log('Available locations after filtering:', this.availableLocations.length);
         
         this.isLoading = false;
       } catch (error) {
         console.error('Error initializing search:', error);
         this.isLoading = false;
       }
+    },
+    
+    // Method to update available options based on current filters
+    updateAvailableOptions() {
+      // Determine which filters are active
+      const hasSearchTerm = this.searchTerm && this.searchTerm.trim() !== '';
+      const hasCategory = this.category && this.category !== '';
+      const hasLocation = this.location && this.location !== '';
+      const hasLetter = this.letter && this.letter !== '';
+      
+      // If no filters are active, all options are available
+      if (!hasSearchTerm && !hasCategory && !hasLocation && !hasLetter) {
+        this.availableCategories = this.categories;
+        this.availableLocations = this.locations;
+        return;
+      }
+      
+      // Create a temporary filter function that excludes the category or location filter
+      // This will be used to determine available options for each dropdown
+      
+      // For category dropdown (exclude category filter)
+      const forCategoryOptions = [...this.clubs].filter(club => {
+        // Apply all filters except category
+        let include = true;
+        
+        if (hasSearchTerm) {
+          const term = this.searchTerm.toLowerCase().trim();
+          const titleMatch = club.title && club.title.toLowerCase().includes(term);
+          const cityMatch = club.city && club.city.toLowerCase().includes(term);
+          const stateMatch = club.state && club.state.toLowerCase().includes(term);
+          const marqueMatch = club.marque && club.marque.toLowerCase().includes(term);
+          
+          include = include && (titleMatch || cityMatch || stateMatch || marqueMatch);
+        }
+        
+        if (hasLocation) {
+          include = include && (club.city && club.city === this.location);
+        }
+        
+        if (hasLetter) {
+          include = include && (club.title && club.title.toLowerCase().startsWith(this.letter.toLowerCase()));
+        }
+        
+        return include;
+      });
+      
+      // For location dropdown (exclude location filter)
+      const forLocationOptions = [...this.clubs].filter(club => {
+        // Apply all filters except location
+        let include = true;
+        
+        if (hasSearchTerm) {
+          const term = this.searchTerm.toLowerCase().trim();
+          const titleMatch = club.title && club.title.toLowerCase().includes(term);
+          const cityMatch = club.city && club.city.toLowerCase().includes(term);
+          const stateMatch = club.state && club.state.toLowerCase().includes(term);
+          const marqueMatch = club.marque && club.marque.toLowerCase().includes(term);
+          
+          include = include && (titleMatch || cityMatch || stateMatch || marqueMatch);
+        }
+        
+        if (hasCategory) {
+          include = include && (club.category && club.category.toLowerCase() === this.category.toLowerCase());
+        }
+        
+        if (hasLetter) {
+          include = include && (club.title && club.title.toLowerCase().startsWith(this.letter.toLowerCase()));
+        }
+        
+        return include;
+      });
+      
+      // Extract available categories and locations from filtered results
+      const availableCategorySet = new Set();
+      forCategoryOptions.forEach(club => {
+        if (club.category) availableCategorySet.add(club.category);
+      });
+      
+      const availableLocationSet = new Set();
+      forLocationOptions.forEach(club => {
+        if (club.city) availableLocationSet.add(club.city);
+      });
+      
+      // Update available options
+      this.availableCategories = [...availableCategorySet].sort();
+      this.availableLocations = [...availableLocationSet].sort();
     },
     
     filter() {
@@ -131,6 +224,9 @@ document.addEventListener('alpine:init', () => {
       }
       
       this.filteredClubs = filtered;
+      
+      // Update the available filter options based on the filtered results
+      this.updateAvailableOptions();
     },
     
     search() {
@@ -145,6 +241,7 @@ document.addEventListener('alpine:init', () => {
       window.history.pushState({}, '', newUrl);
       
       this.filter();
+      // Available options are already updated in the filter method
     },
     
     reset() {
@@ -157,6 +254,9 @@ document.addEventListener('alpine:init', () => {
       window.history.pushState({}, '', window.location.pathname);
       
       this.filter();
+      // Reset available options to all options
+      this.availableCategories = this.categories;
+      this.availableLocations = this.locations;
     },
     
     resetFilters() {
@@ -169,6 +269,9 @@ document.addEventListener('alpine:init', () => {
       window.history.pushState({}, '', window.location.pathname);
       
       this.filter();
+      // Reset available options to all options
+      this.availableCategories = this.categories;
+      this.availableLocations = this.locations;
     },
     
     setLetter(letter) {
@@ -354,7 +457,7 @@ document.addEventListener('alpine:init', () => {
   
   Alpine.data('pagination', () => ({
     currentPage: 1,
-    itemsPerPage: 3,
+    itemsPerPage: 40,
     totalItems: 0,
     totalPages: 0,
     items: [],
