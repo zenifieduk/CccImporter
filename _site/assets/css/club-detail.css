@@ -1,0 +1,160 @@
+.club-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.featured-badge-large {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.club-detail-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.club-detail-image {
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.club-detail-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.club-detail-image-placeholder {
+  background-color: #f0f0f0;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 1rem;
+  text-align: center;
+  padding: 1rem;
+}
+
+.club-description {
+  margin-bottom: 2rem;
+}
+
+.info-card-title {
+  font-size: 1.3rem;
+  margin-bottom: 1.25rem;
+  color: var(--primary-color);
+}
+
+.club-info-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.info-item {
+  display: flex;
+  margin-bottom: 1.25rem;
+  gap: 1rem;
+}
+
+.info-item:last-child {
+  margin-bottom: 0;
+}
+
+.info-icon {
+  color: var(--primary-color);
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.info-label {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 0.25rem;
+}
+
+.info-value {
+  font-weight: 500;
+}
+
+.website-link {
+  color: var(--primary-color);
+  word-break: break-all;
+}
+
+.club-cta-card {
+  background-color: #e8f5e9;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+}
+
+.cta-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+  color: var(--primary-color);
+}
+
+.cta-text {
+  margin-bottom: 1.25rem;
+  font-size: 0.95rem;
+}
+
+.visit-website-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin-bottom: 0.75rem;
+}
+
+.contact-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.related-clubs {
+  margin-top: 2rem;
+}
+
+.grid-small {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+@media (max-width: 992px) {
+  .club-detail-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .club-detail-sidebar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .club-detail-sidebar {
+    grid-template-columns: 1fr;
+  }
+}

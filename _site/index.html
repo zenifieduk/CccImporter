@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classic Car Clubs UK | Classic Car Clubs | UK Directory</title>
+  <meta name="description" content="Discover classic car clubs across the UK with contact details and more.">
+  <link rel="icon" type="image/svg+xml" href="/assets/images/ccc-logo.svg">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="/assets/js/alpine-init.js"></script>
+</head>
+<body>
+  <header class="site-header" x-data="mobileMenu">
+  <div class="container">
+    <div class="logo">
+      <a href="/">
+        <img class="logo-image" src="/assets/images/ccc-logo.svg" alt="Classic Car Clubs | UK Directory">
+      </a>
+    </div>
+    
+    <nav class="desktop-nav">
+      <ul>
+        
+          <li>
+            <a href="/" aria-current="page">
+              Home
+            </a>
+          </li>
+        
+          <li>
+            <a href="/club-directory/" >
+              Club Directory
+            </a>
+          </li>
+        
+          <li>
+            <a href="/club-events/" >
+              Club Events
+            </a>
+          </li>
+        
+          <li>
+            <a href="/contact/" >
+              Contact
+            </a>
+          </li>
+        
+      </ul>
+    </nav>
+    
+    <button class="mobile-menu-toggle" @click="toggle" aria-label="Toggle menu">
+      <span class="hamburger-icon">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </span>
+    </button>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" :class="{ 'active': isOpen }" x-cloak>
+      <div class="mobile-menu-container">
+        <div class="mobile-menu-header">
+          <div class="logo">
+            <a href="/" @click="close">
+              <img class="logo-image" src="/assets/images/ccc-logo.svg" alt="Classic Car Clubs | UK Directory">
+            </a>
+          </div>
+          
+          <button class="mobile-menu-close" @click="close" aria-label="Close menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        
+        <nav class="mobile-nav">
+          <ul>
+            
+              <li>
+                <a href="/" @click="close" aria-current="page">
+                  Home
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/" @click="close" >
+                  Club Directory
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+              <li>
+                <a href="/club-events/" @click="close" >
+                  Club Events
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+              <li>
+                <a href="/contact/" @click="close" >
+                  Contact
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+          </ul>
+        </nav>
+        
+        <div class="mobile-menu-footer">
+          <p class="cta-text">Connect with classic car enthusiasts</p>
+          <a href="/contact/" class="contact-link" @click="close">Get in touch</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+  
+  <main>
+    
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">Classic Car Clubs Directory</h1>
+      <p class="hero-subtitle">Discover classic car clubs across the UK, with contact details and more.</p>
+      <div class="hero-buttons">
+        <a href="/club-directory/" class="button button-primary">Browse Directory</a>
+        <a href="/contact/" class="button button-secondary">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="featured-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Featured Car Clubs</h2>
+      <p class="section-subtitle">Discover popular classic car clubs from across the UK</p>
+    </div>
+
+    <div class="club-grid">
+      
+      
+        <div class="club-card">
+  
+    <div class="club-featured">Featured</div>
+  
+  
+  <div class="club-image">
+    
+      <img src="/assets/images/rolls-royce-enthusiasts.jpg" alt="Rolls-Royce Enthusiasts&#39; Club">
+    
+  </div>
+  
+  <div class="club-content">
+    <h3 class="club-title">Rolls-Royce Enthusiasts&#39; Club</h3>
+    
+    
+      <div class="club-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        Paulerspury
+        , 
+        Northamptonshire
+      </div>
+    
+    
+    
+      <div class="club-category">
+        <span class="category-tag">Car Club</span>
+        
+          <span class="category-tag">Rolls-Royce</span>
+        
+      </div>
+    
+  </div>
+  
+  <div class="club-actions">
+    <a href="/club-directory/rolls-royce-enthusiasts-club/" class="button button-primary">View Details</a>
+    
+      <a href="https://rrec.org.uk/" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+    
+  </div>
+</div>
+
+      
+        <div class="club-card">
+  
+    <div class="club-featured">Featured</div>
+  
+  
+  <div class="club-image">
+    
+      <img src="/assets/images/rover-p6-club.jpg" alt="Rover P6 Owners Club">
+    
+  </div>
+  
+  <div class="club-content">
+    <h3 class="club-title">Rover P6 Owners Club</h3>
+    
+    
+      <div class="club-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        Huddersfield
+        
+        
+      </div>
+    
+    
+    
+      <div class="club-category">
+        <span class="category-tag">Car Club</span>
+        
+          <span class="category-tag">Rover</span>
+        
+      </div>
+    
+  </div>
+  
+  <div class="club-actions">
+    <a href="/club-directory/rover-p6-owners-club/" class="button button-primary">View Details</a>
+    
+      <a href="https://www.p6roc.com" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+    
+  </div>
+</div>
+
+      
+        <div class="club-card">
+  
+    <div class="club-featured">Featured</div>
+  
+  
+  <div class="club-image">
+    
+      <img src="/assets/images/peugeot-club.jpg" alt="Club Peugeot UK">
+    
+  </div>
+  
+  <div class="club-content">
+    <h3 class="club-title">Club Peugeot UK</h3>
+    
+    
+      <div class="club-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        York
+        , 
+        North Yorkshire
+      </div>
+    
+    
+    
+      <div class="club-category">
+        <span class="category-tag">Car Club</span>
+        
+          <span class="category-tag">Peugeot</span>
+        
+      </div>
+    
+  </div>
+  
+  <div class="club-actions">
+    <a href="/club-directory/club-peugeot-uk/" class="button button-primary">View Details</a>
+    
+      <a href="https://www.peugeotclub.org" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+    
+  </div>
+</div>
+
+      
+        <div class="club-card">
+  
+    <div class="club-featured">Featured</div>
+  
+  
+  <div class="club-image">
+    
+      <img src="/assets/images/ford-classic-capri.jpg" alt="Ford Classic and Capri Owners Club">
+    
+  </div>
+  
+  <div class="club-content">
+    <h3 class="club-title">Ford Classic and Capri Owners Club</h3>
+    
+    
+      <div class="club-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        Colchester
+        , 
+        Essex
+      </div>
+    
+    
+    
+      <div class="club-category">
+        <span class="category-tag">Car Club</span>
+        
+          <span class="category-tag">Ford</span>
+        
+      </div>
+    
+  </div>
+  
+  <div class="club-actions">
+    <a href="/club-directory/ford-classic-and-capri-owners-club/" class="button button-primary">View Details</a>
+    
+      <a href="https://www.fccoc.org.uk" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+    
+  </div>
+</div>
+
+      
+    </div>
+    
+    <div style="text-align: center; margin-top: 1rem;">
+      <a href="/club-directory/" class="button button-primary">View All Clubs</a>
+    </div>
+  </div>
+</section>
+
+<section class="featured-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Upcoming Events</h2>
+      <p class="section-subtitle">Classic car shows, meets, and events across the UK</p>
+    </div>
+
+    <div class="event-grid">
+      
+      
+        <div class="event-card">
+  
+    <div class="event-featured">Featured</div>
+  
+  
+  <div class="event-image">
+    
+      <img src="/assets/images/events/classic-car-show-2025.jpg" alt="Classic Car Show 2025">
+    
+    
+    <div class="event-date">
+      <span class="event-month">Jun</span>
+      <span class="event-day">8</span>
+    </div>
+  </div>
+  
+  <div class="event-content">
+    <h3 class="event-title">Classic Car Show 2025</h3>
+    
+    
+      <div class="event-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        Gloucester
+        , 
+        Gloucestershire
+      </div>
+    
+    
+    <div class="event-time">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      10:00
+    </div>
+    
+    
+      <div class="event-price">£10.00</div>
+    
+  </div>
+  
+  <div class="event-actions">
+    <a href="/club-events/classic-car-show-2025-highnam-court/" class="button button-primary">View Details</a>
+    
+      <a href="https://piedpiperappeal.co.uk/event/classic-car-show-2025/" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+    
+  </div>
+</div>
+
+      
+        <div class="event-card">
+  
+    <div class="event-featured">Featured</div>
+  
+  
+  <div class="event-image">
+    
+      <img src="/assets/images/events/pistons-pretzels.jpg" alt="Pistons &amp; Pretzels - UK">
+    
+    
+    <div class="event-date">
+      <span class="event-month">May</span>
+      <span class="event-day">4</span>
+    </div>
+  </div>
+  
+  <div class="event-content">
+    <h3 class="event-title">Pistons &amp; Pretzels - UK</h3>
+    
+    
+      <div class="event-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        Bicester
+        , 
+        Oxfordshire
+      </div>
+    
+    
+    <div class="event-time">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      11:00
+    </div>
+    
+    
+      <div class="event-price">Free Entry</div>
+    
+  </div>
+  
+  <div class="event-actions">
+    <a href="/club-events/pistons-pretzels-uk-May-2025/" class="button button-primary">View Details</a>
+    
+      <a href="https://www.konzepthaus-consulting.com/insights/events/pistons-pretzels-uk-0" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+    
+  </div>
+</div>
+
+      
+        <div class="event-card">
+  
+    <div class="event-featured">Featured</div>
+  
+  
+  <div class="event-image">
+    
+      <img src="/assets/images/events/aston-martin-car-show.jpg" alt="A British Icon - Aston Martin">
+    
+    
+    <div class="event-date">
+      <span class="event-month">Jun</span>
+      <span class="event-day">3</span>
+    </div>
+  </div>
+  
+  <div class="event-content">
+    <h3 class="event-title">A British Icon - Aston Martin</h3>
+    
+    
+      <div class="event-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        London
+        , 
+        London
+      </div>
+    
+    
+    <div class="event-time">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      11:00
+    </div>
+    
+    
+      <div class="event-price">£60.00</div>
+    
+  </div>
+  
+  <div class="event-actions">
+    <a href="/club-events/aston-martin-brisith-icon/" class="button button-primary">View Details</a>
+    
+      <a href="https://londonconcours.co.uk/" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+    
+  </div>
+</div>
+
+      
+    </div>
+    
+    <div style="text-align: center; margin-top: 1rem;">
+      <a href="/club-events/" class="button button-primary">View All Events</a>
+    </div>
+  </div>
+</section>
+
+<section class="about-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">About The Classic Car Clubs Directory</h2>
+    </div>
+    
+    <div class="about-content">
+      <div class="about-text">
+        <p>
+          Welcome to the UK's premier directory of classic car clubs. Our mission is to connect enthusiasts with local and national clubs dedicated to preserving and celebrating classic automobiles.
+        </p>
+        <p>
+          Whether you're looking to join a club for your specific make or model, or simply want to connect with fellow classic car enthusiasts in your area, our comprehensive directory has you covered.
+        </p>
+        <p>
+          From vintage British marques to American muscle, European sports cars to Japanese classics, you'll find clubs catering to every interest and era of motoring history.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="club-types-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Popular Car Club Types</h2>
+    </div>
+    
+    <div class="club-types-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+      <div class="club-type-card" style="background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+        <h3>Jaguar Clubs</h3>
+        <p>Clubs for Jaguar fans, from the E-Type to XJS, XK, and more.</p>
+        <p><a href="/club-directory/?search=jaguar">View Clubs</a></p>
+      </div>
+      
+      <div class="club-type-card" style="background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+        <h3>Austin Clubs</h3>
+        <p>For fans of Austin, Austin-Healey, and other British classics.</p>
+        <p><a href="/club-directory/?search=austin">View Clubs</a></p>
+      </div>
+      
+      <div class="club-type-card" style="background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+        <h3>MG Clubs</h3>
+        <p>From MGA to MGB, Midget, and all other MG models.</p>
+        <p><a href="/club-directory/?search=mg">View Clubs</a></p>
+      </div>
+      
+      <div class="club-type-card" style="background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+        <h3>Triumph Clubs</h3>
+        <p>Classic Triumph TR3, TR4, TR6, Spitfire, and more.</p>
+        <p><a href="/club-directory/?search=triumph">View Clubs</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </main>
+  
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="logo-column">
+        <div class="footer-logo">
+          <h3>CLASSIC CAR CLUBS</h3>
+          <p class="tagline">UK NETWORK</p>
+        </div>
+        <p class="footer-blurb">
+          Your ultimate resource for connecting with classic car enthusiasts across the 
+          United Kingdom. Find clubs dedicated to vintage marques, iconic eras, and 
+          specific regions.
+        </p>
+      </div>
+      
+      
+        <div class="footer-column">
+          <h4>Directory</h4>
+          <ul class="footer-links">
+            
+              <li>
+                <a href="/club-directory/">All Clubs</a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/?category=Car%20Club">Car Type Clubs</a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/?category=Regional%20Club">Region Clubs</a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/?featured=true">Featured Clubs</a>
+              </li>
+            
+          </ul>
+        </div>
+      
+        <div class="footer-column">
+          <h4>Events</h4>
+          <ul class="footer-links">
+            
+              <li>
+                <a href="/club-events/">All Events</a>
+              </li>
+            
+              <li>
+                <a href="/club-events/?category=Car%20Show">Car Shows</a>
+              </li>
+            
+              <li>
+                <a href="/club-events/?category=Car%20Meet">Meets</a>
+              </li>
+            
+              <li>
+                <a href="/club-events/?featured=true">Featured Events</a>
+              </li>
+            
+          </ul>
+        </div>
+      
+        <div class="footer-column">
+          <h4>About</h4>
+          <ul class="footer-links">
+            
+              <li>
+                <a href="/contact/">Contact Us</a>
+              </li>
+            
+              <li>
+                <a href="/privacy-policy/">Privacy Policy</a>
+              </li>
+            
+              <li>
+                <a href="/submit-club/">Submit a Club</a>
+              </li>
+            
+              <li>
+                <a href="/advertise/">Advertise With Us</a>
+              </li>
+            
+          </ul>
+        </div>
+      
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; YYYY Classic Car Clubs UK. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+  
+  <!-- Scripts -->
+  <script src="/assets/js/search.js"></script>
+</body>
+</html>

@@ -1,51 +1,53 @@
 <div class="event-card">
+  {% if event.eventFeatured %}
+    <div class="event-featured">Featured</div>
+  {% endif %}
+  
   <div class="event-image">
     {% if event.eventImageUrl %}
-      {% image event.eventImageUrl, event.eventTitle, "(min-width: 768px) 300px, 100vw", "event-image-img" %}
+      <img src="{{ event.eventImageUrl }}" alt="{{ event.eventTitle }}">
     {% else %}
-      <div class="event-image-placeholder">Image not available</div>
+      <img src="/assets/images/event-placeholder.jpg" alt="{{ event.eventTitle }}">
     {% endif %}
     
-    <div class="event-date-badge">
-      <span class="event-month">{{ event.eventStartDateTime | extractMonth }}</span>
-      {{ event.eventStartDateTime | shortDate }}
+    <div class="event-date">
+      <span class="event-month">{{ event.eventStartDateTime | eventMonth }}</span>
+      <span class="event-day">{{ (event.eventStartDateTime | parseDate).getDate() }}</span>
+    </div>
+  </div>
+  
+  <div class="event-content">
+    <h3 class="event-title">{{ event.eventTitle }}</h3>
+    
+    {% if event.eventCity or event.eventState %}
+      <div class="event-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        {% if event.eventCity %}{{ event.eventCity }}{% endif %}
+        {% if event.eventCity and event.eventState %}, {% endif %}
+        {% if event.eventState %}{{ event.eventState }}{% endif %}
+      </div>
+    {% endif %}
+    
+    <div class="event-time">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      {{ (event.eventStartDateTime | parseDate) | formatTime }}
     </div>
     
-    {% if event.eventFeatured %}
-      <div class="featured-badge">Featured</div>
+    {% if event.eventTicketPrice %}
+      <div class="event-price">{{ event.eventTicketPrice }}</div>
     {% endif %}
   </div>
   
-  <div class="card-content">
-    <h3 class="card-title">{{ event.eventTitle }}</h3>
-    
-    <div class="card-details">
-      {% if event.eventCity %}
-        <div class="card-detail">
-          <i data-feather="map-pin"></i> 
-          <span>{{ event.eventCity }}</span>
-        </div>
-      {% endif %}
-      
-      {% if event.eventStartDateTime %}
-        <div class="card-detail">
-          <i data-feather="calendar"></i> 
-          <span>{{ event.eventStartDateTime | formatDate }}</span>
-        </div>
-      {% endif %}
-      
-      {% if event.eventCategory %}
-        <div class="card-tags">
-          {% for category in event.eventCategory %}
-            <span class="card-tag">{{ category }}</span>
-          {% endfor %}
-        </div>
-      {% endif %}
-    </div>
-    
-    <div class="card-actions">
-      <span class="price-badge">{{ event.eventTicketPrice }}</span>
-      <a href="/events/{{ event.eventSlug }}/" class="view-btn">View Details</a>
-    </div>
+  <div class="event-actions">
+    <a href="/club-events/{{ event.eventSlug }}/" class="button button-primary">View Details</a>
+    {% if event.eventWebsite %}
+      <a href="{{ event.eventWebsite }}" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+    {% endif %}
   </div>
 </div>

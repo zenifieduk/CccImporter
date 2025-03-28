@@ -1,51 +1,35 @@
 module.exports = {
   title: "Classic Car Clubs | UK Directory",
   description: "Discover classic car clubs across the UK with contact details and more.",
-  url: "https://classiccarclubs.uk",
+  url: process.env.URL || "http://localhost:8080",
   author: "Classic Car Clubs UK",
   email: "hello@classiccarclubs.uk",
-  phone: "",
-  logo: "/assets/svg/logo.svg",
-  primaryColor: "#1b5e20",
-  secondaryColor: "#388e3c",
+  buildTime: new Date(),
+  environment: process.env.ELEVENTY_ENV || "development",
   navigation: [
-    { text: "Home", url: "/" },
-    { text: "Club Directory", url: "/club-directory/" },
-    { text: "Club Events", url: "/club-events/" },
-    { text: "Contact", url: "/contact/" }
+    { label: "Home", url: "/" },
+    { label: "Club Directory", url: "/club-directory/" },
+    { label: "Club Events", url: "/club-events/" },
+    { label: "Contact", url: "/contact/" }
   ],
-  footerLinks: [
-    {
-      title: "Information",
-      links: [
-        { text: "Privacy Policy", url: "/privacy-policy/" },
-        { text: "Advertise With Us", url: "/advertise/" },
-        { text: "Submit a Club", url: "/submit-club/" }
-      ]
-    },
-    {
-      title: "Navigation",
-      links: [
-        { text: "Home", url: "/" },
-        { text: "Club Directory", url: "/club-directory/" },
-        { text: "Club Events", url: "/club-events/" },
-        { text: "Contact", url: "/contact/" }
-      ]
-    }
-  ],
-  socialLinks: [
-    { platform: "facebook", url: "https://facebook.com/classiccarclubsuk" },
-    { platform: "twitter", url: "https://twitter.com/classiccarclubs" },
-    { platform: "instagram", url: "https://instagram.com/classiccarclubsuk" }
-  ],
-  popularClubTypes: [
-    { name: "Jaguar Clubs", count: 15 },
-    { name: "Austin Clubs", count: 8 },
-    { name: "MG Clubs", count: 12 },
-    { name: "Triumph Clubs", count: 10 },
-    { name: "Ford Clubs", count: 14 },
-    { name: "Morris Clubs", count: 7 },
-    { name: "Porsche Clubs", count: 5 },
-    { name: "Rolls-Royce Clubs", count: 6 }
-  ]
+  footerLinks: {
+    "Directory": [
+      { label: "All Clubs", url: "/club-directory/" },
+      { label: "Car Type Clubs", url: "/club-directory/?category=Car%20Club" },
+      { label: "Region Clubs", url: "/club-directory/?category=Regional%20Club" },
+      { label: "Featured Clubs", url: "/club-directory/?featured=true" }
+    ],
+    "Events": [
+      { label: "All Events", url: "/club-events/" },
+      { label: "Car Shows", url: "/club-events/?category=Car%20Show" },
+      { label: "Meets", url: "/club-events/?category=Car%20Meet" },
+      { label: "Featured Events", url: "/club-events/?featured=true" }
+    ],
+    "About": [
+      { label: "Contact Us", url: "/contact/" },
+      { label: "Privacy Policy", url: "/privacy-policy/" },
+      { label: "Submit a Club", url: "/submit-club/" },
+      { label: "Advertise With Us", url: "/advertise/" }
+    ]
+  }
 };

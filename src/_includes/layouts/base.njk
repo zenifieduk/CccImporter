@@ -3,24 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ title or site.title }}</title>
+  <title>{% if title %}{{ title }} | {% endif %}{{ site.title }}</title>
   <meta name="description" content="{{ description or site.description }}">
-  <link rel="icon" type="image/svg+xml" href="{{ site.logo }}">
+  <link rel="icon" type="image/svg+xml" href="/assets/images/ccc-logo.svg">
   
-  <!-- CSS -->
-  <link rel="stylesheet" href="/assets/css/main.css">
-  <link rel="stylesheet" href="/assets/css/header.css">
-  <link rel="stylesheet" href="/assets/css/footer.css">
-  <link rel="stylesheet" href="/assets/css/club-card.css">
-  <link rel="stylesheet" href="/assets/css/event-card.css">
-  <link rel="stylesheet" href="/assets/css/search.css">
-  <link rel="stylesheet" href="/assets/css/pagination.css">
-  
-  <!-- Feather Icons -->
-  <script src="https://unpkg.com/feather-icons"></script>
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/styles.css">
   
   <!-- Alpine.js -->
-  <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="/assets/js/alpine-init.js"></script>
 </head>
 <body>
   {% include "components/header.njk" %}
@@ -31,15 +23,7 @@
   
   {% include "components/footer.njk" %}
   
-  <!-- JavaScript -->
+  <!-- Scripts -->
   <script src="/assets/js/search.js"></script>
-  <script src="/assets/js/filters.js"></script>
-  <script src="/assets/js/alpine-config.js"></script>
-  <script>
-    // Initialize Feather icons
-    document.addEventListener('DOMContentLoaded', function() {
-      feather.replace();
-    });
-  </script>
 </body>
 </html>

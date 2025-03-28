@@ -2,12 +2,7 @@
   <li><a href="/">Home</a></li>
   {% for crumb in breadcrumbs %}
     <li>
-      <i data-feather="chevron-right" class="breadcrumb-icon"></i>
-      {% if crumb.url %}
-        <a href="{{ crumb.url }}">{{ crumb.text }}</a>
-      {% else %}
-        <span>{{ crumb.text }}</span>
-      {% endif %}
+      <a href="{{ crumb.url }}">{{ crumb.label }}</a>
     </li>
   {% endfor %}
 </ul>

@@ -15,6 +15,10 @@ author = "agent"
 task = "workflow.run"
 args = "Classic Car Clubs 11ty Server"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "11ty Development Server"
+
 [[workflows.workflow]]
 name = "Classic Car Clubs 11ty Server"
 author = "agent"
@@ -30,5 +34,24 @@ task = "shell.exec"
 args = "npm install && npx @11ty/eleventy --serve --port=5000"
 waitForPort = 5000
 
+[[workflows.workflow]]
+name = "11ty Development Server"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npx @11ty/eleventy --serve --port 5000"
+waitForPort = 5000
+
 [deployment]
 run = ["sh", "-c", "npm install && npx @11ty/eleventy --serve --port=5000"]
+
+[[ports]]
+localPort = 5000
+externalPort = 80

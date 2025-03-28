@@ -1,0 +1,32 @@
+<div class="search-container">
+  <form class="search-form">
+    <div class="search-grid">
+      <div class="custom-search-group">
+        <label for="search-term">Search Term</label>
+        <input type="text" id="search-term" class="custom-search-input search-term" placeholder="Search..." value="{{ searchTerm }}">
+      </div>
+      
+      {% if categories.length > 0 %}
+        <div class="custom-search-group">
+          <label for="search-category">Category</label>
+          <select id="search-category" class="custom-search-input search-category">
+            <option value="">All Categories</option>
+            {% for cat in categories %}
+              <option value="{{ cat }}" {% if cat === category %}selected{% endif %}>{{ cat }}</option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+      
+      <div class="custom-search-group">
+        <label for="search-location">Location</label>
+        <input type="text" id="search-location" class="custom-search-input search-location" placeholder="City, region..." value="{{ location }}">
+      </div>
+      
+      <div class="search-actions">
+        <button type="submit" class="search-button">Search</button>
+        <button type="button" class="reset-button">Reset</button>
+      </div>
+    </div>
+  </form>
+</div>

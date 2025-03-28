@@ -1,83 +1,146 @@
 ---
-layout: layouts/base.njk
-title: Club Directory | Classic Car Clubs UK
+layout: layouts/page.njk
+title: Classic Car Clubs Directory
 description: Browse our comprehensive directory of classic car clubs across the UK.
 pagination:
-  data: collections.clubs
+  data: clubs
   size: 12
 ---
 
-<div class="container">
-  <div class="breadcrumb-container">
-    {% set breadcrumbs = [{ text: 'Club Directory' }] %}
-    {% include "components/breadcrumb.njk" %}
+{% set breadcrumbs = [{ url: '/club-directory/', label: 'Club Directory' }] %}
+
+<h1>Classic Car Clubs Directory</h1>
+
+<p>
+  Welcome to our comprehensive classic car clubs directory – your ultimate resource for connecting with classic car enthusiasts across
+  the United Kingdom. Our extensive directory features a wide range of clubs dedicated to various marques, specific models, and
+  regions, ensuring the perfect classic car experience finds you.
+</p>
+
+{% set categories = clubs | map("category") | unique %}
+{% set locations = clubs | map("state") | unique %}
+
+<div x-data="clubSearch">
+  {% include "components/search-filter.njk" %}
+  
+  <div class="az-filter-container">
+    <ul class="az-filter">
+      {% for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+        <li>
+          <a href="#" data-letter="{{ letter }}" @click.prevent="setLetter('{{ letter }}')" :class="{ 'active': letter === '{{ letter }}' }">{{ letter }}</a>
+        </li>
+      {% endfor %}
+    </ul>
   </div>
   
-  <h1 class="page-title">Classic Car Clubs Directory</h1>
+  <div x-show="isLoading" class="loading-indicator">Loading...</div>
   
-  <p class="intro-text">
-    Welcome to our comprehensive classic car clubs directory – your ultimate resource for connecting with classic car enthusiasts across the United Kingdom. Our extensive directory features a wide range of clubs focused on specific marques, eras, and regions.
-  </p>
-  
-  {% set categories = collections.clubCategories %}
-  {% set showAzFilters = true %}
-  {% set searchTerm = '' %}
-  {% set selectedCategory = '' %}
-  {% set selectedLocation = '' %}
-  {% set letter = '' %}
-  {% set filteredItems = pagination.items %}
-  {% include "components/search-filters.njk" %}
-  
-  <div id="resultsContainer" data-items="{{ collections.clubs | json | escape }}" x-data="clubDirectory">
-    <div class="grid" x-show="filteredItems.length > 0">
-      <template x-for="club in filteredItems" :key="club.slug">
-        <div class="club-card">
-          <div class="club-image">
-            <template x-if="club.imageUrl">
-              <img :src="club.imageUrl" :alt="club.title" class="club-image-img">
-            </template>
-            <template x-if="!club.imageUrl">
-              <div class="club-image-placeholder">Image not available</div>
-            </template>
+  <div x-cloak x-show="!isLoading">
+    <div class="featured-section" x-show="filteredClubs.some(club => club.featured)">
+      <h2>Featured Clubs</h2>
+      
+      <div class="club-grid">
+        <template x-for="club in filteredClubs.filter(c => c.featured)" :key="club.slug">
+          <div class="club-card">
+            <div x-show="club.featured" class="club-featured">Featured</div>
             
-            <template x-if="club.featured">
-              <div class="featured-badge">Featured</div>
+            <div class="club-image">
+              <img :src="club.imageUrl || '/assets/images/club-placeholder.jpg'" :alt="club.title">
+            </div>
+            
+            <div class="club-content">
+              <h3 class="club-title" x-text="club.title"></h3>
+              
+              <div class="club-location" x-show="club.city || club.state">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span x-text="[club.city, club.state].filter(Boolean).join(', ')"></span>
+              </div>
+              
+              <div class="club-category" x-show="club.category">
+                <span class="category-tag" x-text="club.category"></span>
+                <span class="category-tag" x-text="club.marque" x-show="club.marque"></span>
+              </div>
+            </div>
+            
+            <div class="club-actions">
+              <a :href="'/club-directory/' + club.slug + '/'" class="button button-primary">View Details</a>
+              <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+    
+    <div x-data="pagination" x-effect="items = filteredClubs.filter(c => !c.featured)">
+      <div class="club-grid" x-show="paginatedItems.length > 0">
+        <template x-for="club in paginatedItems" :key="club.slug">
+          <div class="club-card">
+            <div class="club-image">
+              <img :src="club.imageUrl || '/assets/images/club-placeholder.jpg'" :alt="club.title">
+            </div>
+            
+            <div class="club-content">
+              <h3 class="club-title" x-text="club.title"></h3>
+              
+              <div class="club-location" x-show="club.city || club.state">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span x-text="[club.city, club.state].filter(Boolean).join(', ')"></span>
+              </div>
+              
+              <div class="club-category" x-show="club.category">
+                <span class="category-tag" x-text="club.category"></span>
+                <span class="category-tag" x-text="club.marque" x-show="club.marque"></span>
+              </div>
+            </div>
+            
+            <div class="club-actions">
+              <a :href="'/club-directory/' + club.slug + '/'" class="button button-primary">View Details</a>
+              <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+            </div>
+          </div>
+        </template>
+      </div>
+      
+      <div x-show="paginatedItems.length === 0" class="no-results">
+        <p>No clubs found matching your criteria. Please try different search terms or <button @click="reset" class="reset-link">reset filters</button>.</p>
+      </div>
+      
+      <div class="pagination" x-show="totalPages > 1">
+        <div class="pagination-controls">
+          <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="pagination-arrow pagination-prev" :class="{ 'disabled': currentPage === 1 }">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Previous
+          </button>
+          
+          <div class="pagination-numbers">
+            <template x-for="(pageNumber, index) in pageNumbers" :key="index">
+              <template x-if="pageNumber === '...'">
+                <span class="pagination-ellipsis">...</span>
+              </template>
+              <template x-if="pageNumber !== '...'">
+                <button @click="goToPage(pageNumber)" class="pagination-number" :class="{ 'active': pageNumber === currentPage }" x-text="pageNumber"></button>
+              </template>
             </template>
           </div>
           
-          <div class="card-content">
-            <h3 class="card-title" x-text="club.title"></h3>
-            
-            <div class="card-details">
-              <template x-if="club.city">
-                <div class="card-detail">
-                  <i data-feather="map-pin"></i> 
-                  <span x-text="club.city + (club.state ? ', ' + club.state : '')"></span>
-                </div>
-              </template>
-              
-              <template x-if="club.category">
-                <div class="card-detail">
-                  <i data-feather="tag"></i> 
-                  <span x-text="club.category"></span>
-                </div>
-              </template>
-            </div>
-            
-            <div class="card-actions">
-              <a :href="'/clubs/' + club.slug + '/'" class="view-btn">View Details</a>
-            </div>
-          </div>
+          <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-arrow pagination-next" :class="{ 'disabled': currentPage === totalPages }">
+            Next
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 4px;">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
         </div>
-      </template>
-    </div>
-    
-    <div class="no-results" x-show="filteredItems.length === 0">
-      <h3>No clubs found</h3>
-      <p>Please try adjusting your search criteria or reset the filters.</p>
-      <button class="btn" @click="resetFilters">Reset Filters</button>
+        
+        <div class="pagination-info" x-text="`Showing ${startIndex} to ${endIndex} of ${totalItems} clubs`"></div>
+      </div>
     </div>
   </div>
-  
-  {% include "components/pagination.njk" %}
 </div>

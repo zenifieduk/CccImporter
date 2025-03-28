@@ -1,4 +1,6 @@
 module.exports = function() {
+  // This would typically be fetched from a headless CMS
+  // For now, using static data from the provided sample
   return [
     {
       title: "Rolls-Royce Enthusiasts' Club",
@@ -14,7 +16,8 @@ module.exports = function() {
       state: "Northamptonshire",
       slug: "rolls-royce-enthusiasts-club",
       featured: true,
-      description: "The Rolls-Royce Enthusiasts' Club is a vibrant community of enthusiasts dedicated to the preservation and celebration of Rolls-Royce and Bentley motor cars. With members worldwide, the club offers a wealth of knowledge, events, and resources for owners and enthusiasts alike."
+      description: "The Rolls-Royce Enthusiasts' Club is a worldwide organisation dedicated to the preservation and promotion of Rolls-Royce and Bentley motor cars.",
+      marque: "Rolls-Royce"
     },
     {
       title: "Rolls-Royce Enthusiasts' Wessex Section",
@@ -25,11 +28,12 @@ module.exports = function() {
       city: "",
       postalCode: "",
       countryCode: "GB",
-      imageUrl: "",
+      imageUrl: "/assets/images/rolls-royce-enthusiasts-wessex.jpg",
       category: "Car Club",
       state: "Wessex",
       slug: "rolls-royce-enthusiasts-club-wessex",
-      description: "The Wessex Section of the Rolls-Royce Enthusiasts' Club caters to members in the Wessex region, organizing local events and gatherings for Rolls-Royce and Bentley enthusiasts."
+      description: "The Wessex Section of the Rolls-Royce Enthusiasts' Club, serving members in the South West of England.",
+      marque: "Rolls-Royce"
     },
     {
       title: "Rover P4 Drivers' Guild",
@@ -40,11 +44,12 @@ module.exports = function() {
       city: "Northants",
       postalCode: "MK19 7BD",
       countryCode: "GB",
-      imageUrl: "",
+      imageUrl: "/assets/images/rover-p4-club.jpg",
       category: "Car Club",
       state: "",
       slug: "rover-p4-drivers-guild",
-      description: "The Rover P4 Drivers' Guild is dedicated to the preservation and enjoyment of Rover P4 vehicles, affectionately known as 'Aunties'. The club provides technical support, spares, and regular events for P4 enthusiasts."
+      description: "The Rover P4 Drivers Guild caters for owners and enthusiasts of the Rover P4 models manufactured between 1949 and 1964.",
+      marque: "Rover"
     },
     {
       title: "Rover SDI Club",
@@ -55,11 +60,12 @@ module.exports = function() {
       city: "Swindon",
       postalCode: "SN2 1WS",
       countryCode: "GB",
-      imageUrl: "",
+      imageUrl: "/assets/images/rover-sdi-club.jpg",
       category: "Car Club",
       state: "",
       slug: "rover-sdi-club",
-      description: "The Rover SDI Club is focused on the Rover SD1 model produced between 1976 and 1986. The club offers technical support, parts sourcing assistance, and regular meetings for SD1 owners and enthusiasts."
+      description: "The Rover SDI Club is dedicated to the preservation and enjoyment of the Rover SD1 range of cars manufactured from 1976 to 1986.",
+      marque: "Rover"
     },
     {
       title: "Rolls-Royce Enthusiasts' Club - Surrey Section",
@@ -67,14 +73,15 @@ module.exports = function() {
       address: "Melrose Cottage, Cranleigh Road, Ewhurst, Surrey GU6 7RJ",
       phone: "01483 271853",
       email: "secretary@rrec-surrey.uk",
-      city: "Surrey",
+      city: "Surrey GU6 7RJ",
       postalCode: "GU6 7RJ",
       countryCode: "GB",
-      imageUrl: "",
+      imageUrl: "/assets/images/rolls-royce-surrey.jpg",
       category: "Car Club",
       state: "Surrey",
       slug: "rolls-royce-enthusiasts-club-surrey-section",
-      description: "The Surrey Section of the Rolls-Royce Enthusiasts' Club serves members in the Surrey area, organizing events, drives, and social gatherings for local Rolls-Royce and Bentley enthusiasts."
+      description: "The Surrey Section of the Rolls-Royce Enthusiasts' Club, serving members in the Surrey region.",
+      marque: "Rolls-Royce"
     },
     {
       title: "Rover P6 Owners Club",
@@ -85,105 +92,97 @@ module.exports = function() {
       city: "Huddersfield",
       postalCode: "HD8 8HJ",
       countryCode: "GB",
-      imageUrl: "",
+      imageUrl: "/assets/images/rover-p6-club.jpg",
       category: "Car Club",
       state: "",
       slug: "rover-p6-owners-club",
-      description: "The Rover P6 Owners Club is dedicated to the preservation and enjoyment of the Rover P6 model, produced between 1963 and 1977. The club provides technical support, spare parts, and regular events for P6 enthusiasts."
+      featured: true,
+      description: "The Rover P6 Owners Club supports owners and enthusiasts of the Rover 2000, 2200 and 3500 models produced between 1963 and 1977.",
+      marque: "Rover"
     },
     {
       title: "Rover P5 Owners Club",
       website: "https://www.roverp5club.org.uk",
-      address: "Membership Secretary Rover P5 Club, 13 Glen Avenue, Ashford, Middlesex TW15 2JE, United Kingdom.",
+      address: "Membership Secretary Rover P5 Club, 13 Glen Avenue, Ashford, Middlesex, TW15 2JE, United Kingdom.",
       phone: "01784 258166",
       email: "",
       city: "Ashford",
       postalCode: "TW15 2JE",
       countryCode: "GB",
-      imageUrl: "",
+      imageUrl: "/assets/images/rover-p5-club.jpg",
       category: "Car Club",
-      state: "Middlesex",
+      state: "",
       slug: "rover-p5-owners-club",
-      description: "The Rover P5 Owners Club supports enthusiasts of the Rover P5 and P5B models. The club organizes events, provides technical advice, and helps members source spares for these classic British luxury cars."
+      description: "The Rover P5 Club is dedicated to the preservation and use of Rover P5 and P5B models produced between 1958 and 1973.",
+      marque: "Rover"
     },
     {
       title: "Club Peugeot UK",
-      website: "https://www.clubpeugeotuk.org",
-      address: "85 Warwick Road, Banbury, Oxfordshire, OX16 9HJ",
-      phone: "01295 272587",
-      email: "info@clubpeugeotuk.org",
-      city: "Banbury",
-      postalCode: "OX16 9HJ",
+      website: "https://www.peugeotclub.org",
+      address: "4 The Paddocks, York, North Yorkshire YO32 9GW",
+      phone: "01904 784833",
+      email: "info@peugeotclub.org",
+      city: "York",
+      postalCode: "YO32 9GW",
       countryCode: "GB",
-      imageUrl: "/assets/images/club-peugeot-uk.jpg",
+      imageUrl: "/assets/images/peugeot-club.jpg",
       category: "Car Club",
-      state: "Oxfordshire",
+      state: "North Yorkshire",
       slug: "club-peugeot-uk",
       featured: true,
-      description: "Club Peugeot UK is the official club for all Peugeot enthusiasts in the United Kingdom. Catering to owners of both classic and modern Peugeots, the club organizes rallies, shows, and technical workshops throughout the year."
+      description: "Club Peugeot UK is the official club for all Peugeot enthusiasts, covering all models from vintage to modern.",
+      marque: "Peugeot"
     },
     {
       title: "Ford Classic and Capri Owners Club",
-      website: "https://www.fordcapriclub.co.uk",
-      address: "72 Manor Road, Burnham-on-Sea, Somerset, TA8 2AS",
-      phone: "07789 123456",
-      email: "secretary@fordcapriclub.co.uk",
-      city: "Burnham-on-Sea",
-      postalCode: "TA8 2AS",
+      website: "https://www.fccoc.org.uk",
+      address: "1 Manor Close, Colchester CO4 3DJ",
+      phone: "01206 240678",
+      email: "secretary@fccoc.org.uk",
+      city: "Colchester",
+      postalCode: "CO4 3DJ",
       countryCode: "GB",
       imageUrl: "/assets/images/ford-classic-capri.jpg",
       category: "Car Club",
-      state: "Somerset",
+      state: "Essex",
       slug: "ford-classic-and-capri-owners-club",
       featured: true,
-      description: "The Ford Classic and Capri Owners Club is dedicated to the preservation and enjoyment of Ford Consul Classics, Capris, and related vehicles. The club offers technical support, spares, and regular events across the UK."
+      description: "The Ford Classic and Capri Owners Club caters for the Ford Consul Classic, Consul Capri and all models of Ford Capri.",
+      marque: "Ford"
     },
     {
       title: "North West Casual Classics",
       website: "https://www.northwestcasualclassics.com",
-      address: "156 Chester Road, Warrington, Cheshire, WA4 6AG",
-      phone: "01925 234567",
+      address: "Warrington, Cheshire",
+      phone: "",
       email: "info@northwestcasualclassics.com",
       city: "Warrington",
-      postalCode: "WA4 6AG",
+      postalCode: "",
       countryCode: "GB",
       imageUrl: "/assets/images/nw-casual-classics.jpg",
-      category: "Car Club",
+      category: "Regional Club",
       state: "Cheshire",
       slug: "north-west-casual-classics",
       featured: true,
-      description: "North West Casual Classics is a friendly club for enthusiasts of all classic vehicles in the North West of England. With a relaxed approach to classic car ownership, the club welcomes vehicles of all makes, models, and conditions."
+      description: "North West Casual Classics is a friendly classic car club based in the North West of England, welcoming all makes and models.",
+      marque: "Various"
     },
     {
       title: "Range Rover Register",
       website: "https://www.rangeroverregister.org",
-      address: "PO Box 123, Reading, Berkshire, RG1 5AB",
-      phone: "0118 9876543",
-      email: "membership@rangeroverregister.org",
-      city: "Reading",
-      postalCode: "RG1 5AB",
+      address: "PO Box 251, Cranleigh, Surrey GU6 8WP",
+      phone: "",
+      email: "secretary@rangeroverregister.org",
+      city: "Cranleigh",
+      postalCode: "GU6 8WP",
       countryCode: "GB",
       imageUrl: "/assets/images/range-rover-register.jpg",
       category: "Car Club",
-      state: "Berkshire",
+      state: "Surrey",
       slug: "range-rover-register",
       featured: true,
-      description: "The Range Rover Register is the premier club for Range Rover enthusiasts, covering all generations from the classic three-door to the latest models. The club offers technical advice, parts sources, and regular off-road events."
-    },
-    {
-      title: "Jaguar E-Type Club",
-      website: "https://www.e-typeclub.com",
-      address: "Trent Park, Cockayne Hatley, Bedfordshire, SG19 2EA",
-      phone: "01234 567890",
-      email: "enquiries@e-typeclub.com",
-      city: "Bedfordshire",
-      postalCode: "SG19 2EA",
-      countryCode: "GB",
-      imageUrl: "/assets/images/jaguar-e-type-club.jpg",
-      category: "Car Club",
-      state: "Bedfordshire",
-      slug: "jaguar-e-type-club",
-      description: "The Jaguar E-Type Club is exclusively for owners and enthusiasts of the iconic Jaguar E-Type. The club offers technical support, tours, rallies, and track days for members to enjoy their E-Types to the fullest."
+      description: "The Range Rover Register is dedicated to the classic Range Rover, manufactured from 1970 to 1996.",
+      marque: "Range Rover"
     }
   ];
 };

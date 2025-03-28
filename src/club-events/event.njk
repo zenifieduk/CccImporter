@@ -1,0 +1,195 @@
+---
+layout: layouts/page.njk
+pagination:
+  data: events
+  size: 1
+  alias: event
+permalink: "club-events/{{ event.eventSlug }}/"
+eleventyComputed:
+  title: "{{ event.eventTitle }}"
+  description: "Information about {{ event.eventTitle }}, including date, location, ticket prices, and more."
+---
+
+{% set breadcrumbs = [
+  { url: '/club-events/', label: 'Club Events' },
+  { url: '/club-events/' + event.eventSlug + '/', label: event.eventTitle }
+] %}
+
+{% set eventDate = event.eventStartDateTime | parseDate %}
+{% set eventEndDate = event.eventEndDateTime | parseDate %}
+
+<div class="detail-header">
+  <div class="container">
+    <div style="margin-bottom: 1rem;">
+      {% for category in event.eventCategory %}
+        <span class="category-tag">{{ category }}</span>
+      {% endfor %}
+    </div>
+    
+    <h1 class="detail-title">{{ event.eventTitle }}</h1>
+    
+    <div class="detail-meta">
+      <div class="detail-meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        {% if eventDate %}
+          {{ eventDate | formatDate }}
+          {% if eventEndDate and eventDate.toDateString() != eventEndDate.toDateString() %}
+            - {{ eventEndDate | formatDate }}
+          {% endif %}
+        {% else %}
+          Date TBD
+        {% endif %}
+      </div>
+      
+      <div class="detail-meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        {% if eventDate %}
+          {{ eventDate | formatTime }}
+          {% if eventEndDate %}
+            - {{ eventEndDate | formatTime }}
+          {% endif %}
+        {% else %}
+          Time TBD
+        {% endif %}
+      </div>
+      
+      {% if event.eventCity or event.eventState %}
+        <div class="detail-meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          {% if event.eventCity %}{{ event.eventCity }}{% endif %}
+          {% if event.eventCity and event.eventState %}, {% endif %}
+          {% if event.eventState %}{{ event.eventState }}{% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="detail-content">
+  <div class="detail-main">
+    {% if event.eventDescription %}
+      <div class="event-description">
+        <h2>About This Event</h2>
+        <p>{{ event.eventDescription }}</p>
+      </div>
+    {% endif %}
+    
+    {% if event.eventImageUrl %}
+      <div class="event-gallery" style="margin: 2rem 0;">
+        <img src="{{ event.eventImageUrl }}" alt="{{ event.eventTitle }}" style="max-width: 100%; border-radius: 8px;">
+      </div>
+    {% endif %}
+    
+    <div class="event-details">
+      <h2>Event Details</h2>
+      
+      <div style="margin-top: 1.5rem;">
+        <h3>Date and Time</h3>
+        <p>
+          {% if eventDate %}
+            {{ eventDate | formatDate }}, {{ eventDate | formatTime }}
+            {% if eventEndDate %}
+              {% if eventDate.toDateString() == eventEndDate.toDateString() %}
+                to {{ eventEndDate | formatTime }}
+              {% else %}
+                to {{ eventEndDate | formatDate }}, {{ eventEndDate | formatTime }}
+              {% endif %}
+            {% endif %}
+          {% else %}
+            Date and time to be announced
+          {% endif %}
+        </p>
+      </div>
+      
+      <div style="margin-top: 1.5rem;">
+        <h3>Location</h3>
+        <p>{{ event.eventAddress }}</p>
+      </div>
+      
+      <div style="margin-top: 1.5rem;">
+        <h3>Price</h3>
+        <p>{{ event.eventTicketPrice }}</p>
+      </div>
+      
+      <div style="margin-top: 1.5rem;">
+        <h3>Categories</h3>
+        <div class="club-category">
+          {% for category in event.eventCategory %}
+            <span class="category-tag">{{ category }}</span>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="detail-sidebar">
+    <div class="detail-sidebar-section">
+      <h3 class="detail-sidebar-title">Location</h3>
+      <div style="height: 300px; background-color: #eee; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+        <a href="https://maps.google.com/?q={{ event.eventAddress | urlencode }}" target="_blank" rel="noopener">
+          View on Google Maps
+        </a>
+      </div>
+      <a href="https://maps.google.com/?q={{ event.eventAddress | urlencode }}" target="_blank" rel="noopener" class="button button-secondary" style="width: 100%; text-align: center;">Get Directions</a>
+    </div>
+    
+    <div class="detail-sidebar-section">
+      <h3 class="detail-sidebar-title">Share This Event</h3>
+      <div class="social-share" style="display: flex; gap: 1rem; margin-top: 1rem;">
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ page.url | urlencode }}" target="_blank" rel="noopener" style="color: #3b5998; font-size: 1.5rem;" aria-label="Share on Facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.77,7.46H14.5v-1.9c0-0.9,0.6-1.1,1-1.1h3V0.3h-4.1C10.8,0.3,9.5,2.4,9.5,5.3v2.1h-3v4h3v12h5v-12h3.85l0.42-4H14.5z"/>
+          </svg>
+        </a>
+        <a href="https://twitter.com/intent/tweet?text={{ event.eventTitle | urlencode }}&url={{ page.url | urlencode }}" target="_blank" rel="noopener" style="color: #1da1f2; font-size: 1.5rem;" aria-label="Share on Twitter">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M23.44,4.83c-0.8,0.35-1.66,0.59-2.58,0.69c0.93-0.56,1.64-1.43,1.98-2.49c-0.87,0.52-1.83,0.89-2.85,1.09 C19.1,3.07,17.9,2.5,16.56,2.5c-2.57,0-4.65,2.08-4.65,4.65c0,0.36,0.04,0.72,0.12,1.06C8.04,8.05,4.5,6.2,2.16,3.51 C1.78,4.19,1.56,4.99,1.56,5.83c0,1.61,0.82,3.03,2.07,3.86C2.87,9.67,2.14,9.47,1.5,9.14v0.06c0,2.25,1.6,4.12,3.72,4.55 c-0.39,0.11-0.8,0.16-1.22,0.16c-0.3,0-0.59-0.03-0.87-0.08c0.59,1.84,2.31,3.19,4.34,3.22c-1.59,1.25-3.59,1.99-5.77,1.99 c-0.37,0-0.74-0.02-1.11-0.07c2.06,1.32,4.5,2.09,7.13,2.09c8.55,0,13.24-7.09,13.24-13.24c0-0.2,0-0.4-0.01-0.6 C22.06,6.5,22.83,5.72,23.44,4.83z"/>
+          </svg>
+        </a>
+        <a href="mailto:?subject={{ event.eventTitle | urlencode }}&body={{ event.eventDescription | urlencode }}%0A%0A{{ page.url | urlencode }}" style="color: #ea4335; font-size: 1.5rem;" aria-label="Share via Email">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+    
+    <div class="detail-sidebar-section">
+      <h3 class="detail-sidebar-title">Organizer</h3>
+      <p>For more information about this event, please visit the <a href="{{ event.eventWebsite }}" target="_blank" rel="noopener">official website</a>.</p>
+    </div>
+    
+    <div class="detail-sidebar-section">
+      <a href="{{ event.eventWebsite }}" target="_blank" rel="noopener" class="button button-primary" style="width: 100%; text-align: center;">Visit Website</a>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="margin-top: 3rem;">
+  <div class="section-header">
+    <h2 class="section-title">Other Upcoming Events</h2>
+  </div>
+  
+  <div class="event-grid">
+    {% set otherEvents = events | limit(3) %}
+    {% for event in otherEvents %}
+      {% include "components/event-card.njk" %}
+    {% endfor %}
+  </div>
+  
+  <div style="text-align: center; margin-top: 2rem;">
+    <a href="/club-events/" class="button button-primary">View All Events</a>
+  </div>
+</div>

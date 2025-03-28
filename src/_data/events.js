@@ -1,4 +1,6 @@
 module.exports = function() {
+  // This would typically be fetched from a headless CMS
+  // For now, using static data based on the provided sample
   return [
     {
       eventTitle: "Classic Car Show 2025",
@@ -12,7 +14,7 @@ module.exports = function() {
       eventCity: "Gloucester",
       eventPostalCode: "GL2 8DP",
       eventCountryCode: "GB",
-      eventImageUrl: "/assets/images/classic-car-show-2025.jpg",
+      eventImageUrl: "/assets/images/events/classic-car-show-2025.jpg",
       eventCategory: ["Car Show", "Truck Show"],
       eventState: "Gloucestershire",
       eventSlug: "classic-car-show-2025-highnam-court",
@@ -31,7 +33,7 @@ module.exports = function() {
       eventCity: "Bicester",
       eventPostalCode: "OX2 5HA",
       eventCountryCode: "GB",
-      eventImageUrl: "/assets/images/pistons-pretzels.jpg",
+      eventImageUrl: "/assets/images/events/pistons-pretzels.jpg",
       eventCategory: ["Car Meet", "Classic Car"],
       eventState: "Oxfordshire",
       eventSlug: "pistons-pretzels-uk-May-2025",
@@ -50,7 +52,7 @@ module.exports = function() {
       eventCity: "London",
       eventPostalCode: "EC1Y 2BQ",
       eventCountryCode: "GB",
-      eventImageUrl: "/assets/images/aston-martin-car-show.jpg",
+      eventImageUrl: "/assets/images/events/aston-martin-car-show.jpg",
       eventCategory: ["Car Show"],
       eventState: "London",
       eventSlug: "aston-martin-brisith-icon",

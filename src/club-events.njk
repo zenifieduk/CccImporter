@@ -1,170 +1,166 @@
 ---
-layout: layouts/base.njk
-title: Classic Car Events | UK Directory
-description: Find classic car shows, meets, and events across the UK.
-pagination:
-  data: collections.events
-  size: 9
+layout: layouts/page.njk
+title: Classic Car Events
+description: Browse upcoming classic car shows, meets, and events across the UK.
 ---
 
-<section class="hero-section">
-  <div class="container">
-    <div class="hero-content">
-      <h1 class="hero-title">Classic Car Events</h1>
-      <p class="hero-subtitle">Find classic car shows, meets, and events across the UK</p>
-    </div>
-  </div>
-</section>
+{% set breadcrumbs = [{ url: '/club-events/', label: 'Club Events' }] %}
 
-<div class="container">
-  {% set categories = collections.eventCategories %}
-  {% set showAzFilters = false %}
-  {% set searchTerm = '' %}
-  {% set selectedCategory = '' %}
-  {% set selectedLocation = '' %}
-  {% include "components/search-filters.njk" %}
+<h1>Classic Car Events</h1>
+
+<p>Find classic car shows, meets, and events across the UK.</p>
+
+{% set eventCategories = [] %}
+{% for event in events %}
+  {% if event.eventCategory %}
+    {% if event.eventCategory | isArray %}
+      {% for cat in event.eventCategory %}
+        {% set eventCategories = (eventCategories.push(cat), eventCategories) %}
+      {% endfor %}
+    {% else %}
+      {% set eventCategories = (eventCategories.push(event.eventCategory), eventCategories) %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% set uniqueCategories = eventCategories | unique %}
+{% set locations = events | map("eventCity") | unique %}
+
+<div x-data="eventSearch">
+  {% include "components/search-filter.njk" %}
   
-  <div class="event-results">
-    <h2 class="section-title">Featured Events</h2>
-    <div id="eventsContainer" data-events="{{ collections.featuredEvents | json | escape }}" x-data="eventDirectory">
-      <div class="grid" x-show="filteredEvents.length > 0">
-        <template x-for="event in filteredEvents" :key="event.eventSlug">
+  <div x-show="isLoading" class="loading-indicator">Loading...</div>
+  
+  <div x-cloak x-show="!isLoading">
+    <div class="featured-section" x-show="filteredEvents.some(event => event.eventFeatured)">
+      <h2>Featured Events</h2>
+      
+      <div class="event-grid">
+        <template x-for="event in filteredEvents.filter(e => e.eventFeatured)" :key="event.eventSlug">
           <div class="event-card">
+            <div x-show="event.eventFeatured" class="event-featured">Featured</div>
+            
             <div class="event-image">
-              <template x-if="event.eventImageUrl">
-                <img :src="event.eventImageUrl" :alt="event.eventTitle" class="event-image-img">
-              </template>
-              <template x-if="!event.eventImageUrl">
-                <div class="event-image-placeholder">Image not available</div>
-              </template>
+              <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
               
-              <div class="event-date-badge">
+              <div class="event-date">
                 <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
-                <span x-text="formatShortDate(event.eventStartDateTime)"></span>
+                <span class="event-day" x-text="formatDay(event.eventStartDateTime)"></span>
               </div>
-              
-              <div class="featured-badge">Featured</div>
             </div>
             
-            <div class="card-content">
-              <h3 class="card-title" x-text="event.eventTitle"></h3>
+            <div class="event-content">
+              <h3 class="event-title" x-text="event.eventTitle"></h3>
               
-              <div class="card-details">
-                <template x-if="event.eventCity">
-                  <div class="card-detail">
-                    <i data-feather="map-pin"></i> 
-                    <span x-text="event.eventCity"></span>
-                  </div>
-                </template>
-                
-                <template x-if="event.eventStartDateTime">
-                  <div class="card-detail">
-                    <i data-feather="calendar"></i> 
-                    <span x-text="formatDate(event.eventStartDateTime)"></span>
-                  </div>
-                </template>
-                
-                <template x-if="event.eventCategory && event.eventCategory.length">
-                  <div class="card-tags">
-                    <template x-for="category in event.eventCategory" :key="category">
-                      <span class="card-tag" x-text="category"></span>
-                    </template>
-                  </div>
-                </template>
+              <div class="event-location" x-show="event.eventCity || event.eventState">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span x-text="[event.eventCity, event.eventState].filter(Boolean).join(', ')"></span>
               </div>
               
-              <div class="card-actions">
-                <span class="price-badge" x-text="event.eventTicketPrice"></span>
-                <a :href="'/events/' + event.eventSlug + '/'" class="view-btn">View Details</a>
+              <div class="event-time">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span x-text="formatTime(event.eventStartDateTime)"></span>
               </div>
+              
+              <div class="event-price" x-show="event.eventTicketPrice" x-text="event.eventTicketPrice"></div>
+            </div>
+            
+            <div class="event-actions">
+              <a :href="'/club-events/' + event.eventSlug + '/'" class="button button-primary">View Details</a>
+              <a x-show="event.eventWebsite" :href="event.eventWebsite" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+    
+    <div x-data="pagination" x-effect="items = filteredEvents.filter(e => !e.eventFeatured)">
+      <h2>Upcoming Events</h2>
+      
+      <div class="event-grid" x-show="paginatedItems.length > 0">
+        <template x-for="event in paginatedItems" :key="event.eventSlug">
+          <div class="event-card">
+            <div class="event-image">
+              <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
+              
+              <div class="event-date">
+                <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
+                <span class="event-day" x-text="formatDay(event.eventStartDateTime)"></span>
+              </div>
+            </div>
+            
+            <div class="event-content">
+              <h3 class="event-title" x-text="event.eventTitle"></h3>
+              
+              <div class="event-location" x-show="event.eventCity || event.eventState">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span x-text="[event.eventCity, event.eventState].filter(Boolean).join(', ')"></span>
+              </div>
+              
+              <div class="event-time">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span x-text="formatTime(event.eventStartDateTime)"></span>
+              </div>
+              
+              <div class="event-price" x-show="event.eventTicketPrice" x-text="event.eventTicketPrice"></div>
+            </div>
+            
+            <div class="event-actions">
+              <a :href="'/club-events/' + event.eventSlug + '/'" class="button button-primary">View Details</a>
+              <a x-show="event.eventWebsite" :href="event.eventWebsite" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
             </div>
           </div>
         </template>
       </div>
       
-      <div class="no-results" x-show="filteredEvents.length === 0">
-        <h3>No events found</h3>
-        <p>Please try adjusting your search criteria or reset the filters.</p>
-        <button class="btn" @click="resetFilters">Reset Filters</button>
+      <div x-show="paginatedItems.length === 0" class="no-results">
+        <p>No events found matching your criteria. Please try different search terms or <button @click="reset" class="reset-link">reset filters</button>.</p>
+      </div>
+      
+      <div class="pagination" x-show="totalPages > 1">
+        <div class="pagination-controls">
+          <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="pagination-arrow pagination-prev" :class="{ 'disabled': currentPage === 1 }">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Previous
+          </button>
+          
+          <div class="pagination-numbers">
+            <template x-for="(pageNumber, index) in pageNumbers" :key="index">
+              <template x-if="pageNumber === '...'">
+                <span class="pagination-ellipsis">...</span>
+              </template>
+              <template x-if="pageNumber !== '...'">
+                <button @click="goToPage(pageNumber)" class="pagination-number" :class="{ 'active': pageNumber === currentPage }" x-text="pageNumber"></button>
+              </template>
+            </template>
+          </div>
+          
+          <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-arrow pagination-next" :class="{ 'disabled': currentPage === totalPages }">
+            Next
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 4px;">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="pagination-info" x-text="`Showing ${startIndex} to ${endIndex} of ${totalItems} events`"></div>
       </div>
     </div>
   </div>
-  
-  <div class="event-results">
-    <h2 class="section-title">Upcoming Events</h2>
-    <div id="upcomingEventsContainer" data-events="{{ collections.upcomingEvents | json | escape }}">
-      <div class="grid">
-        {% for event in pagination.items %}
-          {% include "components/event-card.njk" %}
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-  
-  {% include "components/pagination.njk" %}
 </div>
 
-<script>
-  function formatMonth(dateString) {
-    if (!dateString) return '';
-    
-    try {
-      const month = dateString.substring(2, 4);
-      const date = new Date(2000, parseInt(month) - 1, 1);
-      return date.toLocaleString('en-US', { month: 'short' });
-    } catch (error) {
-      return '';
-    }
-  }
-  
-  function formatShortDate(dateString) {
-    if (!dateString) return 'TBD';
-    
-    try {
-      const day = dateString.substring(0, 2);
-      const month = dateString.substring(2, 4);
-      const year = dateString.substring(4, 8);
-      
-      const date = new Date(`${year}-${month}-${day}`);
-      
-      const options = { 
-        day: 'numeric'
-      };
-      
-      return date.toLocaleDateString('en-GB', options);
-    } catch (error) {
-      return 'TBD';
-    }
-  }
-  
-  function formatDate(dateString) {
-    if (!dateString) return 'Date TBD';
-    
-    try {
-      const day = dateString.substring(0, 2);
-      const month = dateString.substring(2, 4);
-      const year = dateString.substring(4, 8);
-      const time = dateString.substring(9);
-      
-      const date = new Date(`${year}-${month}-${day}T${time}`);
-      
-      const options = { 
-        weekday: 'short', 
-        day: 'numeric', 
-        month: 'short', 
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      };
-      
-      return date.toLocaleDateString('en-GB', options);
-    } catch (error) {
-      return 'Date TBD';
-    }
-  }
-  
-  // Make these functions available to Alpine
-  window.formatMonth = formatMonth;
-  window.formatShortDate = formatShortDate;
-  window.formatDate = formatDate;
-</script>
+<script src="/assets/js/club-events.js"></script>

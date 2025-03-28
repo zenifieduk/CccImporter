@@ -1,128 +1,102 @@
-const Image = require("@11ty/eleventy-img");
-const path = require("path");
-
-// Image shortcode
-async function imageShortcode(src, alt, sizes = "100vw", classes = "") {
-  if (!src) {
-    return `<div class="image-placeholder ${classes}">Image not available</div>`;
-  }
-
-  // Handle both local and external images
-  const isExternal = src.startsWith('http');
-  const imageSrc = isExternal ? src : './src' + src;
-  
-  let metadata;
-  try {
-    metadata = await Image(imageSrc, {
-      widths: [300, 600, 900],
-      formats: ["webp", "jpeg"],
-      outputDir: "./_site/img/",
-      urlPath: "/img/",
-      filenameFormat: function(id, src, width, format) {
-        const extension = path.extname(src);
-        const name = path.basename(src, extension);
-        return `${name}-${width}w.${format}`;
-      }
-    });
-  } catch (error) {
-    console.error(`Error processing image: ${src}`, error);
-    return `<div class="image-placeholder ${classes}">Image not available</div>`;
-  }
-
-  const imageAttributes = {
-    alt,
-    sizes,
-    loading: "lazy",
-    decoding: "async",
-    class: classes
-  };
-
-  return Image.generateHTML(metadata, imageAttributes);
-}
+const { DateTime } = require("luxon");
 
 module.exports = function(eleventyConfig) {
-  // Copy static assets
-  eleventyConfig.addPassthroughCopy("src/assets/css");
-  eleventyConfig.addPassthroughCopy("src/assets/js");
-  eleventyConfig.addPassthroughCopy("src/assets/svg");
-  eleventyConfig.addPassthroughCopy("src/assets/images");
+  // Copy assets directory
+  eleventyConfig.addPassthroughCopy("src/assets");
   
-  // Add shortcodes
-  eleventyConfig.addNunjucksAsyncShortcode("image", imageShortcode);
+  // Add a filter to format dates
+  eleventyConfig.addFilter("formatDate", function(dateObj) {
+    return DateTime.fromJSDate(dateObj).toFormat("dd LLL yyyy");
+  });
   
-  // Add filters
+  // Add a filter to format time
+  eleventyConfig.addFilter("formatTime", function(dateObj) {
+    return DateTime.fromJSDate(dateObj).toFormat("HH:mm");
+  });
+
+  // Add a filter for limit
   eleventyConfig.addFilter("limit", function(array, limit) {
     return array.slice(0, limit);
   });
   
-  eleventyConfig.addFilter("formatDate", function(dateString) {
-    if (!dateString) return 'Date TBD';
+  // Add filter for getting featured items
+  eleventyConfig.addFilter("filter", function(array, property) {
+    return array.filter(item => item[property]);
+  });
+  
+  // Add unique filter for arrays
+  eleventyConfig.addFilter("unique", function(array, property) {
+    if (!array || !Array.isArray(array)) return [];
+    
+    const propertyValues = array.map(item => item[property]);
+    return [...new Set(propertyValues)];
+  });
+  
+  // Add map filter for arrays
+  eleventyConfig.addFilter("map", function(array, property) {
+    if (!array || !Array.isArray(array)) return [];
+    
+    return array.map(item => item[property]);
+  });
+  
+  // Add isArray filter
+  eleventyConfig.addFilter("isArray", function(value) {
+    return Array.isArray(value);
+  });
+  
+  // Add a filter to convert string to date
+  eleventyConfig.addFilter("parseDate", function(dateString) {
+    // Format: DDMMYYYY:HH:MM:SS
+    if (!dateString) return null;
     
     try {
-      // Parse the date string (format: DDMMYYYY:HH:MM:SS)
       const day = dateString.substring(0, 2);
       const month = dateString.substring(2, 4);
       const year = dateString.substring(4, 8);
       const time = dateString.substring(9);
       
-      // Create a date object
-      const date = new Date(`${year}-${month}-${day}T${time}`);
-      
-      // Format the date
-      const options = { 
-        weekday: 'short', 
-        day: 'numeric', 
-        month: 'short', 
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-      };
-      
-      return date.toLocaleDateString('en-GB', options);
+      return new Date(`${year}-${month}-${day}T${time}`);
     } catch (error) {
-      console.error('Error formatting date:', error);
-      return 'Date TBD';
+      console.error('Error parsing date:', error);
+      return null;
     }
   });
   
-  eleventyConfig.addFilter("shortDate", function(dateString) {
-    if (!dateString) return 'TBD';
+  // Add a filter to get event month
+  eleventyConfig.addFilter("eventMonth", function(dateString) {
+    const date = eleventyConfig.getFilter("parseDate")(dateString);
+    if (!date) return "";
     
-    try {
-      // Parse the date string (format: DDMMYYYY:HH:MM:SS)
-      const day = dateString.substring(0, 2);
-      const month = dateString.substring(2, 4);
-      const year = dateString.substring(4, 8);
-      
-      // Create a date object
-      const date = new Date(`${year}-${month}-${day}`);
-      
-      // Format the date
-      const options = { 
-        day: 'numeric', 
-        month: 'short'
-      };
-      
-      return date.toLocaleDateString('en-GB', options);
-    } catch (error) {
-      console.error('Error formatting short date:', error);
-      return 'TBD';
-    }
+    return DateTime.fromJSDate(date).toFormat("LLL");
   });
   
-  eleventyConfig.addFilter("extractMonth", function(dateString) {
-    if (!dateString) return '';
-    
-    try {
-      const month = dateString.substring(2, 4);
-      const date = new Date(2000, parseInt(month) - 1, 1);
-      return date.toLocaleString('en-US', { month: 'short' });
-    } catch (error) {
-      return '';
-    }
+  // Add a filter to make a slug
+  eleventyConfig.addFilter("slug", function(str) {
+    return str
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/[\s_-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
   });
   
-  // Configure eleventy
+  // Add shortcode for environment variables
+  eleventyConfig.addShortcode("env", function(name, fallback = "") {
+    return process.env[name] || fallback;
+  });
+  
+  // Add filter for absolute URLs
+  eleventyConfig.addFilter("absoluteUrl", function(url, base) {
+    if (!url) return url;
+    if (url.startsWith('http')) return url;
+    return new URL(url, base || 'https://classiccars.club/').href;
+  });
+  
+  // Add date filter
+  eleventyConfig.addFilter("date", function(date, format) {
+    return DateTime.fromJSDate(new Date(date)).toFormat(format);
+  });
+  
+  // Configure directory structure
   return {
     dir: {
       input: "src",

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Classic Car Events | Classic Car Clubs | UK Directory</title>
+  <meta name="description" content="Browse upcoming classic car shows, meets, and events across the UK.">
+  <link rel="icon" type="image/svg+xml" href="/assets/images/ccc-logo.svg">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="/assets/js/alpine-init.js"></script>
+</head>
+<body>
+  <header class="site-header" x-data="mobileMenu">
+  <div class="container">
+    <div class="logo">
+      <a href="/">
+        <img class="logo-image" src="/assets/images/ccc-logo.svg" alt="Classic Car Clubs | UK Directory">
+      </a>
+    </div>
+    
+    <nav class="desktop-nav">
+      <ul>
+        
+          <li>
+            <a href="/" >
+              Home
+            </a>
+          </li>
+        
+          <li>
+            <a href="/club-directory/" >
+              Club Directory
+            </a>
+          </li>
+        
+          <li>
+            <a href="/club-events/" aria-current="page">
+              Club Events
+            </a>
+          </li>
+        
+          <li>
+            <a href="/contact/" >
+              Contact
+            </a>
+          </li>
+        
+      </ul>
+    </nav>
+    
+    <button class="mobile-menu-toggle" @click="toggle" aria-label="Toggle menu">
+      <span class="hamburger-icon">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </span>
+    </button>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" :class="{ 'active': isOpen }" x-cloak>
+      <div class="mobile-menu-container">
+        <div class="mobile-menu-header">
+          <div class="logo">
+            <a href="/" @click="close">
+              <img class="logo-image" src="/assets/images/ccc-logo.svg" alt="Classic Car Clubs | UK Directory">
+            </a>
+          </div>
+          
+          <button class="mobile-menu-close" @click="close" aria-label="Close menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        
+        <nav class="mobile-nav">
+          <ul>
+            
+              <li>
+                <a href="/" @click="close" >
+                  Home
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/" @click="close" >
+                  Club Directory
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+              <li>
+                <a href="/club-events/" @click="close" aria-current="page">
+                  Club Events
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+              <li>
+                <a href="/contact/" @click="close" >
+                  Contact
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+          </ul>
+        </nav>
+        
+        <div class="mobile-menu-footer">
+          <p class="cta-text">Connect with classic car enthusiasts</p>
+          <a href="/contact/" class="contact-link" @click="close">Get in touch</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+  
+  <main>
+    
+<div class="container">
+  
+    <ul class="breadcrumbs">
+  <li><a href="/">Home</a></li>
+  
+</ul>
+
+  
+  
+  
+
+
+<h1>Classic Car Events</h1>
+
+<p>Find classic car shows, meets, and events across the UK.</p>
+
+
+
+  
+    
+      
+        
+      
+        
+      
+    
+  
+
+  
+    
+      
+        
+      
+        
+      
+    
+  
+
+  
+    
+      
+        
+      
+    
+  
+
+
+
+
+
+<div x-data="eventSearch">
+  <div class="search-container">
+  <form class="search-form">
+    <div class="search-grid">
+      <div class="custom-search-group">
+        <label for="search-term">Search Term</label>
+        <input type="text" id="search-term" class="custom-search-input search-term" placeholder="Search..." value="">
+      </div>
+      
+      
+      
+      <div class="custom-search-group">
+        <label for="search-location">Location</label>
+        <input type="text" id="search-location" class="custom-search-input search-location" placeholder="City, region..." value="">
+      </div>
+      
+      <div class="search-actions">
+        <button type="submit" class="search-button">Search</button>
+        <button type="button" class="reset-button">Reset</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+  
+  <div x-show="isLoading" class="loading-indicator">Loading...</div>
+  
+  <div x-cloak x-show="!isLoading">
+    <div class="featured-section" x-show="filteredEvents.some(event => event.eventFeatured)">
+      <h2>Featured Events</h2>
+      
+      <div class="event-grid">
+        <template x-for="event in filteredEvents.filter(e => e.eventFeatured)" :key="event.eventSlug">
+          <div class="event-card">
+            <div x-show="event.eventFeatured" class="event-featured">Featured</div>
+            
+            <div class="event-image">
+              <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
+              
+              <div class="event-date">
+                <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
+                <span class="event-day" x-text="formatDay(event.eventStartDateTime)"></span>
+              </div>
+            </div>
+            
+            <div class="event-content">
+              <h3 class="event-title" x-text="event.eventTitle"></h3>
+              
+              <div class="event-location" x-show="event.eventCity || event.eventState">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span x-text="[event.eventCity, event.eventState].filter(Boolean).join(', ')"></span>
+              </div>
+              
+              <div class="event-time">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span x-text="formatTime(event.eventStartDateTime)"></span>
+              </div>
+              
+              <div class="event-price" x-show="event.eventTicketPrice" x-text="event.eventTicketPrice"></div>
+            </div>
+            
+            <div class="event-actions">
+              <a :href="'/club-events/' + event.eventSlug + '/'" class="button button-primary">View Details</a>
+              <a x-show="event.eventWebsite" :href="event.eventWebsite" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+    
+    <div x-data="pagination" x-effect="items = filteredEvents.filter(e => !e.eventFeatured)">
+      <h2>Upcoming Events</h2>
+      
+      <div class="event-grid" x-show="paginatedItems.length > 0">
+        <template x-for="event in paginatedItems" :key="event.eventSlug">
+          <div class="event-card">
+            <div class="event-image">
+              <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
+              
+              <div class="event-date">
+                <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
+                <span class="event-day" x-text="formatDay(event.eventStartDateTime)"></span>
+              </div>
+            </div>
+            
+            <div class="event-content">
+              <h3 class="event-title" x-text="event.eventTitle"></h3>
+              
+              <div class="event-location" x-show="event.eventCity || event.eventState">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span x-text="[event.eventCity, event.eventState].filter(Boolean).join(', ')"></span>
+              </div>
+              
+              <div class="event-time">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span x-text="formatTime(event.eventStartDateTime)"></span>
+              </div>
+              
+              <div class="event-price" x-show="event.eventTicketPrice" x-text="event.eventTicketPrice"></div>
+            </div>
+            
+            <div class="event-actions">
+              <a :href="'/club-events/' + event.eventSlug + '/'" class="button button-primary">View Details</a>
+              <a x-show="event.eventWebsite" :href="event.eventWebsite" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+            </div>
+          </div>
+        </template>
+      </div>
+      
+      <div x-show="paginatedItems.length === 0" class="no-results">
+        <p>No events found matching your criteria. Please try different search terms or <button @click="reset" class="reset-link">reset filters</button>.</p>
+      </div>
+      
+      <div class="pagination" x-show="totalPages > 1">
+        <div class="pagination-controls">
+          <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="pagination-arrow pagination-prev" :class="{ 'disabled': currentPage === 1 }">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Previous
+          </button>
+          
+          <div class="pagination-numbers">
+            <template x-for="(pageNumber, index) in pageNumbers" :key="index">
+              <template x-if="pageNumber === '...'">
+                <span class="pagination-ellipsis">...</span>
+              </template>
+              <template x-if="pageNumber !== '...'">
+                <button @click="goToPage(pageNumber)" class="pagination-number" :class="{ 'active': pageNumber === currentPage }" x-text="pageNumber"></button>
+              </template>
+            </template>
+          </div>
+          
+          <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-arrow pagination-next" :class="{ 'disabled': currentPage === totalPages }">
+            Next
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 4px;">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="pagination-info" x-text="`Showing ${startIndex} to ${endIndex} of ${totalItems} events`"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/assets/js/club-events.js"></script>
+
+</div>
+
+  </main>
+  
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="logo-column">
+        <div class="footer-logo">
+          <h3>CLASSIC CAR CLUBS</h3>
+          <p class="tagline">UK NETWORK</p>
+        </div>
+        <p class="footer-blurb">
+          Your ultimate resource for connecting with classic car enthusiasts across the 
+          United Kingdom. Find clubs dedicated to vintage marques, iconic eras, and 
+          specific regions.
+        </p>
+      </div>
+      
+      
+        <div class="footer-column">
+          <h4>Directory</h4>
+          <ul class="footer-links">
+            
+              <li>
+                <a href="/club-directory/">All Clubs</a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/?category=Car%20Club">Car Type Clubs</a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/?category=Regional%20Club">Region Clubs</a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/?featured=true">Featured Clubs</a>
+              </li>
+            
+          </ul>
+        </div>
+      
+        <div class="footer-column">
+          <h4>Events</h4>
+          <ul class="footer-links">
+            
+              <li>
+                <a href="/club-events/">All Events</a>
+              </li>
+            
+              <li>
+                <a href="/club-events/?category=Car%20Show">Car Shows</a>
+              </li>
+            
+              <li>
+                <a href="/club-events/?category=Car%20Meet">Meets</a>
+              </li>
+            
+              <li>
+                <a href="/club-events/?featured=true">Featured Events</a>
+              </li>
+            
+          </ul>
+        </div>
+      
+        <div class="footer-column">
+          <h4>About</h4>
+          <ul class="footer-links">
+            
+              <li>
+                <a href="/contact/">Contact Us</a>
+              </li>
+            
+              <li>
+                <a href="/privacy-policy/">Privacy Policy</a>
+              </li>
+            
+              <li>
+                <a href="/submit-club/">Submit a Club</a>
+              </li>
+            
+              <li>
+                <a href="/advertise/">Advertise With Us</a>
+              </li>
+            
+          </ul>
+        </div>
+      
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; YYYY Classic Car Clubs UK. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+  
+  <!-- Scripts -->
+  <script src="/assets/js/search.js"></script>
+</body>
+</html>

@@ -1,426 +1,137 @@
 ---
-layout: layouts/base.njk
-title: Contact Us | Classic Car Clubs UK
-description: Get in touch with Classic Car Clubs UK for any inquiries, suggestions, or to submit your club.
+layout: layouts/page.njk
+title: Contact Us
+description: Get in touch with the Classic Car Clubs UK team for inquiries, submissions, and advertising opportunities.
 ---
 
-<div class="container">
-  <div class="breadcrumb-container">
-    {% set breadcrumbs = [{ text: 'Contact Us' }] %}
-    {% include "components/breadcrumb.njk" %}
-  </div>
-  
-  <h1 class="page-title">Contact Us</h1>
-  
-  <div class="contact-layout">
-    <div class="contact-content">
-      <p class="intro-text">
-        Have a question, suggestion, or want to report an issue? We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.
+{% set breadcrumbs = [{ url: '/contact/', label: 'Contact' }] %}
+
+<h1>Contact Us</h1>
+
+<div class="detail-content" style="margin: 2rem 0;">
+  <div class="detail-main">
+    <div class="contact-form">
+      <p style="margin-bottom: 1.5rem;">
+        Have a question, suggestion, or need to get in touch with our team? Fill out the form below and we'll get back to you as soon as possible.
       </p>
       
-      <div class="contact-info-section">
-        <h2 class="section-title">Contact Information</h2>
-        <div class="contact-info-grid">
-          <div class="contact-info-item">
-            <i data-feather="mail" class="contact-icon"></i>
-            <div>
-              <div class="info-label">Email</div>
-              <a href="mailto:{{ site.email }}" class="info-value">{{ site.email }}</a>
-            </div>
-          </div>
-          
-          {% if site.phone %}
-            <div class="contact-info-item">
-              <i data-feather="phone" class="contact-icon"></i>
-              <div>
-                <div class="info-label">Phone</div>
-                <a href="tel:{{ site.phone }}" class="info-value">{{ site.phone }}</a>
-              </div>
-            </div>
-          {% endif %}
-          
-          <div class="contact-info-item">
-            <i data-feather="globe" class="contact-icon"></i>
-            <div>
-              <div class="info-label">Website</div>
-              <a href="{{ site.url }}" class="info-value">{{ site.url }}</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="contact-form-container">
-      <h2 class="section-title">Send us a message</h2>
-      <form id="contactForm" class="contact-form">
+      <form id="contactForm" action="/submit-contact" method="POST">
         <div class="form-group">
-          <label for="name" class="form-label">Your Name *</label>
+          <label for="name" class="form-label">Your Name</label>
           <input type="text" id="name" name="name" class="form-input" required>
         </div>
         
         <div class="form-group">
-          <label for="email" class="form-label">Email Address *</label>
+          <label for="email" class="form-label">Email Address</label>
           <input type="email" id="email" name="email" class="form-input" required>
         </div>
         
         <div class="form-group">
-          <label for="subject" class="form-label">Subject *</label>
-          <input type="text" id="subject" name="subject" class="form-input" required>
+          <label for="subject" class="form-label">Subject</label>
+          <select id="subject" name="subject" class="form-input">
+            <option value="general">General Inquiry</option>
+            <option value="club">Submit a Club</option>
+            <option value="event">Submit an Event</option>
+            <option value="advertising">Advertising Opportunity</option>
+            <option value="feedback">Website Feedback</option>
+          </select>
         </div>
         
-        <div class="form-group full-width">
-          <label for="message" class="form-label">Message *</label>
-          <textarea id="message" name="message" class="form-textarea" rows="6" required></textarea>
+        <div class="form-group">
+          <label for="message" class="form-label">Message</label>
+          <textarea id="message" name="message" class="form-input form-textarea" required></textarea>
         </div>
         
-        <div class="form-group full-width">
-          <div class="checkbox-container">
-            <input type="checkbox" id="privacy" name="privacy" required>
-            <label for="privacy" class="checkbox-label">I agree to the <a href="/privacy-policy/">privacy policy</a> *</label>
-          </div>
-        </div>
-        
-        <div class="form-actions">
-          <button type="submit" class="btn submit-btn">
-            <i data-feather="send"></i> Send Message
-          </button>
+        <div class="form-group">
+          <button type="submit" class="form-submit">Send Message</button>
         </div>
       </form>
+      
+      <div id="formSuccess" style="display: none; background-color: #d4edda; color: #155724; padding: 1rem; border-radius: 4px; margin-top: 1rem;">
+        Thank you for your message! We'll get back to you as soon as possible.
+      </div>
+      
+      <div id="formError" style="display: none; background-color: #f8d7da; color: #721c24; padding: 1rem; border-radius: 4px; margin-top: 1rem;">
+        There was an error sending your message. Please try again or contact us directly at the email address below.
+      </div>
     </div>
   </div>
   
-  <div class="other-ways-section">
-    <h2 class="section-title">Other Ways to Connect</h2>
-    <div class="other-ways-grid">
-      <div class="other-ways-item">
-        <i data-feather="users" class="other-ways-icon"></i>
-        <h3>Submit a Club</h3>
-        <p>Want to add your classic car club to our directory? Visit our submission page to get started.</p>
-        <a href="/submit-club/" class="btn btn-secondary">Submit a Club</a>
-      </div>
-      
-      <div class="other-ways-item">
-        <i data-feather="calendar" class="other-ways-icon"></i>
-        <h3>Submit an Event</h3>
-        <p>Hosting a classic car event? Let us help you promote it to our community of enthusiasts.</p>
-        <a href="/submit-event/" class="btn btn-secondary">Submit an Event</a>
-      </div>
-      
-      <div class="other-ways-item">
-        <i data-feather="message-circle" class="other-ways-icon"></i>
-        <h3>Social Media</h3>
-        <p>Follow us on social media for the latest updates, features, and classic car content.</p>
-        <div class="social-links">
-          {% for social in site.socialLinks %}
-            <a href="{{ social.url }}" target="_blank" rel="noopener" class="social-link {{ social.platform }}">
-              <i data-feather="{{ social.platform }}"></i>
+  <div class="detail-sidebar">
+    <div class="detail-sidebar-section">
+      <h3 class="detail-sidebar-title">Contact Information</h3>
+      <ul style="list-style: none; padding: 0;">
+        <li style="margin-bottom: 1rem;">
+          <strong>Email:</strong><br>
+          <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+        </li>
+        
+        <li style="margin-bottom: 1rem;">
+          <strong>Social Media:</strong><br>
+          <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+            <a href="https://www.facebook.com/classiccarclubsuk" target="_blank" rel="noopener" style="color: #3b5998; font-size: 1.5rem;" aria-label="Facebook">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18.77,7.46H14.5v-1.9c0-0.9,0.6-1.1,1-1.1h3V0.3h-4.1C10.8,0.3,9.5,2.4,9.5,5.3v2.1h-3v4h3v12h5v-12h3.85l0.42-4H14.5z"/>
+              </svg>
             </a>
-          {% endfor %}
-        </div>
-      </div>
+            <a href="https://twitter.com/classiccarclubs" target="_blank" rel="noopener" style="color: #1da1f2; font-size: 1.5rem;" aria-label="Twitter">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23.44,4.83c-0.8,0.35-1.66,0.59-2.58,0.69c0.93-0.56,1.64-1.43,1.98-2.49c-0.87,0.52-1.83,0.89-2.85,1.09 C19.1,3.07,17.9,2.5,16.56,2.5c-2.57,0-4.65,2.08-4.65,4.65c0,0.36,0.04,0.72,0.12,1.06C8.04,8.05,4.5,6.2,2.16,3.51 C1.78,4.19,1.56,4.99,1.56,5.83c0,1.61,0.82,3.03,2.07,3.86C2.87,9.67,2.14,9.47,1.5,9.14v0.06c0,2.25,1.6,4.12,3.72,4.55 c-0.39,0.11-0.8,0.16-1.22,0.16c-0.3,0-0.59-0.03-0.87-0.08c0.59,1.84,2.31,3.19,4.34,3.22c-1.59,1.25-3.59,1.99-5.77,1.99 c-0.37,0-0.74-0.02-1.11-0.07c2.06,1.32,4.5,2.09,7.13,2.09c8.55,0,13.24-7.09,13.24-13.24c0-0.2,0-0.4-0.01-0.6 C22.06,6.5,22.83,5.72,23.44,4.83z"/>
+              </svg>
+            </a>
+            <a href="https://www.instagram.com/classiccarclubsuk" target="_blank" rel="noopener" style="color: #c13584; font-size: 1.5rem;" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12,4.62c2.38,0,2.67,0.01,3.61,0.05c0.87,0.04,1.34,0.19,1.65,0.31c0.42,0.16,0.71,0.36,1.03,0.67 c0.32,0.32,0.51,0.61,0.67,1.03c0.12,0.32,0.27,0.78,0.31,1.65c0.04,0.94,0.05,1.22,0.05,3.61c0,2.38-0.01,2.67-0.05,3.61 c-0.04,0.87-0.19,1.34-0.31,1.65c-0.16,0.42-0.36,0.71-0.67,1.03c-0.32,0.32-0.61,0.51-1.03,0.67c-0.32,0.12-0.78,0.27-1.65,0.31 c-0.94,0.04-1.22,0.05-3.61,0.05c-2.38,0-2.67-0.01-3.61-0.05c-0.87-0.04-1.34-0.19-1.65-0.31c-0.42-0.16-0.71-0.36-1.03-0.67 c-0.32-0.32-0.51-0.61-0.67-1.03c-0.12-0.32-0.27-0.78-0.31-1.65c-0.04-0.94-0.05-1.22-0.05-3.61c0-2.38,0.01-2.67,0.05-3.61 c0.04-0.87,0.19-1.34,0.31-1.65c0.16-0.42,0.36-0.71,0.67-1.03c0.32-0.32,0.61-0.51,1.03-0.67c0.32-0.12,0.78-0.27,1.65-0.31 C9.33,4.63,9.62,4.62,12,4.62 M12,3c-2.42,0-2.73,0.01-3.68,0.05C7.36,3.1,6.7,3.25,6.14,3.47c-0.58,0.23-1.07,0.53-1.56,1.02 c-0.49,0.49-0.79,0.98-1.02,1.56C3.35,6.59,3.2,7.25,3.14,8.21C3.11,9.17,3.09,9.47,3.09,11.9c0,2.43,0.01,2.73,0.05,3.69 c0.06,0.96,0.21,1.62,0.43,2.19c0.23,0.58,0.53,1.07,1.02,1.56c0.49,0.49,0.98,0.79,1.56,1.02c0.57,0.22,1.23,0.37,2.19,0.43 c0.96,0.04,1.26,0.05,3.68,0.05c2.43,0,2.73-0.01,3.69-0.05c0.96-0.06,1.62-0.21,2.19-0.43c0.58-0.23,1.07-0.53,1.56-1.02 c0.49-0.49,0.79-0.98,1.02-1.56c0.22-0.57,0.37-1.23,0.43-2.19c0.04-0.96,0.05-1.26,0.05-3.69c0-2.43-0.01-2.73-0.05-3.69 c-0.06-0.96-0.21-1.62-0.43-2.19c-0.23-0.58-0.53-1.07-1.02-1.56c-0.49-0.49-0.98-0.79-1.56-1.02c-0.57-0.22-1.23-0.37-2.19-0.43 C14.73,3.01,14.43,3,12,3z"/>
+                <path d="M12,7.3c-2.55,0-4.62,2.07-4.62,4.62c0,2.55,2.07,4.62,4.62,4.62c2.55,0,4.62-2.07,4.62-4.62 C16.62,9.37,14.55,7.3,12,7.3z M12,15c-1.7,0-3.08-1.38-3.08-3.08c0-1.7,1.38-3.08,3.08-3.08s3.08,1.38,3.08,3.08 C15.08,13.62,13.7,15,12,15z"/>
+                <circle cx="16.8" cy="7.2" r="1.08"/>
+              </svg>
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="detail-sidebar-section">
+      <h3 class="detail-sidebar-title">Submit Your Club</h3>
+      <p>Do you run a classic car club that should be listed in our directory? We'd love to add it!</p>
+      <a href="/submit-club/" class="button button-primary" style="width: 100%; text-align: center; margin-top: 1rem;">Submit a Club</a>
+    </div>
+    
+    <div class="detail-sidebar-section">
+      <h3 class="detail-sidebar-title">Advertise With Us</h3>
+      <p>Interested in promoting your business or event to classic car enthusiasts across the UK?</p>
+      <a href="/advertise/" class="button button-secondary" style="width: 100%; text-align: center; margin-top: 1rem;">Advertising Opportunities</a>
     </div>
   </div>
 </div>
 
-<style>
-  .contact-layout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2.5rem;
-    margin-bottom: 3rem;
-  }
-  
-  .intro-text {
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-    line-height: 1.6;
-  }
-  
-  .contact-info-section {
-    margin-bottom: 2rem;
-  }
-  
-  .contact-info-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  
-  .contact-info-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  
-  .contact-icon {
-    color: var(--primary-color);
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-  }
-  
-  .info-label {
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 0.25rem;
-  }
-  
-  .info-value {
-    font-weight: 500;
-    color: #333;
-  }
-  
-  /* Form Styles */
-  .contact-form-container {
-    background-color: white;
-    border-radius: 8px;
-    padding: 2rem;
-    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
-  }
-  
-  .contact-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
-  
-  .form-group {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .form-group.full-width {
-    grid-column: span 2;
-  }
-  
-  .form-label {
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    color: #333;
-  }
-  
-  .form-input,
-  .form-textarea {
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  
-  .form-input:focus,
-  .form-textarea:focus {
-    border-color: var(--primary-color);
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.1);
-  }
-  
-  .checkbox-container {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-  }
-  
-  .checkbox-label {
-    font-size: 0.95rem;
-    line-height: 1.4;
-    color: #555;
-  }
-  
-  .form-actions {
-    grid-column: span 2;
-    display: flex;
-    justify-content: flex-end;
-  }
-  
-  .submit-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1.5rem;
-  }
-  
-  /* Other Ways Section */
-  .other-ways-section {
-    margin: 3rem 0;
-  }
-  
-  .other-ways-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-top: 1.5rem;
-  }
-  
-  .other-ways-item {
-    background-color: white;
-    border-radius: 8px;
-    padding: 2rem;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
-    text-align: center;
-    transition: transform 0.3s, box-shadow 0.3s;
-  }
-  
-  .other-ways-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  }
-  
-  .other-ways-icon {
-    width: 48px;
-    height: 48px;
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-  }
-  
-  .other-ways-item h3 {
-    font-size: 1.25rem;
-    margin-bottom: 0.75rem;
-    color: #333;
-  }
-  
-  .other-ways-item p {
-    margin-bottom: 1.5rem;
-    color: #666;
-    line-height: 1.5;
-  }
-  
-  .social-links {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-  }
-  
-  .social-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    color: white;
-    background-color: var(--primary-color);
-    transition: transform 0.2s, opacity 0.2s;
-  }
-  
-  .social-link:hover {
-    transform: translateY(-3px);
-    opacity: 0.9;
-  }
-  
-  .social-link.facebook {
-    background-color: #1877F2;
-  }
-  
-  .social-link.twitter {
-    background-color: #1DA1F2;
-  }
-  
-  .social-link.instagram {
-    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-  }
-  
-  /* Responsive styles */
-  @media (max-width: 992px) {
-    .contact-layout {
-      grid-template-columns: 1fr;
-    }
-    
-    .other-ways-grid {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .contact-form {
-      grid-template-columns: 1fr;
-    }
-    
-    .form-group.full-width {
-      grid-column: span 1;
-    }
-    
-    .form-actions {
-      grid-column: span 1;
-      justify-content: center;
-    }
-  }
-</style>
-
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.getElementById('contactForm');
+    const formSuccess = document.getElementById('formSuccess');
+    const formError = document.getElementById('formError');
     
-    if (contactForm) {
-      contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Get form data
-        const formData = new FormData(contactForm);
-        const formDataObj = Object.fromEntries(formData.entries());
-        
-        // Add basic form validation
-        let isValid = true;
-        const requiredFields = ['name', 'email', 'subject', 'message'];
-        
-        requiredFields.forEach(field => {
-          const input = document.getElementById(field);
-          if (!input.value.trim()) {
-            input.classList.add('error');
-            isValid = false;
-          } else {
-            input.classList.remove('error');
-          }
-        });
-        
-        // Validate email format
-        const emailInput = document.getElementById('email');
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(emailInput.value)) {
-          emailInput.classList.add('error');
-          isValid = false;
-        }
-        
-        if (isValid) {
-          // In a real implementation, this would send the form data to a server
-          // For this implementation, we'll show a success message
-          contactForm.innerHTML = `
-            <div class="form-success">
-              <i data-feather="check-circle" class="success-icon"></i>
-              <h3>Message Sent Successfully!</h3>
-              <p>Thank you for reaching out. We'll get back to you as soon as possible.</p>
-            </div>
-          `;
-          
-          // Reinitialize feather icons
-          feather.replace();
-        }
-      });
+    contactForm.addEventListener('submit', function(e) {
+      e.preventDefault();
       
-      // Add live validation on blur
-      const inputs = contactForm.querySelectorAll('input, textarea');
-      inputs.forEach(input => {
-        input.addEventListener('blur', function() {
-          if (input.required && !input.value.trim()) {
-            input.classList.add('error');
-          } else if (input.type === 'email') {
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(input.value)) {
-              input.classList.add('error');
-            } else {
-              input.classList.remove('error');
-            }
-          } else {
-            input.classList.remove('error');
-          }
-        });
+      // In a real application, you would submit the form data via AJAX
+      // For demo purposes, we'll just simulate a successful submission
+      
+      // Hide any previous messages
+      formSuccess.style.display = 'none';
+      formError.style.display = 'none';
+      
+      // Simulate form submission (would be replaced with actual AJAX call)
+      setTimeout(() => {
+        // Show success message
+        formSuccess.style.display = 'block';
         
-        // Remove error class on focus
-        input.addEventListener('focus', function() {
-          input.classList.remove('error');
-        });
-      });
-    }
+        // Reset form
+        contactForm.reset();
+        
+        // Scroll to success message
+        formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 1000);
+    });
   });
 </script>

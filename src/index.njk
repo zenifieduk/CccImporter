@@ -1,7 +1,8 @@
 ---
 layout: layouts/base.njk
-title: Classic Car Clubs | UK Directory
+title: Classic Car Clubs UK
 description: Discover classic car clubs across the UK with contact details and more.
+showBreadcrumb: false
 ---
 
 <section class="hero-section">
@@ -10,8 +11,8 @@ description: Discover classic car clubs across the UK with contact details and m
       <h1 class="hero-title">Classic Car Clubs Directory</h1>
       <p class="hero-subtitle">Discover classic car clubs across the UK, with contact details and more.</p>
       <div class="hero-buttons">
-        <a href="/club-directory/" class="btn">Browse Directory</a>
-        <a href="/contact/" class="btn btn-secondary">Contact Us</a>
+        <a href="/club-directory/" class="button button-primary">Browse Directory</a>
+        <a href="/contact/" class="button button-secondary">Contact Us</a>
       </div>
     </div>
   </div>
@@ -19,20 +20,52 @@ description: Discover classic car clubs across the UK with contact details and m
 
 <section class="featured-section">
   <div class="container">
-    <h2 class="section-title">Featured Car Clubs</h2>
-    <div class="grid">
-      {% for club in collections.featuredClubs | limit(4) %}
+    <div class="section-header">
+      <h2 class="section-title">Featured Car Clubs</h2>
+      <p class="section-subtitle">Discover popular classic car clubs from across the UK</p>
+    </div>
+
+    <div class="club-grid">
+      {% set featuredClubs = clubs | filter("featured") | limit(4) %}
+      {% for club in featuredClubs %}
         {% include "components/club-card.njk" %}
       {% endfor %}
+    </div>
+    
+    <div style="text-align: center; margin-top: 1rem;">
+      <a href="/club-directory/" class="button button-primary">View All Clubs</a>
+    </div>
+  </div>
+</section>
+
+<section class="featured-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Upcoming Events</h2>
+      <p class="section-subtitle">Classic car shows, meets, and events across the UK</p>
+    </div>
+
+    <div class="event-grid">
+      {% set upcomingEvents = events | limit(3) %}
+      {% for event in upcomingEvents %}
+        {% include "components/event-card.njk" %}
+      {% endfor %}
+    </div>
+    
+    <div style="text-align: center; margin-top: 1rem;">
+      <a href="/club-events/" class="button button-primary">View All Events</a>
     </div>
   </div>
 </section>
 
 <section class="about-section">
   <div class="container">
-    <div class="about-container">
-      <div class="about-content">
-        <h2 class="section-title">About The Classic Car Clubs Directory</h2>
+    <div class="section-header">
+      <h2 class="section-title">About The Classic Car Clubs Directory</h2>
+    </div>
+    
+    <div class="about-content">
+      <div class="about-text">
         <p>
           Welcome to the UK's premier directory of classic car clubs. Our mission is to connect enthusiasts with local and national clubs dedicated to preserving and celebrating classic automobiles.
         </p>
@@ -43,38 +76,40 @@ description: Discover classic car clubs across the UK with contact details and m
           From vintage British marques to American muscle, European sports cars to Japanese classics, you'll find clubs catering to every interest and era of motoring history.
         </p>
       </div>
-      <div class="about-image">
-        <img src="/assets/images/classic-car-meet.jpg" alt="Classic car club meeting">
+    </div>
+  </div>
+</section>
+
+<section class="club-types-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Popular Car Club Types</h2>
+    </div>
+    
+    <div class="club-types-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+      <div class="club-type-card" style="background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+        <h3>Jaguar Clubs</h3>
+        <p>Clubs for Jaguar fans, from the E-Type to XJS, XK, and more.</p>
+        <p><a href="/club-directory/?search=jaguar">View Clubs</a></p>
       </div>
-    </div>
-  </div>
-</section>
-
-<section class="categories-section">
-  <div class="container">
-    <h2 class="section-title">Popular Car Club Types</h2>
-    <div class="club-type-grid">
-      {% for clubType in site.popularClubTypes %}
-        <div class="club-type-card">
-          <h3 class="club-type-title">{{ clubType.name }}</h3>
-          <p class="club-type-count">{{ clubType.count }} clubs</p>
-          <a href="/club-directory/?category={{ clubType.name | slugify }}" class="club-type-link">View clubs</a>
-        </div>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-
-<section class="featured-section">
-  <div class="container">
-    <h2 class="section-title">Upcoming Events</h2>
-    <div class="grid">
-      {% for event in collections.upcomingEvents | limit(3) %}
-        {% include "components/event-card.njk" %}
-      {% endfor %}
-    </div>
-    <div class="text-center" style="margin-top: 2rem;">
-      <a href="/club-events/" class="btn">View All Events</a>
+      
+      <div class="club-type-card" style="background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+        <h3>Austin Clubs</h3>
+        <p>For fans of Austin, Austin-Healey, and other British classics.</p>
+        <p><a href="/club-directory/?search=austin">View Clubs</a></p>
+      </div>
+      
+      <div class="club-type-card" style="background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+        <h3>MG Clubs</h3>
+        <p>From MGA to MGB, Midget, and all other MG models.</p>
+        <p><a href="/club-directory/?search=mg">View Clubs</a></p>
+      </div>
+      
+      <div class="club-type-card" style="background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+        <h3>Triumph Clubs</h3>
+        <p>Classic Triumph TR3, TR4, TR6, Spitfire, and more.</p>
+        <p><a href="/club-directory/?search=triumph">View Clubs</a></p>
+      </div>
     </div>
   </div>
 </section>
