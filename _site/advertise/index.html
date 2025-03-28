@@ -14,7 +14,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="/assets/js/alpine-init.js"></script>
 </head>
-<body>
+<body class="">
   <header class="site-header" x-data="mobileMenu">
   <div class="container">
     <div class="logo">
@@ -165,16 +165,25 @@
   
 
 
-<div class="container">
-  <div class="breadcrumbs-container">
-    <ul class="breadcrumbs">
-      <li><a href="/">Home</a></li>
-      <li><a href="/advertise/">Advertise</a></li>
-    </ul>
+<section class="hero-section advertise-hero-section">
+  <div class="hero-overlay"></div>
+  <div class="container">
+    <div class="breadcrumbs-container">
+      <ul class="breadcrumbs">
+        <li><a href="/" style="color: white;">Home</a></li>
+        <li><a href="/advertise/" style="color: white;">Advertise</a></li>
+      </ul>
+    </div>
+    
+    <div class="hero-content">
+      <h1 class="hero-title">Advertise with Classic Car Clubs</h1>
+      <p class="hero-subtitle">Connect with classic car enthusiasts across the UK</p>
+    </div>
   </div>
+</section>
 
+<div class="container">
   <div class="advertise-page">
-    <h1>Advertise with Classic Car Clubs</h1>
     
     <div class="advertise-content">
       <p>Reach thousands of classic car enthusiasts and owners across the UK through our growing platform. We offer a range of advertising opportunities for businesses that want to connect with our engaged audience.</p>

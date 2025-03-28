@@ -14,7 +14,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="/assets/js/alpine-init.js"></script>
 </head>
-<body>
+<body class="{% if page.url === '/' %}home{% endif %}">
   {% include "components/header.njk" %}
   
   <main>
