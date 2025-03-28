@@ -1,7 +1,20 @@
+const origClubs = require('./clubs-orig.js');
+
+// Add description field for each club
+function enhanceClubData(club) {
+  return {
+    ...club,
+    description: `${club.title} is a car club${club.city ? ` based in ${club.city}` : ''}.`,
+    featured: ['Rolls-Royce', 'Bentley', 'Jaguar', 'Aston Martin', 'Ferrari', 'Porsche', 'Rover', 'Ford', 'Peugeot', 'Classic'].includes(club.marque) ? Math.random() < 0.1 : false
+  };
+}
+
 module.exports = function() {
-  // This would typically be fetched from a headless CMS
-  // For now, using static data from the provided sample
-  return [
+  // Enhance the club data with descriptions and featured flags
+  const originalClubs = origClubs.map(enhanceClubData);
+  
+  // Add some manually curated clubs with images
+  const curatedClubs = [
     {
       title: "Alvis Owners Club",
       website: "https://www.alvisoc.org",
@@ -202,4 +215,7 @@ module.exports = function() {
       marque: "Range Rover"
     }
   ];
+  
+  // Combine the original and curated clubs
+  return [...originalClubs, ...curatedClubs];
 };

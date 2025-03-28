@@ -1,10 +1,11 @@
 ---
 layout: layouts/page.njk
 pagination:
-  data: clubs
+  data: clubs 
   size: 1
   alias: club
-permalink: "club-directory/{{ club.slug }}/"
+  addAllPagesToCollections: false
+permalink: "club-directory/{{ club.slug | slugify }}-{{ pagination.pageNumber + 1 }}/"
 eleventyComputed:
   title: "{{ club.title }}"
   description: "Discover information about {{ club.title }}, including contact details, events, and more."
@@ -12,7 +13,7 @@ eleventyComputed:
 
 {% set breadcrumbs = [
   { url: '/club-directory/', label: 'Club Directory' },
-  { url: '/club-directory/' + club.slug + '/', label: club.title }
+  { url: '/club-directory/' + club.slug | slugify + '-' + (club.id if club.id else (pagination.pageNumber + 1)) + '/', label: club.title }
 ] %}
 
 <div class="detail-header">

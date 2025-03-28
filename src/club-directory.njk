@@ -45,39 +45,45 @@ pagination:
             <div class="search-grid">
               <div class="custom-search-group">
                 <label for="search-term">Club Name</label>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
-                  <circle cx="11" cy="11" r="8"></circle>
-                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                <input type="text" id="search-term" class="custom-search-input search-term" placeholder="Enter club name..." x-model="searchTerm">
+                <div class="input-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input type="text" id="search-term" class="custom-search-input search-term" placeholder="Enter club name..." x-model="searchTerm">
+                </div>
               </div>
               
               <div class="custom-search-group">
                 <label for="search-category">Category</label>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
-                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                </svg>
-                <select id="search-category" class="custom-search-input search-category" x-model="category">
-                  <option value="">All Categories</option>
-                  {% for cat in categories %}
-                    <option value="{{ cat }}" {% if cat === category %}selected{% endif %}>{{ cat }}</option>
-                  {% endfor %}
-                </select>
+                <div class="input-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                  </svg>
+                  <select id="search-category" class="custom-search-input search-category" x-model="category">
+                    <option value="">All Categories</option>
+                    {% for cat in categories %}
+                      <option value="{{ cat }}" {% if cat === category %}selected{% endif %}>{{ cat }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
               </div>
               
               <div class="custom-search-group">
                 <label for="search-location">Location</label>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                  <circle cx="12" cy="10" r="3"></circle>
-                </svg>
-                <select id="search-location" class="custom-search-input search-location" x-model="location">
-                  <option value="">All Locations</option>
-                  {% for loc in locations %}
-                    <option value="{{ loc }}" {% if loc === location %}selected{% endif %}>{{ loc }}</option>
-                  {% endfor %}
-                </select>
+                <div class="input-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <select id="search-location" class="custom-search-input search-location" x-model="location">
+                    <option value="">All Locations</option>
+                    {% for loc in locations %}
+                      <option value="{{ loc }}" {% if loc === location %}selected{% endif %}>{{ loc }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
               </div>
               
               <div class="search-actions">
@@ -144,7 +150,7 @@ pagination:
             </div>
             
             <div class="club-actions">
-              <a :href="'/club-directory/' + club.slug + '/'" class="button button-primary">View Details</a>
+              <a :href="`/club-directory/${club.slug.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${club.id}/`" class="button button-primary">View Details</a>
               <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
             </div>
           </div>
@@ -174,7 +180,7 @@ pagination:
             </div>
             
             <div class="club-actions">
-              <a :href="'/club-directory/' + club.slug + '/'" class="button button-primary">View Details</a>
+              <a :href="`/club-directory/${club.slug.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${club.id}/`" class="button button-primary">View Details</a>
               <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
             </div>
           </div>
