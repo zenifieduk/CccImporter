@@ -5,9 +5,15 @@ description: Discover classic car clubs across the UK with contact details and m
 showBreadcrumb: false
 ---
 
-<section class="hero-section">
+<section class="hero-section home-hero-section">
+  <div class="hero-video-container">
+    <video autoplay muted loop class="hero-video">
+      <source src="/assets/videos/ccc3.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+  </div>
   <div class="container">
-    <div class="hero-content">
+    <div class="hero-content home-hero-content">
       <h1 class="hero-title">Classic Car Clubs Directory</h1>
       <p class="hero-subtitle">Discover classic car clubs across the UK, with contact details and more.</p>
       <div class="hero-buttons">
@@ -25,9 +31,35 @@ showBreadcrumb: false
       <p class="section-subtitle">Discover popular classic car clubs from across the UK</p>
     </div>
 
-    <div class="club-grid">
-      {% set featuredClubs = clubs | filter("featured") | limit(4) %}
+    <div class="club-grid featured-club-grid">
+      {% set featuredClubs = clubs | filter("featured") | limit(8) %}
       {% for club in featuredClubs %}
+        {% include "components/club-card.njk" %}
+      {% endfor %}
+    </div>
+    
+    <div style="text-align: center; margin-top: 1rem;">
+      <a href="/club-directory/" class="button button-primary">View All Clubs</a>
+    </div>
+  </div>
+</section>
+
+<section class="standard-clubs-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Classic Car Clubs</h2>
+      <p class="section-subtitle">Find your perfect classic car club from our comprehensive directory</p>
+    </div>
+
+    <div class="club-grid standard-club-grid">
+      {% set standardClubs = [] %}
+      {% for club in clubs %}
+        {% if not club.featured %}
+          {% set standardClubs = (standardClubs.push(club), standardClubs) %}
+        {% endif %}
+      {% endfor %}
+      
+      {% for club in standardClubs | limit(12) %}
         {% include "components/club-card.njk" %}
       {% endfor %}
     </div>
@@ -76,6 +108,9 @@ showBreadcrumb: false
           From vintage British marques to American muscle, European sports cars to Japanese classics, you'll find clubs catering to every interest and era of motoring history.
         </p>
       </div>
+      <div class="about-image">
+        <img src="/assets/images/classic-car-meet.jpg" alt="Classic Car Meet" class="rounded-image">
+      </div>
     </div>
   </div>
 </section>
@@ -86,30 +121,52 @@ showBreadcrumb: false
       <h2 class="section-title">Popular Car Club Types</h2>
     </div>
     
-    <div class="club-types-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
-      <div class="club-type-card" style="background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+    <div class="club-types-grid">
+      <div class="club-type-card">
+        <div class="club-type-logo">
+          <img src="/assets/images/logos/jaguar-logo.svg" alt="Jaguar Logo" class="brand-logo">
+        </div>
         <h3>Jaguar Clubs</h3>
         <p>Clubs for Jaguar fans, from the E-Type to XJS, XK, and more.</p>
-        <p><a href="/club-directory/?search=jaguar">View Clubs</a></p>
+        <p><a href="/club-directory/?search=jaguar" class="club-type-link">View Clubs</a></p>
       </div>
       
-      <div class="club-type-card" style="background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+      <div class="club-type-card">
+        <div class="club-type-logo">
+          <img src="/assets/images/logos/austin-logo.svg" alt="Austin Logo" class="brand-logo">
+        </div>
         <h3>Austin Clubs</h3>
         <p>For fans of Austin, Austin-Healey, and other British classics.</p>
-        <p><a href="/club-directory/?search=austin">View Clubs</a></p>
+        <p><a href="/club-directory/?search=austin" class="club-type-link">View Clubs</a></p>
       </div>
       
-      <div class="club-type-card" style="background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+      <div class="club-type-card">
+        <div class="club-type-logo">
+          <img src="/assets/images/logos/mg-logo.svg" alt="MG Logo" class="brand-logo">
+        </div>
         <h3>MG Clubs</h3>
         <p>From MGA to MGB, Midget, and all other MG models.</p>
-        <p><a href="/club-directory/?search=mg">View Clubs</a></p>
+        <p><a href="/club-directory/?search=mg" class="club-type-link">View Clubs</a></p>
       </div>
       
-      <div class="club-type-card" style="background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+      <div class="club-type-card">
+        <div class="club-type-logo">
+          <img src="/assets/images/logos/triumph-logo.svg" alt="Triumph Logo" class="brand-logo">
+        </div>
         <h3>Triumph Clubs</h3>
         <p>Classic Triumph TR3, TR4, TR6, Spitfire, and more.</p>
-        <p><a href="/club-directory/?search=triumph">View Clubs</a></p>
+        <p><a href="/club-directory/?search=triumph" class="club-type-link">View Clubs</a></p>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-container">
+      <h2 class="cta-title">Can't find your club?</h2>
+      <p class="cta-text">If you run or know of a classic car club that's not listed in our directory, we'd love to include it.</p>
+      <a href="/contact/" class="button button-primary cta-button">Submit Your Club</a>
     </div>
   </div>
 </section>

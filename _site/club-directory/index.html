@@ -45,6 +45,12 @@
           </li>
         
           <li>
+            <a href="/advertise/" >
+              Advertise
+            </a>
+          </li>
+        
+          <li>
             <a href="/contact/" >
               Contact
             </a>
@@ -113,6 +119,16 @@
               </li>
             
               <li>
+                <a href="/advertise/" @click="close" >
+                  Advertise
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+              <li>
                 <a href="/contact/" @click="close" >
                   Contact
                   <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -149,19 +165,18 @@
   
 
 
-<h1>Classic Car Clubs Directory</h1>
-
-<p>
-  Welcome to our comprehensive classic car clubs directory – your ultimate resource for connecting with classic car enthusiasts across
-  the United Kingdom. Our extensive directory features a wide range of clubs dedicated to various marques, specific models, and
-  regions, ensuring the perfect classic car experience finds you.
-</p>
-
-
-
-
-<div x-data="clubSearch">
-  <div class="search-container">
+<section class="hero-section club-hero-section">
+  <div class="hero-overlay"></div>
+  <div class="container">
+    <div class="hero-content club-hero-content">
+      <h1 class="hero-title">Classic Car Clubs Directory</h1>
+      <p class="hero-subtitle">Welcome to our comprehensive classic car clubs directory – your ultimate resource for connecting with classic car enthusiasts across the United Kingdom.</p>
+      
+      
+      
+      
+      <div x-data="clubSearch" class="hero-search">
+        <div class="search-container">
   <form class="search-form">
     <div class="search-grid">
       <div class="custom-search-group">
@@ -194,6 +209,20 @@
   </form>
 </div>
 
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  <div class="breadcrumbs-container">
+    <ul class="breadcrumbs">
+      <li><a href="/">Home</a></li>
+      <li><a href="/club-directory/">Club Directory</a></li>
+    </ul>
+  </div>
+  
+  <div x-data="clubSearch">
   
   <div class="az-filter-container">
     <div class="filter-header">Filter by letter:</div>

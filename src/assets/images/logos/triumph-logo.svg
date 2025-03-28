@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect x="10" y="30" width="80" height="40" fill="#1b5e20"/>
+  <text x="50" y="55" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="white">TRIUMPH</text>
+  <path d="M20,30 L20,20 L50,10 L80,20 L80,30" fill="#1b5e20"/>
+  <path d="M25,30 L25,25 L50,15 L75,25 L75,30" fill="white"/>
+</svg>

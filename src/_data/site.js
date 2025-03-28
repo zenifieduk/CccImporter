@@ -10,6 +10,7 @@ module.exports = {
     { label: "Home", url: "/" },
     { label: "Club Directory", url: "/club-directory/" },
     { label: "Club Events", url: "/club-events/" },
+    { label: "Advertise", url: "/advertise/" },
     { label: "Contact", url: "/contact/" }
   ],
   footerLinks: {

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="45" fill="#1b5e20"/>
+  <text x="50" y="55" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="white">JAGUAR</text>
+  <path d="M30,40 C40,30 60,30 70,40 L65,45 C55,37 45,37 35,45 Z" fill="white"/>
+  <path d="M30,60 C40,70 60,70 70,60 L65,55 C55,63 45,63 35,55 Z" fill="white"/>
+</svg>

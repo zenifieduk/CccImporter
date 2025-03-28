@@ -45,6 +45,12 @@
           </li>
         
           <li>
+            <a href="/advertise/" >
+              Advertise
+            </a>
+          </li>
+        
+          <li>
             <a href="/contact/" >
               Contact
             </a>
@@ -113,6 +119,16 @@
               </li>
             
               <li>
+                <a href="/advertise/" @click="close" >
+                  Advertise
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+              <li>
                 <a href="/contact/" @click="close" >
                   Contact
                   <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -137,9 +153,15 @@
   
   <main>
     
-<section class="hero-section">
+<section class="hero-section home-hero-section">
+  <div class="hero-video-container">
+    <video autoplay muted loop class="hero-video">
+      <source src="/assets/videos/ccc3.mp4" type="video/mp4">
+    </video>
+    <div class="hero-overlay"></div>
+  </div>
   <div class="container">
-    <div class="hero-content">
+    <div class="hero-content home-hero-content">
       <h1 class="hero-title">Classic Car Clubs Directory</h1>
       <p class="hero-subtitle">Discover classic car clubs across the UK, with contact details and more.</p>
       <div class="hero-buttons">
@@ -157,7 +179,7 @@
       <p class="section-subtitle">Discover popular classic car clubs from across the UK</p>
     </div>
 
-    <div class="club-grid">
+    <div class="club-grid featured-club-grid">
       
       
         
@@ -334,6 +356,380 @@
     <a href="/club-directory/club-peugeot-uk/" class="button button-primary">View Details</a>
     
       <a href="https://www.peugeotclub.org" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
+    
+  </div>
+</div>
+
+
+      
+        
+<div class="club-card featured-club-card">
+  <div class="club-featured">Featured</div>
+  
+  <div class="club-image">
+    
+      <img src="/assets/images/ford-classic-capri.jpg" alt="Ford Classic and Capri Owners Club">
+    
+  </div>
+  
+  <div class="club-content">
+    <h3 class="club-title">Ford Classic and Capri Owners Club</h3>
+    
+    
+      <div class="club-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        Colchester
+        , 
+        Essex
+      </div>
+    
+    
+    
+      <div class="club-category">
+        <span class="category-tag">Car Club</span>
+        
+          <span class="category-tag">Ford</span>
+        
+      </div>
+    
+  </div>
+  
+  <div class="club-actions">
+    <a href="/club-directory/ford-classic-and-capri-owners-club/" class="button button-primary">View Details</a>
+    
+      <a href="https://www.fccoc.org.uk" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
+    
+  </div>
+</div>
+
+
+      
+        
+<div class="club-card featured-club-card">
+  <div class="club-featured">Featured</div>
+  
+  <div class="club-image">
+    
+      <img src="/assets/images/classic-car-club-london.jpg" alt="Classic Car Club London">
+    
+  </div>
+  
+  <div class="club-content">
+    <h3 class="club-title">Classic Car Club London</h3>
+    
+    
+      <div class="club-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        London
+        , 
+        London
+      </div>
+    
+    
+    
+      <div class="club-category">
+        <span class="category-tag">Car Club</span>
+        
+          <span class="category-tag">Various</span>
+        
+      </div>
+    
+  </div>
+  
+  <div class="club-actions">
+    <a href="/club-directory/classic-car-club-london/" class="button button-primary">View Details</a>
+    
+      <a href="https://www.classiccarclublondon.co.uk" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
+    
+  </div>
+</div>
+
+
+      
+        
+<div class="club-card featured-club-card">
+  <div class="club-featured">Featured</div>
+  
+  <div class="club-image">
+    
+      <img src="/assets/images/range-rover-register.jpg" alt="Range Rover Register">
+    
+  </div>
+  
+  <div class="club-content">
+    <h3 class="club-title">Range Rover Register</h3>
+    
+    
+      <div class="club-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        Cranleigh
+        , 
+        Surrey
+      </div>
+    
+    
+    
+      <div class="club-category">
+        <span class="category-tag">Car Club</span>
+        
+          <span class="category-tag">Range Rover</span>
+        
+      </div>
+    
+  </div>
+  
+  <div class="club-actions">
+    <a href="/club-directory/range-rover-register/" class="button button-primary">View Details</a>
+    
+      <a href="https://www.rangeroverregister.org" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
+    
+  </div>
+</div>
+
+
+      
+    </div>
+    
+    <div style="text-align: center; margin-top: 1rem;">
+      <a href="/club-directory/" class="button button-primary">View All Clubs</a>
+    </div>
+  </div>
+</section>
+
+<section class="standard-clubs-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Classic Car Clubs</h2>
+      <p class="section-subtitle">Find your perfect classic car club from our comprehensive directory</p>
+    </div>
+
+    <div class="club-grid standard-club-grid">
+      
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+        
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+      
+      
+        
+<div class="club-card standard-club-card">
+  <div class="club-content">
+    <h3 class="club-title">Rolls-Royce Enthusiasts&#39; Wessex Section</h3>
+    
+    
+      <div class="club-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        
+        
+        Wessex
+      </div>
+    
+    
+    
+      <div class="club-category">
+        <span class="category-tag">Car Club</span>
+        
+          <span class="category-tag">Rolls-Royce</span>
+        
+      </div>
+    
+  </div>
+  
+  <div class="club-actions">
+    <a href="/club-directory/rolls-royce-enthusiasts-club-wessex/" class="button button-primary">View Details</a>
+    
+      <a href="https://rrecwessex.org.uk/" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
+    
+  </div>
+</div>
+
+
+      
+        
+<div class="club-card standard-club-card">
+  <div class="club-content">
+    <h3 class="club-title">Rover P4 Drivers&#39; Guild</h3>
+    
+    
+      <div class="club-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        Northants
+        
+        
+      </div>
+    
+    
+    
+      <div class="club-category">
+        <span class="category-tag">Car Club</span>
+        
+          <span class="category-tag">Rover</span>
+        
+      </div>
+    
+  </div>
+  
+  <div class="club-actions">
+    <a href="/club-directory/rover-p4-drivers-guild/" class="button button-primary">View Details</a>
+    
+      <a href="https://www.roverp4dg.org.uk" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
+    
+  </div>
+</div>
+
+
+      
+        
+<div class="club-card standard-club-card">
+  <div class="club-content">
+    <h3 class="club-title">Rover SDI Club</h3>
+    
+    
+      <div class="club-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        Swindon
+        
+        
+      </div>
+    
+    
+    
+      <div class="club-category">
+        <span class="category-tag">Car Club</span>
+        
+          <span class="category-tag">Rover</span>
+        
+      </div>
+    
+  </div>
+  
+  <div class="club-actions">
+    <a href="/club-directory/rover-sdi-club/" class="button button-primary">View Details</a>
+    
+      <a href="https://www.roversd1club.net" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
+    
+  </div>
+</div>
+
+
+      
+        
+<div class="club-card standard-club-card">
+  <div class="club-content">
+    <h3 class="club-title">Rolls-Royce Enthusiasts&#39; Club - Surrey Section</h3>
+    
+    
+      <div class="club-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        Surrey GU6 7RJ
+        , 
+        Surrey
+      </div>
+    
+    
+    
+      <div class="club-category">
+        <span class="category-tag">Car Club</span>
+        
+          <span class="category-tag">Rolls-Royce</span>
+        
+      </div>
+    
+  </div>
+  
+  <div class="club-actions">
+    <a href="/club-directory/rolls-royce-enthusiasts-club-surrey-section/" class="button button-primary">View Details</a>
+    
+      <a href="https://www.rrec-surrey.uk/" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
+    
+  </div>
+</div>
+
+
+      
+        
+<div class="club-card standard-club-card">
+  <div class="club-content">
+    <h3 class="club-title">Rover P5 Owners Club</h3>
+    
+    
+      <div class="club-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        Ashford
+        
+        
+      </div>
+    
+    
+    
+      <div class="club-category">
+        <span class="category-tag">Car Club</span>
+        
+          <span class="category-tag">Rover</span>
+        
+      </div>
+    
+  </div>
+  
+  <div class="club-actions">
+    <a href="/club-directory/rover-p5-owners-club/" class="button button-primary">View Details</a>
+    
+      <a href="https://www.roverp5club.org.uk" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
     
   </div>
 </div>
@@ -543,6 +939,9 @@
           From vintage British marques to American muscle, European sports cars to Japanese classics, you'll find clubs catering to every interest and era of motoring history.
         </p>
       </div>
+      <div class="about-image">
+        <img src="/assets/images/classic-car-meet.jpg" alt="Classic Car Meet" class="rounded-image">
+      </div>
     </div>
   </div>
 </section>
@@ -553,30 +952,52 @@
       <h2 class="section-title">Popular Car Club Types</h2>
     </div>
     
-    <div class="club-types-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
-      <div class="club-type-card" style="background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+    <div class="club-types-grid">
+      <div class="club-type-card">
+        <div class="club-type-logo">
+          <img src="/assets/images/logos/jaguar-logo.svg" alt="Jaguar Logo" class="brand-logo">
+        </div>
         <h3>Jaguar Clubs</h3>
         <p>Clubs for Jaguar fans, from the E-Type to XJS, XK, and more.</p>
-        <p><a href="/club-directory/?search=jaguar">View Clubs</a></p>
+        <p><a href="/club-directory/?search=jaguar" class="club-type-link">View Clubs</a></p>
       </div>
       
-      <div class="club-type-card" style="background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+      <div class="club-type-card">
+        <div class="club-type-logo">
+          <img src="/assets/images/logos/austin-logo.svg" alt="Austin Logo" class="brand-logo">
+        </div>
         <h3>Austin Clubs</h3>
         <p>For fans of Austin, Austin-Healey, and other British classics.</p>
-        <p><a href="/club-directory/?search=austin">View Clubs</a></p>
+        <p><a href="/club-directory/?search=austin" class="club-type-link">View Clubs</a></p>
       </div>
       
-      <div class="club-type-card" style="background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+      <div class="club-type-card">
+        <div class="club-type-logo">
+          <img src="/assets/images/logos/mg-logo.svg" alt="MG Logo" class="brand-logo">
+        </div>
         <h3>MG Clubs</h3>
         <p>From MGA to MGB, Midget, and all other MG models.</p>
-        <p><a href="/club-directory/?search=mg">View Clubs</a></p>
+        <p><a href="/club-directory/?search=mg" class="club-type-link">View Clubs</a></p>
       </div>
       
-      <div class="club-type-card" style="background-color: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+      <div class="club-type-card">
+        <div class="club-type-logo">
+          <img src="/assets/images/logos/triumph-logo.svg" alt="Triumph Logo" class="brand-logo">
+        </div>
         <h3>Triumph Clubs</h3>
         <p>Classic Triumph TR3, TR4, TR6, Spitfire, and more.</p>
-        <p><a href="/club-directory/?search=triumph">View Clubs</a></p>
+        <p><a href="/club-directory/?search=triumph" class="club-type-link">View Clubs</a></p>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-container">
+      <h2 class="cta-title">Can't find your club?</h2>
+      <p class="cta-text">If you run or know of a classic car club that's not listed in our directory, we'd love to include it.</p>
+      <a href="/contact/" class="button button-primary cta-button">Submit Your Club</a>
     </div>
   </div>
 </section>

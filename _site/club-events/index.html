@@ -45,6 +45,12 @@
           </li>
         
           <li>
+            <a href="/advertise/" >
+              Advertise
+            </a>
+          </li>
+        
+          <li>
             <a href="/contact/" >
               Contact
             </a>
@@ -113,6 +119,16 @@
               </li>
             
               <li>
+                <a href="/advertise/" @click="close" >
+                  Advertise
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+              <li>
                 <a href="/contact/" @click="close" >
                   Contact
                   <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -149,68 +165,97 @@
   
 
 
-<h1>Classic Car Events</h1>
-
-<p>Find classic car shows, meets, and events across the UK.</p>
-
-
-
-  
-    
+<section class="hero-section event-hero-section">
+  <div class="hero-overlay"></div>
+  <div class="container">
+    <div class="hero-content event-hero-content">
+      <h1 class="hero-title">Classic Car Events</h1>
+      <p class="hero-subtitle">Find classic car shows, meets, and events across the UK</p>
       
+      
+      
+        
+          
+            
+              
+            
+              
+            
+          
         
       
         
-      
-    
-  
-
-  
-    
-      
+          
+            
+              
+            
+              
+            
+          
         
       
         
-      
-    
-  
-
-  
-    
-      
+          
+            
+              
+            
+          
         
       
-    
-  
-
-
-
-
-
-<div x-data="eventSearch">
-  <div class="search-container">
-  <form class="search-form">
-    <div class="search-grid">
-      <div class="custom-search-group">
-        <label for="search-term">Search Term</label>
-        <input type="text" id="search-term" class="custom-search-input search-term" placeholder="Search..." value="">
-      </div>
       
       
       
-      <div class="custom-search-group">
-        <label for="search-location">Location</label>
-        <input type="text" id="search-location" class="custom-search-input search-location" placeholder="City, region..." value="">
-      </div>
       
-      <div class="search-actions">
-        <button type="submit" class="search-button">Search</button>
-        <button type="button" class="reset-button">Reset</button>
+      <div x-data="eventSearch" class="hero-search">
+        <div class="search-container event-search">
+          <form class="search-form">
+            <div class="search-grid">
+              <div class="custom-search-group">
+                <label for="search-term" class="sr-only">Event Title</label>
+                <input type="text" id="search-term" class="custom-search-input search-term" placeholder="Event title (optional)">
+              </div>
+              
+              <div class="custom-search-group">
+                <label for="search-category" class="sr-only">Event Type</label>
+                <select id="search-category" class="custom-search-input search-category">
+                  <option value="">All Event Types</option>
+                  
+                    <option value=""></option>
+                  
+                </select>
+              </div>
+              
+              <div class="custom-search-group">
+                <label for="search-location" class="sr-only">Location</label>
+                <select id="search-location" class="custom-search-input search-location">
+                  <option value="">All Locations</option>
+                  
+                    <option value=""></option>
+                  
+                </select>
+              </div>
+              
+              <div class="search-actions">
+                <button type="submit" class="search-button">Search</button>
+                <button type="button" class="reset-button">Reset</button>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-  </form>
-</div>
+  </div>
+</section>
 
+<div class="container">
+  <div class="breadcrumbs-container">
+    <ul class="breadcrumbs">
+      <li><a href="/">Home</a></li>
+      <li><a href="/club-events/">Club Events</a></li>
+    </ul>
+  </div>
+  
+  <div x-data="eventSearch">
   
   <div x-show="isLoading" class="loading-indicator">Loading...</div>
   

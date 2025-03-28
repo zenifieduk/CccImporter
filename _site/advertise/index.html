@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advertise with Classic Car Clubs | Classic Car Clubs | UK Directory</title>
+  <meta name="description" content="Learn about advertising opportunities with Classic Car Clubs UK.">
+  <link rel="icon" type="image/svg+xml" href="/assets/images/ccc-logo.svg">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  
+  <!-- Alpine.js -->
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <script src="/assets/js/alpine-init.js"></script>
+</head>
+<body>
+  <header class="site-header" x-data="mobileMenu">
+  <div class="container">
+    <div class="logo">
+      <a href="/">
+        <img class="logo-image" src="/assets/images/ccc-logo.svg" alt="Classic Car Clubs | UK Directory">
+      </a>
+    </div>
+    
+    <nav class="desktop-nav">
+      <ul>
+        
+          <li>
+            <a href="/" >
+              Home
+            </a>
+          </li>
+        
+          <li>
+            <a href="/club-directory/" >
+              Club Directory
+            </a>
+          </li>
+        
+          <li>
+            <a href="/club-events/" >
+              Club Events
+            </a>
+          </li>
+        
+          <li>
+            <a href="/advertise/" aria-current="page">
+              Advertise
+            </a>
+          </li>
+        
+          <li>
+            <a href="/contact/" >
+              Contact
+            </a>
+          </li>
+        
+      </ul>
+    </nav>
+    
+    <button class="mobile-menu-toggle" @click="toggle" aria-label="Toggle menu">
+      <span class="hamburger-icon">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </span>
+    </button>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" :class="{ 'active': isOpen }" x-cloak>
+      <div class="mobile-menu-container">
+        <div class="mobile-menu-header">
+          <div class="logo">
+            <a href="/" @click="close">
+              <img class="logo-image" src="/assets/images/ccc-logo.svg" alt="Classic Car Clubs | UK Directory">
+            </a>
+          </div>
+          
+          <button class="mobile-menu-close" @click="close" aria-label="Close menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        
+        <nav class="mobile-nav">
+          <ul>
+            
+              <li>
+                <a href="/" @click="close" >
+                  Home
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/" @click="close" >
+                  Club Directory
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+              <li>
+                <a href="/club-events/" @click="close" >
+                  Club Events
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+              <li>
+                <a href="/advertise/" @click="close" aria-current="page">
+                  Advertise
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+              <li>
+                <a href="/contact/" @click="close" >
+                  Contact
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+          </ul>
+        </nav>
+        
+        <div class="mobile-menu-footer">
+          <p class="cta-text">Connect with classic car enthusiasts</p>
+          <a href="/contact/" class="contact-link" @click="close">Get in touch</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+  
+  <main>
+    
+<div class="container">
+  
+    <ul class="breadcrumbs">
+  <li><a href="/">Home</a></li>
+  
+</ul>
+
+  
+  
+  
+
+
+<div class="container">
+  <div class="breadcrumbs-container">
+    <ul class="breadcrumbs">
+      <li><a href="/">Home</a></li>
+      <li><a href="/advertise/">Advertise</a></li>
+    </ul>
+  </div>
+
+  <div class="advertise-page">
+    <h1>Advertise with Classic Car Clubs</h1>
+    
+    <div class="advertise-content">
+      <p>Reach thousands of classic car enthusiasts and owners across the UK through our growing platform. We offer a range of advertising opportunities for businesses that want to connect with our engaged audience.</p>
+      
+      <h2>Why Advertise with Us?</h2>
+      <ul>
+        <li>Reach a targeted audience of classic car owners and enthusiasts</li>
+        <li>Connect with club organizers and event planners</li>
+        <li>Promote your products or services to a passionate community</li>
+        <li>Flexible advertising options to suit your needs and budget</li>
+      </ul>
+      
+      <h2>Advertising Options</h2>
+      <div class="advertise-options">
+        <div class="advertise-option-card">
+          <h3>Directory Banners</h3>
+          <p>Premium banner placement on our club directory and search pages.</p>
+        </div>
+        
+        <div class="advertise-option-card">
+          <h3>Event Sponsorships</h3>
+          <p>Sponsor featured events and gain visibility throughout our event listings.</p>
+        </div>
+        
+        <div class="advertise-option-card">
+          <h3>Newsletter Features</h3>
+          <p>Feature your business in our monthly newsletter sent to classic car enthusiasts.</p>
+        </div>
+        
+        <div class="advertise-option-card">
+          <h3>Custom Partnerships</h3>
+          <p>Bespoke advertising solutions tailored to your specific marketing goals.</p>
+        </div>
+      </div>
+      
+      <h2>Contact Our Advertising Team</h2>
+      <p>For more information about advertising opportunities, rates, and availability, please contact our commercial team:</p>
+      
+      <div class="contact-details">
+        <p><strong>Email:</strong> <a href="mailto:commercial@classiccarclubs.uk">commercial@classiccarclubs.uk</a></p>
+      </div>
+      
+      <div class="advertise-cta">
+        <a href="mailto:commercial@classiccarclubs.uk" class="button button-primary">Get in Touch</a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+  </main>
+  
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="logo-column">
+        <div class="footer-logo">
+          <h3>CLASSIC CAR CLUBS</h3>
+          <p class="tagline">UK NETWORK</p>
+        </div>
+        <p class="footer-blurb">
+          Your ultimate resource for connecting with classic car enthusiasts across the 
+          United Kingdom. Find clubs dedicated to vintage marques, iconic eras, and 
+          specific regions.
+        </p>
+      </div>
+      
+      
+        <div class="footer-column">
+          <h4>Directory</h4>
+          <ul class="footer-links">
+            
+              <li>
+                <a href="/club-directory/">All Clubs</a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/?category=Car%20Club">Car Type Clubs</a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/?category=Regional%20Club">Region Clubs</a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/?featured=true">Featured Clubs</a>
+              </li>
+            
+          </ul>
+        </div>
+      
+        <div class="footer-column">
+          <h4>Events</h4>
+          <ul class="footer-links">
+            
+              <li>
+                <a href="/club-events/">All Events</a>
+              </li>
+            
+              <li>
+                <a href="/club-events/?category=Car%20Show">Car Shows</a>
+              </li>
+            
+              <li>
+                <a href="/club-events/?category=Car%20Meet">Meets</a>
+              </li>
+            
+              <li>
+                <a href="/club-events/?featured=true">Featured Events</a>
+              </li>
+            
+          </ul>
+        </div>
+      
+        <div class="footer-column">
+          <h4>About</h4>
+          <ul class="footer-links">
+            
+              <li>
+                <a href="/contact/">Contact Us</a>
+              </li>
+            
+              <li>
+                <a href="/privacy-policy/">Privacy Policy</a>
+              </li>
+            
+              <li>
+                <a href="/submit-club/">Submit a Club</a>
+              </li>
+            
+              <li>
+                <a href="/advertise/">Advertise With Us</a>
+              </li>
+            
+          </ul>
+        </div>
+      
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; YYYY Classic Car Clubs UK. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+  
+  <!-- Scripts -->
+  <script src="/assets/js/search.js"></script>
+</body>
+</html>

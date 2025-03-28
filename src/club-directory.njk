@@ -9,19 +9,32 @@ pagination:
 
 {% set breadcrumbs = [{ url: '/club-directory/', label: 'Club Directory' }] %}
 
-<h1>Classic Car Clubs Directory</h1>
+<section class="hero-section club-hero-section">
+  <div class="hero-overlay"></div>
+  <div class="container">
+    <div class="hero-content club-hero-content">
+      <h1 class="hero-title">Classic Car Clubs Directory</h1>
+      <p class="hero-subtitle">Welcome to our comprehensive classic car clubs directory – your ultimate resource for connecting with classic car enthusiasts across the United Kingdom.</p>
+      
+      {% set categories = clubs | map("category") | unique %}
+      {% set locations = clubs | map("state") | unique %}
+      
+      <div x-data="clubSearch" class="hero-search">
+        {% include "components/search-filter.njk" %}
+      </div>
+    </div>
+  </div>
+</section>
 
-<p>
-  Welcome to our comprehensive classic car clubs directory – your ultimate resource for connecting with classic car enthusiasts across
-  the United Kingdom. Our extensive directory features a wide range of clubs dedicated to various marques, specific models, and
-  regions, ensuring the perfect classic car experience finds you.
-</p>
-
-{% set categories = clubs | map("category") | unique %}
-{% set locations = clubs | map("state") | unique %}
-
-<div x-data="clubSearch">
-  {% include "components/search-filter.njk" %}
+<div class="container">
+  <div class="breadcrumbs-container">
+    <ul class="breadcrumbs">
+      <li><a href="/">Home</a></li>
+      <li><a href="/club-directory/">Club Directory</a></li>
+    </ul>
+  </div>
+  
+  <div x-data="clubSearch">
   
   <div class="az-filter-container">
     <div class="filter-header">Filter by letter:</div>

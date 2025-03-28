@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="45" fill="#1b5e20"/>
+  <text x="50" y="60" font-family="Arial, sans-serif" font-size="30" font-weight="bold" text-anchor="middle" fill="white">MG</text>
+  <path d="M20,35 L80,35 L80,40 L20,40 Z" fill="white"/>
+  <path d="M20,65 L80,65 L80,70 L20,70 Z" fill="white"/>
+</svg>

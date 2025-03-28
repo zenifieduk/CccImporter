@@ -6,28 +6,79 @@ description: Browse upcoming classic car shows, meets, and events across the UK.
 
 {% set breadcrumbs = [{ url: '/club-events/', label: 'Club Events' }] %}
 
-<h1>Classic Car Events</h1>
-
-<p>Find classic car shows, meets, and events across the UK.</p>
-
-{% set eventCategories = [] %}
-{% for event in events %}
-  {% if event.eventCategory %}
-    {% if event.eventCategory | isArray %}
-      {% for cat in event.eventCategory %}
-        {% set eventCategories = (eventCategories.push(cat), eventCategories) %}
+<section class="hero-section event-hero-section">
+  <div class="hero-overlay"></div>
+  <div class="container">
+    <div class="hero-content event-hero-content">
+      <h1 class="hero-title">Classic Car Events</h1>
+      <p class="hero-subtitle">Find classic car shows, meets, and events across the UK</p>
+      
+      {% set eventCategories = [] %}
+      {% for event in events %}
+        {% if event.eventCategory %}
+          {% if event.eventCategory | isArray %}
+            {% for cat in event.eventCategory %}
+              {% set eventCategories = (eventCategories.push(cat), eventCategories) %}
+            {% endfor %}
+          {% else %}
+            {% set eventCategories = (eventCategories.push(event.eventCategory), eventCategories) %}
+          {% endif %}
+        {% endif %}
       {% endfor %}
-    {% else %}
-      {% set eventCategories = (eventCategories.push(event.eventCategory), eventCategories) %}
-    {% endif %}
-  {% endif %}
-{% endfor %}
+      
+      {% set uniqueCategories = eventCategories | unique %}
+      {% set locations = events | map("eventState") | unique %}
+      
+      <div x-data="eventSearch" class="hero-search">
+        <div class="search-container event-search">
+          <form class="search-form">
+            <div class="search-grid">
+              <div class="custom-search-group">
+                <label for="search-term" class="sr-only">Event Title</label>
+                <input type="text" id="search-term" class="custom-search-input search-term" placeholder="Event title (optional)">
+              </div>
+              
+              <div class="custom-search-group">
+                <label for="search-category" class="sr-only">Event Type</label>
+                <select id="search-category" class="custom-search-input search-category">
+                  <option value="">All Event Types</option>
+                  {% for cat in uniqueCategories %}
+                    <option value="{{ cat }}">{{ cat }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              
+              <div class="custom-search-group">
+                <label for="search-location" class="sr-only">Location</label>
+                <select id="search-location" class="custom-search-input search-location">
+                  <option value="">All Locations</option>
+                  {% for location in locations %}
+                    <option value="{{ location }}">{{ location }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              
+              <div class="search-actions">
+                <button type="submit" class="search-button">Search</button>
+                <button type="button" class="reset-button">Reset</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-{% set uniqueCategories = eventCategories | unique %}
-{% set locations = events | map("eventCity") | unique %}
-
-<div x-data="eventSearch">
-  {% include "components/search-filter.njk" %}
+<div class="container">
+  <div class="breadcrumbs-container">
+    <ul class="breadcrumbs">
+      <li><a href="/">Home</a></li>
+      <li><a href="/club-events/">Club Events</a></li>
+    </ul>
+  </div>
+  
+  <div x-data="eventSearch">
   
   <div x-show="isLoading" class="loading-indicator">Loading...</div>
   
