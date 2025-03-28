@@ -3,9 +3,5 @@ layout: layouts/base.njk
 ---
 
 <div class="container">
-  {% if showBreadcrumb !== false %}
-    {% include "components/breadcrumb.njk" %}
-  {% endif %}
-  
   {{ content | safe }}
 </div>
