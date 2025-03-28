@@ -115,6 +115,18 @@ document.addEventListener('alpine:init', () => {
       this.filter();
     },
     
+    resetFilters() {
+      this.searchTerm = '';
+      this.category = '';
+      this.location = '';
+      this.letter = '';
+      
+      // Update URL
+      window.history.pushState({}, '', window.location.pathname);
+      
+      this.filter();
+    },
+    
     setLetter(letter) {
       this.letter = this.letter === letter ? '' : letter;
       this.search();

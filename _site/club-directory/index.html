@@ -196,113 +196,68 @@
 
   
   <div class="az-filter-container">
-    <ul class="az-filter">
+    <div class="filter-header">Filter by letter:</div>
+    <div class="az-filter-letters">
+      <a href="#" class="az-filter-letter" data-letter="" @click.prevent="resetFilters()" :class="{ 'active': !letter }">All</a>
       
-        <li>
-          <a href="#" data-letter="A" @click.prevent="setLetter('A')" :class="{ 'active': letter === 'A' }">A</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="A" @click.prevent="setLetter('A')" :class="{ 'active': letter === 'A' }" aria-label="Filter by letter A">A</a>
       
-        <li>
-          <a href="#" data-letter="B" @click.prevent="setLetter('B')" :class="{ 'active': letter === 'B' }">B</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="B" @click.prevent="setLetter('B')" :class="{ 'active': letter === 'B' }" aria-label="Filter by letter B">B</a>
       
-        <li>
-          <a href="#" data-letter="C" @click.prevent="setLetter('C')" :class="{ 'active': letter === 'C' }">C</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="C" @click.prevent="setLetter('C')" :class="{ 'active': letter === 'C' }" aria-label="Filter by letter C">C</a>
       
-        <li>
-          <a href="#" data-letter="D" @click.prevent="setLetter('D')" :class="{ 'active': letter === 'D' }">D</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="D" @click.prevent="setLetter('D')" :class="{ 'active': letter === 'D' }" aria-label="Filter by letter D">D</a>
       
-        <li>
-          <a href="#" data-letter="E" @click.prevent="setLetter('E')" :class="{ 'active': letter === 'E' }">E</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="E" @click.prevent="setLetter('E')" :class="{ 'active': letter === 'E' }" aria-label="Filter by letter E">E</a>
       
-        <li>
-          <a href="#" data-letter="F" @click.prevent="setLetter('F')" :class="{ 'active': letter === 'F' }">F</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="F" @click.prevent="setLetter('F')" :class="{ 'active': letter === 'F' }" aria-label="Filter by letter F">F</a>
       
-        <li>
-          <a href="#" data-letter="G" @click.prevent="setLetter('G')" :class="{ 'active': letter === 'G' }">G</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="G" @click.prevent="setLetter('G')" :class="{ 'active': letter === 'G' }" aria-label="Filter by letter G">G</a>
       
-        <li>
-          <a href="#" data-letter="H" @click.prevent="setLetter('H')" :class="{ 'active': letter === 'H' }">H</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="H" @click.prevent="setLetter('H')" :class="{ 'active': letter === 'H' }" aria-label="Filter by letter H">H</a>
       
-        <li>
-          <a href="#" data-letter="I" @click.prevent="setLetter('I')" :class="{ 'active': letter === 'I' }">I</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="I" @click.prevent="setLetter('I')" :class="{ 'active': letter === 'I' }" aria-label="Filter by letter I">I</a>
       
-        <li>
-          <a href="#" data-letter="J" @click.prevent="setLetter('J')" :class="{ 'active': letter === 'J' }">J</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="J" @click.prevent="setLetter('J')" :class="{ 'active': letter === 'J' }" aria-label="Filter by letter J">J</a>
       
-        <li>
-          <a href="#" data-letter="K" @click.prevent="setLetter('K')" :class="{ 'active': letter === 'K' }">K</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="K" @click.prevent="setLetter('K')" :class="{ 'active': letter === 'K' }" aria-label="Filter by letter K">K</a>
       
-        <li>
-          <a href="#" data-letter="L" @click.prevent="setLetter('L')" :class="{ 'active': letter === 'L' }">L</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="L" @click.prevent="setLetter('L')" :class="{ 'active': letter === 'L' }" aria-label="Filter by letter L">L</a>
       
-        <li>
-          <a href="#" data-letter="M" @click.prevent="setLetter('M')" :class="{ 'active': letter === 'M' }">M</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="M" @click.prevent="setLetter('M')" :class="{ 'active': letter === 'M' }" aria-label="Filter by letter M">M</a>
       
-        <li>
-          <a href="#" data-letter="N" @click.prevent="setLetter('N')" :class="{ 'active': letter === 'N' }">N</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="N" @click.prevent="setLetter('N')" :class="{ 'active': letter === 'N' }" aria-label="Filter by letter N">N</a>
       
-        <li>
-          <a href="#" data-letter="O" @click.prevent="setLetter('O')" :class="{ 'active': letter === 'O' }">O</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="O" @click.prevent="setLetter('O')" :class="{ 'active': letter === 'O' }" aria-label="Filter by letter O">O</a>
       
-        <li>
-          <a href="#" data-letter="P" @click.prevent="setLetter('P')" :class="{ 'active': letter === 'P' }">P</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="P" @click.prevent="setLetter('P')" :class="{ 'active': letter === 'P' }" aria-label="Filter by letter P">P</a>
       
-        <li>
-          <a href="#" data-letter="Q" @click.prevent="setLetter('Q')" :class="{ 'active': letter === 'Q' }">Q</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="Q" @click.prevent="setLetter('Q')" :class="{ 'active': letter === 'Q' }" aria-label="Filter by letter Q">Q</a>
       
-        <li>
-          <a href="#" data-letter="R" @click.prevent="setLetter('R')" :class="{ 'active': letter === 'R' }">R</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="R" @click.prevent="setLetter('R')" :class="{ 'active': letter === 'R' }" aria-label="Filter by letter R">R</a>
       
-        <li>
-          <a href="#" data-letter="S" @click.prevent="setLetter('S')" :class="{ 'active': letter === 'S' }">S</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="S" @click.prevent="setLetter('S')" :class="{ 'active': letter === 'S' }" aria-label="Filter by letter S">S</a>
       
-        <li>
-          <a href="#" data-letter="T" @click.prevent="setLetter('T')" :class="{ 'active': letter === 'T' }">T</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="T" @click.prevent="setLetter('T')" :class="{ 'active': letter === 'T' }" aria-label="Filter by letter T">T</a>
       
-        <li>
-          <a href="#" data-letter="U" @click.prevent="setLetter('U')" :class="{ 'active': letter === 'U' }">U</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="U" @click.prevent="setLetter('U')" :class="{ 'active': letter === 'U' }" aria-label="Filter by letter U">U</a>
       
-        <li>
-          <a href="#" data-letter="V" @click.prevent="setLetter('V')" :class="{ 'active': letter === 'V' }">V</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="V" @click.prevent="setLetter('V')" :class="{ 'active': letter === 'V' }" aria-label="Filter by letter V">V</a>
       
-        <li>
-          <a href="#" data-letter="W" @click.prevent="setLetter('W')" :class="{ 'active': letter === 'W' }">W</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="W" @click.prevent="setLetter('W')" :class="{ 'active': letter === 'W' }" aria-label="Filter by letter W">W</a>
       
-        <li>
-          <a href="#" data-letter="X" @click.prevent="setLetter('X')" :class="{ 'active': letter === 'X' }">X</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="X" @click.prevent="setLetter('X')" :class="{ 'active': letter === 'X' }" aria-label="Filter by letter X">X</a>
       
-        <li>
-          <a href="#" data-letter="Y" @click.prevent="setLetter('Y')" :class="{ 'active': letter === 'Y' }">Y</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="Y" @click.prevent="setLetter('Y')" :class="{ 'active': letter === 'Y' }" aria-label="Filter by letter Y">Y</a>
       
-        <li>
-          <a href="#" data-letter="Z" @click.prevent="setLetter('Z')" :class="{ 'active': letter === 'Z' }">Z</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="Z" @click.prevent="setLetter('Z')" :class="{ 'active': letter === 'Z' }" aria-label="Filter by letter Z">Z</a>
       
-    </ul>
+    </div>
+  </div>
+  
+  <div x-show="letter" class="search-status">
+    <p x-text="`Showing ${filteredClubs.length} clubs for '${searchQuery || ''}' ${letter ? `starting with '${letter}'` : ''}`"></p>
+    <button @click="resetFilters()" class="exit-search-button">Clear All Filters</button>
   </div>
   
   <div x-show="isLoading" class="loading-indicator">Loading...</div>
@@ -313,8 +268,8 @@
       
       <div class="club-grid">
         <template x-for="club in filteredClubs.filter(c => c.featured)" :key="club.slug">
-          <div class="club-card">
-            <div x-show="club.featured" class="club-featured">Featured</div>
+          <div class="club-card featured-club-card">
+            <div class="club-featured">Featured</div>
             
             <div class="club-image">
               <img :src="club.imageUrl || '/assets/images/club-placeholder.jpg'" :alt="club.title">
@@ -339,7 +294,7 @@
             
             <div class="club-actions">
               <a :href="'/club-directory/' + club.slug + '/'" class="button button-primary">View Details</a>
-              <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+              <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
             </div>
           </div>
         </template>
@@ -349,11 +304,7 @@
     <div x-data="pagination" x-effect="items = filteredClubs.filter(c => !c.featured)">
       <div class="club-grid" x-show="paginatedItems.length > 0">
         <template x-for="club in paginatedItems" :key="club.slug">
-          <div class="club-card">
-            <div class="club-image">
-              <img :src="club.imageUrl || '/assets/images/club-placeholder.jpg'" :alt="club.title">
-            </div>
-            
+          <div class="club-card standard-club-card">
             <div class="club-content">
               <h3 class="club-title" x-text="club.title"></h3>
               
@@ -373,7 +324,7 @@
             
             <div class="club-actions">
               <a :href="'/club-directory/' + club.slug + '/'" class="button button-primary">View Details</a>
-              <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+              <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
             </div>
           </div>
         </template>

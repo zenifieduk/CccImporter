@@ -24,13 +24,18 @@ pagination:
   {% include "components/search-filter.njk" %}
   
   <div class="az-filter-container">
-    <ul class="az-filter">
+    <div class="filter-header">Filter by letter:</div>
+    <div class="az-filter-letters">
+      <a href="#" class="az-filter-letter" data-letter="" @click.prevent="resetFilters()" :class="{ 'active': !letter }">All</a>
       {% for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
-        <li>
-          <a href="#" data-letter="{{ letter }}" @click.prevent="setLetter('{{ letter }}')" :class="{ 'active': letter === '{{ letter }}' }">{{ letter }}</a>
-        </li>
+        <a href="#" class="az-filter-letter" data-letter="{{ letter }}" @click.prevent="setLetter('{{ letter }}')" :class="{ 'active': letter === '{{ letter }}' }" aria-label="Filter by letter {{ letter }}">{{ letter }}</a>
       {% endfor %}
-    </ul>
+    </div>
+  </div>
+  
+  <div x-show="letter" class="search-status">
+    <p x-text="`Showing ${filteredClubs.length} clubs for '${searchQuery || ''}' ${letter ? `starting with '${letter}'` : ''}`"></p>
+    <button @click="resetFilters()" class="exit-search-button">Clear All Filters</button>
   </div>
   
   <div x-show="isLoading" class="loading-indicator">Loading...</div>
@@ -41,8 +46,8 @@ pagination:
       
       <div class="club-grid">
         <template x-for="club in filteredClubs.filter(c => c.featured)" :key="club.slug">
-          <div class="club-card">
-            <div x-show="club.featured" class="club-featured">Featured</div>
+          <div class="club-card featured-club-card">
+            <div class="club-featured">Featured</div>
             
             <div class="club-image">
               <img :src="club.imageUrl || '/assets/images/club-placeholder.jpg'" :alt="club.title">
@@ -67,7 +72,7 @@ pagination:
             
             <div class="club-actions">
               <a :href="'/club-directory/' + club.slug + '/'" class="button button-primary">View Details</a>
-              <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+              <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
             </div>
           </div>
         </template>
@@ -77,11 +82,7 @@ pagination:
     <div x-data="pagination" x-effect="items = filteredClubs.filter(c => !c.featured)">
       <div class="club-grid" x-show="paginatedItems.length > 0">
         <template x-for="club in paginatedItems" :key="club.slug">
-          <div class="club-card">
-            <div class="club-image">
-              <img :src="club.imageUrl || '/assets/images/club-placeholder.jpg'" :alt="club.title">
-            </div>
-            
+          <div class="club-card standard-club-card">
             <div class="club-content">
               <h3 class="club-title" x-text="club.title"></h3>
               
@@ -101,7 +102,7 @@ pagination:
             
             <div class="club-actions">
               <a :href="'/club-directory/' + club.slug + '/'" class="button button-primary">View Details</a>
-              <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>
+              <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
             </div>
           </div>
         </template>
