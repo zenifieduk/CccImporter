@@ -1,0 +1,37 @@
+<div class="club-card">
+  <div class="club-image">
+    {% if club.imageUrl %}
+      {% image club.imageUrl, club.title, "(min-width: 768px) 300px, 100vw", "club-image-img" %}
+    {% else %}
+      <div class="club-image-placeholder">Image not available</div>
+    {% endif %}
+    
+    {% if club.featured %}
+      <div class="featured-badge">Featured</div>
+    {% endif %}
+  </div>
+  
+  <div class="card-content">
+    <h3 class="card-title">{{ club.title }}</h3>
+    
+    <div class="card-details">
+      {% if club.city %}
+        <div class="card-detail">
+          <i data-feather="map-pin"></i> 
+          <span>{{ club.city }}{% if club.state %}, {{ club.state }}{% endif %}</span>
+        </div>
+      {% endif %}
+      
+      {% if club.category %}
+        <div class="card-detail">
+          <i data-feather="tag"></i> 
+          <span>{{ club.category }}</span>
+        </div>
+      {% endif %}
+    </div>
+    
+    <div class="card-actions">
+      <a href="/clubs/{{ club.slug }}/" class="view-btn">View Details</a>
+    </div>
+  </div>
+</div>

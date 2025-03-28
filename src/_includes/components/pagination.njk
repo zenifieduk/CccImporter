@@ -1,0 +1,54 @@
+{% if pagination.pages.length > 1 %}
+<div class="pagination">
+  <div class="pagination-controls">
+    <a 
+      href="{% if pagination.href.previous %}{{ pagination.href.previous }}{% else %}#{% endif %}"
+      class="pagination-arrow {% if not pagination.href.previous %}disabled{% endif %}"
+      {% if not pagination.href.previous %}aria-disabled="true"{% endif %}
+    >
+      <i data-feather="chevron-left"></i> Previous
+    </a>
+    
+    <div class="pagination-numbers">
+      {% set start = (pagination.pageNumber - 2) | max(0) %}
+      {% set end = (pagination.pageNumber + 2) | min(pagination.pages.length - 1) %}
+      
+      {% if start > 0 %}
+        <a href="{{ pagination.href.first }}" class="pagination-number">1</a>
+        {% if start > 1 %}
+          <span class="pagination-ellipsis">...</span>
+        {% endif %}
+      {% endif %}
+      
+      {% for pageEntry in range(start, end + 1) %}
+        <a 
+          href="{{ pagination.hrefs[pageEntry] }}"
+          class="pagination-number {% if pageEntry === pagination.pageNumber %}active{% endif %}"
+          {% if pageEntry === pagination.pageNumber %}aria-current="page"{% endif %}
+        >
+          {{ pageEntry + 1 }}
+        </a>
+      {% endfor %}
+      
+      {% if end < pagination.pages.length - 1 %}
+        {% if end < pagination.pages.length - 2 %}
+          <span class="pagination-ellipsis">...</span>
+        {% endif %}
+        <a href="{{ pagination.href.last }}" class="pagination-number">{{ pagination.pages.length }}</a>
+      {% endif %}
+    </div>
+    
+    <a 
+      href="{% if pagination.href.next %}{{ pagination.href.next }}{% else %}#{% endif %}"
+      class="pagination-arrow {% if not pagination.href.next %}disabled{% endif %}"
+      {% if not pagination.href.next %}aria-disabled="true"{% endif %}
+    >
+      Next <i data-feather="chevron-right"></i>
+    </a>
+  </div>
+  
+  <div class="pagination-info">
+    Page {{ pagination.pageNumber + 1 }} of {{ pagination.pages.length }}
+  </div>
+</div>
+{% endif %}

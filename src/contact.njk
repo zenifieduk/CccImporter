@@ -1,0 +1,426 @@
+---
+layout: layouts/base.njk
+title: Contact Us | Classic Car Clubs UK
+description: Get in touch with Classic Car Clubs UK for any inquiries, suggestions, or to submit your club.
+---
+
+<div class="container">
+  <div class="breadcrumb-container">
+    {% set breadcrumbs = [{ text: 'Contact Us' }] %}
+    {% include "components/breadcrumb.njk" %}
+  </div>
+  
+  <h1 class="page-title">Contact Us</h1>
+  
+  <div class="contact-layout">
+    <div class="contact-content">
+      <p class="intro-text">
+        Have a question, suggestion, or want to report an issue? We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.
+      </p>
+      
+      <div class="contact-info-section">
+        <h2 class="section-title">Contact Information</h2>
+        <div class="contact-info-grid">
+          <div class="contact-info-item">
+            <i data-feather="mail" class="contact-icon"></i>
+            <div>
+              <div class="info-label">Email</div>
+              <a href="mailto:{{ site.email }}" class="info-value">{{ site.email }}</a>
+            </div>
+          </div>
+          
+          {% if site.phone %}
+            <div class="contact-info-item">
+              <i data-feather="phone" class="contact-icon"></i>
+              <div>
+                <div class="info-label">Phone</div>
+                <a href="tel:{{ site.phone }}" class="info-value">{{ site.phone }}</a>
+              </div>
+            </div>
+          {% endif %}
+          
+          <div class="contact-info-item">
+            <i data-feather="globe" class="contact-icon"></i>
+            <div>
+              <div class="info-label">Website</div>
+              <a href="{{ site.url }}" class="info-value">{{ site.url }}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="contact-form-container">
+      <h2 class="section-title">Send us a message</h2>
+      <form id="contactForm" class="contact-form">
+        <div class="form-group">
+          <label for="name" class="form-label">Your Name *</label>
+          <input type="text" id="name" name="name" class="form-input" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address *</label>
+          <input type="email" id="email" name="email" class="form-input" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="subject" class="form-label">Subject *</label>
+          <input type="text" id="subject" name="subject" class="form-input" required>
+        </div>
+        
+        <div class="form-group full-width">
+          <label for="message" class="form-label">Message *</label>
+          <textarea id="message" name="message" class="form-textarea" rows="6" required></textarea>
+        </div>
+        
+        <div class="form-group full-width">
+          <div class="checkbox-container">
+            <input type="checkbox" id="privacy" name="privacy" required>
+            <label for="privacy" class="checkbox-label">I agree to the <a href="/privacy-policy/">privacy policy</a> *</label>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn submit-btn">
+            <i data-feather="send"></i> Send Message
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <div class="other-ways-section">
+    <h2 class="section-title">Other Ways to Connect</h2>
+    <div class="other-ways-grid">
+      <div class="other-ways-item">
+        <i data-feather="users" class="other-ways-icon"></i>
+        <h3>Submit a Club</h3>
+        <p>Want to add your classic car club to our directory? Visit our submission page to get started.</p>
+        <a href="/submit-club/" class="btn btn-secondary">Submit a Club</a>
+      </div>
+      
+      <div class="other-ways-item">
+        <i data-feather="calendar" class="other-ways-icon"></i>
+        <h3>Submit an Event</h3>
+        <p>Hosting a classic car event? Let us help you promote it to our community of enthusiasts.</p>
+        <a href="/submit-event/" class="btn btn-secondary">Submit an Event</a>
+      </div>
+      
+      <div class="other-ways-item">
+        <i data-feather="message-circle" class="other-ways-icon"></i>
+        <h3>Social Media</h3>
+        <p>Follow us on social media for the latest updates, features, and classic car content.</p>
+        <div class="social-links">
+          {% for social in site.socialLinks %}
+            <a href="{{ social.url }}" target="_blank" rel="noopener" class="social-link {{ social.platform }}">
+              <i data-feather="{{ social.platform }}"></i>
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    margin-bottom: 3rem;
+  }
+  
+  .intro-text {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+  }
+  
+  .contact-info-section {
+    margin-bottom: 2rem;
+  }
+  
+  .contact-info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .contact-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .contact-icon {
+    color: var(--primary-color);
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+  
+  .info-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+  }
+  
+  .info-value {
+    font-weight: 500;
+    color: #333;
+  }
+  
+  /* Form Styles */
+  .contact-form-container {
+    background-color: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .contact-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .form-group.full-width {
+    grid-column: span 2;
+  }
+  
+  .form-label {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .form-input,
+  .form-textarea {
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  
+  .form-input:focus,
+  .form-textarea:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.1);
+  }
+  
+  .checkbox-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  
+  .checkbox-label {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: #555;
+  }
+  
+  .form-actions {
+    grid-column: span 2;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .submit-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+  }
+  
+  /* Other Ways Section */
+  .other-ways-section {
+    margin: 3rem 0;
+  }
+  
+  .other-ways-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 1.5rem;
+  }
+  
+  .other-ways-item {
+    background-color: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  
+  .other-ways-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .other-ways-icon {
+    width: 48px;
+    height: 48px;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+  }
+  
+  .other-ways-item h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: #333;
+  }
+  
+  .other-ways-item p {
+    margin-bottom: 1.5rem;
+    color: #666;
+    line-height: 1.5;
+  }
+  
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+  }
+  
+  .social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: white;
+    background-color: var(--primary-color);
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  
+  .social-link:hover {
+    transform: translateY(-3px);
+    opacity: 0.9;
+  }
+  
+  .social-link.facebook {
+    background-color: #1877F2;
+  }
+  
+  .social-link.twitter {
+    background-color: #1DA1F2;
+  }
+  
+  .social-link.instagram {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 992px) {
+    .contact-layout {
+      grid-template-columns: 1fr;
+    }
+    
+    .other-ways-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .contact-form {
+      grid-template-columns: 1fr;
+    }
+    
+    .form-group.full-width {
+      grid-column: span 1;
+    }
+    
+    .form-actions {
+      grid-column: span 1;
+      justify-content: center;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.getElementById('contactForm');
+    
+    if (contactForm) {
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = new FormData(contactForm);
+        const formDataObj = Object.fromEntries(formData.entries());
+        
+        // Add basic form validation
+        let isValid = true;
+        const requiredFields = ['name', 'email', 'subject', 'message'];
+        
+        requiredFields.forEach(field => {
+          const input = document.getElementById(field);
+          if (!input.value.trim()) {
+            input.classList.add('error');
+            isValid = false;
+          } else {
+            input.classList.remove('error');
+          }
+        });
+        
+        // Validate email format
+        const emailInput = document.getElementById('email');
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailInput.value)) {
+          emailInput.classList.add('error');
+          isValid = false;
+        }
+        
+        if (isValid) {
+          // In a real implementation, this would send the form data to a server
+          // For this implementation, we'll show a success message
+          contactForm.innerHTML = `
+            <div class="form-success">
+              <i data-feather="check-circle" class="success-icon"></i>
+              <h3>Message Sent Successfully!</h3>
+              <p>Thank you for reaching out. We'll get back to you as soon as possible.</p>
+            </div>
+          `;
+          
+          // Reinitialize feather icons
+          feather.replace();
+        }
+      });
+      
+      // Add live validation on blur
+      const inputs = contactForm.querySelectorAll('input, textarea');
+      inputs.forEach(input => {
+        input.addEventListener('blur', function() {
+          if (input.required && !input.value.trim()) {
+            input.classList.add('error');
+          } else if (input.type === 'email') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(input.value)) {
+              input.classList.add('error');
+            } else {
+              input.classList.remove('error');
+            }
+          } else {
+            input.classList.remove('error');
+          }
+        });
+        
+        // Remove error class on focus
+        input.addEventListener('focus', function() {
+          input.classList.remove('error');
+        });
+      });
+    }
+  });
+</script>

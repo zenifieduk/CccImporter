@@ -1,0 +1,80 @@
+---
+layout: layouts/base.njk
+title: Classic Car Clubs | UK Directory
+description: Discover classic car clubs across the UK with contact details and more.
+---
+
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">Classic Car Clubs Directory</h1>
+      <p class="hero-subtitle">Discover classic car clubs across the UK, with contact details and more.</p>
+      <div class="hero-buttons">
+        <a href="/club-directory/" class="btn">Browse Directory</a>
+        <a href="/contact/" class="btn btn-secondary">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="featured-section">
+  <div class="container">
+    <h2 class="section-title">Featured Car Clubs</h2>
+    <div class="grid">
+      {% for club in collections.featuredClubs | limit(4) %}
+        {% include "components/club-card.njk" %}
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="about-section">
+  <div class="container">
+    <div class="about-container">
+      <div class="about-content">
+        <h2 class="section-title">About The Classic Car Clubs Directory</h2>
+        <p>
+          Welcome to the UK's premier directory of classic car clubs. Our mission is to connect enthusiasts with local and national clubs dedicated to preserving and celebrating classic automobiles.
+        </p>
+        <p>
+          Whether you're looking to join a club for your specific make or model, or simply want to connect with fellow classic car enthusiasts in your area, our comprehensive directory has you covered.
+        </p>
+        <p>
+          From vintage British marques to American muscle, European sports cars to Japanese classics, you'll find clubs catering to every interest and era of motoring history.
+        </p>
+      </div>
+      <div class="about-image">
+        <img src="/assets/images/classic-car-meet.jpg" alt="Classic car club meeting">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="categories-section">
+  <div class="container">
+    <h2 class="section-title">Popular Car Club Types</h2>
+    <div class="club-type-grid">
+      {% for clubType in site.popularClubTypes %}
+        <div class="club-type-card">
+          <h3 class="club-type-title">{{ clubType.name }}</h3>
+          <p class="club-type-count">{{ clubType.count }} clubs</p>
+          <a href="/club-directory/?category={{ clubType.name | slugify }}" class="club-type-link">View clubs</a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="featured-section">
+  <div class="container">
+    <h2 class="section-title">Upcoming Events</h2>
+    <div class="grid">
+      {% for event in collections.upcomingEvents | limit(3) %}
+        {% include "components/event-card.njk" %}
+      {% endfor %}
+    </div>
+    <div class="text-center" style="margin-top: 2rem;">
+      <a href="/club-events/" class="btn">View All Events</a>
+    </div>
+  </div>
+</section>

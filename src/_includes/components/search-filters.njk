@@ -1,0 +1,58 @@
+<div class="search-container">
+  <form id="searchForm" class="search-form">
+    <div class="search-grid">
+      <div class="custom-search-group">
+        <label for="searchInput" class="search-label">Search</label>
+        <input 
+          type="text" 
+          id="searchInput" 
+          class="search-input" 
+          placeholder="Search by name, location..." 
+          value="{{ searchTerm }}"
+        >
+      </div>
+      
+      <div class="custom-search-group">
+        <label for="categoryFilter" class="search-label">Category</label>
+        <select id="categoryFilter" class="search-select">
+          <option value="">All Categories</option>
+          {% for category in categories %}
+            <option value="{{ category }}" {% if category === selectedCategory %}selected{% endif %}>{{ category }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      
+      <div class="custom-search-group">
+        <label for="locationFilter" class="search-label">Location</label>
+        <input 
+          type="text" 
+          id="locationFilter" 
+          class="search-input" 
+          placeholder="City, County..." 
+          value="{{ selectedLocation }}"
+        >
+      </div>
+      
+      <div class="button-group">
+        <button type="submit" class="search-btn">
+          <i data-feather="search"></i> Search
+        </button>
+        <button type="button" class="reset-btn" id="resetButton">Reset</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+{% if showAzFilters %}
+<div class="az-filter-container">
+  <div class="az-filters">
+    <button type="button" class="az-filter-btn {% if letter === 'all' or not letter %}active{% endif %}" data-letter="all">All</button>
+    {% for char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
+      <button type="button" class="az-filter-btn {% if letter === char %}active{% endif %}" data-letter="{{ char }}">{{ char }}</button>
+    {% endfor %}
+  </div>
+  <div id="resultsCount" class="results-count">
+    Showing {{ filteredItems.length }} {{ filteredItems.length === 1 ? 'result' : 'results' }}
+  </div>
+</div>
+{% endif %}

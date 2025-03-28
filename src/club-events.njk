@@ -1,0 +1,170 @@
+---
+layout: layouts/base.njk
+title: Classic Car Events | UK Directory
+description: Find classic car shows, meets, and events across the UK.
+pagination:
+  data: collections.events
+  size: 9
+---
+
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">Classic Car Events</h1>
+      <p class="hero-subtitle">Find classic car shows, meets, and events across the UK</p>
+    </div>
+  </div>
+</section>
+
+<div class="container">
+  {% set categories = collections.eventCategories %}
+  {% set showAzFilters = false %}
+  {% set searchTerm = '' %}
+  {% set selectedCategory = '' %}
+  {% set selectedLocation = '' %}
+  {% include "components/search-filters.njk" %}
+  
+  <div class="event-results">
+    <h2 class="section-title">Featured Events</h2>
+    <div id="eventsContainer" data-events="{{ collections.featuredEvents | json | escape }}" x-data="eventDirectory">
+      <div class="grid" x-show="filteredEvents.length > 0">
+        <template x-for="event in filteredEvents" :key="event.eventSlug">
+          <div class="event-card">
+            <div class="event-image">
+              <template x-if="event.eventImageUrl">
+                <img :src="event.eventImageUrl" :alt="event.eventTitle" class="event-image-img">
+              </template>
+              <template x-if="!event.eventImageUrl">
+                <div class="event-image-placeholder">Image not available</div>
+              </template>
+              
+              <div class="event-date-badge">
+                <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
+                <span x-text="formatShortDate(event.eventStartDateTime)"></span>
+              </div>
+              
+              <div class="featured-badge">Featured</div>
+            </div>
+            
+            <div class="card-content">
+              <h3 class="card-title" x-text="event.eventTitle"></h3>
+              
+              <div class="card-details">
+                <template x-if="event.eventCity">
+                  <div class="card-detail">
+                    <i data-feather="map-pin"></i> 
+                    <span x-text="event.eventCity"></span>
+                  </div>
+                </template>
+                
+                <template x-if="event.eventStartDateTime">
+                  <div class="card-detail">
+                    <i data-feather="calendar"></i> 
+                    <span x-text="formatDate(event.eventStartDateTime)"></span>
+                  </div>
+                </template>
+                
+                <template x-if="event.eventCategory && event.eventCategory.length">
+                  <div class="card-tags">
+                    <template x-for="category in event.eventCategory" :key="category">
+                      <span class="card-tag" x-text="category"></span>
+                    </template>
+                  </div>
+                </template>
+              </div>
+              
+              <div class="card-actions">
+                <span class="price-badge" x-text="event.eventTicketPrice"></span>
+                <a :href="'/events/' + event.eventSlug + '/'" class="view-btn">View Details</a>
+              </div>
+            </div>
+          </div>
+        </template>
+      </div>
+      
+      <div class="no-results" x-show="filteredEvents.length === 0">
+        <h3>No events found</h3>
+        <p>Please try adjusting your search criteria or reset the filters.</p>
+        <button class="btn" @click="resetFilters">Reset Filters</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="event-results">
+    <h2 class="section-title">Upcoming Events</h2>
+    <div id="upcomingEventsContainer" data-events="{{ collections.upcomingEvents | json | escape }}">
+      <div class="grid">
+        {% for event in pagination.items %}
+          {% include "components/event-card.njk" %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  
+  {% include "components/pagination.njk" %}
+</div>
+
+<script>
+  function formatMonth(dateString) {
+    if (!dateString) return '';
+    
+    try {
+      const month = dateString.substring(2, 4);
+      const date = new Date(2000, parseInt(month) - 1, 1);
+      return date.toLocaleString('en-US', { month: 'short' });
+    } catch (error) {
+      return '';
+    }
+  }
+  
+  function formatShortDate(dateString) {
+    if (!dateString) return 'TBD';
+    
+    try {
+      const day = dateString.substring(0, 2);
+      const month = dateString.substring(2, 4);
+      const year = dateString.substring(4, 8);
+      
+      const date = new Date(`${year}-${month}-${day}`);
+      
+      const options = { 
+        day: 'numeric'
+      };
+      
+      return date.toLocaleDateString('en-GB', options);
+    } catch (error) {
+      return 'TBD';
+    }
+  }
+  
+  function formatDate(dateString) {
+    if (!dateString) return 'Date TBD';
+    
+    try {
+      const day = dateString.substring(0, 2);
+      const month = dateString.substring(2, 4);
+      const year = dateString.substring(4, 8);
+      const time = dateString.substring(9);
+      
+      const date = new Date(`${year}-${month}-${day}T${time}`);
+      
+      const options = { 
+        weekday: 'short', 
+        day: 'numeric', 
+        month: 'short', 
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      };
+      
+      return date.toLocaleDateString('en-GB', options);
+    } catch (error) {
+      return 'Date TBD';
+    }
+  }
+  
+  // Make these functions available to Alpine
+  window.formatMonth = formatMonth;
+  window.formatShortDate = formatShortDate;
+  window.formatDate = formatDate;
+</script>

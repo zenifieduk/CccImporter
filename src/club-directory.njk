@@ -1,0 +1,83 @@
+---
+layout: layouts/base.njk
+title: Club Directory | Classic Car Clubs UK
+description: Browse our comprehensive directory of classic car clubs across the UK.
+pagination:
+  data: collections.clubs
+  size: 12
+---
+
+<div class="container">
+  <div class="breadcrumb-container">
+    {% set breadcrumbs = [{ text: 'Club Directory' }] %}
+    {% include "components/breadcrumb.njk" %}
+  </div>
+  
+  <h1 class="page-title">Classic Car Clubs Directory</h1>
+  
+  <p class="intro-text">
+    Welcome to our comprehensive classic car clubs directory – your ultimate resource for connecting with classic car enthusiasts across the United Kingdom. Our extensive directory features a wide range of clubs focused on specific marques, eras, and regions.
+  </p>
+  
+  {% set categories = collections.clubCategories %}
+  {% set showAzFilters = true %}
+  {% set searchTerm = '' %}
+  {% set selectedCategory = '' %}
+  {% set selectedLocation = '' %}
+  {% set letter = '' %}
+  {% set filteredItems = pagination.items %}
+  {% include "components/search-filters.njk" %}
+  
+  <div id="resultsContainer" data-items="{{ collections.clubs | json | escape }}" x-data="clubDirectory">
+    <div class="grid" x-show="filteredItems.length > 0">
+      <template x-for="club in filteredItems" :key="club.slug">
+        <div class="club-card">
+          <div class="club-image">
+            <template x-if="club.imageUrl">
+              <img :src="club.imageUrl" :alt="club.title" class="club-image-img">
+            </template>
+            <template x-if="!club.imageUrl">
+              <div class="club-image-placeholder">Image not available</div>
+            </template>
+            
+            <template x-if="club.featured">
+              <div class="featured-badge">Featured</div>
+            </template>
+          </div>
+          
+          <div class="card-content">
+            <h3 class="card-title" x-text="club.title"></h3>
+            
+            <div class="card-details">
+              <template x-if="club.city">
+                <div class="card-detail">
+                  <i data-feather="map-pin"></i> 
+                  <span x-text="club.city + (club.state ? ', ' + club.state : '')"></span>
+                </div>
+              </template>
+              
+              <template x-if="club.category">
+                <div class="card-detail">
+                  <i data-feather="tag"></i> 
+                  <span x-text="club.category"></span>
+                </div>
+              </template>
+            </div>
+            
+            <div class="card-actions">
+              <a :href="'/clubs/' + club.slug + '/'" class="view-btn">View Details</a>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+    
+    <div class="no-results" x-show="filteredItems.length === 0">
+      <h3>No clubs found</h3>
+      <p>Please try adjusting your search criteria or reset the filters.</p>
+      <button class="btn" @click="resetFilters">Reset Filters</button>
+    </div>
+  </div>
+  
+  {% include "components/pagination.njk" %}
+</div>

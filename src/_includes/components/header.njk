@@ -1,0 +1,59 @@
+<header class="site-header">
+  <div class="container">
+    <div class="logo">
+      <a href="/">
+        <img src="{{ site.logo }}" alt="Classic Car Clubs" class="logo-image">
+      </a>
+    </div>
+    
+    <nav class="desktop-nav">
+      <ul>
+        {% for item in site.navigation %}
+          <li><a href="{{ item.url }}">{{ item.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+    
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <span class="hamburger-icon">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </span>
+    </button>
+  </div>
+  
+  <div class="mobile-menu">
+    <div class="mobile-menu-container">
+      <div class="mobile-menu-header">
+        <div class="logo">
+          <a href="/">
+            <img src="{{ site.logo }}" alt="Classic Car Clubs" class="logo-image">
+          </a>
+        </div>
+        
+        <button class="mobile-menu-close" aria-label="Close menu">
+          <i data-feather="x"></i>
+        </button>
+      </div>
+      
+      <nav class="mobile-nav">
+        <ul>
+          {% for item in site.navigation %}
+            <li>
+              <a href="{{ item.url }}">
+                {{ item.text }}
+                <i data-feather="chevron-right" class="arrow-icon"></i>
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </nav>
+      
+      <div class="mobile-menu-footer">
+        <p class="cta-text">Need to get in touch?</p>
+        <a href="/contact/" class="contact-link">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</header>

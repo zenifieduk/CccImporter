@@ -1,0 +1,51 @@
+<div class="event-card">
+  <div class="event-image">
+    {% if event.eventImageUrl %}
+      {% image event.eventImageUrl, event.eventTitle, "(min-width: 768px) 300px, 100vw", "event-image-img" %}
+    {% else %}
+      <div class="event-image-placeholder">Image not available</div>
+    {% endif %}
+    
+    <div class="event-date-badge">
+      <span class="event-month">{{ event.eventStartDateTime | extractMonth }}</span>
+      {{ event.eventStartDateTime | shortDate }}
+    </div>
+    
+    {% if event.eventFeatured %}
+      <div class="featured-badge">Featured</div>
+    {% endif %}
+  </div>
+  
+  <div class="card-content">
+    <h3 class="card-title">{{ event.eventTitle }}</h3>
+    
+    <div class="card-details">
+      {% if event.eventCity %}
+        <div class="card-detail">
+          <i data-feather="map-pin"></i> 
+          <span>{{ event.eventCity }}</span>
+        </div>
+      {% endif %}
+      
+      {% if event.eventStartDateTime %}
+        <div class="card-detail">
+          <i data-feather="calendar"></i> 
+          <span>{{ event.eventStartDateTime | formatDate }}</span>
+        </div>
+      {% endif %}
+      
+      {% if event.eventCategory %}
+        <div class="card-tags">
+          {% for category in event.eventCategory %}
+            <span class="card-tag">{{ category }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+    
+    <div class="card-actions">
+      <span class="price-badge">{{ event.eventTicketPrice }}</span>
+      <a href="/events/{{ event.eventSlug }}/" class="view-btn">View Details</a>
+    </div>
+  </div>
+</div>

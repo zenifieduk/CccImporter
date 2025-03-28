@@ -1,0 +1,295 @@
+---
+pagination:
+  data: collections.clubs
+  size: 1
+  alias: club
+permalink: "/clubs/{{ club.slug }}/"
+---
+
+{% set title = club.title + " | Classic Car Clubs UK" %}
+{% set description = club.description or "Details about " + club.title + ", a classic car club in the UK." %}
+
+<div class="container">
+  <div class="breadcrumb-container">
+    {% set breadcrumbs = [
+      { text: "Club Directory", url: "/club-directory/" },
+      { text: club.title }
+    ] %}
+    {% include "components/breadcrumb.njk" %}
+  </div>
+  
+  <div class="club-detail-header">
+    <h1 class="page-title">{{ club.title }}</h1>
+    
+    {% if club.featured %}
+      <div class="featured-badge-large">Featured Club</div>
+    {% endif %}
+  </div>
+  
+  <div class="club-detail-layout">
+    <div class="club-detail-main">
+      <div class="club-detail-image">
+        {% if club.imageUrl %}
+          {% image club.imageUrl, club.title, "(min-width: 768px) 600px, 100vw", "club-detail-img" %}
+        {% else %}
+          <div class="club-detail-image-placeholder">Club image not available</div>
+        {% endif %}
+      </div>
+      
+      <div class="club-description">
+        {% if club.description %}
+          <h2 class="section-title">About This Club</h2>
+          <p>{{ club.description }}</p>
+        {% else %}
+          <h2 class="section-title">About This Club</h2>
+          <p>This is the official page for {{ club.title }}. Please visit their website or contact them directly for more information about membership, events, and activities.</p>
+        {% endif %}
+      </div>
+      
+      {% set relatedClubs = collections.clubs | filterByCategory(club.category) | limitWithout(3, club.slug) %}
+      {% if relatedClubs.length > 0 %}
+        <div class="related-clubs">
+          <h2 class="section-title">Similar Clubs</h2>
+          <div class="grid grid-small">
+            {% for relatedClub in relatedClubs %}
+              {% include "components/club-card.njk" with {club: relatedClub} %}
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+    
+    <div class="club-detail-sidebar">
+      <div class="club-info-card">
+        <h2 class="info-card-title">Club Details</h2>
+        
+        {% if club.website %}
+          <div class="info-item">
+            <i data-feather="globe" class="info-icon"></i>
+            <div>
+              <div class="info-label">Website</div>
+              <a href="{{ club.website }}" target="_blank" rel="noopener" class="info-value website-link">{{ club.website | replace("https://", "") | replace("http://", "") }}</a>
+            </div>
+          </div>
+        {% endif %}
+        
+        {% if club.phone %}
+          <div class="info-item">
+            <i data-feather="phone" class="info-icon"></i>
+            <div>
+              <div class="info-label">Phone</div>
+              <div class="info-value">{{ club.phone }}</div>
+            </div>
+          </div>
+        {% endif %}
+        
+        {% if club.email %}
+          <div class="info-item">
+            <i data-feather="mail" class="info-icon"></i>
+            <div>
+              <div class="info-label">Email</div>
+              <a href="mailto:{{ club.email }}" class="info-value">{{ club.email }}</a>
+            </div>
+          </div>
+        {% endif %}
+        
+        {% if club.address %}
+          <div class="info-item">
+            <i data-feather="map-pin" class="info-icon"></i>
+            <div>
+              <div class="info-label">Address</div>
+              <div class="info-value">{{ club.address }}</div>
+            </div>
+          </div>
+        {% endif %}
+        
+        {% if club.category %}
+          <div class="info-item">
+            <i data-feather="tag" class="info-icon"></i>
+            <div>
+              <div class="info-label">Category</div>
+              <div class="info-value">{{ club.category }}</div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+      
+      <div class="club-cta-card">
+        <h3 class="cta-title">Interested in this club?</h3>
+        <p class="cta-text">Visit their website to learn more about membership, events, and activities.</p>
+        {% if club.website %}
+          <a href="{{ club.website }}" target="_blank" rel="noopener" class="btn visit-website-btn">
+            <i data-feather="external-link"></i> Visit Website
+          </a>
+        {% endif %}
+        
+        <a href="/contact/?club={{ club.title | slugify }}" class="btn btn-secondary contact-btn">
+          <i data-feather="mail"></i> Contact Us About This Club
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .club-detail-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .featured-badge-large {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .club-detail-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  
+  .club-detail-image {
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .club-detail-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  .club-detail-image-placeholder {
+    background-color: #f0f0f0;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 1rem;
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  .club-description {
+    margin-bottom: 2rem;
+  }
+  
+  .info-card-title {
+    font-size: 1.3rem;
+    margin-bottom: 1.25rem;
+    color: var(--primary-color);
+  }
+  
+  .club-info-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.5rem;
+  }
+  
+  .info-item {
+    display: flex;
+    margin-bottom: 1.25rem;
+    gap: 1rem;
+  }
+  
+  .info-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .info-icon {
+    color: var(--primary-color);
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+  
+  .info-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.25rem;
+  }
+  
+  .info-value {
+    font-weight: 500;
+  }
+  
+  .website-link {
+    color: var(--primary-color);
+    word-break: break-all;
+  }
+  
+  .club-cta-card {
+    background-color: #e8f5e9;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .cta-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+    color: var(--primary-color);
+  }
+  
+  .cta-text {
+    margin-bottom: 1.25rem;
+    font-size: 0.95rem;
+  }
+  
+  .visit-website-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-bottom: 0.75rem;
+  }
+  
+  .contact-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+  }
+  
+  .related-clubs {
+    margin-top: 2rem;
+  }
+  
+  .grid-small {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  
+  @media (max-width: 992px) {
+    .club-detail-layout {
+      grid-template-columns: 1fr;
+    }
+    
+    .club-detail-sidebar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .club-detail-sidebar {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

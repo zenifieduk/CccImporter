@@ -1,0 +1,9 @@
+<svg width="120" height="50" viewBox="0 0 120 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M25 10C25 6.13401 28.134 3 32 3H88C91.866 3 95 6.13401 95 10V25C95 28.866 91.866 32 88 32H32C28.134 32 25 28.866 25 25V10Z" fill="white"/>
+  <path d="M30 15C30 12.2386 32.2386 10 35 10H85C87.7614 10 90 12.2386 90 15V20C90 22.7614 87.7614 25 85 25H35C32.2386 25 30 22.7614 30 20V15Z" fill="#1b5e20"/>
+  <path d="M40 38L45 32H75L80 38H40Z" fill="#1b5e20"/>
+  <path d="M32 42L40 38H80L88 42H32Z" fill="#1b5e20"/>
+  <path d="M31 45L33 42H87L89 45H31Z" fill="#1b5e20"/>
+  <text x="60" y="20" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">CLASSIC CAR CLUBS</text>
+  <text x="60" y="48" font-family="Arial, sans-serif" font-size="6" fill="#1b5e20" text-anchor="middle">UK NETWORK</text>
+</svg>
