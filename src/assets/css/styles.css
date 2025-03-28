@@ -41,17 +41,28 @@ a:hover {
   padding: 0 1rem;
 }
 
+.hero-section {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .hero-section .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
   width: 100%;
+  box-sizing: border-box;
 }
 
-.hero-section {
-  width: 100%;
-  margin: 0;
-  padding: 0;
+.club-hero-content, .event-hero-content {
+  text-align: center;
+  margin: 0 auto;
 }
 
 /* Header styles */
@@ -931,6 +942,7 @@ select.custom-search-input option {
   text-align: left;
   margin-left: 0;
   padding-left: 0;
+  max-width: 800px;
 }
 
 .hero-video-container {
