@@ -23,8 +23,21 @@ pagination:
       <h1 class="hero-title">Classic Car Clubs Directory</h1>
       <p class="hero-subtitle">Welcome to our comprehensive classic car clubs directory – your ultimate resource for connecting with classic car enthusiasts across the United Kingdom.</p>
       
-      {% set categories = clubs | map("category") | unique %}
-      {% set locations = clubs | map("city") | unique %}
+      {% set categories = [] %}
+      {% for club in clubs %}
+        {% if club.category and club.category | length > 0 %}
+          {% set categories = (categories.push(club.category), categories) %}
+        {% endif %}
+      {% endfor %}
+      {% set categories = categories | unique %}
+
+      {% set locations = [] %}
+      {% for club in clubs %}
+        {% if club.city and club.city | length > 0 %}
+          {% set locations = (locations.push(club.city), locations) %}
+        {% endif %}
+      {% endfor %}
+      {% set locations = locations | unique %}
       
       <div x-data="clubSearch" class="hero-search">
         <div class="search-container event-search">

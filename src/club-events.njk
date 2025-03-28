@@ -34,7 +34,13 @@ description: Browse upcoming classic car shows, meets, and events across the UK.
       {% endfor %}
       
       {% set uniqueCategories = eventCategories | unique %}
-      {% set locations = events | map("eventCity") | unique %}
+      {% set locations = [] %}
+      {% for event in events %}
+        {% if event.eventCity and event.eventCity | length > 0 %}
+          {% set locations = (locations.push(event.eventCity), locations) %}
+        {% endif %}
+      {% endfor %}
+      {% set locations = locations | unique %}
       
       <div x-data="eventSearch" class="hero-search">
         <div class="search-container event-search">
