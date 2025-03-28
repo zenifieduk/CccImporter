@@ -171,9 +171,9 @@
       <h1 class="hero-title">Classic Car Clubs Directory</h1>
       <p class="hero-subtitle">Welcome to our comprehensive classic car clubs directory – your ultimate resource for connecting with classic car enthusiasts across the United Kingdom.</p>
       
-      <div x-data="clubSearch" class="hero-search">
+      <div x-data="clubSearch" x-init="initSearch()" class="hero-search">
         <div class="search-container event-search">
-          <form class="search-form">
+          <form class="search-form" @submit.prevent="search()">
             <div class="search-grid">
               <div class="custom-search-group">
                 <label for="search-term">Club Name</label>
@@ -232,7 +232,7 @@
 
 <div class="container">
   
-  <div x-data="clubSearch">
+  <div x-data="clubSearch" x-init="initSearch()">
   
   <div class="az-filter-container">
     <div class="filter-header">Filter by letter:</div>

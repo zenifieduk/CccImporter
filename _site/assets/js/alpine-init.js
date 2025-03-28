@@ -64,11 +64,18 @@ document.addEventListener('alpine:init', () => {
         console.log('All categories loaded:', this.categories.length);
         console.log('All locations loaded:', this.locations.length);
         
-        // Apply filters
-        this.filter();
+        // Set available options initially to all options
+        this.availableCategories = this.categories;
+        this.availableLocations = this.locations;
         
-        // Update available options based on filtered results
-        this.updateAvailableOptions();
+        // Apply filters only if there are any parameters
+        if (this.searchTerm || this.category || this.location || this.letter) {
+          this.filter();
+          this.updateAvailableOptions();
+        } else {
+          // Initialize filteredClubs with all clubs if no filters are active
+          this.filteredClubs = [...this.clubs];
+        }
 
         // For debugging
         console.log('Filtered clubs:', this.filteredClubs.length);
@@ -79,6 +86,35 @@ document.addEventListener('alpine:init', () => {
       } catch (error) {
         console.error('Error initializing search:', error);
         this.isLoading = false;
+      }
+    },
+    
+    // Method to manually initialize search - can be called from the template
+    initSearch() {
+      // This method can be called from the x-init directive in the template
+      // It ensures that if we come directly to the page with URL parameters,
+      // the search is properly applied
+      
+      // Get URL params again to ensure we have the latest
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchTerm = urlParams.get('search') || '';
+      const category = urlParams.get('category') || '';
+      const location = urlParams.get('location') || '';
+      const letter = urlParams.get('letter') || '';
+      
+      // Only apply search if there are parameters
+      if (searchTerm || category || location || letter) {
+        // Update the model
+        this.searchTerm = searchTerm;
+        this.category = category;
+        this.location = location;
+        this.letter = letter;
+        
+        // Apply the search
+        setTimeout(() => {
+          this.filter();
+          this.updateAvailableOptions();
+        }, 100); // Small delay to ensure data is loaded
       }
     },
     
