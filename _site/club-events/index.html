@@ -171,54 +171,6 @@
       <h1 class="hero-title">Classic Car Events</h1>
       <p class="hero-subtitle">Find classic car shows, meets, and events across the UK</p>
       
-      
-      
-        
-          
-            
-              
-            
-              
-            
-          
-        
-      
-        
-          
-            
-              
-            
-              
-            
-          
-        
-      
-        
-          
-            
-              
-            
-          
-        
-      
-      
-      
-      
-      
-        
-          
-        
-      
-        
-          
-        
-      
-        
-          
-        
-      
-      
-      
       <div x-data="eventSearch" class="hero-search">
         <div class="search-container event-search">
           <form class="search-form">
@@ -244,9 +196,9 @@
                   </svg>
                   <select id="search-category" class="custom-search-input search-category" x-model="category">
                     <option value="">All Event Types</option>
-                    
-                      <option value=""></option>
-                    
+                    <template x-for="cat in categories" :key="cat">
+                      <option :value="cat" :selected="cat === category" x-text="cat"></option>
+                    </template>
                   </select>
                 </div>
               </div>
@@ -260,9 +212,9 @@
                   </svg>
                   <select id="search-location" class="custom-search-input search-location" x-model="location">
                     <option value="">All Locations</option>
-                    
-                      <option value=""></option>
-                    
+                    <template x-for="loc in locations" :key="loc">
+                      <option :value="loc" :selected="loc === location" x-text="loc"></option>
+                    </template>
                   </select>
                 </div>
               </div>
@@ -290,7 +242,7 @@
       <h2>Featured Events</h2>
       
       <div class="event-grid">
-        <template x-for="event in filteredEvents.filter(e => e.eventFeatured)" :key="event.eventSlug">
+        <template x-for="event in filteredEvents.filter(e => e.eventFeatured).slice(0, 8)" :key="event.eventSlug">
           <div class="event-card">
             <div x-show="event.eventFeatured" class="event-featured">Featured</div>
             

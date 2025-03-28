@@ -1,4 +1,5 @@
 ---
 permalink: /events.json
+eleventyExcludeFromCollections: true
 ---
-{{ events | dump | safe }}
+{{ events | json | safe }}

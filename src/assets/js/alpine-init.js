@@ -26,6 +26,8 @@ document.addEventListener('alpine:init', () => {
     letter: '',
     clubs: [],
     filteredClubs: [],
+    categories: [],
+    locations: [],
     isLoading: true,
     
     async init() {
@@ -40,9 +42,31 @@ document.addEventListener('alpine:init', () => {
         // Fetch clubs
         const response = await fetch('/clubs.json');
         this.clubs = await response.json();
+
+        // For debugging
+        console.log('Loaded clubs:', this.clubs.length);
+        console.log('Search term:', this.searchTerm);
+        
+        // Extract unique categories and locations for dropdown options
+        const categorySet = new Set();
+        const locationSet = new Set();
+        
+        this.clubs.forEach(club => {
+          if (club.category) categorySet.add(club.category);
+          if (club.city) locationSet.add(club.city);
+        });
+        
+        this.categories = [...categorySet].sort();
+        this.locations = [...locationSet].sort();
+        
+        console.log('Categories loaded:', this.categories.length);
+        console.log('Locations loaded:', this.locations.length);
         
         // Apply filters
         this.filter();
+
+        // For debugging
+        console.log('Filtered clubs:', this.filteredClubs.length);
         
         this.isLoading = false;
       } catch (error) {
@@ -52,37 +76,58 @@ document.addEventListener('alpine:init', () => {
     },
     
     filter() {
+      // Start with a copy of all clubs
       let filtered = [...this.clubs];
       
-      // Filter by search term
-      if (this.searchTerm) {
-        const term = this.searchTerm.toLowerCase();
-        filtered = filtered.filter(club => 
-          club.title.toLowerCase().includes(term) ||
-          (club.city && club.city.toLowerCase().includes(term)) ||
-          (club.state && club.state.toLowerCase().includes(term))
-        );
+      // Filter by search term (case insensitive)
+      if (this.searchTerm && this.searchTerm.trim() !== '') {
+        const term = this.searchTerm.toLowerCase().trim();
+        console.log('Filtering by term:', term);
+        
+        filtered = filtered.filter(club => {
+          // Check various fields for the search term
+          const titleMatch = club.title && club.title.toLowerCase().includes(term);
+          const cityMatch = club.city && club.city.toLowerCase().includes(term);
+          const stateMatch = club.state && club.state.toLowerCase().includes(term);
+          const marqueMatch = club.marque && club.marque.toLowerCase().includes(term);
+          
+          return titleMatch || cityMatch || stateMatch || marqueMatch;
+        });
+        
+        console.log('After term filtering:', filtered.length);
       }
       
-      // Filter by category
-      if (this.category) {
+      // Filter by category (exact match, case insensitive)
+      if (this.category && this.category !== '') {
+        console.log('Filtering by category:', this.category);
+        
         filtered = filtered.filter(club => 
           club.category && club.category.toLowerCase() === this.category.toLowerCase()
         );
+        
+        console.log('After category filtering:', filtered.length);
       }
       
-      // Filter by location
-      if (this.location) {
+      // Filter by location (exact match)
+      if (this.location && this.location !== '') {
+        console.log('Filtering by location:', this.location);
+        
         filtered = filtered.filter(club => 
-          (club.city && club.city === this.location)
+          club.city && club.city === this.location
         );
+        
+        console.log('After location filtering:', filtered.length);
       }
       
-      // Filter by letter
-      if (this.letter) {
+      // Filter by letter (starts with)
+      if (this.letter && this.letter !== '') {
+        console.log('Filtering by letter:', this.letter);
+        
         filtered = filtered.filter(club => 
-          club.title.toLowerCase().startsWith(this.letter.toLowerCase())
+          club.title && club.title.toLowerCase().startsWith(this.letter.toLowerCase())
         );
+        
+        console.log('After letter filtering:', filtered.length);
       }
       
       this.filteredClubs = filtered;
@@ -138,6 +183,8 @@ document.addEventListener('alpine:init', () => {
     location: '',
     events: [],
     filteredEvents: [],
+    categories: [],
+    locations: [],
     isLoading: true,
     
     async init() {
@@ -152,8 +199,38 @@ document.addEventListener('alpine:init', () => {
         const response = await fetch('/events.json');
         this.events = await response.json();
         
+        // For debugging
+        console.log('Loaded events:', this.events.length);
+        console.log('Search term:', this.searchTerm);
+        
+        // Extract unique categories and locations for dropdown options
+        const categorySet = new Set();
+        const locationSet = new Set();
+        
+        this.events.forEach(event => {
+          // Handle both array and string categories
+          if (Array.isArray(event.eventCategory)) {
+            event.eventCategory.forEach(cat => {
+              if (cat) categorySet.add(cat);
+            });
+          } else if (event.eventCategory) {
+            categorySet.add(event.eventCategory);
+          }
+          
+          if (event.eventCity) locationSet.add(event.eventCity);
+        });
+        
+        this.categories = [...categorySet].sort();
+        this.locations = [...locationSet].sort();
+        
+        console.log('Event categories loaded:', this.categories.length);
+        console.log('Event locations loaded:', this.locations.length);
+        
         // Apply filters
         this.filter();
+        
+        // For debugging
+        console.log('Filtered events:', this.filteredEvents.length);
         
         this.isLoading = false;
       } catch (error) {
@@ -162,21 +239,69 @@ document.addEventListener('alpine:init', () => {
       }
     },
     
+    // Helper method to format event dates for display
+    formatMonth(dateStr) {
+      if (!dateStr) return '';
+      try {
+        const date = new Date(dateStr);
+        return date.toLocaleString('default', { month: 'short' });
+      } catch (e) {
+        console.error('Error formatting month:', e);
+        return '';
+      }
+    },
+    
+    // Helper method to format event days for display
+    formatDay(dateStr) {
+      if (!dateStr) return '';
+      try {
+        const date = new Date(dateStr);
+        return date.getDate();
+      } catch (e) {
+        console.error('Error formatting day:', e);
+        return '';
+      }
+    },
+    
+    // Helper method to format event time for display
+    formatTime(dateStr) {
+      if (!dateStr) return '';
+      try {
+        const date = new Date(dateStr);
+        return date.toLocaleTimeString('default', { hour: '2-digit', minute: '2-digit' });
+      } catch (e) {
+        console.error('Error formatting time:', e);
+        return '';
+      }
+    },
+    
     filter() {
+      // Start with a copy of all events
       let filtered = [...this.events];
       
-      // Filter by search term
-      if (this.searchTerm) {
-        const term = this.searchTerm.toLowerCase();
-        filtered = filtered.filter(event => 
-          event.eventTitle.toLowerCase().includes(term) ||
-          (event.eventCity && event.eventCity.toLowerCase().includes(term)) ||
-          (event.eventState && event.eventState.toLowerCase().includes(term))
-        );
+      // Filter by search term (case insensitive)
+      if (this.searchTerm && this.searchTerm.trim() !== '') {
+        const term = this.searchTerm.toLowerCase().trim();
+        console.log('Filtering events by term:', term);
+        
+        filtered = filtered.filter(event => {
+          // Check various fields for the search term
+          const titleMatch = event.eventTitle && event.eventTitle.toLowerCase().includes(term);
+          const descMatch = event.eventDescription && event.eventDescription.toLowerCase().includes(term);
+          const cityMatch = event.eventCity && event.eventCity.toLowerCase().includes(term);
+          const stateMatch = event.eventState && event.eventState.toLowerCase().includes(term);
+          const venueMatch = event.eventVenue && event.eventVenue.toLowerCase().includes(term);
+          
+          return titleMatch || descMatch || cityMatch || stateMatch || venueMatch;
+        });
+        
+        console.log('After term filtering events:', filtered.length);
       }
       
       // Filter by category
-      if (this.category) {
+      if (this.category && this.category !== '') {
+        console.log('Filtering events by category:', this.category);
+        
         filtered = filtered.filter(event => {
           if (Array.isArray(event.eventCategory)) {
             return event.eventCategory.some(cat => cat.toLowerCase() === this.category.toLowerCase());
@@ -184,13 +309,19 @@ document.addEventListener('alpine:init', () => {
             return event.eventCategory && event.eventCategory.toLowerCase() === this.category.toLowerCase();
           }
         });
+        
+        console.log('After category filtering events:', filtered.length);
       }
       
       // Filter by location
-      if (this.location) {
+      if (this.location && this.location !== '') {
+        console.log('Filtering events by location:', this.location);
+        
         filtered = filtered.filter(event => 
-          (event.eventCity && event.eventCity === this.location)
+          event.eventCity && event.eventCity === this.location
         );
+        
+        console.log('After location filtering events:', filtered.length);
       }
       
       this.filteredEvents = filtered;

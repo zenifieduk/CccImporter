@@ -4,6 +4,11 @@ module.exports = function(eleventyConfig) {
   // Copy assets directory
   eleventyConfig.addPassthroughCopy("src/assets");
   
+  // Add JSON filter
+  eleventyConfig.addFilter("json", function(value) {
+    return JSON.stringify(value);
+  });
+  
   // Add a filter to format dates
   eleventyConfig.addFilter("formatDate", function(dateObj) {
     return DateTime.fromJSDate(dateObj).toFormat("dd LLL yyyy");

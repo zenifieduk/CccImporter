@@ -20,28 +20,6 @@ description: Browse upcoming classic car shows, meets, and events across the UK.
       <h1 class="hero-title">Classic Car Events</h1>
       <p class="hero-subtitle">Find classic car shows, meets, and events across the UK</p>
       
-      {% set eventCategories = [] %}
-      {% for event in events %}
-        {% if event.eventCategory %}
-          {% if event.eventCategory | isArray %}
-            {% for cat in event.eventCategory %}
-              {% set eventCategories = (eventCategories.push(cat), eventCategories) %}
-            {% endfor %}
-          {% else %}
-            {% set eventCategories = (eventCategories.push(event.eventCategory), eventCategories) %}
-          {% endif %}
-        {% endif %}
-      {% endfor %}
-      
-      {% set uniqueCategories = eventCategories | unique %}
-      {% set locations = [] %}
-      {% for event in events %}
-        {% if event.eventCity and event.eventCity | length > 0 %}
-          {% set locations = (locations.push(event.eventCity), locations) %}
-        {% endif %}
-      {% endfor %}
-      {% set locations = locations | unique %}
-      
       <div x-data="eventSearch" class="hero-search">
         <div class="search-container event-search">
           <form class="search-form">
@@ -67,9 +45,9 @@ description: Browse upcoming classic car shows, meets, and events across the UK.
                   </svg>
                   <select id="search-category" class="custom-search-input search-category" x-model="category">
                     <option value="">All Event Types</option>
-                    {% for cat in uniqueCategories %}
-                      <option value="{{ cat }}">{{ cat }}</option>
-                    {% endfor %}
+                    <template x-for="cat in categories" :key="cat">
+                      <option :value="cat" :selected="cat === category" x-text="cat"></option>
+                    </template>
                   </select>
                 </div>
               </div>
@@ -83,9 +61,9 @@ description: Browse upcoming classic car shows, meets, and events across the UK.
                   </svg>
                   <select id="search-location" class="custom-search-input search-location" x-model="location">
                     <option value="">All Locations</option>
-                    {% for location in locations %}
-                      <option value="{{ location }}">{{ location }}</option>
-                    {% endfor %}
+                    <template x-for="loc in locations" :key="loc">
+                      <option :value="loc" :selected="loc === location" x-text="loc"></option>
+                    </template>
                   </select>
                 </div>
               </div>
@@ -113,7 +91,7 @@ description: Browse upcoming classic car shows, meets, and events across the UK.
       <h2>Featured Events</h2>
       
       <div class="event-grid">
-        <template x-for="event in filteredEvents.filter(e => e.eventFeatured)" :key="event.eventSlug">
+        <template x-for="event in filteredEvents.filter(e => e.eventFeatured).slice(0, 8)" :key="event.eventSlug">
           <div class="event-card">
             <div x-show="event.eventFeatured" class="event-featured">Featured</div>
             
