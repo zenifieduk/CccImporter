@@ -1,0 +1,267 @@
+// src/data/events.js
+export const events = [
+    {
+      eventTitle: "Classic Car Show 2025",
+      eventStartDateTime: "08062025:10:00:00",
+      eventEndDateTime: "08062025:16:00:00",
+      eventTicketPrice: "£10.00",
+      eventWebsite: "https://piedpiperappeal.co.uk/event/classic-car-show-2025/",
+      eventAddress: "Highnam Court, Gloucester, Gloucestershire GL2 8DP, United Kingdom",
+      eventPhone: "",
+      eventEmail: "",
+      eventCity: "Gloucester",
+      eventPostalCode: "GL2 8DP",
+      eventCountryCode: "GB",
+      eventImageUrl: "/images/events/Classic-car-Poster-25.webp",
+      eventCategory: ["Car Show", "Truck Show"],
+      eventState: "Gloucestershire",
+      eventSlug: "classic-car-show-2025-highnam-court",
+      eventFeatured: true,
+      eventDescription: "We are excited to welcome you and your classic car to the 2025 Classic Car show in aid of The Pied Piper Appeal. General admission to this event is £10 for adults. Children under 16 are free of charge and can just turn up on the day"
+    },
+    {
+      eventTitle: "Pistons & Pretzels - UK",
+      eventStartDateTime: "04052025:11:00:00",
+      eventEndDateTime: "04052025:16:00:00",
+      eventTicketPrice: "Free Entry",
+      eventWebsite: "https://www.konzepthaus-consulting.com/insights/events/pistons-pretzels-uk-0",
+      eventAddress: "Bicester Heritage, The Station Armoury, Building 123 Buckingham Rd London OX2 5HA",
+      eventPhone: "",
+      eventEmail: "",
+      eventCity: "Bicester",
+      eventPostalCode: "OX2 5HA",
+      eventCountryCode: "GB",
+      eventImageUrl: "/images/events/pistons-pretzels.avif",
+      eventCategory: ["Car Meet", "Classic Car"],
+      eventState: "Oxfordshire",
+      eventSlug: "pistons-pretzels-uk-May-2025",
+      eventFeatured: true,
+      eventDescription: "May the Fourth be with you! Pistons & Pretzels is returning to Bicester to celebrate an unforgettable gathering with the car design community. **NOTE** To enter, you must be part of the Car Design Community or a guest of a member."
+    },
+    {
+      eventTitle: "A British Icon - Aston Martin",
+      eventStartDateTime: "03062025:11:00:00",
+      eventEndDateTime: "03062025:20:00:00",
+      eventTicketPrice: "£60.00",
+      eventWebsite: "https://londonconcours.co.uk/",
+      eventAddress: "The Honourable Artillery Company, Armoury House, City Road, London EC1Y 2BQ",
+      eventPhone: "",
+      eventEmail: "",
+      eventCity: "London",
+      eventPostalCode: "EC1Y 2BQ",
+      eventCountryCode: "GB",
+      eventImageUrl: "/images/events/aston-martin-car-show.avif",
+      eventCategory: ["Car Show"],
+      eventState: "London",
+      eventSlug: "aston-martin-brisith-icon",
+      eventFeatured: true,
+      eventDescription: "The display will be limited to 50 curated examples of the marque."
+    }
+  ];
+  
+  // Helper function to format date
+  export function formatEventDate(dateTimeString) {
+    if (!dateTimeString) return 'Date TBD';
+    
+    try {
+      // Parse the date string (format: DDMMYYYY:HH:MM:SS)
+      const day = dateTimeString.substring(0, 2);
+      const month = dateTimeString.substring(2, 4);
+      const year = dateTimeString.substring(4, 8);
+      const time = dateTimeString.substring(9);
+      
+      // Create a date object
+      const date = new Date(`${year}-${month}-${day}T${time}`);
+      
+      // Format the date
+      const options = { 
+        weekday: 'short', 
+        day: 'numeric', 
+        month: 'short', 
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      };
+      
+      return date.toLocaleDateString('en-GB', options);
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return 'Date TBD';
+    }
+  }
+  
+  // Helper function to get short date (for event cards)
+  export function getShortDate(dateTimeString) {
+    if (!dateTimeString) return 'TBD';
+    
+    try {
+      // Parse the date string (format: DDMMYYYY:HH:MM:SS)
+      const day = dateTimeString.substring(0, 2);
+      const month = dateTimeString.substring(2, 4);
+      const year = dateTimeString.substring(4, 8);
+      
+      // Create a date object
+      const date = new Date(`${year}-${month}-${day}`);
+      
+      // Format the date
+      const options = { 
+        day: 'numeric', 
+        month: 'short'
+      };
+      
+      return date.toLocaleDateString('en-GB', options);
+    } catch (error) {
+      console.error('Error formatting short date:', error);
+      return 'TBD';
+    }
+  }
+  
+  // Function to get all events
+  export function getAllEvents() {
+    return events;
+  }
+  
+  // Function to get event by slug
+  export function getEventBySlug(slug) {
+    return events.find(event => event.eventSlug === slug);
+  }
+  
+  // Function to get featured events
+  export function getFeaturedEvents() {
+    return events.filter(event => event.eventFeatured);
+  }
+  
+  // Function to get all categories
+  export function getAllCategories() {
+    const categories = new Set();
+    events.forEach(event => {
+      if (Array.isArray(event.eventCategory)) {
+        event.eventCategory.forEach(cat => categories.add(cat));
+      } else if (event.eventCategory) {
+        categories.add(event.eventCategory);
+      }
+    });
+    return Array.from(categories).sort();
+  }
+  
+  // Function to get all locations
+  export function getAllLocations() {
+    const locations = new Set();
+    events.forEach(event => {
+      if (event.eventCity) {
+        locations.add(event.eventCity);
+      }
+    });
+    return Array.from(locations).sort();
+  }
+  
+  // Main filter function that combines all filters
+  export function filterEvents(searchTerm, category, location, distance) {
+    let filtered = [...events];
+    
+    // Apply search term filter
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(event => 
+        event.eventTitle.toLowerCase().includes(term) ||
+        (event.eventAddress && event.eventAddress.toLowerCase().includes(term)) ||
+        (event.eventCity && event.eventCity.toLowerCase().includes(term))
+      );
+    }
+    
+    // Apply category filter
+    if (category) {
+      filtered = filtered.filter(event => {
+        if (Array.isArray(event.eventCategory)) {
+          return event.eventCategory.some(cat => cat.toLowerCase() === category.toLowerCase());
+        } else {
+          return event.eventCategory && event.eventCategory.toLowerCase() === category.toLowerCase();
+        }
+      });
+    }
+    
+    // Apply location filter
+    if (location) {
+      const locationLower = location.toLowerCase();
+      filtered = filtered.filter(event => 
+        (event.eventCity && event.eventCity.toLowerCase().includes(locationLower)) ||
+        (event.eventAddress && event.eventAddress.toLowerCase().includes(locationLower))
+      );
+      
+      // In a real implementation, you would apply distance filtering here
+      // using geolocation calculations
+    }
+    
+    return filtered;
+  }
+  
+  // Function to filter events by search term
+  export function filterEventsBySearchTerm(searchTerm) {
+    if (!searchTerm) return events;
+    
+    const term = searchTerm.toLowerCase();
+    return events.filter(event => 
+      event.eventTitle.toLowerCase().includes(term) ||
+      (event.eventAddress && event.eventAddress.toLowerCase().includes(term)) ||
+      (event.eventCity && event.eventCity.toLowerCase().includes(term))
+    );
+  }
+  
+  // Function to filter events by category
+  export function filterEventsByCategory(category) {
+    if (!category) return events;
+    
+    return events.filter(event => {
+      if (Array.isArray(event.eventCategory)) {
+        return event.eventCategory.some(cat => cat.toLowerCase() === category.toLowerCase());
+      } else {
+        return event.eventCategory && event.eventCategory.toLowerCase() === category.toLowerCase();
+      }
+    });
+  }
+  
+  // Function to filter events by location and distance
+  export function filterEventsByLocation(location, distance) {
+    if (!location) return events;
+    
+    // In a real implementation, this would use geocoding and distance calculation
+    // For this example, we'll just do a simple text match on city or address
+    const locationLower = location.toLowerCase();
+    return events.filter(event => 
+      (event.eventCity && event.eventCity.toLowerCase().includes(locationLower)) ||
+      (event.eventAddress && event.eventAddress.toLowerCase().includes(locationLower))
+    );
+  }
+  
+  // Function to get upcoming events
+  export function getUpcomingEvents() {
+    const now = new Date();
+    return events.filter(event => {
+      if (!event.eventStartDateTime) return false;
+      
+      try {
+        const day = event.eventStartDateTime.substring(0, 2);
+        const month = event.eventStartDateTime.substring(2, 4);
+        const year = event.eventStartDateTime.substring(4, 8);
+        const time = event.eventStartDateTime.substring(9);
+        
+        const eventDate = new Date(`${year}-${month}-${day}T${time}`);
+        return eventDate >= now;
+      } catch (error) {
+        return false;
+      }
+    }).sort((a, b) => {
+      const dateA = new Date(`${a.eventStartDateTime.substring(4, 8)}-${a.eventStartDateTime.substring(2, 4)}-${a.eventStartDateTime.substring(0, 2)}T${a.eventStartDateTime.substring(9)}`);
+      const dateB = new Date(`${b.eventStartDateTime.substring(4, 8)}-${b.eventStartDateTime.substring(2, 4)}-${b.eventStartDateTime.substring(0, 2)}T${b.eventStartDateTime.substring(9)}`);
+      return dateA - dateB;
+    });
+  }
+  
+  // Debug function to log event data
+  export function debugEventData(slug) {
+    const event = getEventBySlug(slug);
+    console.log('Event data for slug:', slug);
+    console.log(JSON.stringify(event, null, 2));
+    return event;
+  }
+  

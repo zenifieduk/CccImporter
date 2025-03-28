@@ -1,0 +1,455 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Contact Us | Classic Car Clubs UK</title><meta name="description" content="Get in touch with the Classic Car Clubs UK directory team."><link rel="icon" type="image/svg+xml" href="/favicon.svg"><!-- Add global styles --><style data-vite-dev-id="/Users/james/Documents/classiccarclubs/src/components/Breadcrumb.astro?astro&#38;type=style&#38;index=0&#38;lang.css">ul[data-astro-cid-qaanghzh].breadcrumbs{list-style:none;display:flex;flex-wrap:wrap;padding:0;margin:0 0 20px 0;font-size:14px}.breadcrumbs[data-astro-cid-qaanghzh] li[data-astro-cid-qaanghzh]{display:flex;align-items:center}.breadcrumbs[data-astro-cid-qaanghzh] li[data-astro-cid-qaanghzh] a[data-astro-cid-qaanghzh]{color:#1b5e20;text-decoration:none;transition:color 0.2s}.breadcrumbs[data-astro-cid-qaanghzh] li[data-astro-cid-qaanghzh] a[data-astro-cid-qaanghzh]:hover{color:#0a3410;text-decoration:underline}.breadcrumbs[data-astro-cid-qaanghzh] li[data-astro-cid-qaanghzh] span[data-astro-cid-qaanghzh]{color:#666}.separator[data-astro-cid-qaanghzh]{margin:0 0.5rem;color:#888}</style>
+<style data-vite-dev-id="/Users/james/Documents/classiccarclubs/src/components/BaseHead.astro?astro&#38;type=style&#38;index=0&#38;lang.css">:root {
+    --primary-color: #1b5e20;
+    --secondary-color: #388e3c;
+    --text-color: #333;
+    --background-color: #f5f5f5;
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    line-height: 1.6;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    margin-bottom: 1rem;
+  }
+  
+  a {
+    color: var(--primary-color);
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }</style>
+<style data-vite-dev-id="/Users/james/Documents/classiccarclubs/src/components/Header.astro?astro&#38;type=style&#38;index=0&#38;lang.css">/* Header styles */
+  .site-header {
+    background: linear-gradient(135deg, #1b5e20 0%, #0a3410 100%);
+    color: white;
+    padding: 1rem 0;
+    position: relative;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .site-header .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Logo styles */
+  .site-header .logo a {
+    display: flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .site-header .logo-image {
+    height: 80px;
+    width: auto;
+  }
+  
+  /* Desktop navigation */
+  .site-header .desktop-nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .site-header .desktop-nav li {
+    margin-left: 1.5rem;
+  }
+  
+  .site-header .desktop-nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+    position: relative;
+  }
+  
+  .site-header .desktop-nav a:hover {
+    opacity: 0.8;
+  }
+  
+  .site-header .desktop-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #a3e635;
+    transition: width 0.3s;
+  }
+  
+  .site-header .desktop-nav a:hover::after {
+    width: 100%;
+  }
+  
+  /* Mobile menu toggle button */
+  .site-header .mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+  }
+  
+  .site-header .hamburger-icon {
+    display: block;
+    position: relative;
+    width: 30px;
+    height: 24px;
+  }
+  
+  .site-header .bar {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: white;
+    border-radius: 3px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: .25s ease-in-out;
+  }
+  
+  .site-header .bar:nth-child(1) {
+    top: 0px;
+  }
+  
+  .site-header .bar:nth-child(2) {
+    top: 10px;
+  }
+  
+  .site-header .bar:nth-child(3) {
+    top: 20px;
+  }
+  
+  /* Full screen mobile menu */
+  .site-header .mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0a3410 0%, #051a08 100%);
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    overflow-y: auto;
+  }
+  
+  .site-header .mobile-menu.active {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .site-header .mobile-menu-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1rem;
+  }
+  
+  .site-header .mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .site-header .mobile-menu-close {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+  }
+  
+  .site-header .mobile-menu-close svg {
+    width: 30px;
+    height: 30px;
+    stroke: white;
+  }
+  
+  /* Mobile navigation */
+  .site-header .mobile-nav {
+    flex: 1;
+  }
+  
+  .site-header .mobile-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .site-header .mobile-nav li {
+    margin-bottom: 1.5rem;
+  }
+  
+  .site-header .mobile-nav a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    transition: opacity 0.2s;
+  }
+  
+  .site-header .mobile-nav a:hover {
+    opacity: 0.8;
+  }
+  
+  .site-header .arrow-icon {
+    width: 40px;
+    height: 40px;
+    stroke: white;
+  }
+  
+  /* Mobile menu footer */
+  .site-header .mobile-menu-footer {
+    margin-top: auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .site-header .cta-text {
+    color: #a3e635; /* Light green color for CTA */
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .site-header .contact-link {
+    color: white;
+    text-decoration: underline;
+    font-size: 1.2rem;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .site-header .desktop-nav {
+      display: none;
+    }
+    
+    .site-header .mobile-menu-toggle {
+      display: block;
+    }
+  }</style>
+<style data-vite-dev-id="/Users/james/Documents/classiccarclubs/src/components/Footer.astro?astro&#38;type=style&#38;index=0&#38;lang.css">/* Footer styles */
+  .site-footer {
+    background: linear-gradient(135deg, #1b5e20 0%, #0a3410 100%);
+    color: white;
+    padding: 3rem 0 1.5rem;
+    margin-top: 3rem;
+  }
+  
+  .site-footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  .site-footer .footer-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .site-footer .logo-column {
+    grid-column: span 1;
+  }
+  
+  .site-footer .footer-logo h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+  }
+  
+  .site-footer .tagline {
+    margin-top: 0.25rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+  
+  .site-footer .footer-blurb {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    opacity: 0.85;
+  }
+  
+  .site-footer .footer-column h4 {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    font-size: 1.1rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+  }
+  
+  .site-footer .footer-column h4::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+  
+  .site-footer .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .site-footer .footer-links li {
+    margin-bottom: 0.75rem;
+    color:white;
+  }
+  
+  .site-footer .footer-links a {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    transition: color 0.2s, padding-left 0.2s;
+    display: inline-block;
+  }
+  
+  .site-footer .footer-links a:hover {
+    color: white;
+    padding-left: 5px;
+  }
+  
+  .site-footer .contact-links a {
+    display: flex;
+    align-items: center;
+  }
+  
+  .site-footer .footer-bottom {
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 992px) {
+    .site-footer .footer-content {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .site-footer .logo-column {
+      grid-column: span 2;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .site-footer .footer-content {
+      grid-template-columns: 1fr;
+    }
+    
+    .site-footer .logo-column {
+      grid-column: span 1;
+    }
+    
+    .site-footer .footer-column h4::after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .site-footer .footer-column {
+      text-align: center;
+    }
+  }</style>
+<style data-vite-dev-id="/Users/james/Documents/classiccarclubs/src/pages/contact.astro?astro&#38;type=style&#38;index=0&#38;lang.css">.form-status[data-astro-cid-uw5kdbxl]{margin-top:1rem;padding:0.75rem;border-radius:4px;display:none}.form-status[data-astro-cid-uw5kdbxl].success{display:block;background-color:#e8f5e9;color:#2e7d32;border:1px solid #c8e6c9}.form-status[data-astro-cid-uw5kdbxl].error{display:block;background-color:#ffebee;color:#c62828;border:1px solid #ffcdd2}.container[data-astro-cid-uw5kdbxl]{padding:2rem 1rem}h1[data-astro-cid-uw5kdbxl]{margin-bottom:2rem}.contact-content[data-astro-cid-uw5kdbxl]{display:grid;grid-template-columns:1fr 1fr;gap:3rem}.contact-info[data-astro-cid-uw5kdbxl],.contact-form[data-astro-cid-uw5kdbxl]{background-color:white;border-radius:8px;padding:2rem;box-shadow:0 2px 8px rgba(0,0,0,0.1)}.contact-methods[data-astro-cid-uw5kdbxl]{margin-top:2rem}.contact-method[data-astro-cid-uw5kdbxl]{margin-bottom:1.5rem}.contact-method[data-astro-cid-uw5kdbxl] h3[data-astro-cid-uw5kdbxl]{font-size:1.1rem;margin-bottom:0.25rem}.form-group[data-astro-cid-uw5kdbxl]{margin-bottom:1.5rem}label[data-astro-cid-uw5kdbxl]{display:block;margin-bottom:0.5rem;font-weight:500}input[data-astro-cid-uw5kdbxl],textarea[data-astro-cid-uw5kdbxl]{width:100%;padding:0.75rem;border:1px solid #ddd;border-radius:4px;font-family:inherit;font-size:1rem}.submit-button[data-astro-cid-uw5kdbxl]{background-color:var(--primary-color);color:white;border:none;padding:0.75rem 1.5rem;border-radius:4px;font-size:1rem;cursor:pointer;font-weight:bold}.submit-button[data-astro-cid-uw5kdbxl]:hover{background-color:var(--secondary-color)}@media (max-width: 768px){.contact-content[data-astro-cid-uw5kdbxl]{grid-template-columns:1fr}.contact-info[data-astro-cid-uw5kdbxl]{margin-bottom:2rem}}</style><script type="module" src="/@vite/client"></script>
+<script type="module" src="/@fs/Users/james/Documents/classiccarclubs/node_modules/astro/dist/runtime/client/dev-toolbar/entrypoint.js?v=519c66de"></script>
+<script>window.__astro_dev_toolbar__ = {"root":"/Users/james/Documents/classiccarclubs/","version":"5.5.4","debugInfo":"Astro                    v5.5.4\nNode                     v22.14.0\nSystem                   macOS (x64)\nPackage Manager          npm\nOutput                   static\nAdapter                  none\nIntegrations             @astrojs/mdx\n                         @astrojs/sitemap"}</script>
+<script type="module" src="/src/components/Breadcrumb.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/components/BaseHead.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/components/Header.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/components/Footer.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/pages/contact.astro?astro&type=style&index=0&lang.css"></script></head> <body data-astro-source-file="/Users/james/Documents/classiccarclubs/src/layouts/MainLayout.astro" data-astro-source-loc="14:9"> <div id="dynamic-header" data-astro-source-file="/Users/james/Documents/classiccarclubs/src/components/Header.astro" data-astro-source-loc="5:2"></div> <script type="module" src="/src/components/Header.astro?astro&type=script&index=0&lang.ts"></script>  <main data-astro-source-file="/Users/james/Documents/classiccarclubs/src/layouts/MainLayout.astro" data-astro-source-loc="16:11">  <div class="container" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="10:26"> <nav aria-label="Breadcrumb" data-astro-cid-qaanghzh data-astro-source-file="/Users/james/Documents/classiccarclubs/src/components/Breadcrumb.astro" data-astro-source-loc="58:30"> <ul class="breadcrumbs" data-astro-cid-qaanghzh data-astro-source-file="/Users/james/Documents/classiccarclubs/src/components/Breadcrumb.astro" data-astro-source-loc="59:27"> <li key="0" data-astro-cid-qaanghzh data-astro-source-file="/Users/james/Documents/classiccarclubs/src/components/Breadcrumb.astro" data-astro-source-loc="61:23"> <a href="/" data-astro-cid-qaanghzh data-astro-source-file="/Users/james/Documents/classiccarclubs/src/components/Breadcrumb.astro" data-astro-source-loc="63:25">Home</a> <span class="separator" data-astro-cid-qaanghzh data-astro-source-file="/Users/james/Documents/classiccarclubs/src/components/Breadcrumb.astro" data-astro-source-loc="67:68"> &gt; </span> </li><li key="1" data-astro-cid-qaanghzh data-astro-source-file="/Users/james/Documents/classiccarclubs/src/components/Breadcrumb.astro" data-astro-source-loc="61:23"> <span data-astro-cid-qaanghzh data-astro-source-file="/Users/james/Documents/classiccarclubs/src/components/Breadcrumb.astro" data-astro-source-loc="65:17">Contact</span> <!-- Current page is not a link -->  </li> </ul> </nav>  <!-- JSON-LD Injection --> <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://classiccarclubs.uk/"},{"@type":"ListItem","position":2,"name":"Contact","item":"https://classiccarclubs.uk/contact/"}]}</script> <h1 data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="12:9">Contact Us</h1> <div class="contact-content" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="14:34"> <div class="contact-info" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="15:33"> <h2 data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="16:13">Get in Touch</h2> <p data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="17:12">Have questions about classic car clubs or want to add your club to our directory? We'd love to hear from you!</p> <div class="contact-methods" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="19:38"> <div class="contact-method" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="20:39"> <h3 data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="21:17">Email</h3> <p data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="22:17"><a href="mailto:enquiries@classiccarclubs.uk" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="22:62">enquiries@classiccarclubs.uk</a></p> </div> <!--  <div class="contact-method">
+            <h3>Phone</h3>
+            <p>+44 (0)  123 456 7890</p>
+          </div>--> </div> </div> <div class="contact-form" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="32:33"> <h2 data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="33:13">Send a Message</h2> <form action="https://formsubmit.co/enquiries@classiccarclubs.uk" method="POST" id="contact-form" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="38:10"> <!-- FormSubmit configuration --> <input type="hidden" name="_subject" value="New contact form submission from ClassicCarClubs.uk" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="40:12"> <input type="hidden" name="_template" value="table" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="41:12"> <input type="hidden" name="_next" value="https://classiccarclubs.uk/thank-you" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="42:12"> <input type="text" name="_honey" style="display:none" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="43:12"> <div class="form-group" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="45:35"> <label for="name" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="46:31">Name</label> <input type="text" id="name" name="name" required data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="47:14"> </div> <div class="form-group" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="50:35"> <label for="email" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="51:32">Email</label> <input type="email" id="email" name="email" required data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="52:14"> </div> <div class="form-group" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="55:35"> <label for="subject" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="56:34">Subject</label> <input type="text" id="subject" name="subject" required data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="57:14"> </div> <div class="form-group" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="60:35"> <label for="message" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="61:34">Message</label> <textarea id="message" name="message" rows="5" required data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="62:14"></textarea> </div> <button type="submit" class="submit-button" data-astro-cid-uw5kdbxl data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/contact.astro" data-astro-source-loc="65:55">Send Message</button> </form> </div> </div> </div>  </main> <div id="dynamic-footer" data-astro-source-file="/Users/james/Documents/classiccarclubs/src/components/Footer.astro" data-astro-source-loc="6:2"></div> <script>(function(){const currentYear = 2025;
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      // Fetch the footer content
+      const response = await fetch('/includes/footer.html');
+      
+      if (!response.ok) {
+        throw new Error(`Failed to load footer: ${response.status} ${response.statusText}`);
+      }
+      
+      // Get the HTML content
+      let footerContent = await response.text();
+      
+      // Replace any year placeholder with the current year if needed
+      footerContent = footerContent.replace(/\{currentYear\}/g, currentYear);
+      
+      // Insert the content into the container
+      document.getElementById('dynamic-footer').innerHTML = footerContent;
+      
+    } catch (error) {
+      console.error('Error loading footer:', error);
+      document.getElementById('dynamic-footer').innerHTML = `
+        <footer class="site-footer">
+          <div class="container">
+            <div class="footer-content">
+              <div class="footer-column logo-column">
+                <div class="footer-logo">
+                  <h3>CLASSIC CAR CLUBS</h3>
+                  <p class="tagline">UK Network</p>
+                </div>
+                <p class="footer-blurb">
+                  Your ultimate resource for connecting with classic car enthusiasts across the United Kingdom.
+                </p>
+              </div>
+              <div class="footer-column">
+                <h4>Navigation</h4>
+                <ul class="footer-links">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/club-directory">Club Directory</a></li>
+                  <li><a href="/contact">Contact</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="footer-bottom">
+              <p>&copy; ${currentYear} Classic Car Clubs UK. All rights reserved.</p>
+            </div>
+          </div>
+        </footer>
+      `;
+    }
+  });
+})();</script> <script type="module" src="/src/components/Footer.astro?astro&type=script&index=0&lang.ts"></script> <script type="module" src="/src/components/Footer.astro?astro&type=script&index=1&lang.ts"></script>  </body></html> 

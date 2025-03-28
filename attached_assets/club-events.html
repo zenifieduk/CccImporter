@@ -1,0 +1,452 @@
+<!DOCTYPE html><html lang="en"> <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Classic Car Events | Classic Car Clubs UK</title><meta name="description" content="Find classic car events, shows, and meets across the UK."><link rel="icon" type="image/svg+xml" href="/favicon.svg"><!-- Add global styles --><style data-vite-dev-id="/Users/james/Documents/classiccarclubs/src/components/BaseHead.astro?astro&#38;type=style&#38;index=0&#38;lang.css">:root {
+    --primary-color: #1b5e20;
+    --secondary-color: #388e3c;
+    --text-color: #333;
+    --background-color: #f5f5f5;
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    line-height: 1.6;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    margin-bottom: 1rem;
+  }
+  
+  a {
+    color: var(--primary-color);
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }</style>
+<style data-vite-dev-id="/Users/james/Documents/classiccarclubs/src/components/Header.astro?astro&#38;type=style&#38;index=0&#38;lang.css">/* Header styles */
+  .site-header {
+    background: linear-gradient(135deg, #1b5e20 0%, #0a3410 100%);
+    color: white;
+    padding: 1rem 0;
+    position: relative;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .site-header .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* Logo styles */
+  .site-header .logo a {
+    display: flex;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+  }
+  
+  .site-header .logo-image {
+    height: 80px;
+    width: auto;
+  }
+  
+  /* Desktop navigation */
+  .site-header .desktop-nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .site-header .desktop-nav li {
+    margin-left: 1.5rem;
+  }
+  
+  .site-header .desktop-nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+    position: relative;
+  }
+  
+  .site-header .desktop-nav a:hover {
+    opacity: 0.8;
+  }
+  
+  .site-header .desktop-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #a3e635;
+    transition: width 0.3s;
+  }
+  
+  .site-header .desktop-nav a:hover::after {
+    width: 100%;
+  }
+  
+  /* Mobile menu toggle button */
+  .site-header .mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+  }
+  
+  .site-header .hamburger-icon {
+    display: block;
+    position: relative;
+    width: 30px;
+    height: 24px;
+  }
+  
+  .site-header .bar {
+    display: block;
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: white;
+    border-radius: 3px;
+    opacity: 1;
+    left: 0;
+    transform: rotate(0deg);
+    transition: .25s ease-in-out;
+  }
+  
+  .site-header .bar:nth-child(1) {
+    top: 0px;
+  }
+  
+  .site-header .bar:nth-child(2) {
+    top: 10px;
+  }
+  
+  .site-header .bar:nth-child(3) {
+    top: 20px;
+  }
+  
+  /* Full screen mobile menu */
+  .site-header .mobile-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #0a3410 0%, #051a08 100%);
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    overflow-y: auto;
+  }
+  
+  .site-header .mobile-menu.active {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .site-header .mobile-menu-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 1rem;
+  }
+  
+  .site-header .mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .site-header .mobile-menu-close {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+  }
+  
+  .site-header .mobile-menu-close svg {
+    width: 30px;
+    height: 30px;
+    stroke: white;
+  }
+  
+  /* Mobile navigation */
+  .site-header .mobile-nav {
+    flex: 1;
+  }
+  
+  .site-header .mobile-nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .site-header .mobile-nav li {
+    margin-bottom: 1.5rem;
+  }
+  
+  .site-header .mobile-nav a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    text-decoration: none;
+    font-size: 2rem;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    transition: opacity 0.2s;
+  }
+  
+  .site-header .mobile-nav a:hover {
+    opacity: 0.8;
+  }
+  
+  .site-header .arrow-icon {
+    width: 40px;
+    height: 40px;
+    stroke: white;
+  }
+  
+  /* Mobile menu footer */
+  .site-header .mobile-menu-footer {
+    margin-top: auto;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .site-header .cta-text {
+    color: #a3e635; /* Light green color for CTA */
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .site-header .contact-link {
+    color: white;
+    text-decoration: underline;
+    font-size: 1.2rem;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .site-header .desktop-nav {
+      display: none;
+    }
+    
+    .site-header .mobile-menu-toggle {
+      display: block;
+    }
+  }</style>
+<style data-vite-dev-id="/Users/james/Documents/classiccarclubs/src/components/Footer.astro?astro&#38;type=style&#38;index=0&#38;lang.css">/* Footer styles */
+  .site-footer {
+    background: linear-gradient(135deg, #1b5e20 0%, #0a3410 100%);
+    color: white;
+    padding: 3rem 0 1.5rem;
+    margin-top: 3rem;
+  }
+  
+  .site-footer .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  .site-footer .footer-content {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .site-footer .logo-column {
+    grid-column: span 1;
+  }
+  
+  .site-footer .footer-logo h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+  }
+  
+  .site-footer .tagline {
+    margin-top: 0.25rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+  
+  .site-footer .footer-blurb {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    opacity: 0.85;
+  }
+  
+  .site-footer .footer-column h4 {
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    font-size: 1.1rem;
+    position: relative;
+    padding-bottom: 0.5rem;
+  }
+  
+  .site-footer .footer-column h4::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 40px;
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+  
+  .site-footer .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .site-footer .footer-links li {
+    margin-bottom: 0.75rem;
+    color:white;
+  }
+  
+  .site-footer .footer-links a {
+    color: rgba(255, 255, 255, 0.85);
+    text-decoration: none;
+    transition: color 0.2s, padding-left 0.2s;
+    display: inline-block;
+  }
+  
+  .site-footer .footer-links a:hover {
+    color: white;
+    padding-left: 5px;
+  }
+  
+  .site-footer .contact-links a {
+    display: flex;
+    align-items: center;
+  }
+  
+  .site-footer .footer-bottom {
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0.7;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 992px) {
+    .site-footer .footer-content {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .site-footer .logo-column {
+      grid-column: span 2;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .site-footer .footer-content {
+      grid-template-columns: 1fr;
+    }
+    
+    .site-footer .logo-column {
+      grid-column: span 1;
+    }
+    
+    .site-footer .footer-column h4::after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .site-footer .footer-column {
+      text-align: center;
+    }
+  }</style>
+<style data-vite-dev-id="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro?astro&#38;type=style&#38;index=0&#38;lang.css">.events-hero[data-astro-cid-dmzakfw5]{background-color:#1b5e20;background-image:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url(/images/classic-car-event-group.avif);background-size:cover;background-position:center;color:white;padding:4rem 0;margin-bottom:2rem}.events-hero[data-astro-cid-dmzakfw5] h1[data-astro-cid-dmzakfw5]{font-size:2.5rem;margin-bottom:1rem}.events-hero[data-astro-cid-dmzakfw5] p[data-astro-cid-dmzakfw5]{font-size:1.2rem;margin-bottom:2rem;opacity:0.9}.container[data-astro-cid-dmzakfw5]{max-width:1200px;margin:0 auto;padding:0 1rem}.search-container[data-astro-cid-dmzakfw5]{background-color:rgba(255,255,255,0.1);border-radius:8px;padding:1.5rem;backdrop-filter:blur(5px)}.event-search-form[data-astro-cid-dmzakfw5]{display:flex;flex-wrap:wrap;gap:1rem;align-items:center}.search-group[data-astro-cid-dmzakfw5]{flex:1;min-width:200px}.search-input[data-astro-cid-dmzakfw5],.search-select[data-astro-cid-dmzakfw5]{position:relative;width:100%}.search-icon[data-astro-cid-dmzakfw5]{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:#666}.search-input[data-astro-cid-dmzakfw5] input[data-astro-cid-dmzakfw5],.search-select[data-astro-cid-dmzakfw5] input[data-astro-cid-dmzakfw5],.search-select[data-astro-cid-dmzakfw5] select[data-astro-cid-dmzakfw5]{width:100%;padding:0.75rem 1rem 0.75rem 3rem;border:none;border-radius:4px;font-size:1rem;background-color:white}.search-select[data-astro-cid-dmzakfw5] select[data-astro-cid-dmzakfw5]{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;background-size:1rem}.search-button[data-astro-cid-dmzakfw5]{background-color:#b8860b;color:white;border:none;border-radius:4px;padding:0.75rem 2rem;font-size:1rem;font-weight:500;cursor:pointer;transition:background-color 0.2s}.search-button[data-astro-cid-dmzakfw5]:hover{background-color:#a67c09}.search-status[data-astro-cid-dmzakfw5]{background-color:#fff3cd;border:1px solid #ffeeba;color:#856404;padding:0.75rem 1.25rem;margin:1.5rem 0;border-radius:4px}.search-status[data-astro-cid-dmzakfw5] p[data-astro-cid-dmzakfw5]{margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem}.filter-tag[data-astro-cid-dmzakfw5]{background-color:#856404;color:white;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.875rem}.exit-search-button[data-astro-cid-dmzakfw5]{margin-left:auto;background-color:transparent;border:1px solid #856404;color:#856404;padding:0.25rem 0.75rem;border-radius:4px;cursor:pointer;font-size:0.875rem}.exit-search-button[data-astro-cid-dmzakfw5]:hover{background-color:#856404;color:white}section[data-astro-cid-dmzakfw5] h2[data-astro-cid-dmzakfw5]{font-size:1.75rem;margin:2rem 0 1.5rem;color:#333;border-bottom:2px solid #f0f0f0;padding-bottom:0.5rem}.featured-events-grid[data-astro-cid-dmzakfw5]{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;margin-bottom:2rem}.events-grid[data-astro-cid-dmzakfw5]{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;margin-bottom:2rem}.event-card[data-astro-cid-dmzakfw5]{background-color:white;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);transition:transform 0.3s ease,box-shadow 0.3s ease;display:flex;flex-direction:column;height:100%}.event-card[data-astro-cid-dmzakfw5]:hover{transform:translateY(-5px);box-shadow:0 5px 15px rgba(0,0,0,0.1)}.event-card[data-astro-cid-dmzakfw5].featured{border:2px solid #b8860b}.event-image[data-astro-cid-dmzakfw5]{height:180px;position:relative;overflow:hidden}.event-image[data-astro-cid-dmzakfw5] img[data-astro-cid-dmzakfw5]{width:100%;height:100%;object-fit:cover;transition:transform 0.3s ease}.event-card[data-astro-cid-dmzakfw5]:hover .event-image[data-astro-cid-dmzakfw5] img[data-astro-cid-dmzakfw5]{transform:scale(1.05)}.featured-badge[data-astro-cid-dmzakfw5]{position:absolute;top:10px;right:10px;background-color:#b8860b;color:white;padding:0.25rem 0.75rem;border-radius:4px;font-weight:500;font-size:0.875rem;z-index:1}.event-date[data-astro-cid-dmzakfw5]{position:absolute;bottom:0;left:0;background-color:#b8860b;color:white;display:flex;flex-direction:column;align-items:center;padding:0.5rem;min-width:60px;text-align:center}.event-date[data-astro-cid-dmzakfw5] .month[data-astro-cid-dmzakfw5]{font-size:0.875rem;text-transform:uppercase;font-weight:500}.event-date[data-astro-cid-dmzakfw5] .day[data-astro-cid-dmzakfw5]{font-size:1.25rem;font-weight:700}.event-content[data-astro-cid-dmzakfw5]{padding:1.25rem;display:flex;flex-direction:column;flex-grow:1}.event-title[data-astro-cid-dmzakfw5]{font-size:1.25rem;margin:0 0 1rem;line-height:1.3}.event-title[data-astro-cid-dmzakfw5] a[data-astro-cid-dmzakfw5]{color:#333;text-decoration:none}.event-title[data-astro-cid-dmzakfw5] a[data-astro-cid-dmzakfw5]:hover{color:#1b5e20}.event-meta[data-astro-cid-dmzakfw5]{display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:1rem;font-size:0.9rem;color:#666}.event-location[data-astro-cid-dmzakfw5],.event-time[data-astro-cid-dmzakfw5]{display:flex;align-items:center;gap:0.5rem}.event-categories[data-astro-cid-dmzakfw5]{display:flex;flex-wrap:wrap;gap:0.5rem;margin-bottom:1rem}.event-category[data-astro-cid-dmzakfw5]{background-color:#f0f0f0;color:#555;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.8rem}.event-actions[data-astro-cid-dmzakfw5]{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:1rem;border-top:1px solid #eee}.btn-view-details[data-astro-cid-dmzakfw5]{color:#1b5e20;text-decoration:none;font-weight:500;flex:1;text-align:left}.btn-view-details[data-astro-cid-dmzakfw5]:hover{text-decoration:underline}.event-price[data-astro-cid-dmzakfw5]{background-color:#f0f0f0;color:#555;padding:0.25rem 0.75rem;border-radius:4px;font-size:0.875rem;font-weight:500;min-width:80px;text-align:center}.event-price[data-astro-cid-dmzakfw5].free{background-color:#e8f5e9;color:#1b5e20}.no-events[data-astro-cid-dmzakfw5]{text-align:center;padding:3rem 0;color:#666}.no-events[data-astro-cid-dmzakfw5] p[data-astro-cid-dmzakfw5]{margin-bottom:1.5rem}.btn-primary[data-astro-cid-dmzakfw5]{background-color:#1b5e20;color:white;border:none;padding:0.75rem 1.5rem;border-radius:4px;font-size:1rem;cursor:pointer;transition:background-color 0.2s}.btn-primary[data-astro-cid-dmzakfw5]:hover{background-color:#164a19}.pagination-container[data-astro-cid-dmzakfw5]{margin:2rem 0}.pagination[data-astro-cid-dmzakfw5]{display:flex;justify-content:center;align-items:center}.pagination-info[data-astro-cid-dmzakfw5]{color:#666;font-size:0.95rem;text-align:center}.back-to-top[data-astro-cid-dmzakfw5]{position:fixed;bottom:20px;right:20px;width:50px;height:50px;border-radius:50%;background-color:#1b5e20;color:white;font-size:24px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity 0.3s,visibility 0.3s;box-shadow:0 2px 10px rgba(0,0,0,0.2);z-index:1000}.back-to-top[data-astro-cid-dmzakfw5].visible{opacity:1;visibility:visible}.back-to-top[data-astro-cid-dmzakfw5]:hover{background-color:#164a19}@media (max-width: 768px){.events-hero[data-astro-cid-dmzakfw5]{padding:3rem 0}.events-hero[data-astro-cid-dmzakfw5] h1[data-astro-cid-dmzakfw5]{font-size:2rem}.search-group[data-astro-cid-dmzakfw5]{flex:1 0 100%}.search-button[data-astro-cid-dmzakfw5]{width:100%}.event-actions[data-astro-cid-dmzakfw5]{flex-direction:column;gap:0.75rem;align-items:flex-start}.btn-view-details[data-astro-cid-dmzakfw5]{margin-bottom:0.5rem}.event-price[data-astro-cid-dmzakfw5]{align-self:flex-start}}</style><script type="module" src="/@vite/client"></script>
+<script type="module" src="/@fs/Users/james/Documents/classiccarclubs/node_modules/astro/dist/runtime/client/dev-toolbar/entrypoint.js?v=519c66de"></script>
+<script>window.__astro_dev_toolbar__ = {"root":"/Users/james/Documents/classiccarclubs/","version":"5.5.4","debugInfo":"Astro                    v5.5.4\nNode                     v22.14.0\nSystem                   macOS (x64)\nPackage Manager          npm\nOutput                   static\nAdapter                  none\nIntegrations             @astrojs/mdx\n                         @astrojs/sitemap"}</script>
+<script type="module" src="/src/components/BaseHead.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/components/Header.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/components/Footer.astro?astro&type=style&index=0&lang.css"></script>
+<script type="module" src="/src/pages/club-events.astro?astro&type=style&index=0&lang.css"></script></head> <body data-astro-source-file="/Users/james/Documents/classiccarclubs/src/layouts/MainLayout.astro" data-astro-source-loc="14:9"> <div id="dynamic-header" data-astro-source-file="/Users/james/Documents/classiccarclubs/src/components/Header.astro" data-astro-source-loc="5:2"></div> <script type="module" src="/src/components/Header.astro?astro&type=script&index=0&lang.ts"></script>  <main data-astro-source-file="/Users/james/Documents/classiccarclubs/src/layouts/MainLayout.astro" data-astro-source-loc="16:11">  <div class="events-hero" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="29:28"> <div class="container" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="30:28"> <h1 data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="31:11">Classic Car Events</h1> <p data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="32:10">Find classic car shows, meets, and events across the UK</p> <div class="search-container" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="34:37"> <form id="event-search-form" class="event-search-form" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="35:64"> <div class="search-group" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="36:37"> <div class="search-input" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="37:39"> <span class="search-icon" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="38:41"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="39:198"> <circle cx="11" cy="11" r="8" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="40:20"></circle> <line x1="21" y1="21" x2="16.65" y2="16.65" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="41:20"></line> </svg> </span> <input type="text" id="search-input" name="search" placeholder="Event title (optional)" value data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="44:16"> </div> </div> <div class="search-group" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="54:37"> <div class="search-select" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="55:40"> <span class="search-icon" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="56:41"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="57:198"> <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="58:20"></path> <polyline points="14 2 14 8 20 8" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="59:20"></polyline> <line x1="16" y1="13" x2="8" y2="13" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="60:20"></line> <line x1="16" y1="17" x2="8" y2="17" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="61:20"></line> <polyline points="10 9 9 9 8 9" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="62:20"></polyline> </svg> </span> <select id="category-filter" name="category" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="65:60"> <option value="" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="66:34">All Event Types</option> <option value="car meet" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="68:111"> Car Meet </option><option value="car show" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="68:111"> Car Show </option><option value="classic car" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="68:111"> Classic Car </option><option value="truck show" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="68:111"> Truck Show </option> </select> </div> </div> <div class="search-group" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="76:37"> <div class="search-select" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="77:40"> <span class="search-icon" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="78:41"> <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="79:198"> <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="80:20"></path> <circle cx="12" cy="10" r="3" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="81:20"></circle> </svg> </span> <input type="text" id="location-filter" name="location" placeholder="Location (optional)" value list="location-suggestions" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="84:16"> <datalist id="location-suggestions" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="92:51"> <option value="Bicester" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="94:44">Bicester</option><option value="Gloucester" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="94:44">Gloucester</option><option value="London" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="94:44">London</option> </datalist> </div> </div> <button type="submit" class="search-button" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="100:55">Search</button> </form> </div> </div> </div> <div class="container" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="106:26"> <!-- Top Pagination --> <div id="top-pagination" class="pagination-container" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="109:61"> <div class="pagination" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="110:33"> <div class="pagination-info" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="111:40"> <span id="top-pagination-info-text" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="112:49">
+Showing 3 events    </span> </div> </div> </div> <!-- Search Status Indicator -->  <!-- Featured Events Section --> <section class="featured-events" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="138:40"> <h2 data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="139:13">Featured Events</h2> <div class="featured-events-grid" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="140:43"> <div class="event-card featured" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="146:48"> <div class="event-image" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="147:42"> <img src="/images/events/Classic-car-Poster-25.webp" alt="Classic Car Show 2025" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="148:20"> <div class="featured-badge" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="149:47">Featured</div> <div class="event-date" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="150:43"> <span class="month" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="151:41">8</span> <span class="day" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="152:39">Jun</span> </div> </div> <div class="event-content" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="156:44"> <h3 class="event-title" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="157:43"> <a href="/events/classic-car-show-2025-highnam-court" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="158:60">Classic Car Show 2025</a> </h3> <div class="event-meta" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="161:43"> <div class="event-location" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="162:49"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="163:204"> <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="164:26"></path> <circle cx="12" cy="10" r="3" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="165:26"></circle> </svg> <span data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="167:29">Gloucester</span> </div> <div class="event-time" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="170:45"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="171:204"> <circle cx="12" cy="12" r="10" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="172:26"></circle> <polyline points="12 6 12 12 16 14" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="173:26"></polyline> </svg> <span data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="175:29">Sun, 8 Jun 2025, 10:00</span> </div> </div> <div class="event-categories" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="179:49"> <span class="event-category" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="181:52">Car Show</span><span class="event-category" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="181:52">Truck Show</span> </div> <div class="event-actions" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="185:46"> <a href="/events/classic-car-show-2025-highnam-court" class="btn-view-details" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="186:85">View Details</a> <span class="event-price" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="188:49">£10.00</span> </div> </div> </div><div class="event-card featured" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="146:48"> <div class="event-image" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="147:42"> <img src="/images/events/pistons-pretzels.avif" alt="Pistons &#38; Pretzels - UK" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="148:20"> <div class="featured-badge" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="149:47">Featured</div> <div class="event-date" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="150:43"> <span class="month" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="151:41">4</span> <span class="day" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="152:39">May</span> </div> </div> <div class="event-content" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="156:44"> <h3 class="event-title" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="157:43"> <a href="/events/pistons-pretzels-uk-May-2025" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="158:60">Pistons &amp; Pretzels - UK</a> </h3> <div class="event-meta" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="161:43"> <div class="event-location" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="162:49"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="163:204"> <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="164:26"></path> <circle cx="12" cy="10" r="3" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="165:26"></circle> </svg> <span data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="167:29">Bicester</span> </div> <div class="event-time" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="170:45"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="171:204"> <circle cx="12" cy="12" r="10" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="172:26"></circle> <polyline points="12 6 12 12 16 14" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="173:26"></polyline> </svg> <span data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="175:29">Sun, 4 May 2025, 11:00</span> </div> </div> <div class="event-categories" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="179:49"> <span class="event-category" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="181:52">Car Meet</span><span class="event-category" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="181:52">Classic Car</span> </div> <div class="event-actions" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="185:46"> <a href="/events/pistons-pretzels-uk-May-2025" class="btn-view-details" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="186:85">View Details</a> <span class="event-price" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="188:49">Free Entry</span> </div> </div> </div><div class="event-card featured" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="146:48"> <div class="event-image" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="147:42"> <img src="/images/events/aston-martin-car-show.avif" alt="A British Icon - Aston Martin" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="148:20"> <div class="featured-badge" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="149:47">Featured</div> <div class="event-date" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="150:43"> <span class="month" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="151:41">3</span> <span class="day" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="152:39">Jun</span> </div> </div> <div class="event-content" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="156:44"> <h3 class="event-title" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="157:43"> <a href="/events/aston-martin-brisith-icon" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="158:60">A British Icon - Aston Martin</a> </h3> <div class="event-meta" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="161:43"> <div class="event-location" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="162:49"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="163:204"> <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="164:26"></path> <circle cx="12" cy="10" r="3" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="165:26"></circle> </svg> <span data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="167:29">London</span> </div> <div class="event-time" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="170:45"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="171:204"> <circle cx="12" cy="12" r="10" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="172:26"></circle> <polyline points="12 6 12 12 16 14" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="173:26"></polyline> </svg> <span data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="175:29">Tue, 3 Jun 2025, 11:00</span> </div> </div> <div class="event-categories" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="179:49"> <span class="event-category" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="181:52">Car Show</span> </div> <div class="event-actions" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="185:46"> <a href="/events/aston-martin-brisith-icon" class="btn-view-details" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="186:85">View Details</a> <span class="event-price" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="188:49">£60.00</span> </div> </div> </div> </div> </section> <!-- All Events Section --> <section class="all-events" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="202:33"> <h2 data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="203:11">Upcoming Events</h2> <div class="events-grid" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="211:34"> <div class="event-card" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="217:39"> <div class="event-image" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="218:42"> <img src="/images/events/Classic-car-Poster-25.webp" alt="Classic Car Show 2025" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="219:20"> <div class="event-date" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="220:43"> <span class="month" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="221:41">8</span> <span class="day" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="222:39">Jun</span> </div> </div> <div class="event-content" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="226:44"> <h3 class="event-title" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="227:43"> <a href="/events/classic-car-show-2025-highnam-court" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="228:60">Classic Car Show 2025</a> </h3> <div class="event-meta" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="231:43"> <div class="event-location" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="232:49"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="233:204"> <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="234:26"></path> <circle cx="12" cy="10" r="3" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="235:26"></circle> </svg> <span data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="237:29">Gloucester</span> </div> <div class="event-time" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="240:45"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="241:204"> <circle cx="12" cy="12" r="10" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="242:26"></circle> <polyline points="12 6 12 12 16 14" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="243:26"></polyline> </svg> <span data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="245:29">Sun, 8 Jun 2025, 10:00</span> </div> </div> <div class="event-categories" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="249:49"> <span class="event-category" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="251:52">Car Show</span><span class="event-category" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="251:52">Truck Show</span> </div> <div class="event-actions" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="255:46"> <a href="/events/classic-car-show-2025-highnam-court" class="btn-view-details" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="256:85">View Details</a> <span class="event-price" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="258:49">£10.00</span> </div> </div> </div><div class="event-card" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="217:39"> <div class="event-image" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="218:42"> <img src="/images/events/pistons-pretzels.avif" alt="Pistons &#38; Pretzels - UK" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="219:20"> <div class="event-date" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="220:43"> <span class="month" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="221:41">4</span> <span class="day" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="222:39">May</span> </div> </div> <div class="event-content" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="226:44"> <h3 class="event-title" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="227:43"> <a href="/events/pistons-pretzels-uk-May-2025" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="228:60">Pistons &amp; Pretzels - UK</a> </h3> <div class="event-meta" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="231:43"> <div class="event-location" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="232:49"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="233:204"> <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="234:26"></path> <circle cx="12" cy="10" r="3" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="235:26"></circle> </svg> <span data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="237:29">Bicester</span> </div> <div class="event-time" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="240:45"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="241:204"> <circle cx="12" cy="12" r="10" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="242:26"></circle> <polyline points="12 6 12 12 16 14" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="243:26"></polyline> </svg> <span data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="245:29">Sun, 4 May 2025, 11:00</span> </div> </div> <div class="event-categories" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="249:49"> <span class="event-category" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="251:52">Car Meet</span><span class="event-category" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="251:52">Classic Car</span> </div> <div class="event-actions" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="255:46"> <a href="/events/pistons-pretzels-uk-May-2025" class="btn-view-details" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="256:85">View Details</a> <span class="event-price" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="258:49">Free Entry</span> </div> </div> </div><div class="event-card" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="217:39"> <div class="event-image" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="218:42"> <img src="/images/events/aston-martin-car-show.avif" alt="A British Icon - Aston Martin" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="219:20"> <div class="event-date" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="220:43"> <span class="month" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="221:41">3</span> <span class="day" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="222:39">Jun</span> </div> </div> <div class="event-content" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="226:44"> <h3 class="event-title" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="227:43"> <a href="/events/aston-martin-brisith-icon" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="228:60">A British Icon - Aston Martin</a> </h3> <div class="event-meta" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="231:43"> <div class="event-location" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="232:49"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="233:204"> <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="234:26"></path> <circle cx="12" cy="10" r="3" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="235:26"></circle> </svg> <span data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="237:29">London</span> </div> <div class="event-time" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="240:45"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="241:204"> <circle cx="12" cy="12" r="10" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="242:26"></circle> <polyline points="12 6 12 12 16 14" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="243:26"></polyline> </svg> <span data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="245:29">Tue, 3 Jun 2025, 11:00</span> </div> </div> <div class="event-categories" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="249:49"> <span class="event-category" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="251:52">Car Show</span> </div> <div class="event-actions" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="255:46"> <a href="/events/aston-martin-brisith-icon" class="btn-view-details" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="256:85">View Details</a> <span class="event-price" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="258:49">£60.00</span> </div> </div> </div> </div> </section> <!-- Bottom Pagination --> <div id="bottom-pagination" class="pagination-container" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="273:64"> <div class="pagination" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="274:33"> <div class="pagination-info" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="275:40"> <span id="bottom-pagination-info-text" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="276:52">
+Showing 3 events    </span> </div> </div> </div> <!-- Back to Top Button --> <button id="back-to-top" class="back-to-top" title="Back to Top" data-astro-cid-dmzakfw5 data-astro-source-file="/Users/james/Documents/classiccarclubs/src/pages/club-events.astro" data-astro-source-loc="288:70">↑</button> </div>  </main> <div id="dynamic-footer" data-astro-source-file="/Users/james/Documents/classiccarclubs/src/components/Footer.astro" data-astro-source-loc="6:2"></div> <script>(function(){const currentYear = 2025;
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    try {
+      // Fetch the footer content
+      const response = await fetch('/includes/footer.html');
+      
+      if (!response.ok) {
+        throw new Error(`Failed to load footer: ${response.status} ${response.statusText}`);
+      }
+      
+      // Get the HTML content
+      let footerContent = await response.text();
+      
+      // Replace any year placeholder with the current year if needed
+      footerContent = footerContent.replace(/\{currentYear\}/g, currentYear);
+      
+      // Insert the content into the container
+      document.getElementById('dynamic-footer').innerHTML = footerContent;
+      
+    } catch (error) {
+      console.error('Error loading footer:', error);
+      document.getElementById('dynamic-footer').innerHTML = `
+        <footer class="site-footer">
+          <div class="container">
+            <div class="footer-content">
+              <div class="footer-column logo-column">
+                <div class="footer-logo">
+                  <h3>CLASSIC CAR CLUBS</h3>
+                  <p class="tagline">UK Network</p>
+                </div>
+                <p class="footer-blurb">
+                  Your ultimate resource for connecting with classic car enthusiasts across the United Kingdom.
+                </p>
+              </div>
+              <div class="footer-column">
+                <h4>Navigation</h4>
+                <ul class="footer-links">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/club-directory">Club Directory</a></li>
+                  <li><a href="/contact">Contact</a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="footer-bottom">
+              <p>&copy; ${currentYear} Classic Car Clubs UK. All rights reserved.</p>
+            </div>
+          </div>
+        </footer>
+      `;
+    }
+  });
+})();</script> <script type="module" src="/src/components/Footer.astro?astro&type=script&index=0&lang.ts"></script> <script type="module" src="/src/components/Footer.astro?astro&type=script&index=1&lang.ts"></script>  </body></html> <script type="module" src="/src/pages/club-events.astro?astro&type=script&index=0&lang.ts"></script> 
