@@ -41,6 +41,19 @@ a:hover {
   padding: 0 1rem;
 }
 
+.hero-section .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  width: 100%;
+}
+
+.hero-section {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 /* Header styles */
 .site-header {
   background: linear-gradient(135deg, #1b5e20 0%, #0a3410 100%);
@@ -645,6 +658,23 @@ a:hover {
   border-radius: 4px;
   background-color: white;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+select.custom-search-input {
+  appearance: auto;
+  -webkit-appearance: menulist;
+  -moz-appearance: menulist;
+  color: #333;
+  background-image: none;
+  background-repeat: no-repeat;
+  background-position: right center;
+  padding-right: 1.5rem;
+}
+
+select.custom-search-input option {
+  color: #333;
+  background-color: white;
+  padding: 0.5rem;
 }
 
 .input-icon {
