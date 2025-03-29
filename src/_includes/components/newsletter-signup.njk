@@ -1,0 +1,33 @@
+
+<div class="newsletter-signup">
+  <h2>SUBSCRIBE TO CLASSIC CAR CLUBS NEWS</h2>
+  <p>Our email newsletter contains all the latest news, stories and event information about classic cars.</p>
+  
+  <form id="newsletterForm" class="newsletter-form" action="/api/subscribe" method="POST">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="firstName">FIRST NAME</label>
+        <input type="text" id="firstName" name="firstName" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="lastName">LAST NAME</label>
+        <input type="text" id="lastName" name="lastName" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">EMAIL ADDRESS</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      
+      <button type="submit" class="sign-up-btn">SIGN UP</button>
+    </div>
+    
+    <div class="form-footer">
+      <p class="privacy-notice">
+        By clicking 'sign up' you are accepting the terms of our <a href="/privacy-policy">privacy notice</a>.
+        This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy">Privacy Policy</a> and <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+      </p>
+    </div>
+  </form>
+</div>

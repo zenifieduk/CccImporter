@@ -36,7 +36,7 @@ showBreadcrumb: false
         {% include "components/club-card.njk" %}
       {% endfor %}
     </div>
-    
+
     <div style="text-align: center; margin-top: 1rem;">
       <a href="/club-directory/" class="button button-primary">View All Clubs</a>
     </div>
@@ -57,12 +57,12 @@ showBreadcrumb: false
           {% set standardClubs = (standardClubs.push(club), standardClubs) %}
         {% endif %}
       {% endfor %}
-      
+
       {% for club in standardClubs | limit(12) %}
         {% include "components/club-card.njk" %}
       {% endfor %}
     </div>
-    
+
     <div style="text-align: center; margin-top: 1rem;">
       <a href="/club-directory/" class="button button-primary">View All Clubs</a>
     </div>
@@ -82,7 +82,7 @@ showBreadcrumb: false
         {% include "components/event-card.njk" %}
       {% endfor %}
     </div>
-    
+
     <div style="text-align: center; margin-top: 1rem;">
       <a href="/club-events/" class="button button-primary">View All Events</a>
     </div>
@@ -94,7 +94,7 @@ showBreadcrumb: false
     <div class="section-header">
       <h2 class="section-title">About The Classic Car Clubs Directory</h2>
     </div>
-    
+
     <div class="about-content">
       <div class="about-text">
         <p>
@@ -119,26 +119,26 @@ showBreadcrumb: false
     <div class="section-header">
       <h2 class="section-title">Popular Car Club Types</h2>
     </div>
-    
+
     <div class="club-types-grid">
       <div class="club-type-card">
         <h3>Jaguar Clubs</h3>
         <p>Clubs for Jaguar fans, from the E-Type to XJS, XK, and more.</p>
         <p><a href="/club-directory/?search=jaguar" class="button button-primary">View Clubs</a></p>
       </div>
-      
+
       <div class="club-type-card">
         <h3>Austin Clubs</h3>
         <p>For fans of Austin, Austin-Healey, and other British classics.</p>
         <p><a href="/club-directory/?search=austin" class="button button-primary">View Clubs</a></p>
       </div>
-      
+
       <div class="club-type-card">
         <h3>MG Clubs</h3>
         <p>From MGA to MGB, Midget, and all other MG models.</p>
         <p><a href="/club-directory/?search=mg" class="button button-primary">View Clubs</a></p>
       </div>
-      
+
       <div class="club-type-card">
         <h3>Triumph Clubs</h3>
         <p>Classic Triumph TR3, TR4, TR6, Spitfire, and more.</p>
@@ -157,3 +157,5 @@ showBreadcrumb: false
     </div>
   </div>
 </section>
+
+{% include "components/newsletter-signup.njk" %}
