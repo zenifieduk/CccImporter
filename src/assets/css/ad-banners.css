@@ -7,12 +7,15 @@
   background-color: #f8f8f8;
   border-top: 1px solid #e0e0e0;
   border-bottom: 1px solid #e0e0e0;
+  display: block !important;
+  visibility: visible !important;
 }
 
 .ad-banner {
   display: inline-block;
   max-width: 100%;
   transition: opacity 0.3s ease;
+  margin: 0 auto;
 }
 
 .ad-banner:hover {
@@ -20,8 +23,16 @@
 }
 
 .ad-banner-image {
-  max-width: 100%;
+  max-width: 728px;
+  width: 100%;
   height: auto;
   border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: block !important;
+  margin: 0 auto;
+}
+
+/* Make sure the banner section has proper spacing */
+section .ad-banner-container {
+  margin: 3rem 0;
 }
