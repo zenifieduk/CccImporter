@@ -1114,10 +1114,13 @@ select.custom-search-input option {
 .event-grid,
 .featured-clubs .club-grid,
 .featured-clubs-section .club-grid,
-.featured-section .featured-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+.featured-section .featured-grid,
+.featured-clubs-section,
+.featured-events-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
   gap: 1.5rem;
+  width: 100%;
   margin: 1.5rem 0;
   width: 100%;
 }
