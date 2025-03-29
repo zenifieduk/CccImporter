@@ -3,13 +3,13 @@ function extractMarque(title) {
   // Common car manufacturers/marques to look for in club names
   const marques = [
     'Aston Martin', 'Bentley', 'Jaguar', 'Land Rover', 'Lotus', 'McLaren', 'MG', 'Mini', 'Morgan', 
-    'Rolls-Royce', 'Rolls Royce', 'Rover', 'Triumph', 'TVR', 'Vauxhall', 'Austin', 'Morris',
-    'Alvis', 'Ford', 'Peugeot', 'Citroën', 'Citroen', 'Renault', 'Alfa Romeo', 'Ferrari',
-    'Lamborghini', 'Maserati', 'Fiat', 'Lancia', 'BMW', 'Mercedes', 'Mercedes-Benz', 'Porsche',
-    'Volkswagen', 'VW', 'Audi', 'Volvo', 'Saab', 'Toyota', 'Nissan', 'Datsun', 'Honda', 'Mazda', 
+    'Rolls-Royce', 'Rover', 'Triumph', 'TVR', 'Vauxhall', 'Austin', 'Morris',
+    'Alvis', 'Ford', 'Peugeot', 'Citroën', 'Renault', 'Alfa Romeo', 'Ferrari',
+    'Lamborghini', 'Maserati', 'Fiat', 'Lancia', 'BMW', 'Mercedes-Benz', 'Porsche',
+    'Volkswagen', 'Audi', 'Volvo', 'Saab', 'Toyota', 'Nissan', 'Datsun', 'Honda', 'Mazda', 
     'Subaru', 'Mitsubishi', 'Chevrolet', 'Cadillac', 'Buick', 'Oldsmobile', 'Pontiac', 
-    'Lincoln', 'Chrysler', 'Dodge', 'Plymouth', 'De Lorean', 'DeLorean', 'Jensen', 'Sunbeam',
-    'Healey', 'Austin-Healey', 'Reliant', 'Riley', 'Daimler', 'Hillman', 'Humber', 'Wolseley'
+    'Lincoln', 'Chrysler', 'Dodge', 'Plymouth', 'DeLorean', 'Jensen', 'Sunbeam',
+    'Austin-Healey', 'Reliant', 'Riley', 'Daimler', 'Hillman', 'Humber', 'Wolseley'
   ];
   
   for (const marque of marques) {
