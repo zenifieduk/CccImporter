@@ -41,16 +41,20 @@ module.exports = async (req, res) => {
     // Send the request to add the contact to SendGrid
     await client.request(request);
     
+    // We're only adding to the contact list for now, no welcome email
+    // Uncomment and configure the code below when you have a verified sender email
+    /*
     // Send welcome email to the new subscriber
     const msg = {
       to: email,
-      from: 'noreply@classiccarclubs.co.uk', // Replace with your verified email address
+      from: 'test@example.com', // IMPORTANT: Replace with your verified email address in SendGrid
       subject: 'Welcome to Classic Car Clubs Newsletter',
       text: `Hi ${first_name},\n\nThank you for subscribing to our newsletter! You'll now receive the latest news, stories, and event information about the classic car community.\n\nBest regards,\nClassic Car Clubs Team`,
       html: `<p>Hi ${first_name},</p><p>Thank you for subscribing to our newsletter! You'll now receive the latest news, stories, and event information about the classic car community.</p><p>Best regards,<br>Classic Car Clubs Team</p>`,
     };
     
     await sgMail.send(msg);
+    */
     
     // Return success response
     return res.status(200).json({ success: true, message: 'Subscription successful' });
