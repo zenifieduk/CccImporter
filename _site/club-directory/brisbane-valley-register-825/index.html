@@ -352,6 +352,104 @@
 
   </main>
 
+  <section class="newsletter-section">
+  <div class="container">
+    <div class="newsletter-container">
+      <div class="newsletter-content">
+        <p class="newsletter-subtitle">SUBSCRIBE AND ENJOY</p>
+        <h2 class="newsletter-title">SUBSCRIBE TO CLASSIC CAR NEWS</h2>
+        <p class="newsletter-description">Our email newsletter contains all the latest news, stories and event information about the classic car community.</p>
+      
+        <form id="newsletter-form" class="newsletter-form" onsubmit="return submitNewsletterForm(event)">
+          <div class="newsletter-form-fields">
+            <div class="form-group">
+              <label for="first_name" class="form-label">FIRST NAME</label>
+              <input type="text" id="first_name" name="first_name" class="form-input newsletter-input" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="last_name" class="form-label">LAST NAME</label>
+              <input type="text" id="last_name" name="last_name" class="form-input newsletter-input" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="email" class="form-label">EMAIL ADDRESS</label>
+              <input type="email" id="email" name="email" class="form-input newsletter-input" required>
+            </div>
+
+            <div class="form-group">
+              <button type="submit" class="button button-primary newsletter-submit">SIGN UP</button>
+            </div>
+          </div>
+          
+          <div class="newsletter-disclaimer">
+            <p>By clicking 'sign up' you are accepting the terms of our <a href="/privacy-policy/">privacy notice</a>.</p>
+            <p>This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Privacy Policy</a> and <a href="https://policies.google.com/terms" target="_blank" rel="noopener">Terms of Service</a> apply.</p>
+          </div>
+        </form>
+
+        <div id="newsletter-success" class="newsletter-success" style="display: none;">
+          <p>Thank you for subscribing to our newsletter!</p>
+        </div>
+        
+        <div id="newsletter-error" class="newsletter-error" style="display: none;">
+          <p>There was an error submitting your subscription. Please try again.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+function submitNewsletterForm(event) {
+  event.preventDefault();
+  
+  const form = document.getElementById('newsletter-form');
+  const successMessage = document.getElementById('newsletter-success');
+  const errorMessage = document.getElementById('newsletter-error');
+  
+  // Get form data
+  const firstName = document.getElementById('first_name').value;
+  const lastName = document.getElementById('last_name').value;
+  const email = document.getElementById('email').value;
+  
+  // Clear any previous messages
+  successMessage.style.display = 'none';
+  errorMessage.style.display = 'none';
+  
+  // Send form data to API
+  fetch('/api/subscribe', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      first_name: firstName,
+      last_name: lastName,
+      email: email
+    }),
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    return response.json();
+  })
+  .then(data => {
+    // Show success message
+    form.style.display = 'none';
+    successMessage.style.display = 'block';
+  })
+  .catch(error => {
+    // Show error message
+    console.error('Error:', error);
+    errorMessage.style.display = 'block';
+  });
+  
+  return false;
+}
+</script>
+  
   <footer class="site-footer">
   <div class="container">
     <div class="footer-content">

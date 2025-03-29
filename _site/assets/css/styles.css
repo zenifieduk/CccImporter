@@ -912,6 +912,151 @@ select.custom-search-input option {
   }
 }
 
+/* Newsletter Section Styles */
+.newsletter-section {
+  padding: 4rem 0;
+  background-color: #f5f5f5;
+  margin-top: 3rem;
+}
+
+.newsletter-container {
+  background-color: white;
+  padding: 3rem;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+  position: relative;
+}
+
+.newsletter-content {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.newsletter-subtitle {
+  color: #666;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  font-family: 'Public Sans', sans-serif;
+}
+
+.newsletter-title {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #000;
+  line-height: 1.2;
+  font-family: 'Public Sans', sans-serif;
+}
+
+.newsletter-description {
+  color: #666;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.newsletter-form {
+  margin-top: 2rem;
+}
+
+.newsletter-form-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #333;
+  font-family: 'Public Sans', sans-serif;
+}
+
+.newsletter-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+  color: #333;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.newsletter-input:focus {
+  outline: none;
+  border-color: #9ee0d8;
+  box-shadow: 0 0 0 3px rgba(158, 224, 216, 0.2);
+}
+
+.newsletter-submit {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  margin-top: 1.55rem;
+}
+
+.newsletter-disclaimer {
+  color: #999;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+.newsletter-disclaimer a {
+  color: #666;
+  text-decoration: underline;
+}
+
+.newsletter-disclaimer a:hover {
+  color: #333;
+}
+
+.newsletter-success, .newsletter-error {
+  margin-top: 2rem;
+  padding: 1rem;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.newsletter-success {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  border: 1px solid #c8e6c9;
+}
+
+.newsletter-error {
+  background-color: #ffebee;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+}
+
+@media (max-width: 768px) {
+  .newsletter-container {
+    padding: 2rem;
+  }
+  
+  .newsletter-title {
+    font-size: 1.8rem;
+  }
+  
+  .newsletter-form-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Breadcrumb Styles */
 .breadcrumbs {
   list-style: none;
