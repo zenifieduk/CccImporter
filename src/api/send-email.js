@@ -1,36 +1,38 @@
-const sgMail = require("@sendgrid/mail");
 
-exports.handler = async (event) => {
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
+const sgMail = require('@sendgrid/mail');
+
+export async function handler(event) {
+  if (event.method !== 'POST') {
+    return {
+      statusCode: 405,
+      body: JSON.stringify({ error: 'Method not allowed' })
+    };
   }
 
   const data = JSON.parse(event.body);
-  sgMail.setApiKey(
-    process.env.SG.r9hWUNLWQDCdYN6jyNi5LQ
-      .rLU9r9tiv97j3iZjgIHXIPLr32ty0ZgWQHgSlllfacQ,
-  );
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
   try {
     await sgMail.send({
-      to: "enquiries@classiccarclubs.uk",
+      to: 'enquiries@classiccarclubs.uk',
       from: process.env.SENDGRID_VERIFIED_SENDER,
-      subject: "New Contact Form Submission",
+      subject: 'New Contact Form Submission',
       text: `
 Name: ${data.name}
 Email: ${data.email}
 Message: ${data.message}
-      `,
+      `
     });
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: "Email sent successfully" }),
+      body: JSON.stringify({ message: 'Email sent successfully' })
     };
   } catch (error) {
+    console.error('Error sending email:', error);
     return {
       statusCode: 500,
-      body: JSON.stringify({ message: "Error sending email" }),
+      body: JSON.stringify({ error: 'Failed to send email' })
     };
   }
-};
+}
