@@ -338,7 +338,8 @@
         </div>
       </div>
       
-      <div x-data="pagination" x-effect="items = filteredClubs.filter(c => !c.featured)">
+      <div x-data="pagination" x-effect="items = filteredClubs.filter(c => !c.featured)" id="club-list-section">
+        <h2>Club List</h2>
         <div class="club-grid" x-show="paginatedItems.length > 0">
           <template x-for="club in paginatedItems" :key="club.slug">
             <div class="club-card standard-club-card">
@@ -378,10 +379,10 @@
             </button>
             
             <div class="pagination-numbers">
-              <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="pagination-nav">Previous</button>
+              <button @click="goToPage(currentPage - 1); document.getElementById('club-list-section').scrollIntoView({behavior: 'smooth'})" :disabled="currentPage === 1" class="pagination-nav">Previous</button>
               <template x-for="page in [1,2,3,4,5,6]" :key="page">
                 <button 
-                  @click="goToPage(page)" 
+                  @click="goToPage(page); document.getElementById('club-list-section').scrollIntoView({behavior: 'smooth'})" 
                   class="pagination-number" 
                   :class="{ 'active': page === currentPage }"
                   x-text="page"
@@ -389,7 +390,7 @@
                 ></button>
               </template>
               <span class="pagination-ellipsis" x-show="totalPages > 6">...</span>
-              <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-nav">Next</button>
+              <button @click="goToPage(currentPage + 1); document.getElementById('club-list-section').scrollIntoView({behavior: 'smooth'})" :disabled="currentPage === totalPages" class="pagination-nav">Next</button>
             </div>
             
             <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-arrow pagination-next" :class="{ 'disabled': currentPage === totalPages }">
