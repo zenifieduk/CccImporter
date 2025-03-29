@@ -75,7 +75,7 @@ a:hover {
 }
 
 .hero-section .container {
-  max-width: 1200px;
+  max-width: 1360px;
   margin: 0 auto;
   padding: 0 1rem;
   width: 100%;
@@ -120,7 +120,7 @@ a:hover {
 }
 
 .site-header .logo-image {
-  height: 50px;
+  height: 70px;
   width: auto;
 }
 
@@ -966,9 +966,9 @@ select.custom-search-input option {
 .hero-section {
   position: relative;
   height: 60vh;
-  min-height: 400px;
+  min-height: 750px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   color: white;
   overflow: hidden;
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/hero-background.jpg');
@@ -998,8 +998,7 @@ select.custom-search-input option {
   padding-left: 0;
   max-width: 800px;
   align-self: flex-end;
-  margin-bottom: 100px;
-  padding-bottom: 40px;
+  padding-bottom: 50px;
 }
 
 .hero-video-container {
@@ -1092,15 +1091,15 @@ select.custom-search-input option {
 }
 
 .hero-title {
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 0.1rem;
   line-height: 1.2;
-  color: white;
+  /*text-transform:uppercase;*/
 }
 
 .hero-subtitle {
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   margin-bottom: 2rem;
   opacity: 0.9;
   color: white;
@@ -1471,20 +1470,14 @@ select.custom-search-input option {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .club-type-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-}
-
-.club-type-logo {
-  margin-bottom: 1rem;
-}
-
-.brand-logo {
-  width: 80px;
-  height: 80px;
 }
 
 .club-type-card h3 {
@@ -1494,16 +1487,16 @@ select.custom-search-input option {
   color: var(--primary-color);
 }
 
-.club-type-link {
-  display: inline-block;
-  margin-top: 0.5rem;
-  color: var(--primary-color);
-  font-weight: 500;
-  transition: color 0.2s ease;
+/* Leave space between text and button */
+.club-type-card p:first-of-type {
+  margin-bottom: 1.5rem;
 }
 
-.club-type-link:hover {
-  color: var(--secondary-color);
+/* Make consistent button size */
+.club-type-card .button {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
 }
 
 /* CTA Section Styles */
