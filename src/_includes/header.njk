@@ -1,0 +1,18 @@
+
+<header class="site-header">
+  <nav class="site-nav" x-data="{ mobileMenuOpen: false }">
+    <div class="container">
+      <div class="nav-content">
+        <a href="/" class="logo">Classic Car Clubs</a>
+        <button @click="mobileMenuOpen = !mobileMenuOpen" class="mobile-menu-toggle">
+          <span></span>
+        </button>
+        <div class="nav-links" :class="{ 'active': mobileMenuOpen }">
+          <a href="/club-directory">Browse Directory</a>
+          <a href="/club-events">Events</a>
+          <a href="/contact">Contact Us</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
