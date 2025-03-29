@@ -12,6 +12,7 @@
   "dependencies": {
     "@11ty/eleventy": "^3.0.0",
     "@11ty/eleventy-img": "^6.0.1",
+    "@sendgrid/mail": "^8.1.4",
     "alpinejs": "^3.14.9",
     "luxon": "^3.6.0",
     "nunjucks": "^3.2.4",
