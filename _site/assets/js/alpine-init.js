@@ -7,7 +7,8 @@ document.addEventListener('alpine:init', () => {
         const day = dateStr.substring(0, 2);
         const month = dateStr.substring(2, 4);
         const year = dateStr.substring(4, 8);
-        const date = new Date(year, parseInt(month) - 1, day);
+        
+        const date = new Date(`${year}-${month}-${day}`);
         return date.toLocaleString('default', { month: 'short' });
       } catch (e) {
         console.error('Error formatting month:', e, dateStr);
@@ -30,9 +31,14 @@ document.addEventListener('alpine:init', () => {
       if (!dateStr) return '';
       try {
         const time = dateStr.split(':');
-        const hours = time[1];
-        const minutes = time[2];
-        return `${hours}:${minutes}`;
+        if (time.length >= 3) {
+          const hours = parseInt(time[1]);
+          const minutes = time[2];
+          const ampm = hours >= 12 ? 'PM' : 'AM';
+          const hour12 = hours % 12 || 12;
+          return `${hour12}:${minutes} ${ampm}`;
+        }
+        return dateStr; // Return original if format is unexpected
       } catch (e) {
         console.error('Error formatting time:', e, dateStr);
         return '';

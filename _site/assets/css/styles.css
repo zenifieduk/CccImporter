@@ -1620,10 +1620,19 @@ select.custom-search-input option {
 }
 
 .site-nav,
-.nav-links a {
+.nav-links,
+.nav-links a,
+.nav-item,
+.mobile-nav,
+.mobile-menu,
+.mobile-menu-links,
+.mobile-menu-links a {
   font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif !important;
   font-weight: 500;
+}
+
+.site-nav {
   background-color: #000000;
   padding: 1rem 0;
 }

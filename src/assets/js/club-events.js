@@ -5,7 +5,36 @@ document.addEventListener('alpine:init', () => {
     location: '',
     events: [],
     filteredEvents: [],
+    categories: [],
+    locations: [],
+    availableCategories: [],
+    availableLocations: [],
     isLoading: true,
+    
+    initSearch() {
+      // Add a popstate event listener to handle browser back/forward buttons
+      window.addEventListener('popstate', () => {
+        // Get URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        this.searchTerm = urlParams.get('search') || '';
+        this.category = urlParams.get('category') || '';
+        this.location = urlParams.get('location') || '';
+        
+        // Apply the filters immediately
+        this.filter();
+      });
+      
+      // Get URL params again to ensure we have the latest
+      const urlParams = new URLSearchParams(window.location.search);
+      this.searchTerm = urlParams.get('search') || '';
+      this.category = urlParams.get('category') || '';
+      this.location = urlParams.get('location') || '';
+      
+      // Apply search if there are parameters
+      if (this.searchTerm || this.category || this.location) {
+        this.filter();
+      }
+    },
     
     async init() {
       try {
@@ -62,6 +91,30 @@ document.addEventListener('alpine:init', () => {
       }
       
       this.filteredEvents = filtered;
+      this.updateAvailableOptions(filtered);
+    },
+    
+    updateAvailableOptions(filtered) {
+      // Update available categories
+      if (this.events.length > 0) {
+        const categorySet = new Set();
+        filtered.forEach(event => {
+          if (Array.isArray(event.eventCategory)) {
+            event.eventCategory.forEach(cat => categorySet.add(cat));
+          } else if (event.eventCategory) {
+            categorySet.add(event.eventCategory);
+          }
+        });
+        this.availableCategories = [...categorySet].sort();
+        
+        // Update available locations
+        const locationSet = new Set();
+        filtered.forEach(event => {
+          if (event.eventCity) locationSet.add(event.eventCity);
+          if (event.eventState) locationSet.add(event.eventState);
+        });
+        this.availableLocations = [...locationSet].sort();
+      }
     },
     
     search() {
@@ -88,6 +141,11 @@ document.addEventListener('alpine:init', () => {
       this.filter();
     },
     
+    resetFilters() {
+      // Alias for reset() for compatibility
+      this.reset();
+    },
+    
     formatMonth(dateTimeString) {
       if (!dateTimeString) return '';
       
@@ -99,7 +157,7 @@ document.addEventListener('alpine:init', () => {
         const date = new Date(`${year}-${month}-${day}`);
         return date.toLocaleString('en-US', { month: 'short' });
       } catch (error) {
-        console.error('Error formatting month:', error);
+        console.error('Error formatting month:', error, dateTimeString);
         return '';
       }
     },
@@ -109,13 +167,9 @@ document.addEventListener('alpine:init', () => {
       
       try {
         const day = dateTimeString.substring(0, 2);
-        const month = dateTimeString.substring(2, 4);
-        const year = dateTimeString.substring(4, 8);
-        
-        const date = new Date(`${year}-${month}-${day}`);
-        return date.getDate();
+        return parseInt(day);
       } catch (error) {
-        console.error('Error formatting day:', error);
+        console.error('Error formatting day:', error, dateTimeString);
         return '';
       }
     },
@@ -124,15 +178,17 @@ document.addEventListener('alpine:init', () => {
       if (!dateTimeString) return '';
       
       try {
-        const day = dateTimeString.substring(0, 2);
-        const month = dateTimeString.substring(2, 4);
-        const year = dateTimeString.substring(4, 8);
-        const time = dateTimeString.substring(9);
-        
-        const date = new Date(`${year}-${month}-${day}T${time}`);
-        return date.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+        const time = dateTimeString.split(':');
+        if (time.length >= 3) {
+          const hours = parseInt(time[1]);
+          const minutes = time[2];
+          const ampm = hours >= 12 ? 'PM' : 'AM';
+          const hour12 = hours % 12 || 12;
+          return `${hour12}:${minutes} ${ampm}`;
+        }
+        return dateTimeString;
       } catch (error) {
-        console.error('Error formatting time:', error);
+        console.error('Error formatting time:', error, dateTimeString);
         return '';
       }
     }
