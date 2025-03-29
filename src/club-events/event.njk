@@ -25,7 +25,7 @@ eleventyComputed:
     
     <h1 class="detail-title">{{ event.eventTitle }}</h1>
     
-    <div class="detail-meta" x-data="eventDisplay()">
+    <div class="detail-meta" x-data="eventDisplay">
       <div class="detail-meta-item">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
           <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -95,7 +95,7 @@ eleventyComputed:
     <div class="event-details">
       <h2>Event Details</h2>
       
-      <div style="margin-top: 1.5rem;" x-data="eventDisplay()">
+      <div style="margin-top: 1.5rem;" x-data="eventDisplay">
         <h3>Date and Time</h3>
         <p>
           {% if event.eventStartDateTime %}

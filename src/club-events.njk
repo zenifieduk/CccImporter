@@ -95,7 +95,7 @@ description: Browse upcoming classic car shows, meets, and events across the UK.
         
         <div class="event-grid">
           <template x-for="event in filteredEvents.filter(e => e.eventFeatured).slice(0, 8)" :key="event.eventSlug">
-            <div class="event-card">
+            <div class="event-card" x-data="eventDisplay">
               <div x-show="event.eventFeatured" class="event-featured">Featured</div>
               
               <div class="event-image">
@@ -143,7 +143,7 @@ description: Browse upcoming classic car shows, meets, and events across the UK.
         
         <div class="event-grid" x-show="paginatedItems.length > 0">
           <template x-for="event in paginatedItems" :key="event.eventSlug">
-            <div class="event-card">
+            <div class="event-card" x-data="eventDisplay">
               <div class="event-image">
                 <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
                 

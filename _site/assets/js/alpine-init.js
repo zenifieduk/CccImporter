@@ -784,16 +784,25 @@ document.addEventListener('alpine:init', () => {
           pages.push(i);
         }
       } else {
-        // Always show exactly 6 page numbers when possible
-        // Format: << Previous 1 2 3 4 5 6 ... Next >>
-        
-        // Always show first 6 pages if totalPages > 6
-        for (let i = 1; i <= maxVisiblePages; i++) {
-          pages.push(i);
-        }
-        
-        // Add ellipsis if there are more pages after page 6
-        if (this.totalPages > maxVisiblePages) {
+        // Format: « Previous 1 2 3 4 5 6 ... Next »
+        if (this.currentPage <= maxVisiblePages - 2) {
+          // When near the beginning, show first 6 pages then ellipsis
+          for (let i = 1; i <= maxVisiblePages; i++) {
+            pages.push(i);
+          }
+          pages.push('...');
+        } else if (this.currentPage > this.totalPages - (maxVisiblePages - 2)) {
+          // When near the end, show ellipsis then last 6 pages
+          pages.push('...');
+          for (let i = this.totalPages - (maxVisiblePages - 1); i <= this.totalPages; i++) {
+            pages.push(i);
+          }
+        } else {
+          // When in the middle, show ellipsis, current page and neighbors, then ellipsis
+          pages.push('...');
+          for (let i = this.currentPage - 2; i <= this.currentPage + 2; i++) {
+            pages.push(i);
+          }
           pages.push('...');
         }
       }
