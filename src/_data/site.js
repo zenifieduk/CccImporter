@@ -10,6 +10,7 @@ module.exports = {
     { label: "Home", url: "/" },
     { label: "Club Directory", url: "/club-directory/" },
     { label: "Club Events", url: "/club-events/" },
+    { label: "Club Websites", url: "/club-websites/" },
     { label: "Advertise", url: "/advertise/" },
     { label: "Contact", url: "/contact/" }
   ],
@@ -29,6 +30,7 @@ module.exports = {
     "About": [
       { label: "Privacy Policy", url: "/privacy-policy/" },
       { label: "Submit a Club", url: "/submit-club/" },
+      { label: "Club Websites", url: "/club-websites/" },
       { label: "Advertise With Us", url: "/advertise/" }
     ]
   }

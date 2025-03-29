@@ -4,6 +4,9 @@ module.exports = function(eleventyConfig) {
   // Copy assets directory
   eleventyConfig.addPassthroughCopy("src/assets");
   
+  // Copy public directory
+  eleventyConfig.addPassthroughCopy({ "public": "/" });
+  
   // Add JSON filter
   eleventyConfig.addFilter("json", function(value) {
     return JSON.stringify(value);
