@@ -998,7 +998,8 @@ select.custom-search-input option {
   padding-left: 0;
   max-width: 800px;
   align-self: flex-end;
-  margin-bottom: 60px;
+  margin-bottom: 100px;
+  padding-bottom: 40px;
 }
 
 .hero-video-container {
@@ -1606,15 +1607,18 @@ select.custom-search-input option {
 }
 
 .button-primary {
-  background-color: black; /* Changed button color to black */
-  color: white; /* Changed text color to white */
-  border: 1px solid white; /* Added border for consistency */
+  background-color: #9ee0d8; /* Updated to turquoise */
+  color: black; /* Changed text color to black for contrast */
+  border: 1px solid #9ee0d8; /* Matching border */
+  text-transform: uppercase; /* Making text uppercase */
+  font-family: 'Playfair Display', serif; /* Serif font */
 }
 
 .button-primary:hover {
-  background-color: #333; /* Darker shade on hover */
-  color: white;
+  background-color: #8cceC6; /* Slightly darker shade on hover */
+  color: black;
   text-decoration: none;
+  border-color: #8cceC6;
 }
 
 .button-secondary {
@@ -1643,6 +1647,7 @@ select.custom-search-input option {
 }
 
 .site-nav {
-  background-color: #000000;
+  background-color: rgba(0, 0, 0, 0.7); /* More transparent header */
   padding: 1rem 0;
+  backdrop-filter: blur(5px); /* Adds blur effect */
 }
