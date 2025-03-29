@@ -406,8 +406,9 @@ a:hover {
 }
 
 .featured-club-card .club-image {
-  height: 180px;
+  height: 235px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .featured-club-card .club-image img {
