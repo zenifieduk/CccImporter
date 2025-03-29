@@ -1,0 +1,41 @@
+
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "src/assets/images/uploads"
+public_folder: "/assets/images/uploads"
+
+collections:
+  - name: "clubs"
+    label: "Clubs"
+    folder: "src/_data/clubs"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Club Name", name: "clubName", widget: "string"}
+      - {label: "Category", name: "category", widget: "string"}
+      - {label: "Website", name: "website", widget: "string"}
+      - {label: "Description", name: "description", widget: "text"}
+      - {label: "Featured", name: "featured", widget: "boolean", default: false}
+      
+  - name: "events"
+    label: "Events"
+    folder: "src/_data/events"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Event Title", name: "eventTitle", widget: "string"}
+      - {label: "Event Start Date/Time", name: "eventStartDateTime", widget: "datetime"}
+      - {label: "Event End Date/Time", name: "eventEndDateTime", widget: "datetime"}
+      - {label: "Event Ticket Price", name: "eventTicketPrice", widget: "string"}
+      - {label: "Event Website", name: "eventWebsite", widget: "string"}
+      - {label: "Event Address", name: "eventAddress", widget: "string"}
+      - {label: "Event City", name: "eventCity", widget: "string"}
+      - {label: "Event State", name: "eventState", widget: "string"}
+      - {label: "Event Postal Code", name: "eventPostalCode", widget: "string"}
+      - {label: "Event Country Code", name: "eventCountryCode", widget: "string"}
+      - {label: "Event Image", name: "eventImageUrl", widget: "image"}
+      - {label: "Event Categories", name: "eventCategory", widget: "list"}
+      - {label: "Event Description", name: "eventDescription", widget: "text"}
+      - {label: "Featured Event", name: "eventFeatured", widget: "boolean", default: false}
