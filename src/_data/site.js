@@ -3,7 +3,7 @@ module.exports = {
   description: "Discover classic car clubs across the UK with contact details and more.",
   url: process.env.URL || "http://localhost:8080",
   author: "Classic Car Clubs UK",
-  email: "hello@classiccarclubs.uk",
+  email: "enquiries@classiccarclubs.uk",
   buildTime: new Date(),
   environment: process.env.ELEVENTY_ENV || "development",
   navigation: [
@@ -27,7 +27,6 @@ module.exports = {
       { label: "Featured Events", url: "/club-events/?featured=true" }
     ],
     "About": [
-      { label: "Contact Us", url: "/contact/" },
       { label: "Privacy Policy", url: "/privacy-policy/" },
       { label: "Submit a Club", url: "/submit-club/" },
       { label: "Advertise With Us", url: "/advertise/" }
