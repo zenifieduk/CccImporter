@@ -336,5 +336,28 @@ module.exports = function() {
   ];
   
   // Combine the original and curated clubs
-  return [...originalClubs, ...curatedClubs];
+  const allClubs = [...originalClubs, ...curatedClubs];
+  
+  // Normalize categories to ensure consistency
+  allClubs.forEach(club => {
+    // First, normalize all the similar categories that should become 'Car Club'
+    if (club.category === 'Car' || club.category === 'Club') {
+      club.category = 'Car Club';
+    }
+    
+    // Then convert 'Car Club' to 'Classic Car Club' as a second pass
+    if (club.category === 'Car Club') {
+      club.category = 'Classic Car Club';
+    }
+    
+    // Other normalizations
+    if (club.category === 'Motoring club') {
+      club.category = 'Motor Club';
+    }
+    if (club.category === 'Historical Vehicle Club') {
+      club.category = 'Historic Vehicle Club';
+    }
+  });
+
+  return allClubs;
 };
