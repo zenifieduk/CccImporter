@@ -776,7 +776,7 @@ document.addEventListener('alpine:init', () => {
     
     get pageNumbers() {
       const pages = [];
-      const maxVisiblePages = 6; // Increased to 6
+      const maxVisiblePages = 6; // Show exactly 6 page numbers
       
       if (this.totalPages <= maxVisiblePages) {
         // Show all pages if we have 6 or fewer
@@ -784,40 +784,17 @@ document.addEventListener('alpine:init', () => {
           pages.push(i);
         }
       } else {
-        // For more than 6 pages, show a range with current page in the middle when possible
+        // Always show exactly 6 page numbers when possible
+        // Format: << Previous 1 2 3 4 5 6 ... Next >>
         
-        // Calculate the range to show
-        let startPage, endPage;
-        
-        if (this.currentPage <= 3) {
-          // Near the beginning: show first 6 pages
-          startPage = 1;
-          endPage = 6;
-        } else if (this.currentPage >= this.totalPages - 2) {
-          // Near the end: show last 6 pages
-          startPage = this.totalPages - 5;
-          endPage = this.totalPages;
-        } else {
-          // In the middle: show current page with 2 pages before and 3 after
-          startPage = this.currentPage - 2;
-          endPage = this.currentPage + 3;
-        }
-        
-        // Add first page and ellipsis if needed
-        if (startPage > 1) {
-          pages.push(1);
-          if (startPage > 2) pages.push('...');
-        }
-        
-        // Add page numbers in the calculated range
-        for (let i = startPage; i <= endPage; i++) {
+        // Always show first 6 pages if totalPages > 6
+        for (let i = 1; i <= maxVisiblePages; i++) {
           pages.push(i);
         }
         
-        // Add last page and ellipsis if needed
-        if (endPage < this.totalPages) {
-          if (endPage < this.totalPages - 1) pages.push('...');
-          pages.push(this.totalPages);
+        // Add ellipsis if there are more pages after page 6
+        if (this.totalPages > maxVisiblePages) {
+          pages.push('...');
         }
       }
       
