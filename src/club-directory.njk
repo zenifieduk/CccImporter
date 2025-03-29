@@ -181,18 +181,19 @@ pagination:
             </button>
             
             <div class="pagination-numbers">
-              <button @click="goToPage(currentPage - 1); document.getElementById('club-list-section').scrollIntoView({behavior: 'smooth'})" :disabled="currentPage === 1" class="pagination-nav">Previous</button>
-              <template x-for="page in [1,2,3,4,5,6]" :key="page">
-                <button 
-                  @click="goToPage(page); document.getElementById('club-list-section').scrollIntoView({behavior: 'smooth'})" 
-                  class="pagination-number" 
-                  :class="{ 'active': page === currentPage }"
-                  x-text="page"
-                  :disabled="page > totalPages"
-                ></button>
+              <template x-for="page in pageNumbers" :key="page">
+                <template x-if="page === '...'">
+                  <span class="pagination-ellipsis">...</span>
+                </template>
+                <template x-if="page !== '...'">
+                  <button 
+                    @click="goToPage(page); document.getElementById('club-list-section').scrollIntoView({behavior: 'smooth'})" 
+                    class="pagination-number" 
+                    :class="{ 'active': page === currentPage }"
+                    x-text="page"
+                  ></button>
+                </template>
               </template>
-              <span class="pagination-ellipsis" x-show="totalPages > 6">...</span>
-              <button @click="goToPage(currentPage + 1); document.getElementById('club-list-section').scrollIntoView({behavior: 'smooth'})" :disabled="currentPage === totalPages" class="pagination-nav">Next</button>
             </div>
             
             <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-arrow pagination-next" :class="{ 'disabled': currentPage === totalPages }">
