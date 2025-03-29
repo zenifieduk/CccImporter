@@ -83,6 +83,28 @@ document.addEventListener('alpine:init', () => {
         console.log('Available locations after filtering:', this.availableLocations.length);
         
         this.isLoading = false;
+        
+        // Add watchers for real-time filter updates
+        this.$watch('category', value => {
+          if (this.category !== undefined) {
+            // Update the available options for other dropdowns when category changes
+            this.updateAvailableOptions();
+          }
+        });
+        
+        this.$watch('location', value => {
+          if (this.location !== undefined) {
+            // Update the available options for other dropdowns when location changes
+            this.updateAvailableOptions();
+          }
+        });
+        
+        this.$watch('letter', value => {
+          if (this.letter !== undefined) {
+            // Update the available options for other dropdowns when letter changes
+            this.updateAvailableOptions();
+          }
+        });
       } catch (error) {
         console.error('Error initializing search:', error);
         this.isLoading = false;
@@ -398,6 +420,21 @@ document.addEventListener('alpine:init', () => {
         console.log('Available locations after filtering:', this.availableLocations.length);
         
         this.isLoading = false;
+        
+        // Add watchers for real-time filter updates
+        this.$watch('category', value => {
+          if (this.category !== undefined) {
+            // Update the available options for other dropdowns when category changes
+            this.updateAvailableOptions();
+          }
+        });
+        
+        this.$watch('location', value => {
+          if (this.location !== undefined) {
+            // Update the available options for other dropdowns when location changes
+            this.updateAvailableOptions();
+          }
+        });
       } catch (error) {
         console.error('Error initializing search:', error);
         this.isLoading = false;
