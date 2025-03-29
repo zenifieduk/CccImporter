@@ -347,7 +347,7 @@ a:hover {
   .site-footer .footer-content {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .site-footer .logo-column {
     grid-column: span 2;
   }
@@ -357,7 +357,7 @@ a:hover {
   .site-header .desktop-nav {
     display: none;
   }
-  
+
   .site-header .mobile-menu-toggle {
     display: block;
   }
@@ -367,16 +367,16 @@ a:hover {
   .site-footer .footer-content {
     grid-template-columns: 1fr;
   }
-  
+
   .site-footer .logo-column {
     grid-column: span 1;
   }
-  
+
   .site-footer .footer-column h4::after {
     left: 50%;
     transform: translateX(-50%);
   }
-  
+
   .site-footer .footer-column {
     text-align: center;
   }
@@ -775,7 +775,7 @@ select.custom-search-input option {
   .search-grid {
     flex-direction: column;
   }
-  
+
   .custom-search-group {
     width: 100%;
   }
@@ -871,14 +871,14 @@ select.custom-search-input option {
   .pagination-controls {
     flex-wrap: wrap;
   }
-  
+
   .pagination-number {
     min-width: 32px;
     height: 32px;
     padding: 0 0.5rem;
     font-size: 0.9rem;
   }
-  
+
   .pagination-arrow {
     padding: 0 0.75rem;
     font-size: 0.9rem;
@@ -1079,11 +1079,11 @@ select.custom-search-input option {
     height: auto;
     padding: 4rem 0;
   }
-  
+
   .hero-title {
     font-size: 2rem;
   }
-  
+
   .hero-subtitle {
     font-size: 1rem;
   }
@@ -1103,7 +1103,7 @@ select.custom-search-input option {
 
 @media (min-width: 1200px) {
   .featured-club-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -1388,12 +1388,12 @@ select.custom-search-input option {
   .about-content {
     grid-template-columns: 1fr;
   }
-  
+
   .about-image {
     grid-row: 1;
     margin-bottom: 1.5rem;
   }
-  
+
   .about-text {
     grid-row: 2;
   }
@@ -1541,4 +1541,14 @@ select.custom-search-input option {
     border-radius: 50%;
     padding: 4px;
   }
+}
+
+.club-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
