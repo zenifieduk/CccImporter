@@ -1,8 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@500&display=swap');
+
 :root {
-  --primary-color: #1b5e20;
-  --secondary-color: #388e3c;
+  --primary-color: #000000;
+  --secondary-color: #333333;
+  --accent-color: #c8e6c9;
   --text-color: #333;
-  --background-color: #f5f5f5;
+  --background-color: #ffffff;
+  --border-color: #e0e0e0;
+  --shadow-color: rgba(0, 0, 0, 0.1);
 }
 
 * {
@@ -12,10 +17,14 @@
 }
 
 body {
-  font-family: 'Playfair Display', 'Times New Roman', Times, Georgia, serif;
-  color: var(--text-color);
-  background-color: var(--background-color);
+  font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-weight: 500;
   line-height: 1.6;
+  color: var(--text-color);
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
 }
 
 /* Keep headings with sans-serif font */
@@ -72,7 +81,7 @@ a:hover {
 
 /* Header styles */
 .site-header {
-  background: linear-gradient(135deg, #1b5e20 0%, #0a3410 100%);
+  background: var(--primary-color); /* Changed background to black */
   color: white;
   padding: 1rem 0;
   position: relative;
@@ -82,7 +91,7 @@ a:hover {
 
 /* Transparent header for homepage */
 .home .site-header {
-  background: linear-gradient(135deg, rgba(27, 94, 32, 0.85) 0%, rgba(10, 52, 16, 0.85) 100%);
+  background: linear-gradient(135deg, rgba(0,0,0, 0.85) 0%, rgba(0,0,0, 0.85) 100%); /* Changed to black */
   position: absolute;
   width: 100%;
   box-shadow: none;
@@ -258,7 +267,7 @@ a:hover {
 
 /* Footer styles */
 .site-footer {
-  background: linear-gradient(135deg, #1b5e20 0%, #0a3410 100%);
+  background: var(--primary-color); /* Changed background to black */
   color: white;
   padding: 3rem 0 1.5rem;
   margin-top: 3rem;
@@ -510,7 +519,7 @@ a:hover {
 }
 
 .button-primary {
-  background-color: #9DD3CE; /* Mint/turquoise color from screenshot */
+  background-color: #9DD3CE; 
   color: #333;
   border: none;
 }
@@ -907,7 +916,7 @@ select.custom-search-input option {
 }
 
 .breadcrumbs li a {
-  color: #1b5e20;
+  color: var(--primary-color); /* Changed to black */
   text-decoration: none;
 }
 
@@ -1557,4 +1566,28 @@ select.custom-search-input option {
   max-width: 1360px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.button-primary {
+  background-color: black; /* Changed button color to black */
+  color: white; /* Changed text color to white */
+  border: 1px solid white; /* Added border for consistency */
+}
+
+.button-primary:hover {
+  background-color: #333; /* Darker shade on hover */
+  color: white;
+  text-decoration: none;
+}
+
+.button-secondary {
+    background-color: white; /* Changed to white */
+    color: black; /* Changed text to black */
+    border: 1px solid black; /* Added border for consistency */
+}
+
+.button-secondary:hover {
+  background-color: #eee;
+  color: black;
+  text-decoration: none;
 }
