@@ -180,14 +180,18 @@ pagination:
             </button>
             
             <div class="pagination-numbers">
-              <template x-for="(pageNumber, index) in pageNumbers" :key="index">
-                <template x-if="pageNumber === '...'">
-                  <span class="pagination-ellipsis">...</span>
-                </template>
-                <template x-if="pageNumber !== '...'">
-                  <button @click="goToPage(pageNumber)" class="pagination-number" :class="{ 'active': pageNumber === currentPage }" x-text="pageNumber"></button>
-                </template>
+              <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="pagination-nav">Previous</button>
+              <template x-for="page in [1,2,3,4,5,6]" :key="page">
+                <button 
+                  @click="goToPage(page)" 
+                  class="pagination-number" 
+                  :class="{ 'active': page === currentPage }"
+                  x-text="page"
+                  :disabled="page > totalPages"
+                ></button>
               </template>
+              <span class="pagination-ellipsis" x-show="totalPages > 6">...</span>
+              <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-nav">Next</button>
             </div>
             
             <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-arrow pagination-next" :class="{ 'disabled': currentPage === totalPages }">
