@@ -1109,11 +1109,14 @@ select.custom-search-input option {
 }
 
 /* Club Grid Styles */
-.club-grid, .event-grid {
+.club-grid,
+.club-grid.standard-club-grid,
+.event-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   margin: 1.5rem 0;
+  width: 100%;
 }
 
 @media (max-width: 1024px) {
