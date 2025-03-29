@@ -776,35 +776,44 @@ document.addEventListener('alpine:init', () => {
     
     get pageNumbers() {
       const pages = [];
-      const maxVisiblePages = 6; // Show exactly 6 page numbers
       
-      if (this.totalPages <= maxVisiblePages) {
-        // Show all pages if we have 6 or fewer
+      // For fewer pages, just show all numbers
+      if (this.totalPages <= 7) {
         for (let i = 1; i <= this.totalPages; i++) {
           pages.push(i);
         }
-      } else {
-        // Format: « Previous 1 2 3 4 5 6 ... Next »
-        if (this.currentPage <= maxVisiblePages - 2) {
-          // When near the beginning, show first 6 pages then ellipsis
-          for (let i = 1; i <= maxVisiblePages; i++) {
-            pages.push(i);
-          }
-          pages.push('...');
-        } else if (this.currentPage > this.totalPages - (maxVisiblePages - 2)) {
-          // When near the end, show ellipsis then last 6 pages
-          pages.push('...');
-          for (let i = this.totalPages - (maxVisiblePages - 1); i <= this.totalPages; i++) {
-            pages.push(i);
-          }
-        } else {
-          // When in the middle, show ellipsis, current page and neighbors, then ellipsis
-          pages.push('...');
-          for (let i = this.currentPage - 2; i <= this.currentPage + 2; i++) {
-            pages.push(i);
-          }
-          pages.push('...');
+        return pages;
+      }
+      
+      // Always show first page
+      pages.push(1);
+      
+      // Show first few pages based on current location
+      if (this.currentPage <= 4) {
+        // When near the beginning, show first 5 pages
+        for (let i = 2; i <= 5; i++) {
+          if (i <= this.totalPages) pages.push(i);
         }
+        // Add ellipsis if there are more pages
+        if (this.totalPages > 6) pages.push('...');
+        // Add the last page if not already included
+        if (this.totalPages > 5) pages.push(this.totalPages);
+      } else if (this.currentPage > this.totalPages - 4) {
+        // When near the end
+        pages.push('...');
+        // Show last 5 pages
+        for (let i = Math.max(2, this.totalPages - 4); i <= this.totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        // When in the middle
+        pages.push('...');
+        // Show current page and some neighbors
+        for (let i = this.currentPage - 1; i <= Math.min(this.currentPage + 1, this.totalPages - 1); i++) {
+          pages.push(i);
+        }
+        pages.push('...');
+        pages.push(this.totalPages);
       }
       
       return pages;
