@@ -336,6 +336,8 @@ document.addEventListener('alpine:init', () => {
     filteredEvents: [],
     categories: [],
     locations: [],
+    availableCategories: [], // Categories available after filtering
+    availableLocations: [], // Locations available after filtering
     isLoading: true,
     
     async init() {
@@ -374,20 +376,158 @@ document.addEventListener('alpine:init', () => {
         this.categories = [...categorySet].sort();
         this.locations = [...locationSet].sort();
         
+        // Set available options initially to all options
+        this.availableCategories = this.categories;
+        this.availableLocations = this.locations;
+        
         console.log('Event categories loaded:', this.categories.length);
         console.log('Event locations loaded:', this.locations.length);
         
-        // Apply filters
-        this.filter();
+        // Apply filters only if there are any parameters
+        if (this.searchTerm || this.category || this.location) {
+          this.filter();
+          this.updateAvailableOptions();
+        } else {
+          // Initialize filteredEvents with all events if no filters are active
+          this.filteredEvents = [...this.events];
+        }
         
         // For debugging
         console.log('Filtered events:', this.filteredEvents.length);
+        console.log('Available categories after filtering:', this.availableCategories.length);
+        console.log('Available locations after filtering:', this.availableLocations.length);
         
         this.isLoading = false;
       } catch (error) {
         console.error('Error initializing search:', error);
         this.isLoading = false;
       }
+    },
+    
+    // Method to manually initialize search - can be called from the template
+    initSearch() {
+      // This method can be called from the x-init directive in the template
+      // It ensures that if we come directly to the page with URL parameters,
+      // the search is properly applied
+      
+      // Add a popstate event listener to handle browser back/forward buttons
+      window.addEventListener('popstate', () => {
+        // Get URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        this.searchTerm = urlParams.get('search') || '';
+        this.category = urlParams.get('category') || '';
+        this.location = urlParams.get('location') || '';
+        
+        // Apply the filters immediately
+        this.filter();
+      });
+      
+      // Get URL params again to ensure we have the latest
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchTerm = urlParams.get('search') || '';
+      const category = urlParams.get('category') || '';
+      const location = urlParams.get('location') || '';
+      
+      // Update the model
+      this.searchTerm = searchTerm;
+      this.category = category;
+      this.location = location;
+      
+      // Apply search if there are parameters
+      if (searchTerm || category || location) {
+        // Apply the search immediately - no delay needed as we're inside an init function
+        // which will be called after data is available
+        this.filter();
+        this.updateAvailableOptions();
+      }
+    },
+    
+    // Method to update available options based on current filters
+    updateAvailableOptions() {
+      // Determine which filters are active
+      const hasSearchTerm = this.searchTerm && this.searchTerm.trim() !== '';
+      const hasCategory = this.category && this.category !== '';
+      const hasLocation = this.location && this.location !== '';
+      
+      // If no filters are active, all options are available
+      if (!hasSearchTerm && !hasCategory && !hasLocation) {
+        this.availableCategories = this.categories;
+        this.availableLocations = this.locations;
+        return;
+      }
+      
+      // Create a temporary filter function that excludes the category or location filter
+      
+      // For category dropdown (exclude category filter)
+      const forCategoryOptions = [...this.events].filter(event => {
+        // Apply all filters except category
+        let include = true;
+        
+        if (hasSearchTerm) {
+          const term = this.searchTerm.toLowerCase().trim();
+          const titleMatch = event.eventTitle && event.eventTitle.toLowerCase().includes(term);
+          const descMatch = event.eventDescription && event.eventDescription.toLowerCase().includes(term);
+          const cityMatch = event.eventCity && event.eventCity.toLowerCase().includes(term);
+          const stateMatch = event.eventState && event.eventState.toLowerCase().includes(term);
+          const venueMatch = event.eventVenue && event.eventVenue.toLowerCase().includes(term);
+          
+          include = include && (titleMatch || descMatch || cityMatch || stateMatch || venueMatch);
+        }
+        
+        if (hasLocation) {
+          include = include && (event.eventCity && event.eventCity === this.location);
+        }
+        
+        return include;
+      });
+      
+      // For location dropdown (exclude location filter)
+      const forLocationOptions = [...this.events].filter(event => {
+        // Apply all filters except location
+        let include = true;
+        
+        if (hasSearchTerm) {
+          const term = this.searchTerm.toLowerCase().trim();
+          const titleMatch = event.eventTitle && event.eventTitle.toLowerCase().includes(term);
+          const descMatch = event.eventDescription && event.eventDescription.toLowerCase().includes(term);
+          const cityMatch = event.eventCity && event.eventCity.toLowerCase().includes(term);
+          const stateMatch = event.eventState && event.eventState.toLowerCase().includes(term);
+          const venueMatch = event.eventVenue && event.eventVenue.toLowerCase().includes(term);
+          
+          include = include && (titleMatch || descMatch || cityMatch || stateMatch || venueMatch);
+        }
+        
+        if (hasCategory) {
+          if (Array.isArray(event.eventCategory)) {
+            include = include && event.eventCategory.some(cat => cat.toLowerCase() === this.category.toLowerCase());
+          } else {
+            include = include && (event.eventCategory && event.eventCategory.toLowerCase() === this.category.toLowerCase());
+          }
+        }
+        
+        return include;
+      });
+      
+      // Extract available categories and locations from filtered results
+      const availableCategorySet = new Set();
+      forCategoryOptions.forEach(event => {
+        if (Array.isArray(event.eventCategory)) {
+          event.eventCategory.forEach(cat => {
+            if (cat) availableCategorySet.add(cat);
+          });
+        } else if (event.eventCategory) {
+          availableCategorySet.add(event.eventCategory);
+        }
+      });
+      
+      const availableLocationSet = new Set();
+      forLocationOptions.forEach(event => {
+        if (event.eventCity) availableLocationSet.add(event.eventCity);
+      });
+      
+      // Update available options
+      this.availableCategories = [...availableCategorySet].sort();
+      this.availableLocations = [...availableLocationSet].sort();
     },
     
     // Helper method to format event dates for display
@@ -476,6 +616,9 @@ document.addEventListener('alpine:init', () => {
       }
       
       this.filteredEvents = filtered;
+      
+      // Update the available filter options based on the filtered results
+      this.updateAvailableOptions();
     },
     
     search() {
@@ -489,6 +632,7 @@ document.addEventListener('alpine:init', () => {
       window.history.pushState({}, '', newUrl);
       
       this.filter();
+      // Available options are already updated in the filter method
     },
     
     reset() {
@@ -500,6 +644,23 @@ document.addEventListener('alpine:init', () => {
       window.history.pushState({}, '', window.location.pathname);
       
       this.filter();
+      // Reset available options to all options
+      this.availableCategories = this.categories;
+      this.availableLocations = this.locations;
+    },
+    
+    resetFilters() {
+      this.searchTerm = '';
+      this.category = '';
+      this.location = '';
+      
+      // Update URL
+      window.history.pushState({}, '', window.location.pathname);
+      
+      this.filter();
+      // Reset available options to all options
+      this.availableCategories = this.categories;
+      this.availableLocations = this.locations;
     }
   }));
   
