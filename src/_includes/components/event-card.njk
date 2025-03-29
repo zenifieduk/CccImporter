@@ -10,9 +10,9 @@
       <img src="/assets/images/event-placeholder.jpg" alt="{{ event.eventTitle }}">
     {% endif %}
     
-    <div class="event-date">
-      <span class="event-month">{{ event.eventStartDateTime | eventMonth }}</span>
-      <span class="event-day">{{ (event.eventStartDateTime | parseDate).getDate() }}</span>
+    <div class="event-date" x-data="eventDisplay()">
+      <span class="event-month" x-text="formatMonth('{{ event.eventStartDateTime }}')"></span>
+      <span class="event-day" x-text="formatDay('{{ event.eventStartDateTime }}')"></span>
     </div>
   </div>
   
@@ -31,12 +31,12 @@
       </div>
     {% endif %}
     
-    <div class="event-time">
+    <div class="event-time" x-data="eventDisplay()">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
         <circle cx="12" cy="12" r="10"></circle>
         <polyline points="12 6 12 12 16 14"></polyline>
       </svg>
-      {{ (event.eventStartDateTime | parseDate) | formatTime }}
+      <span x-text="formatTime('{{ event.eventStartDateTime }}')"></span>
     </div>
     
     {% if event.eventTicketPrice %}

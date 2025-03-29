@@ -157,9 +157,6 @@
   
 
 
-
-
-
 <div class="detail-header">
   <div class="container">
     <div style="margin-bottom: 1rem;">
@@ -172,7 +169,7 @@
     
     <h1 class="detail-title">Classic Car Show 2025</h1>
     
-    <div class="detail-meta">
+    <div class="detail-meta" x-data="eventDisplay()">
       <div class="detail-meta-item">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
           <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -181,7 +178,9 @@
           <line x1="3" y1="10" x2="21" y2="10"></line>
         </svg>
         
-          08 Jun 2025
+          <span x-text="formatDay('08062025:10:00:00')"></span>
+          <span x-text="formatMonth('08062025:10:00:00')"></span>
+          <span>2025</span>
           
         
       </div>
@@ -192,9 +191,9 @@
           <polyline points="12 6 12 12 16 14"></polyline>
         </svg>
         
-          10:00
+          <span x-text="formatTime('08062025:10:00:00')"></span>
           
-            - 16:00
+            - <span x-text="formatTime('08062025:16:00:00')"></span>
           
         
       </div>
@@ -232,14 +231,18 @@
     <div class="event-details">
       <h2>Event Details</h2>
       
-      <div style="margin-top: 1.5rem;">
+      <div style="margin-top: 1.5rem;" x-data="eventDisplay()">
         <h3>Date and Time</h3>
         <p>
           
-            08 Jun 2025, 10:00
+            <span x-text="formatDay('08062025:10:00:00')"></span>
+            <span x-text="formatMonth('08062025:10:00:00')"></span>
+            <span>2025</span>,
+            <span x-text="formatTime('08062025:10:00:00')"></span>
+            
             
               
-                to 16:00
+                to <span x-text="formatTime('08062025:16:00:00')"></span>
               
             
           
@@ -331,9 +334,9 @@
       <img src="/assets/images/events/classic-car-show-2025.jpg" alt="Classic Car Show 2025">
     
     
-    <div class="event-date">
-      <span class="event-month">Jun</span>
-      <span class="event-day">8</span>
+    <div class="event-date" x-data="eventDisplay()">
+      <span class="event-month" x-text="formatMonth('08062025:10:00:00')"></span>
+      <span class="event-day" x-text="formatDay('08062025:10:00:00')"></span>
     </div>
   </div>
   
@@ -352,12 +355,12 @@
       </div>
     
     
-    <div class="event-time">
+    <div class="event-time" x-data="eventDisplay()">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
         <circle cx="12" cy="12" r="10"></circle>
         <polyline points="12 6 12 12 16 14"></polyline>
       </svg>
-      10:00
+      <span x-text="formatTime('08062025:10:00:00')"></span>
     </div>
     
     
@@ -384,9 +387,9 @@
       <img src="/assets/images/events/pistons-pretzels.jpg" alt="Pistons &amp; Pretzels - UK">
     
     
-    <div class="event-date">
-      <span class="event-month">May</span>
-      <span class="event-day">4</span>
+    <div class="event-date" x-data="eventDisplay()">
+      <span class="event-month" x-text="formatMonth('04052025:11:00:00')"></span>
+      <span class="event-day" x-text="formatDay('04052025:11:00:00')"></span>
     </div>
   </div>
   
@@ -405,12 +408,12 @@
       </div>
     
     
-    <div class="event-time">
+    <div class="event-time" x-data="eventDisplay()">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
         <circle cx="12" cy="12" r="10"></circle>
         <polyline points="12 6 12 12 16 14"></polyline>
       </svg>
-      11:00
+      <span x-text="formatTime('04052025:11:00:00')"></span>
     </div>
     
     
@@ -437,9 +440,9 @@
       <img src="/assets/images/events/aston-martin-car-show.jpg" alt="A British Icon - Aston Martin">
     
     
-    <div class="event-date">
-      <span class="event-month">Jun</span>
-      <span class="event-day">3</span>
+    <div class="event-date" x-data="eventDisplay()">
+      <span class="event-month" x-text="formatMonth('03062025:11:00:00')"></span>
+      <span class="event-day" x-text="formatDay('03062025:11:00:00')"></span>
     </div>
   </div>
   
@@ -458,12 +461,12 @@
       </div>
     
     
-    <div class="event-time">
+    <div class="event-time" x-data="eventDisplay()">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
         <circle cx="12" cy="12" r="10"></circle>
         <polyline points="12 6 12 12 16 14"></polyline>
       </svg>
-      11:00
+      <span x-text="formatTime('03062025:11:00:00')"></span>
     </div>
     
     

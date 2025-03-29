@@ -101,6 +101,12 @@ module.exports = function(eleventyConfig) {
     return DateTime.fromJSDate(new Date(date)).toFormat(format);
   });
   
+  // Add substring filter
+  eleventyConfig.addFilter("substring", function(str, start, end) {
+    if (!str) return '';
+    return str.substring(start, end);
+  });
+  
   // Configure directory structure
   return {
     dir: {

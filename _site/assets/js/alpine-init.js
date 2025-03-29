@@ -1,4 +1,64 @@
 document.addEventListener('alpine:init', () => {
+  // Add event display component for date/time formatting
+  Alpine.data('eventDisplay', () => ({
+    // Helper method to format event dates for display
+    formatMonth(dateStr) {
+      if (!dateStr) return '';
+      try {
+        // Parse custom date format: "08062025:10:00:00"
+        // Where 08 is day, 06 is month, 2025 is year
+        const day = dateStr.substring(0, 2);
+        const month = dateStr.substring(2, 4);
+        const year = dateStr.substring(4, 8);
+        
+        // Create date object with parsed values
+        const date = new Date(year, parseInt(month) - 1, day);
+        
+        // Format month
+        return date.toLocaleString('default', { month: 'short' });
+      } catch (e) {
+        console.error('Error formatting month:', e, dateStr);
+        return 'Invalid';
+      }
+    },
+    
+    // Helper method to format event days for display
+    formatDay(dateStr) {
+      if (!dateStr) return '';
+      try {
+        // Parse custom date format: "08062025:10:00:00"
+        const day = dateStr.substring(0, 2);
+        
+        // Return the day as a number
+        return parseInt(day);
+      } catch (e) {
+        console.error('Error formatting day:', e, dateStr);
+        return '';
+      }
+    },
+    
+    // Helper method to format event time for display
+    formatTime(dateStr) {
+      if (!dateStr) return '';
+      try {
+        // Parse custom date format: "08062025:10:00:00"
+        const time = dateStr.split(':');
+        if (time.length >= 3) {
+          // Get hour and minute from the time part
+          const hour = parseInt(time[1]);
+          const minute = parseInt(time[2]);
+          
+          // Format time with leading zeros
+          return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        }
+        return '';
+      } catch (e) {
+        console.error('Error formatting time:', e, dateStr);
+        return '';
+      }
+    }
+  }));
+
   Alpine.data('mobileMenu', () => ({
     isOpen: false,
     
@@ -567,41 +627,7 @@ document.addEventListener('alpine:init', () => {
       this.availableLocations = [...availableLocationSet].sort();
     },
     
-    // Helper method to format event dates for display
-    formatMonth(dateStr) {
-      if (!dateStr) return '';
-      try {
-        const date = new Date(dateStr);
-        return date.toLocaleString('default', { month: 'short' });
-      } catch (e) {
-        console.error('Error formatting month:', e);
-        return '';
-      }
-    },
-    
-    // Helper method to format event days for display
-    formatDay(dateStr) {
-      if (!dateStr) return '';
-      try {
-        const date = new Date(dateStr);
-        return date.getDate();
-      } catch (e) {
-        console.error('Error formatting day:', e);
-        return '';
-      }
-    },
-    
-    // Helper method to format event time for display
-    formatTime(dateStr) {
-      if (!dateStr) return '';
-      try {
-        const date = new Date(dateStr);
-        return date.toLocaleTimeString('default', { hour: '2-digit', minute: '2-digit' });
-      } catch (e) {
-        console.error('Error formatting time:', e);
-        return '';
-      }
-    },
+    // Note: Date formatting is now handled by the eventDisplay component
     
     filter() {
       // Start with a copy of all events
@@ -750,22 +776,31 @@ document.addEventListener('alpine:init', () => {
     
     get pageNumbers() {
       const pages = [];
-      const maxVisiblePages = 5;
+      const maxVisiblePages = 6; // Increased to 6
       
       if (this.totalPages <= maxVisiblePages) {
-        // Show all pages
+        // Show all pages if we have 6 or fewer
         for (let i = 1; i <= this.totalPages; i++) {
           pages.push(i);
         }
       } else {
-        // Show a range of pages
-        let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
-        let endPage = startPage + maxVisiblePages - 1;
+        // For more than 6 pages, show a range with current page in the middle when possible
         
-        // Adjust if at the end
-        if (endPage > this.totalPages) {
+        // Calculate the range to show
+        let startPage, endPage;
+        
+        if (this.currentPage <= 3) {
+          // Near the beginning: show first 6 pages
+          startPage = 1;
+          endPage = 6;
+        } else if (this.currentPage >= this.totalPages - 2) {
+          // Near the end: show last 6 pages
+          startPage = this.totalPages - 5;
           endPage = this.totalPages;
-          startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        } else {
+          // In the middle: show current page with 2 pages before and 3 after
+          startPage = this.currentPage - 2;
+          endPage = this.currentPage + 3;
         }
         
         // Add first page and ellipsis if needed
@@ -774,7 +809,7 @@ document.addEventListener('alpine:init', () => {
           if (startPage > 2) pages.push('...');
         }
         
-        // Add page numbers
+        // Add page numbers in the calculated range
         for (let i = startPage; i <= endPage; i++) {
           pages.push(i);
         }
