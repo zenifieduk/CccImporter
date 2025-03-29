@@ -455,7 +455,8 @@
         </div>
         
         <div id="newsletter-error" class="newsletter-error" style="display: none;">
-          <p>There was an error submitting your subscription. Please try again.</p>
+          <p>There was an error submitting your subscription.</p>
+          <p id="error-details">Please try again later or contact us for assistance.</p>
         </div>
       </div>
     </div>
@@ -492,19 +493,37 @@ function submitNewsletterForm(event) {
     }),
   })
   .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
+    return response.json().then(data => ({
+      status: response.status,
+      ok: response.ok,
+      data: data
+    }));
   })
-  .then(data => {
-    // Show success message
-    form.style.display = 'none';
-    successMessage.style.display = 'block';
+  .then(result => {
+    if (result.ok) {
+      // Show success message
+      form.style.display = 'none';
+      successMessage.style.display = 'block';
+      
+      // If we're in development mode, show a note in console
+      if (result.data.note) {
+        console.log('Note:', result.data.note);
+      }
+    } else {
+      // Handle error from API but with valid JSON response
+      throw new Error(result.data.error || 'Subscription failed');
+    }
   })
   .catch(error => {
     // Show error message
     console.error('Error:', error);
+    const errorDetailsElement = document.getElementById('error-details');
+    
+    // Display a more helpful error message if available
+    if (typeof error === 'object' && error.message) {
+      errorDetailsElement.textContent = error.message;
+    }
+    
     errorMessage.style.display = 'block';
   });
   

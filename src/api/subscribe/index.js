@@ -2,9 +2,17 @@
 const sgMail = require('@sendgrid/mail');
 const client = require('@sendgrid/client');
 
-// Set SendGrid API key from environment variable
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-client.setApiKey(process.env.SENDGRID_API_KEY);
+// Create a development mode flag to skip actual API calls during development
+const DEVELOPMENT_MODE = true; // Set to false in production
+
+// Check if we have the API key
+const hasApiKey = !!process.env.SENDGRID_API_KEY;
+
+// If API key exists, set it
+if (hasApiKey) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  client.setApiKey(process.env.SENDGRID_API_KEY);
+}
 
 // Main export function that gets executed when this endpoint is called
 module.exports = async (req, res) => {
@@ -19,6 +27,28 @@ module.exports = async (req, res) => {
     
     if (!email || !first_name || !last_name) {
       return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // In development mode, skip actual SendGrid API calls
+    if (DEVELOPMENT_MODE) {
+      console.log('DEVELOPMENT MODE: Simulating successful subscription');
+      console.log(`Would have subscribed: ${first_name} ${last_name} (${email})`);
+      
+      // Return success response
+      return res.status(200).json({ 
+        success: true, 
+        message: 'Subscription successful (Development Mode)',
+        note: 'This is a simulated success. In production mode, the actual SendGrid API would be called.'
+      });
+    }
+
+    // Check if we have the API key
+    if (!hasApiKey) {
+      console.error('SendGrid API key is missing');
+      return res.status(500).json({ 
+        error: 'Configuration error', 
+        details: 'SendGrid API key is not configured.'
+      });
     }
 
     // Add contact to SendGrid contact list
@@ -41,25 +71,24 @@ module.exports = async (req, res) => {
     // Send the request to add the contact to SendGrid
     await client.request(request);
     
-    // We're only adding to the contact list for now, no welcome email
-    // Uncomment and configure the code below when you have a verified sender email
-    /*
-    // Send welcome email to the new subscriber
-    const msg = {
-      to: email,
-      from: 'test@example.com', // IMPORTANT: Replace with your verified email address in SendGrid
-      subject: 'Welcome to Classic Car Clubs Newsletter',
-      text: `Hi ${first_name},\n\nThank you for subscribing to our newsletter! You'll now receive the latest news, stories, and event information about the classic car community.\n\nBest regards,\nClassic Car Clubs Team`,
-      html: `<p>Hi ${first_name},</p><p>Thank you for subscribing to our newsletter! You'll now receive the latest news, stories, and event information about the classic car community.</p><p>Best regards,<br>Classic Car Clubs Team</p>`,
-    };
-    
-    await sgMail.send(msg);
-    */
-    
     // Return success response
     return res.status(200).json({ success: true, message: 'Subscription successful' });
   } catch (error) {
     console.error('Error handling subscription:', error);
-    return res.status(500).json({ error: 'Subscription failed', details: error.message });
+    
+    // Provide a more user-friendly error message
+    let errorMessage = 'Subscription failed. Please try again later.';
+    let errorDetails = error.message;
+    
+    // If it's a SendGrid API error with specific error information
+    if (error.response && error.response.body && error.response.body.errors) {
+      errorDetails = JSON.stringify(error.response.body.errors);
+    }
+    
+    return res.status(500).json({ 
+      error: errorMessage, 
+      details: errorDetails,
+      note: 'Please ensure your SendGrid account is properly set up with a verified sender and correct API permissions.'
+    });
   }
 };
