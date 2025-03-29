@@ -1,22 +1,19 @@
 
 const sgMail = require('@sendgrid/mail');
 
-exports.handler = async (request) => {
+const express = require('express');
+const router = express.Router();
+
+router.post('/', async (request, response) => {
   if (request.httpMethod !== 'POST') {
-    return {
-      statusCode: 405,
-      body: JSON.stringify({ error: 'Method not allowed' })
-    };
+    return response.status(405).json({ error: 'Method not allowed' });
   }
 
   let data;
   try {
     data = JSON.parse(request.body);
   } catch (error) {
-    return {
-      statusCode: 400,
-      body: JSON.stringify({ error: 'Invalid request body' })
-    };
+    return response.status(400).json({ error: 'Invalid request body' });
   }
 
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -33,21 +30,12 @@ Message: ${data.message}
       `
     });
 
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ message: 'Email sent successfully' })
-    };
+    return response.status(200).json({ message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);
-    return {
-      statusCode: 500,
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ error: 'Failed to send email' })
-    };
+    return response.status(500).json({ error: 'Failed to send email' });
   }
 };
+
+
+module.exports = router;
