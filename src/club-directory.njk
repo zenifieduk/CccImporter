@@ -9,201 +9,200 @@ pagination:
 
 {% set breadcrumbs = [{ url: '/club-directory/', label: 'Club Directory' }] %}
 
-<section class="hero-section club-hero-section">
-  <div class="hero-overlay"></div>
+<div x-data="clubSearch" id="club-directory-app" x-init="initSearch()">
+  <section class="hero-section club-hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container">
+      <div class="breadcrumbs-container">
+        <ul class="breadcrumbs">
+          <li><a href="/" style="color: white;">Home</a></li>
+          <li><a href="/club-directory/" style="color: white;">Club Directory</a></li>
+        </ul>
+      </div>
+      
+      <div class="hero-content club-hero-content">
+        <h1 class="hero-title">Classic Car Clubs Directory</h1>
+        <p class="hero-subtitle">Welcome to our comprehensive classic car clubs directory – your ultimate resource for connecting with classic car enthusiasts across the United Kingdom.</p>
+        
+        <div class="hero-search">
+          <div class="search-container event-search">
+            <form class="search-form" @submit.prevent="search()">
+              <div class="search-grid">
+                <div class="custom-search-group">
+                  <label for="search-term">Club Name</label>
+                  <div class="input-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="search-term" class="custom-search-input search-term" placeholder="Enter club name..." x-model="searchTerm">
+                  </div>
+                </div>
+                
+                <div class="custom-search-group">
+                  <label for="search-category">Category</label>
+                  <div class="input-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                    </svg>
+                    <select id="search-category" class="custom-search-input search-category" x-model="category">
+                      <option value="">All Categories</option>
+                      <template x-for="cat in availableCategories" :key="cat">
+                        <option :value="cat" :selected="cat === category" x-text="cat"></option>
+                      </template>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="custom-search-group">
+                  <label for="search-location">Location</label>
+                  <div class="input-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <select id="search-location" class="custom-search-input search-location" x-model="location">
+                      <option value="">All Locations</option>
+                      <template x-for="loc in availableLocations" :key="loc">
+                        <option :value="loc" :selected="loc === location" x-text="loc"></option>
+                      </template>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="search-actions">
+                  <button type="submit" class="search-button">Search</button>
+                  <button type="button" class="reset-button" @click.prevent="reset()">Reset</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <div class="container">
-    <div class="breadcrumbs-container">
-      <ul class="breadcrumbs">
-        <li><a href="/" style="color: white;">Home</a></li>
-        <li><a href="/club-directory/" style="color: white;">Club Directory</a></li>
-      </ul>
+    <div class="az-filter-container">
+      <div class="filter-header">Filter by letter:</div>
+      <div class="az-filter-letters">
+        <a href="#" class="az-filter-letter" data-letter="" @click.prevent="resetFilters()" :class="{ 'active': !letter }">All</a>
+        {% for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+          <a href="#" class="az-filter-letter" data-letter="{{ letter }}" @click.prevent="setLetter('{{ letter }}')" :class="{ 'active': letter === '{{ letter }}' }" aria-label="Filter by letter {{ letter }}">{{ letter }}</a>
+        {% endfor %}
+      </div>
     </div>
     
-    <div class="hero-content club-hero-content">
-      <h1 class="hero-title">Classic Car Clubs Directory</h1>
-      <p class="hero-subtitle">Welcome to our comprehensive classic car clubs directory – your ultimate resource for connecting with classic car enthusiasts across the United Kingdom.</p>
-      
-      <div x-data="clubSearch" x-init="initSearch()" class="hero-search">
-        <div class="search-container event-search">
-          <form class="search-form" @submit.prevent="search()">
-            <div class="search-grid">
-              <div class="custom-search-group">
-                <label for="search-term">Club Name</label>
-                <div class="input-wrapper">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                  </svg>
-                  <input type="text" id="search-term" class="custom-search-input search-term" placeholder="Enter club name..." x-model="searchTerm">
-                </div>
+    <div x-show="letter || searchTerm || category || location" class="search-status">
+      <p x-text="`Showing ${filteredClubs.length} clubs ${letter ? `starting with '${letter}'` : ''}`"></p>
+      <button @click="resetFilters()" class="exit-search-button">Clear All Filters</button>
+    </div>
+    
+    <div x-show="isLoading" class="loading-indicator">Loading...</div>
+    
+    <div x-cloak x-show="!isLoading">
+      <div class="featured-section" x-show="filteredClubs.some(club => club.featured)">
+        <h2>Featured Clubs</h2>
+        
+        <div class="club-grid">
+          <template x-for="club in filteredClubs.filter(c => c.featured).slice(0, 8)" :key="club.slug">
+            <div class="club-card featured-club-card">
+              <div class="club-featured">Featured</div>
+              
+              <div class="club-image">
+                <img :src="club.imageUrl || '/assets/images/club-placeholder.jpg'" :alt="club.title">
               </div>
               
-              <div class="custom-search-group">
-                <label for="search-category">Category</label>
-                <div class="input-wrapper">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
-                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                  </svg>
-                  <select id="search-category" class="custom-search-input search-category" x-model="category">
-                    <option value="">All Categories</option>
-                    <template x-for="cat in availableCategories" :key="cat">
-                      <option :value="cat" :selected="cat === category" x-text="cat"></option>
-                    </template>
-                  </select>
-                </div>
-              </div>
-              
-              <div class="custom-search-group">
-                <label for="search-location">Location</label>
-                <div class="input-wrapper">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+              <div class="club-content">
+                <h3 class="club-title" x-text="club.title"></h3>
+                
+                <div class="club-location" x-show="club.city || club.state">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
                     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                     <circle cx="12" cy="10" r="3"></circle>
                   </svg>
-                  <select id="search-location" class="custom-search-input search-location" x-model="location">
-                    <option value="">All Locations</option>
-                    <template x-for="loc in availableLocations" :key="loc">
-                      <option :value="loc" :selected="loc === location" x-text="loc"></option>
-                    </template>
-                  </select>
+                  <span x-text="[club.city, club.state].filter(Boolean).join(', ')"></span>
+                </div>
+                
+                <div class="club-category" x-show="club.category">
+                  <span class="category-tag" x-text="club.category"></span>
+                  <span class="category-tag" x-text="club.marque" x-show="club.marque"></span>
                 </div>
               </div>
               
-              <div class="search-actions">
-                <button type="submit" class="search-button" @click.prevent="search()">Search</button>
-                <button type="button" class="reset-button" @click.prevent="reset()">Reset</button>
+              <div class="club-actions">
+                <a :href="`/club-directory/${club.slug.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${club.id}/`" class="button button-primary">View Details</a>
+                <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
               </div>
             </div>
-          </form>
+          </template>
         </div>
       </div>
-    </div>
-  </div>
-</section>
-
-<div class="container">
-  
-  <div x-data="clubSearch" x-init="initSearch()">
-  
-  <div class="az-filter-container">
-    <div class="filter-header">Filter by letter:</div>
-    <div class="az-filter-letters">
-      <a href="#" class="az-filter-letter" data-letter="" @click.prevent="resetFilters()" :class="{ 'active': !letter }">All</a>
-      {% for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
-        <a href="#" class="az-filter-letter" data-letter="{{ letter }}" @click.prevent="setLetter('{{ letter }}')" :class="{ 'active': letter === '{{ letter }}' }" aria-label="Filter by letter {{ letter }}">{{ letter }}</a>
-      {% endfor %}
-    </div>
-  </div>
-  
-  <div x-show="letter" class="search-status">
-    <p x-text="`Showing ${filteredClubs.length} clubs ${letter ? `starting with '${letter}'` : ''}`"></p>
-    <button @click="resetFilters()" class="exit-search-button">Clear All Filters</button>
-  </div>
-  
-  <div x-show="isLoading" class="loading-indicator">Loading...</div>
-  
-  <div x-cloak x-show="!isLoading">
-    <div class="featured-section" x-show="filteredClubs.some(club => club.featured)">
-      <h2>Featured Clubs</h2>
       
-      <div class="club-grid">
-        <template x-for="club in filteredClubs.filter(c => c.featured).slice(0, 8)" :key="club.slug">
-          <div class="club-card featured-club-card">
-            <div class="club-featured">Featured</div>
-            
-            <div class="club-image">
-              <img :src="club.imageUrl || '/assets/images/club-placeholder.jpg'" :alt="club.title">
-            </div>
-            
-            <div class="club-content">
-              <h3 class="club-title" x-text="club.title"></h3>
-              
-              <div class="club-location" x-show="club.city || club.state">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                  <circle cx="12" cy="10" r="3"></circle>
-                </svg>
-                <span x-text="[club.city, club.state].filter(Boolean).join(', ')"></span>
+      <div x-data="pagination" x-effect="items = filteredClubs.filter(c => !c.featured)">
+        <div class="club-grid" x-show="paginatedItems.length > 0">
+          <template x-for="club in paginatedItems" :key="club.slug">
+            <div class="club-card standard-club-card">
+              <div class="club-content">
+                <h3 class="club-title" x-text="club.title"></h3>
+                
+                <div class="club-location" x-show="club.city || club.state">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <span x-text="[club.city, club.state].filter(Boolean).join(', ')"></span>
+                </div>
+                
+                <div class="club-category" x-show="club.category">
+                  <span class="category-tag" x-text="club.category"></span>
+                  <span class="category-tag" x-text="club.marque" x-show="club.marque"></span>
+                </div>
               </div>
               
-              <div class="club-category" x-show="club.category">
-                <span class="category-tag" x-text="club.category"></span>
-                <span class="category-tag" x-text="club.marque" x-show="club.marque"></span>
+              <div class="club-actions">
+                <a :href="`/club-directory/${club.slug.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${club.id}/`" class="button button-primary">View Details</a>
+                <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
               </div>
             </div>
-            
-            <div class="club-actions">
-              <a :href="`/club-directory/${club.slug.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${club.id}/`" class="button button-primary">View Details</a>
-              <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
-            </div>
-          </div>
-        </template>
-      </div>
-    </div>
-    
-    <div x-data="pagination" x-effect="items = filteredClubs.filter(c => !c.featured)">
-      <div class="club-grid" x-show="paginatedItems.length > 0">
-        <template x-for="club in paginatedItems" :key="club.slug">
-          <div class="club-card standard-club-card">
-            <div class="club-content">
-              <h3 class="club-title" x-text="club.title"></h3>
-              
-              <div class="club-location" x-show="club.city || club.state">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
-                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                  <circle cx="12" cy="10" r="3"></circle>
-                </svg>
-                <span x-text="[club.city, club.state].filter(Boolean).join(', ')"></span>
-              </div>
-              
-              <div class="club-category" x-show="club.category">
-                <span class="category-tag" x-text="club.category"></span>
-                <span class="category-tag" x-text="club.marque" x-show="club.marque"></span>
-              </div>
-            </div>
-            
-            <div class="club-actions">
-              <a :href="`/club-directory/${club.slug.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${club.id}/`" class="button button-primary">View Details</a>
-              <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
-            </div>
-          </div>
-        </template>
-      </div>
-      
-      <div x-show="paginatedItems.length === 0" class="no-results">
-        <p>No clubs found matching your criteria. Please try different search terms or <button @click="reset" class="reset-link">reset filters</button>.</p>
-      </div>
-      
-      <div class="pagination" x-show="totalPages > 1">
-        <div class="pagination-controls">
-          <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="pagination-arrow pagination-prev" :class="{ 'disabled': currentPage === 1 }">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
-              <polyline points="15 18 9 12 15 6"></polyline>
-            </svg>
-            Previous
-          </button>
-          
-          <div class="pagination-numbers">
-            <template x-for="(pageNumber, index) in pageNumbers" :key="index">
-              <template x-if="pageNumber === '...'">
-                <span class="pagination-ellipsis">...</span>
-              </template>
-              <template x-if="pageNumber !== '...'">
-                <button @click="goToPage(pageNumber)" class="pagination-number" :class="{ 'active': pageNumber === currentPage }" x-text="pageNumber"></button>
-              </template>
-            </template>
-          </div>
-          
-          <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-arrow pagination-next" :class="{ 'disabled': currentPage === totalPages }">
-            Next
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 4px;">
-              <polyline points="9 18 15 12 9 6"></polyline>
-            </svg>
-          </button>
+          </template>
         </div>
         
-        <div class="pagination-info" x-text="`Showing ${startIndex} to ${endIndex} of ${totalItems} clubs`"></div>
+        <div x-show="paginatedItems.length === 0" class="no-results">
+          <p>No clubs found matching your criteria. Please try different search terms or <button @click="reset" class="reset-link">reset filters</button>.</p>
+        </div>
+        
+        <div class="pagination" x-show="totalPages > 1">
+          <div class="pagination-controls">
+            <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="pagination-arrow pagination-prev" :class="{ 'disabled': currentPage === 1 }">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+              Previous
+            </button>
+            
+            <div class="pagination-numbers">
+              <template x-for="(pageNumber, index) in pageNumbers" :key="index">
+                <template x-if="pageNumber === '...'">
+                  <span class="pagination-ellipsis">...</span>
+                </template>
+                <template x-if="pageNumber !== '...'">
+                  <button @click="goToPage(pageNumber)" class="pagination-number" :class="{ 'active': pageNumber === currentPage }" x-text="pageNumber"></button>
+                </template>
+              </template>
+            </div>
+            
+            <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-arrow pagination-next" :class="{ 'disabled': currentPage === totalPages }">
+              Next
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 4px;">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+          
+          <div class="pagination-info" x-text="`Showing ${startIndex} to ${endIndex} of ${totalItems} clubs`"></div>
+        </div>
       </div>
     </div>
   </div>

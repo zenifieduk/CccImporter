@@ -95,6 +95,19 @@ document.addEventListener('alpine:init', () => {
       // It ensures that if we come directly to the page with URL parameters,
       // the search is properly applied
       
+      // Add a popstate event listener to handle browser back/forward buttons
+      window.addEventListener('popstate', () => {
+        // Get URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        this.searchTerm = urlParams.get('search') || '';
+        this.category = urlParams.get('category') || '';
+        this.location = urlParams.get('location') || '';
+        this.letter = urlParams.get('letter') || '';
+        
+        // Apply the filters immediately
+        this.filter();
+      });
+      
       // Get URL params again to ensure we have the latest
       const urlParams = new URLSearchParams(window.location.search);
       const searchTerm = urlParams.get('search') || '';
@@ -102,19 +115,18 @@ document.addEventListener('alpine:init', () => {
       const location = urlParams.get('location') || '';
       const letter = urlParams.get('letter') || '';
       
-      // Only apply search if there are parameters
+      // Update the model
+      this.searchTerm = searchTerm;
+      this.category = category;
+      this.location = location;
+      this.letter = letter;
+      
+      // Apply search if there are parameters
       if (searchTerm || category || location || letter) {
-        // Update the model
-        this.searchTerm = searchTerm;
-        this.category = category;
-        this.location = location;
-        this.letter = letter;
-        
-        // Apply the search
-        setTimeout(() => {
-          this.filter();
-          this.updateAvailableOptions();
-        }, 100); // Small delay to ensure data is loaded
+        // Apply the search immediately - no delay needed as we're inside an init function
+        // which will be called after data is available
+        this.filter();
+        this.updateAvailableOptions();
       }
     },
     
