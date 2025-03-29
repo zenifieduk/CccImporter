@@ -133,11 +133,18 @@ pagination:
               
               <div class="club-actions">
                 <a :href="`/club-directory/${club.slug.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${club.id}/`" class="button button-primary">View Details</a>
-                <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
+               <!-- <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
               </div>
             </div>
           </template>
         </div>
+      </div>
+      
+      <!-- Ad Banner Section -->
+      <div class="ad-banner-container">
+        <a href="https://carrust.co.uk" target="_blank" rel="noopener" class="ad-banner">
+          <img src="/assets/images/ads/car-rust-ad-1.jpg" alt="Car Rust Handbook - Practical knowledge-base dedicated to all aspects of vehicle rust prevention and treatment." class="ad-banner-image">
+        </a>
       </div>
       
       <div x-data="pagination" x-effect="items = filteredClubs.filter(c => !c.featured)" id="club-list-section">
@@ -164,7 +171,7 @@ pagination:
               
               <div class="club-actions">
                 <a :href="`/club-directory/${club.slug.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${club.id}/`" class="button button-primary">View Details</a>
-                <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
+               <!-- <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
               </div>
             </div>
           </template>

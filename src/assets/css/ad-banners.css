@@ -1,0 +1,27 @@
+/* Ad Banner Styles */
+.ad-banner-container {
+  width: 100%;
+  margin: 2rem 0;
+  padding: 1rem 0;
+  text-align: center;
+  background-color: #f8f8f8;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.ad-banner {
+  display: inline-block;
+  max-width: 100%;
+  transition: opacity 0.3s ease;
+}
+
+.ad-banner:hover {
+  opacity: 0.9;
+}
+
+.ad-banner-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}

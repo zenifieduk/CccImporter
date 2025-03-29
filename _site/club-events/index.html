@@ -14,6 +14,7 @@
 
   <!-- Styles -->
   <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/ad-banners.css">
 
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -46,12 +47,6 @@
           <li>
             <a href="/club-events/" aria-current="page">
               Club Events
-            </a>
-          </li>
-        
-          <li>
-            <a href="/advertise/" >
-              Advertise
             </a>
           </li>
         
@@ -116,16 +111,6 @@
               <li>
                 <a href="/club-events/" @click="close" aria-current="page">
                   Club Events
-                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </a>
-              </li>
-            
-              <li>
-                <a href="/advertise/" @click="close" >
-                  Advertise
                   <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                     <polyline points="12 5 19 12 12 19"></polyline>
@@ -292,6 +277,13 @@
             </div>
           </template>
         </div>
+      </div>
+      
+      <!-- Ad Banner Section -->
+      <div class="ad-banner-container">
+        <a href="https://carrust.co.uk" target="_blank" rel="noopener" class="ad-banner">
+          <img src="/assets/images/ads/car-rust-ad-1.jpg" alt="Car Rust Handbook - Practical knowledge-base dedicated to all aspects of vehicle rust prevention and treatment." class="ad-banner-image">
+        </a>
       </div>
       
       <div x-data="pagination" x-effect="items = filteredEvents.filter(e => !e.eventFeatured)">
