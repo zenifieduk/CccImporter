@@ -521,13 +521,18 @@ a:hover {
 
 .button-secondary {
   background-color: transparent;
-  color: #333;
-  border: 1px solid #333;
+  color: white;
+  border: 1px solid white;
 }
 
 .button-secondary:hover {
-  background-color: rgba(0, 0, 0, 0.05);
+  background-color: rgba(255, 255, 255, 0.1);
   text-decoration: none;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
 }
 
 /* Event Card Styles */
@@ -1548,7 +1553,7 @@ select.custom-search-input option {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 2rem;
   margin-top: 2rem;
-  max-width: 1200px;
+  max-width: 1360px;
   margin-left: auto;
   margin-right: auto;
 }
