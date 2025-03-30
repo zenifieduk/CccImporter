@@ -227,57 +227,291 @@
       <div class="az-filter-letters">
         <a href="#" class="az-filter-letter" data-letter="" @click.prevent="resetFilters()" :class="{ 'active': !letter }">All</a>
         
-          <a href="#" class="az-filter-letter" data-letter="A" @click.prevent="setLetter('A')" :class="{ 'active': letter === 'A' }" aria-label="Filter by letter A">A</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="A" 
+             @click.prevent="setLetter('A')" 
+             :class="{ 
+               'active': letter === 'A',
+               'has-clubs': availableLetters.includes('A'),
+               'no-clubs': !availableLetters.includes('A')
+             }" 
+             aria-label="Filter by letter A">A</a>
         
-          <a href="#" class="az-filter-letter" data-letter="B" @click.prevent="setLetter('B')" :class="{ 'active': letter === 'B' }" aria-label="Filter by letter B">B</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="B" 
+             @click.prevent="setLetter('B')" 
+             :class="{ 
+               'active': letter === 'B',
+               'has-clubs': availableLetters.includes('B'),
+               'no-clubs': !availableLetters.includes('B')
+             }" 
+             aria-label="Filter by letter B">B</a>
         
-          <a href="#" class="az-filter-letter" data-letter="C" @click.prevent="setLetter('C')" :class="{ 'active': letter === 'C' }" aria-label="Filter by letter C">C</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="C" 
+             @click.prevent="setLetter('C')" 
+             :class="{ 
+               'active': letter === 'C',
+               'has-clubs': availableLetters.includes('C'),
+               'no-clubs': !availableLetters.includes('C')
+             }" 
+             aria-label="Filter by letter C">C</a>
         
-          <a href="#" class="az-filter-letter" data-letter="D" @click.prevent="setLetter('D')" :class="{ 'active': letter === 'D' }" aria-label="Filter by letter D">D</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="D" 
+             @click.prevent="setLetter('D')" 
+             :class="{ 
+               'active': letter === 'D',
+               'has-clubs': availableLetters.includes('D'),
+               'no-clubs': !availableLetters.includes('D')
+             }" 
+             aria-label="Filter by letter D">D</a>
         
-          <a href="#" class="az-filter-letter" data-letter="E" @click.prevent="setLetter('E')" :class="{ 'active': letter === 'E' }" aria-label="Filter by letter E">E</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="E" 
+             @click.prevent="setLetter('E')" 
+             :class="{ 
+               'active': letter === 'E',
+               'has-clubs': availableLetters.includes('E'),
+               'no-clubs': !availableLetters.includes('E')
+             }" 
+             aria-label="Filter by letter E">E</a>
         
-          <a href="#" class="az-filter-letter" data-letter="F" @click.prevent="setLetter('F')" :class="{ 'active': letter === 'F' }" aria-label="Filter by letter F">F</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="F" 
+             @click.prevent="setLetter('F')" 
+             :class="{ 
+               'active': letter === 'F',
+               'has-clubs': availableLetters.includes('F'),
+               'no-clubs': !availableLetters.includes('F')
+             }" 
+             aria-label="Filter by letter F">F</a>
         
-          <a href="#" class="az-filter-letter" data-letter="G" @click.prevent="setLetter('G')" :class="{ 'active': letter === 'G' }" aria-label="Filter by letter G">G</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="G" 
+             @click.prevent="setLetter('G')" 
+             :class="{ 
+               'active': letter === 'G',
+               'has-clubs': availableLetters.includes('G'),
+               'no-clubs': !availableLetters.includes('G')
+             }" 
+             aria-label="Filter by letter G">G</a>
         
-          <a href="#" class="az-filter-letter" data-letter="H" @click.prevent="setLetter('H')" :class="{ 'active': letter === 'H' }" aria-label="Filter by letter H">H</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="H" 
+             @click.prevent="setLetter('H')" 
+             :class="{ 
+               'active': letter === 'H',
+               'has-clubs': availableLetters.includes('H'),
+               'no-clubs': !availableLetters.includes('H')
+             }" 
+             aria-label="Filter by letter H">H</a>
         
-          <a href="#" class="az-filter-letter" data-letter="I" @click.prevent="setLetter('I')" :class="{ 'active': letter === 'I' }" aria-label="Filter by letter I">I</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="I" 
+             @click.prevent="setLetter('I')" 
+             :class="{ 
+               'active': letter === 'I',
+               'has-clubs': availableLetters.includes('I'),
+               'no-clubs': !availableLetters.includes('I')
+             }" 
+             aria-label="Filter by letter I">I</a>
         
-          <a href="#" class="az-filter-letter" data-letter="J" @click.prevent="setLetter('J')" :class="{ 'active': letter === 'J' }" aria-label="Filter by letter J">J</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="J" 
+             @click.prevent="setLetter('J')" 
+             :class="{ 
+               'active': letter === 'J',
+               'has-clubs': availableLetters.includes('J'),
+               'no-clubs': !availableLetters.includes('J')
+             }" 
+             aria-label="Filter by letter J">J</a>
         
-          <a href="#" class="az-filter-letter" data-letter="K" @click.prevent="setLetter('K')" :class="{ 'active': letter === 'K' }" aria-label="Filter by letter K">K</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="K" 
+             @click.prevent="setLetter('K')" 
+             :class="{ 
+               'active': letter === 'K',
+               'has-clubs': availableLetters.includes('K'),
+               'no-clubs': !availableLetters.includes('K')
+             }" 
+             aria-label="Filter by letter K">K</a>
         
-          <a href="#" class="az-filter-letter" data-letter="L" @click.prevent="setLetter('L')" :class="{ 'active': letter === 'L' }" aria-label="Filter by letter L">L</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="L" 
+             @click.prevent="setLetter('L')" 
+             :class="{ 
+               'active': letter === 'L',
+               'has-clubs': availableLetters.includes('L'),
+               'no-clubs': !availableLetters.includes('L')
+             }" 
+             aria-label="Filter by letter L">L</a>
         
-          <a href="#" class="az-filter-letter" data-letter="M" @click.prevent="setLetter('M')" :class="{ 'active': letter === 'M' }" aria-label="Filter by letter M">M</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="M" 
+             @click.prevent="setLetter('M')" 
+             :class="{ 
+               'active': letter === 'M',
+               'has-clubs': availableLetters.includes('M'),
+               'no-clubs': !availableLetters.includes('M')
+             }" 
+             aria-label="Filter by letter M">M</a>
         
-          <a href="#" class="az-filter-letter" data-letter="N" @click.prevent="setLetter('N')" :class="{ 'active': letter === 'N' }" aria-label="Filter by letter N">N</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="N" 
+             @click.prevent="setLetter('N')" 
+             :class="{ 
+               'active': letter === 'N',
+               'has-clubs': availableLetters.includes('N'),
+               'no-clubs': !availableLetters.includes('N')
+             }" 
+             aria-label="Filter by letter N">N</a>
         
-          <a href="#" class="az-filter-letter" data-letter="O" @click.prevent="setLetter('O')" :class="{ 'active': letter === 'O' }" aria-label="Filter by letter O">O</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="O" 
+             @click.prevent="setLetter('O')" 
+             :class="{ 
+               'active': letter === 'O',
+               'has-clubs': availableLetters.includes('O'),
+               'no-clubs': !availableLetters.includes('O')
+             }" 
+             aria-label="Filter by letter O">O</a>
         
-          <a href="#" class="az-filter-letter" data-letter="P" @click.prevent="setLetter('P')" :class="{ 'active': letter === 'P' }" aria-label="Filter by letter P">P</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="P" 
+             @click.prevent="setLetter('P')" 
+             :class="{ 
+               'active': letter === 'P',
+               'has-clubs': availableLetters.includes('P'),
+               'no-clubs': !availableLetters.includes('P')
+             }" 
+             aria-label="Filter by letter P">P</a>
         
-          <a href="#" class="az-filter-letter" data-letter="Q" @click.prevent="setLetter('Q')" :class="{ 'active': letter === 'Q' }" aria-label="Filter by letter Q">Q</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="Q" 
+             @click.prevent="setLetter('Q')" 
+             :class="{ 
+               'active': letter === 'Q',
+               'has-clubs': availableLetters.includes('Q'),
+               'no-clubs': !availableLetters.includes('Q')
+             }" 
+             aria-label="Filter by letter Q">Q</a>
         
-          <a href="#" class="az-filter-letter" data-letter="R" @click.prevent="setLetter('R')" :class="{ 'active': letter === 'R' }" aria-label="Filter by letter R">R</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="R" 
+             @click.prevent="setLetter('R')" 
+             :class="{ 
+               'active': letter === 'R',
+               'has-clubs': availableLetters.includes('R'),
+               'no-clubs': !availableLetters.includes('R')
+             }" 
+             aria-label="Filter by letter R">R</a>
         
-          <a href="#" class="az-filter-letter" data-letter="S" @click.prevent="setLetter('S')" :class="{ 'active': letter === 'S' }" aria-label="Filter by letter S">S</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="S" 
+             @click.prevent="setLetter('S')" 
+             :class="{ 
+               'active': letter === 'S',
+               'has-clubs': availableLetters.includes('S'),
+               'no-clubs': !availableLetters.includes('S')
+             }" 
+             aria-label="Filter by letter S">S</a>
         
-          <a href="#" class="az-filter-letter" data-letter="T" @click.prevent="setLetter('T')" :class="{ 'active': letter === 'T' }" aria-label="Filter by letter T">T</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="T" 
+             @click.prevent="setLetter('T')" 
+             :class="{ 
+               'active': letter === 'T',
+               'has-clubs': availableLetters.includes('T'),
+               'no-clubs': !availableLetters.includes('T')
+             }" 
+             aria-label="Filter by letter T">T</a>
         
-          <a href="#" class="az-filter-letter" data-letter="U" @click.prevent="setLetter('U')" :class="{ 'active': letter === 'U' }" aria-label="Filter by letter U">U</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="U" 
+             @click.prevent="setLetter('U')" 
+             :class="{ 
+               'active': letter === 'U',
+               'has-clubs': availableLetters.includes('U'),
+               'no-clubs': !availableLetters.includes('U')
+             }" 
+             aria-label="Filter by letter U">U</a>
         
-          <a href="#" class="az-filter-letter" data-letter="V" @click.prevent="setLetter('V')" :class="{ 'active': letter === 'V' }" aria-label="Filter by letter V">V</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="V" 
+             @click.prevent="setLetter('V')" 
+             :class="{ 
+               'active': letter === 'V',
+               'has-clubs': availableLetters.includes('V'),
+               'no-clubs': !availableLetters.includes('V')
+             }" 
+             aria-label="Filter by letter V">V</a>
         
-          <a href="#" class="az-filter-letter" data-letter="W" @click.prevent="setLetter('W')" :class="{ 'active': letter === 'W' }" aria-label="Filter by letter W">W</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="W" 
+             @click.prevent="setLetter('W')" 
+             :class="{ 
+               'active': letter === 'W',
+               'has-clubs': availableLetters.includes('W'),
+               'no-clubs': !availableLetters.includes('W')
+             }" 
+             aria-label="Filter by letter W">W</a>
         
-          <a href="#" class="az-filter-letter" data-letter="X" @click.prevent="setLetter('X')" :class="{ 'active': letter === 'X' }" aria-label="Filter by letter X">X</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="X" 
+             @click.prevent="setLetter('X')" 
+             :class="{ 
+               'active': letter === 'X',
+               'has-clubs': availableLetters.includes('X'),
+               'no-clubs': !availableLetters.includes('X')
+             }" 
+             aria-label="Filter by letter X">X</a>
         
-          <a href="#" class="az-filter-letter" data-letter="Y" @click.prevent="setLetter('Y')" :class="{ 'active': letter === 'Y' }" aria-label="Filter by letter Y">Y</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="Y" 
+             @click.prevent="setLetter('Y')" 
+             :class="{ 
+               'active': letter === 'Y',
+               'has-clubs': availableLetters.includes('Y'),
+               'no-clubs': !availableLetters.includes('Y')
+             }" 
+             aria-label="Filter by letter Y">Y</a>
         
-          <a href="#" class="az-filter-letter" data-letter="Z" @click.prevent="setLetter('Z')" :class="{ 'active': letter === 'Z' }" aria-label="Filter by letter Z">Z</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="Z" 
+             @click.prevent="setLetter('Z')" 
+             :class="{ 
+               'active': letter === 'Z',
+               'has-clubs': availableLetters.includes('Z'),
+               'no-clubs': !availableLetters.includes('Z')
+             }" 
+             aria-label="Filter by letter Z">Z</a>
         
       </div>
     </div>

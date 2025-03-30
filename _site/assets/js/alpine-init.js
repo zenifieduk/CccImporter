@@ -289,6 +289,7 @@ document.addEventListener('alpine:init', () => {
     locations: [],
     availableCategories: [], // Categories available after filtering
     availableLocations: [], // Locations available after filtering
+    availableLetters: [], // Letters that have clubs after filtering
     isLoading: true,
 
     async init() {
@@ -501,6 +502,10 @@ document.addEventListener('alpine:init', () => {
       // Start with a copy of all clubs
       let filtered = [...this.clubs];
 
+      // Keep a copy of the current filtering state without letter filter applied
+      // This will be used to determine available letters
+      let filteredForLetters = [...this.clubs];
+
       // Filter by search term (case insensitive)
       if (this.searchTerm && this.searchTerm.trim() !== '') {
         const term = this.searchTerm.toLowerCase().trim();
@@ -508,6 +513,16 @@ document.addEventListener('alpine:init', () => {
 
         filtered = filtered.filter(club => {
           // Check various fields for the search term
+          const titleMatch = club.title && club.title.toLowerCase().includes(term);
+          const cityMatch = club.city && club.city.toLowerCase().includes(term);
+          const stateMatch = club.state && club.state.toLowerCase().includes(term);
+          const marqueMatch = club.marque && club.marque.toLowerCase().includes(term);
+
+          return titleMatch || cityMatch || stateMatch || marqueMatch;
+        });
+
+        // Apply same filter to the filteredForLetters array
+        filteredForLetters = filteredForLetters.filter(club => {
           const titleMatch = club.title && club.title.toLowerCase().includes(term);
           const cityMatch = club.city && club.city.toLowerCase().includes(term);
           const stateMatch = club.state && club.state.toLowerCase().includes(term);
@@ -527,6 +542,11 @@ document.addEventListener('alpine:init', () => {
           club.category && club.category.toLowerCase() === this.category.toLowerCase()
         );
 
+        // Apply same filter to the filteredForLetters array
+        filteredForLetters = filteredForLetters.filter(club =>
+          club.category && club.category.toLowerCase() === this.category.toLowerCase()
+        );
+
         console.log('After category filtering:', filtered.length);
       }
 
@@ -538,8 +558,23 @@ document.addEventListener('alpine:init', () => {
           club.city && club.city === this.location
         );
 
+        // Apply same filter to the filteredForLetters array
+        filteredForLetters = filteredForLetters.filter(club =>
+          club.city && club.city === this.location
+        );
+
         console.log('After location filtering:', filtered.length);
       }
+
+      // Calculate available letters before applying letter filter
+      const availableLettersSet = new Set();
+      filteredForLetters.forEach(club => {
+        if (club.title && club.title.length > 0) {
+          const firstLetter = club.title.charAt(0).toUpperCase();
+          availableLettersSet.add(firstLetter);
+        }
+      });
+      this.availableLetters = [...availableLettersSet].sort();
 
       // Filter by letter (starts with)
       if (this.letter && this.letter !== '') {

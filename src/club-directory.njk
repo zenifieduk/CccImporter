@@ -89,7 +89,16 @@ pagination:
       <div class="az-filter-letters">
         <a href="#" class="az-filter-letter" data-letter="" @click.prevent="resetFilters()" :class="{ 'active': !letter }">All</a>
         {% for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
-          <a href="#" class="az-filter-letter" data-letter="{{ letter }}" @click.prevent="setLetter('{{ letter }}')" :class="{ 'active': letter === '{{ letter }}' }" aria-label="Filter by letter {{ letter }}">{{ letter }}</a>
+          <a href="#" 
+             class="az-filter-letter" 
+             data-letter="{{ letter }}" 
+             @click.prevent="setLetter('{{ letter }}')" 
+             :class="{ 
+               'active': letter === '{{ letter }}',
+               'has-clubs': availableLetters.includes('{{ letter }}'),
+               'no-clubs': !availableLetters.includes('{{ letter }}')
+             }" 
+             aria-label="Filter by letter {{ letter }}">{{ letter }}</a>
         {% endfor %}
       </div>
     </div>
