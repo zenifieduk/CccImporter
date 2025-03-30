@@ -119,12 +119,45 @@ eleventyComputed:
   </div>
   
   <div class="club-grid">
-    {% set cleanClub = { 
-      slug: club.slug, 
-      category: club.category 
-    } %}
-    {% set otherClubs = relatedClubs.getRelatedClubs(clubs, cleanClub, 3) %}
-    {% for otherClub in otherClubs %}
+    {# Get the current club details #}
+    {% set currentClubSlug = club.slug %}
+    {% set currentCategory = club.category %}
+    
+    {# First, find clubs with the same category #}
+    {% set categoryClubs = [] %}
+    {% set randomClubs = [] %}
+    {% set seenSlugs = [] %}
+    
+    {# Add the current club slug to the list of seen slugs #}
+    {% set seenSlugs = seenSlugs.concat([currentClubSlug]) %}
+    
+    {# First pass - get related clubs by category #}
+    {% for clubItem in clubs | shuffle %}
+      {% if clubItem.category == currentCategory and clubItem.slug != currentClubSlug and categoryClubs.length < 3 %}
+        {% if not seenSlugs.includes(clubItem.slug) %}
+          {% set categoryClubs = categoryClubs.concat([clubItem]) %}
+          {% set seenSlugs = seenSlugs.concat([clubItem.slug]) %}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
+    
+    {# Second pass - if we need more clubs, get random ones #}
+    {% if categoryClubs.length < 3 %}
+      {% for clubItem in clubs | shuffle %}
+        {% if clubItem.slug != currentClubSlug and randomClubs.length < (3 - categoryClubs.length) %}
+          {% if not seenSlugs.includes(clubItem.slug) %}
+            {% set randomClubs = randomClubs.concat([clubItem]) %}
+            {% set seenSlugs = seenSlugs.concat([clubItem.slug]) %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+    
+    {# Merge the two lists #}
+    {% set relatedClubsList = categoryClubs.concat(randomClubs) %}
+    
+    {# Render the clubs #}
+    {% for otherClub in relatedClubsList %}
       {% include "components/club-card-clean.njk" %}
     {% endfor %}
   </div>

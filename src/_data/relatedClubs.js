@@ -3,70 +3,90 @@
  */
 
 /**
+ * Handle the clubs parameter which might be a function or an array
+ * @param {Function|Array} clubs - The clubs data (either a function or an array)
+ * @returns {Array} - The clubs data as an array
+ */
+function getClubsArray(clubs) {
+  if (typeof clubs === 'function') {
+    return clubs();
+  }
+  return Array.isArray(clubs) ? clubs : [];
+}
+
+/**
  * Get related clubs by category or random clubs if no matching categories
- * @param {Array} clubs - All clubs data
+ * @param {Function|Array} clubs - All clubs data (either function or array)
  * @param {Object} currentClub - The current club being viewed
  * @param {Number} count - Number of related clubs to return
  * @returns {Array} - Array of related clubs
  */
 function getRelatedClubs(clubs, currentClub, count = 3) {
-  if (!currentClub || !clubs || !clubs.length) return [];
+  // Convert the clubs parameter to an array if it's a function
+  const clubsArray = getClubsArray(clubs);
+  
+  // Basic validation
+  if (!currentClub || !clubsArray.length) {
+    return [];
+  }
   
   // Make sure we're comparing with strings
-  const currentSlug = String(currentClub.slug);
+  const currentSlug = String(currentClub.slug || '');
   const currentCategory = currentClub.category;
   
   // Ensure currentSlug is valid
   if (!currentSlug) {
-    console.log('Warning: Current club has no slug');
     return [];
   }
   
-  // Filter out the current club by exact slug match
-  const otherClubs = clubs.filter(club => {
-    const clubSlug = String(club.slug || '');
-    return clubSlug !== '' && clubSlug !== currentSlug;
-  });
+  // Get the current club's full details
+  const fullCurrentClub = clubsArray.find(club => 
+    String(club.slug || '') === currentSlug
+  );
   
-  // Debugging
-  console.log(`Current club: ${currentSlug}`);
-  console.log(`Category: ${currentCategory}`);
-  console.log(`Other clubs count: ${otherClubs.length}`);
+  // Get the Rolls-Royce club by its unique slug
+  const paulerspuryClub = clubsArray.find(club => 
+    club.slug === 'rolls-royce-enthusiasts-club-paulerspury'
+  );
   
-  // If we have a category, try to find related clubs
-  let relatedClubs = [];
+  // Ensure we don't show duplicate clubs
+  const uniqueSlugs = new Set();
+  uniqueSlugs.add(currentSlug);
+  
+  // Find clubs with the same category directly
+  let sameCategory = [];
   if (currentCategory) {
-    relatedClubs = otherClubs
-      .filter(club => club.category === currentCategory)
-      .slice(0, count);
-    
-    console.log(`Found ${relatedClubs.length} related clubs by category`);
+    sameCategory = clubsArray.filter(club => {
+      const slug = String(club.slug || '');
+      // Ensure it's a different club and we haven't seen this slug before
+      if (slug !== currentSlug && !uniqueSlugs.has(slug) && club.category === currentCategory) {
+        uniqueSlugs.add(slug);
+        return true;
+      }
+      return false;
+    }).slice(0, count);
   }
   
-  // If we don't have enough related clubs by category, 
-  // add random clubs to reach the requested count
-  if (relatedClubs.length < count) {
-    // Shuffle the remaining clubs
-    const remainingClubs = otherClubs
-      .filter(club => {
-        // Make sure we're not including any clubs already in relatedClubs
-        return !relatedClubs.some(relatedClub => 
-          String(relatedClub.slug) === String(club.slug)
-        );
-      })
-      .sort(() => Math.random() - 0.5);
+  // If we don't have enough clubs by category, fill with random ones
+  const randomClubs = [];
+  if (sameCategory.length < count) {
+    // Randomize all clubs
+    const shuffled = [...clubsArray].sort(() => 0.5 - Math.random());
     
-    // Add random clubs until we reach the count
-    const neededCount = count - relatedClubs.length;
-    const randomSelection = remainingClubs.slice(0, neededCount);
-    relatedClubs = [...relatedClubs, ...randomSelection];
-    
-    console.log(`Added ${randomSelection.length} random clubs to reach count`);
+    // Take clubs until we have enough or run out
+    for (const club of shuffled) {
+      if (randomClubs.length + sameCategory.length >= count) break;
+      
+      const slug = String(club.slug || '');
+      if (slug !== currentSlug && !uniqueSlugs.has(slug)) {
+        uniqueSlugs.add(slug);
+        randomClubs.push(club);
+      }
+    }
   }
   
-  console.log(`Returning ${relatedClubs.length} clubs total`);
-  // Make sure we're not returning the current club
-  return relatedClubs.filter(club => String(club.slug) !== currentSlug);
+  // Combine both lists and make sure we have no more than requested count
+  return [...sameCategory, ...randomClubs].slice(0, count);
 }
 
 module.exports = {

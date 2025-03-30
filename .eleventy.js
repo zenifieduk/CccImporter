@@ -110,6 +110,30 @@ module.exports = function(eleventyConfig) {
     return str.substring(start, end);
   });
   
+  // Add shuffle filter for arrays
+  eleventyConfig.addFilter("shuffle", function(array) {
+    if (!array || !Array.isArray(array)) return [];
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  });
+  
+  // Add includes filter to check if a value is in an array
+  eleventyConfig.addFilter("includes", function(array, value) {
+    if (!array || !Array.isArray(array)) return false;
+    return array.includes(value);
+  });
+  
+  // Add concat filter to combine arrays
+  eleventyConfig.addFilter("concat", function(array1, array2) {
+    if (!array1 || !Array.isArray(array1)) return array2 || [];
+    if (!array2 || !Array.isArray(array2)) return array1 || [];
+    return [...array1, ...array2];
+  });
+  
   // Configure directory structure
   return {
     dir: {
