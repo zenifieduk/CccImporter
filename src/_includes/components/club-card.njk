@@ -1,57 +1,79 @@
-{% set clubUrl = "/club-directory/" + club.slug + "/" %}
-
-<div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-200 hover:shadow-lg hover:-translate-y-1">
-  <div class="aspect-w-16 h-48 relative">
-    <img 
-      src="{{ club.image | default('/assets/images/placeholder-club.jpg') }}" 
-      alt="{{ club.name }}"
-      class="w-full h-full object-cover"
-    >
-    {% if club.featured %}
-      <div class="absolute top-0 right-0 bg-accent text-dark-green px-3 py-1 font-medium">
-        Featured
+{% if club.featured %}
+<div class="club-card featured-club-card">
+  <div class="club-featured">Featured</div>
+  
+  <div class="club-image">
+    {% if club.imageUrl %}
+      <img src="{{ club.imageUrl }}" alt="{{ club.title }}">
+    {% else %}
+      <img src="/assets/images/club-placeholder.jpg" alt="{{ club.title }}">
+    {% endif %}
+  </div>
+  
+  <div class="club-content">
+    <h3 class="club-title">{{ club.title }}</h3>
+    
+    {% if club.city or club.state %}
+      <div class="club-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        {% if club.city %}{{ club.city }}{% endif %}
+        {% if club.city and club.state %}, {% endif %}
+        {% if club.state %}{{ club.state }}{% endif %}
+      </div>
+    {% endif %}
+    
+    {% if club.category %}
+      <div class="club-category">
+        <span class="category-tag">{{ club.category }}</span>
+        {% if club.marque %}
+          <span class="category-tag">{{ club.marque }}</span>
+        {% endif %}
       </div>
     {% endif %}
   </div>
   
-  <div class="p-5">
-    <h3 class="text-xl font-bold mb-2 font-serif text-dark-green">
-      <a href="{{ clubUrl }}" class="hover:text-light-green transition duration-150">
-        {{ club.name }}
-      </a>
-    </h3>
+  <div class="club-actions">
+    <a href="/club-directory/{{ club.slug | slugify }}-{{ club.id if club.id else (loop.index0 + 1) }}/" class="button button-primary">View Details</a>
+    {% if club.website %}
+     <!-- <a href="{{ club.website }}" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
+    {% endif %}
+  </div>
+</div>
+{% else %}
+<div class="club-card standard-club-card">
+  <div class="club-content">
+    <h3 class="club-title">{{ club.title }}</h3>
     
-    <p class="text-gray-600 mb-4 line-clamp-3">
-      {{ club.description }}
-    </p>
-    
-    {% if club.categories and club.categories.length > 0 %}
-      <div class="flex flex-wrap gap-2 mb-4">
-        {% for category in club.categories | limit(3) %}
-          <span class="inline-block bg-light-cream text-dark-green text-xs py-1 px-2 rounded-full">
-            {{ category }}
-          </span>
-        {% endfor %}
-        
-        {% if club.categories.length > 3 %}
-          <span class="inline-block bg-light-cream text-dark-green text-xs py-1 px-2 rounded-full">
-            +{{ club.categories.length - 3 }}
-          </span>
-        {% endif %}
+    {% if club.city or club.state %}
+      <div class="club-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        {% if club.city %}{{ club.city }}{% endif %}
+        {% if club.city and club.state %}, {% endif %}
+        {% if club.state %}{{ club.state }}{% endif %}
       </div>
     {% endif %}
     
-    <div class="flex justify-between items-center">
-      {% if club.founded %}
-        <span class="text-sm text-gray-500">Founded {{ club.founded }}</span>
-      {% endif %}
-      
-      <a 
-        href="{{ clubUrl }}" 
-        class="inline-block bg-accent hover:bg-accent-dark text-dark-green py-1 px-3 rounded text-sm uppercase tracking-wider font-serif transition duration-150"
-      >
-        View Club
-      </a>
-    </div>
+    {% if club.category %}
+      <div class="club-category">
+        <span class="category-tag">{{ club.category }}</span>
+        {% if club.marque %}
+          <span class="category-tag">{{ club.marque }}</span>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+  
+  <div class="club-actions">
+    <a href="/club-directory/{{ club.slug | slugify }}-{{ club.id if club.id else (loop.index0 + 1) }}/" class="button button-primary">View Details</a>
+    {% if club.website %}
+     <!-- <a href="{{ club.website }}" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
+    {% endif %}
   </div>
 </div>
+{% endif %}

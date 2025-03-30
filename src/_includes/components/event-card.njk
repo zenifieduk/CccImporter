@@ -1,77 +1,53 @@
-{% set eventUrl = "/events/" + event.slug + "/" %}
-
-<div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-200 hover:shadow-lg hover:-translate-y-1">
-  <div class="aspect-w-16 h-48 relative">
-    <img 
-      src="{{ event.image | default('/assets/images/placeholder-event.jpg') }}" 
-      alt="{{ event.title }}"
-      class="w-full h-full object-cover"
-    >
-    {% if event.featured %}
-      <div class="absolute top-0 right-0 bg-accent text-dark-green px-3 py-1 font-medium">
-        Featured
-      </div>
+<div class="event-card" x-data="eventDisplay">
+  {% if event.eventFeatured %}
+    <div class="event-featured">Featured</div>
+  {% endif %}
+  
+  <div class="event-image">
+    {% if event.eventImageUrl %}
+      <img src="{{ event.eventImageUrl }}" alt="{{ event.eventTitle }}">
+    {% else %}
+      <img src="/assets/images/event-placeholder.jpg" alt="{{ event.eventTitle }}">
     {% endif %}
     
-    <div class="absolute bottom-0 left-0 bg-dark-green text-white p-2">
-      <div class="text-center">
-        <span class="block text-xs font-medium">{{ event.date | formatDate('short') }}</span>
-        <span class="block text-sm font-bold">
-          {% if event.endDate and event.endDate != event.date %}
-            {{ event.date | date('dd') }}-{{ event.endDate | date('dd MMM') }}
-          {% endif %}
-        </span>
-      </div>
+    <div class="event-date">
+      <span class="event-month" x-text="formatMonth('{{ event.eventStartDateTime }}')"></span>
+      <span class="event-day" x-text="formatDay('{{ event.eventStartDateTime }}')"></span>
     </div>
   </div>
   
-  <div class="p-5">
-    <h3 class="text-xl font-bold mb-2 font-serif text-dark-green">
-      <a href="{{ eventUrl }}" class="hover:text-light-green transition duration-150">
-        {{ event.title }}
-      </a>
-    </h3>
+  <div class="event-content">
+    <h3 class="event-title">{{ event.eventTitle }}</h3>
     
-    <p class="text-gray-600 mb-3 line-clamp-2">
-      {{ event.description }}
-    </p>
-    
-    {% if event.location %}
-      <div class="flex items-start mb-3">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-dark-green mt-0.5 flex-shrink-0 mr-2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+    {% if event.eventCity or event.eventState %}
+      <div class="event-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
         </svg>
-        <div class="text-sm text-gray-600">
-          {% if event.location.name %}{{ event.location.name }},{% endif %}
-          {% if event.location.city %}{{ event.location.city }}{% endif %}
-        </div>
+        {% if event.eventCity %}{{ event.eventCity }}{% endif %}
+        {% if event.eventCity and event.eventState %}, {% endif %}
+        {% if event.eventState %}{{ event.eventState }}{% endif %}
       </div>
     {% endif %}
     
-    {% if event.categories and event.categories.length > 0 %}
-      <div class="flex flex-wrap gap-2 mb-4">
-        {% for category in event.categories | limit(2) %}
-          <span class="inline-block bg-light-cream text-dark-green text-xs py-1 px-2 rounded-full">
-            {{ category }}
-          </span>
-        {% endfor %}
-        
-        {% if event.categories.length > 2 %}
-          <span class="inline-block bg-light-cream text-dark-green text-xs py-1 px-2 rounded-full">
-            +{{ event.categories.length - 2 }}
-          </span>
-        {% endif %}
-      </div>
-    {% endif %}
-    
-    <div class="flex justify-end">
-      <a 
-        href="{{ eventUrl }}" 
-        class="inline-block bg-accent hover:bg-accent-dark text-dark-green py-1 px-3 rounded text-sm uppercase tracking-wider font-serif transition duration-150"
-      >
-        View Event
-      </a>
+    <div class="event-time">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </svg>
+      <span x-text="formatTime('{{ event.eventStartDateTime }}')"></span>
     </div>
+    
+    {% if event.eventTicketPrice %}
+      <div class="event-price">{{ event.eventTicketPrice }}</div>
+    {% endif %}
+  </div>
+  
+  <div class="event-actions">
+    <a href="/club-events/{{ event.eventSlug }}/" class="button button-primary">View Details</a>
+    {% if event.eventWebsite %}
+     <!-- <a href="{{ event.eventWebsite }}" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>-->
+    {% endif %}
   </div>
 </div>

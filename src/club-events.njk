@@ -1,298 +1,220 @@
 ---
-layout: layouts/base.njk
-title: Classic Car Events | Classic Car Clubs
-description: Find classic car events, rallies, shows, and gatherings near you. Browse our comprehensive calendar of classic car events across the UK and worldwide.
+layout: layouts/page.njk
+title: Classic Car Events
+description: Browse upcoming classic car shows, meets, and events across the UK.
 ---
 
-<div class="bg-dark-green text-white py-16">
-  <div class="container mx-auto px-4 text-center">
-    <h1 class="text-4xl md:text-5xl font-serif mb-4">Classic Car Events</h1>
-    <p class="text-xl max-w-3xl mx-auto">Discover upcoming classic car shows, rallies, and gatherings. Join fellow enthusiasts and showcase your vehicle at these exciting events.</p>
-  </div>
-</div>
+{% set breadcrumbs = [{ url: '/club-events/', label: 'Club Events' }] %}
 
-<div class="container mx-auto px-4 py-12" x-data="eventsDirectory">
-  <!-- Search and Filters -->
-  <div class="bg-light-cream p-6 rounded-lg mb-8">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <!-- Search bar -->
-      <div>
-        <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
-        <div class="relative">
-          <input 
-            type="text" 
-            id="search" 
-            x-model="searchQuery"
-            @input="search"
-            placeholder="Search by event name or description" 
-            class="w-full py-2 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
-          >
-          <button 
-            class="absolute right-0 top-0 h-full px-3 text-gray-500"
-            @click="searchQuery = ''; search()"
-            x-show="searchQuery"
-          >
-            <span class="sr-only">Clear search</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
+<div x-data="eventSearch" id="event-directory-app" x-init="initSearch()">
+  <section class="hero-section event-hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container">
+      <div class="breadcrumbs-container">
+        <ul class="breadcrumbs">
+          <li><a href="/" style="color: white;">Home</a></li>
+          <li><a href="/club-events/" style="color: white;">Club Events</a></li>
+        </ul>
       </div>
       
-      <!-- Category filter -->
-      <div>
-        <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
-        <select 
-          id="category" 
-          x-model="filters.category"
-          @change="filter"
-          class="w-full py-2 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
-        >
-          <option value="">All Categories</option>
-          <template x-for="category in availableFilters.categories" :key="category">
-            <option :value="category" x-text="category"></option>
-          </template>
-        </select>
-      </div>
-      
-      <!-- Month filter -->
-      <div>
-        <label for="month" class="block text-sm font-medium text-gray-700 mb-1">Month</label>
-        <select 
-          id="month" 
-          x-model="filters.month"
-          @change="filter"
-          class="w-full py-2 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
-        >
-          <option value="">Any Month</option>
-          <option value="01">January</option>
-          <option value="02">February</option>
-          <option value="03">March</option>
-          <option value="04">April</option>
-          <option value="05">May</option>
-          <option value="06">June</option>
-          <option value="07">July</option>
-          <option value="08">August</option>
-          <option value="09">September</option>
-          <option value="10">October</option>
-          <option value="11">November</option>
-          <option value="12">December</option>
-        </select>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Results Stats -->
-  <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
-    <div class="text-gray-600 mb-4 md:mb-0">
-      <span x-text="filteredEvents.length"></span> events found
-      <template x-if="filters.category">
-        <span> in <span x-text="filters.category"></span></span>
-      </template>
-      <template x-if="filters.month">
-        <span> in <span x-text="formatMonth(filters.month)"></span></span>
-      </template>
-      <template x-if="searchQuery">
-        <span> matching '<span x-text="searchQuery"></span>'</span>
-      </template>
-    </div>
-    
-    <button 
-      @click="resetFilters"
-      class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
-      x-show="isFiltered"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-      </svg>
-      Reset Filters
-    </button>
-  </div>
-  
-  <template x-if="filteredEvents.length === 0">
-    <div class="text-center py-12">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 text-gray-300 mx-auto mb-4">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-      </svg>
-      <h3 class="text-xl font-medium text-gray-900 mb-2">No events found</h3>
-      <p class="text-gray-600 max-w-md mx-auto">
-        We couldn't find any events matching your search criteria. Please try adjusting your filters or search term.
-      </p>
-      <button 
-        @click="resetFilters"
-        class="mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-dark-green hover:bg-light-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
-      >
-        Reset All Filters
-      </button>
-    </div>
-  </template>
-  
-  <template x-if="filteredEvents.length > 0">
-    <!-- Events List -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-      <template x-for="event in paginatedEvents" :key="event.id">
-        <div>
-          <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-200 hover:shadow-lg hover:-translate-y-1">
-            <div class="aspect-w-16 h-48 relative">
-              <img 
-                :src="event.image || '/assets/images/placeholder-event.jpg'" 
-                :alt="event.title"
-                class="w-full h-full object-cover"
-              >
-              <template x-if="event.featured">
-                <div class="absolute top-0 right-0 bg-accent text-dark-green px-3 py-1 font-medium">
-                  Featured
-                </div>
-              </template>
-              
-              <div class="absolute bottom-0 left-0 bg-dark-green text-white p-2">
-                <div class="text-center">
-                  <span class="block text-xs font-medium" x-text="formatDay(event.date)"></span>
-                  <template x-if="event.endDate && event.endDate !== event.date">
-                    <span class="block text-sm font-bold" x-text="formatDay(event.date) + '-' + formatDay(event.endDate)"></span>
-                  </template>
-                </div>
-              </div>
-            </div>
-            
-            <div class="p-5">
-              <h3 class="text-xl font-bold mb-2 font-serif text-dark-green">
-                <a :href="'/events/' + event.slug + '/'" class="hover:text-light-green transition duration-150" x-text="event.title"></a>
-              </h3>
-              
-              <p class="text-gray-600 mb-3 line-clamp-2" x-text="event.description"></p>
-              
-              <template x-if="event.location">
-                <div class="flex items-start mb-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-dark-green mt-0.5 flex-shrink-0 mr-2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                  </svg>
-                  <div class="text-sm text-gray-600">
-                    <template x-if="event.location.name">
-                      <span x-text="event.location.name + ', '"></span>
-                    </template>
-                    <template x-if="event.location.city">
-                      <span x-text="event.location.city"></span>
-                    </template>
+      <div class="hero-content event-hero-content">
+        <h1 class="hero-title">Classic Car Events</h1>
+        <p class="hero-subtitle">Find classic car shows, meets, and events across the UK</p>
+        
+        <div class="hero-search">
+          <div class="search-container event-search">
+            <form class="search-form" @submit.prevent="search()">
+              <div class="search-grid">
+                <div class="custom-search-group">
+                  <label for="search-term">Event Title</label>
+                  <div class="input-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="search-term" class="custom-search-input search-term" placeholder="Enter event title..." x-model="searchTerm">
                   </div>
                 </div>
-              </template>
-              
-              <template x-if="event.categories && event.categories.length > 0">
-                <div class="flex flex-wrap gap-2 mb-4">
-                  <template x-for="(category, index) in event.categories.slice(0, 2)" :key="index">
-                    <span class="inline-block bg-light-cream text-dark-green text-xs py-1 px-2 rounded-full" x-text="category"></span>
-                  </template>
-                  
-                  <template x-if="event.categories.length > 2">
-                    <span class="inline-block bg-light-cream text-dark-green text-xs py-1 px-2 rounded-full" x-text="'+' + (event.categories.length - 2)"></span>
-                  </template>
+                
+                <div class="custom-search-group">
+                  <label for="search-category">Event Type</label>
+                  <div class="input-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="3" y1="9" x2="21" y2="9"></line>
+                      <line x1="9" y1="21" x2="9" y2="9"></line>
+                    </svg>
+                    <select id="search-category" class="custom-search-input search-category" x-model="category">
+                      <option value="">All Event Types</option>
+                      <template x-for="cat in availableCategories" :key="cat">
+                        <option :value="cat" :selected="cat === category" x-text="cat"></option>
+                      </template>
+                    </select>
+                  </div>
                 </div>
-              </template>
-              
-              <div class="flex justify-end">
-                <a 
-                  :href="'/events/' + event.slug + '/'" 
-                  class="inline-block bg-accent hover:bg-accent-dark text-dark-green py-1 px-3 rounded text-sm uppercase tracking-wider font-serif transition duration-150"
-                >
-                  View Event
-                </a>
+                
+                <div class="custom-search-group">
+                  <label for="search-location">Location</label>
+                  <div class="input-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <select id="search-location" class="custom-search-input search-location" x-model="location">
+                      <option value="">All Locations</option>
+                      <template x-for="loc in availableLocations" :key="loc">
+                        <option :value="loc" :selected="loc === location" x-text="loc"></option>
+                      </template>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="search-actions">
+                  <button type="submit" class="search-button">Search</button>
+                  <button type="button" class="reset-button" @click.prevent="reset()">Reset</button>
+                </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
-      </template>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div x-show="searchTerm || category || location" class="search-status">
+      <p x-text="`Showing ${filteredEvents.length} events`"></p>
+      <button @click="resetFilters()" class="exit-search-button">Clear All Filters</button>
     </div>
     
-    <!-- Pagination -->
-    <template x-if="pageCount > 1">
-      <div class="flex justify-center">
-        <nav class="inline-flex rounded-md shadow-sm" aria-label="Pagination">
-          <button
-            @click="goToPage(currentPage - 1)"
-            :disabled="currentPage === 1"
-            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <span class="sr-only">Previous</span>
-            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-            </svg>
-            <span class="ml-1 hidden sm:inline">Previous</span>
-          </button>
-          
-          <template x-for="pageNumber in pageNumbers" :key="pageNumber">
-            <button
-              @click="goToPage(pageNumber)"
-              :class="{
-                'bg-dark-green text-white': pageNumber === currentPage,
-                'bg-white text-gray-500 hover:bg-gray-50': pageNumber !== currentPage
-              }"
-              class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium focus:z-10 focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
-              x-text="pageNumber"
-            ></button>
+    <div x-show="isLoading" class="loading-indicator">Loading...</div>
+    
+    <div x-cloak x-show="!isLoading">
+      <div class="featured-section" x-show="filteredEvents.some(event => event.eventFeatured)">
+        <h2>Featured Events</h2>
+        
+        <div class="event-grid">
+          <template x-for="event in filteredEvents.filter(e => e.eventFeatured).slice(0, 8)" :key="event.eventSlug">
+            <div class="event-card" x-data="eventDisplay">
+              <div x-show="event.eventFeatured" class="event-featured">Featured</div>
+              
+              <div class="event-image">
+                <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
+                
+                <div class="event-date">
+                  <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
+                  <span class="event-day" x-text="formatDay(event.eventStartDateTime)"></span>
+                </div>
+              </div>
+              
+              <div class="event-content">
+                <h3 class="event-title" x-text="event.eventTitle"></h3>
+                
+                <div class="event-location" x-show="event.eventCity || event.eventState">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <span x-text="[event.eventCity, event.eventState].filter(Boolean).join(', ')"></span>
+                </div>
+                
+                <div class="event-time">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span x-text="formatTime(event.eventStartDateTime)"></span>
+                </div>
+                
+                <div class="event-price" x-show="event.eventTicketPrice" x-text="event.eventTicketPrice"></div>
+              </div>
+              
+              <div class="event-actions">
+                <a :href="'/club-events/' + event.eventSlug + '/'" class="button button-primary">View Details</a>
+               <!-- <a x-show="event.eventWebsite" :href="event.eventWebsite" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>-->
+              </div>
+            </div>
           </template>
-          
-          <button
-            @click="goToPage(currentPage + 1)"
-            :disabled="currentPage === pageCount"
-            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <span class="mr-1 hidden sm:inline">Next</span>
-            <span class="sr-only">Next</span>
-            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10l-3.293-3.293a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-            </svg>
-          </button>
-        </nav>
+        </div>
       </div>
-    </template>
-  </template>
-
-  <!-- Event Submission Banner -->
-  <div class="mt-12 py-8 px-6 bg-light-cream rounded-lg flex flex-col md:flex-row items-center justify-between">
-    <div class="md:w-2/3 mb-6 md:mb-0">
-      <h2 class="text-2xl font-serif font-bold text-dark-green mb-2">Hosting a classic car event?</h2>
-      <p class="text-gray-700">
-        Submit your event details to be featured in our directory. Reach thousands of classic car enthusiasts across the country.
-      </p>
-    </div>
-    <div>
-      <a 
-        href="/submit-event/" 
-        class="inline-block bg-accent hover:bg-accent-dark text-dark-green py-3 px-6 rounded uppercase text-sm tracking-wider font-serif transition duration-150"
-      >
-        Submit Event
-      </a>
+      
+      <!-- Ad Banner Section -->
+      {% include "components/ad-banner.njk" %}
+      
+      <div x-data="pagination" x-effect="items = filteredEvents.filter(e => !e.eventFeatured)">
+        <h2>Upcoming Events</h2>
+        
+        <div class="event-grid" x-show="paginatedItems.length > 0">
+          <template x-for="event in paginatedItems" :key="event.eventSlug">
+            <div class="event-card" x-data="eventDisplay">
+              <div class="event-image">
+                <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
+                
+                <div class="event-date">
+                  <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
+                  <span class="event-day" x-text="formatDay(event.eventStartDateTime)"></span>
+                </div>
+              </div>
+              
+              <div class="event-content">
+                <h3 class="event-title" x-text="event.eventTitle"></h3>
+                
+                <div class="event-location" x-show="event.eventCity || event.eventState">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <span x-text="[event.eventCity, event.eventState].filter(Boolean).join(', ')"></span>
+                </div>
+                
+                <div class="event-time">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span x-text="formatTime(event.eventStartDateTime)"></span>
+                </div>
+                
+                <div class="event-price" x-show="event.eventTicketPrice" x-text="event.eventTicketPrice"></div>
+              </div>
+              
+              <div class="event-actions">
+                <a :href="'/club-events/' + event.eventSlug + '/'" class="button button-primary">View Details</a>
+              <!--  <a x-show="event.eventWebsite" :href="event.eventWebsite" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>-->
+              </div>
+            </div>
+          </template>
+        </div>
+        
+        <div x-show="paginatedItems.length === 0" class="no-results">
+          <p>No events found matching your criteria. Please try different search terms or <button @click="reset" class="reset-link">reset filters</button>.</p>
+        </div>
+        
+        <div class="pagination" x-show="totalPages > 1">
+          <div class="pagination-controls">
+            <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="pagination-arrow pagination-prev" :class="{ 'disabled': currentPage === 1 }">
+              &laquo; Previous
+            </button>
+            
+            <div class="pagination-numbers">
+              <template x-for="(pageNumber, index) in pageNumbers" :key="index">
+                <template x-if="pageNumber === '...'">
+                  <span class="pagination-ellipsis">...</span>
+                </template>
+                <template x-if="pageNumber !== '...'">
+                  <button @click="goToPage(pageNumber)" class="pagination-number" :class="{ 'active': pageNumber === currentPage }" x-text="pageNumber"></button>
+                </template>
+              </template>
+            </div>
+            
+            <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-arrow pagination-next" :class="{ 'disabled': currentPage === totalPages }">
+              Next &raquo;
+            </button>
+          </div>
+          
+          <div class="pagination-info" x-text="`Showing ${startIndex} to ${endIndex} of ${totalItems} events`"></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
-<script>
-  document.addEventListener('alpine:init', () => {
-    Alpine.store('eventsData', {
-      initialEvents: {{ mergedEvents | json | safe }}
-    });
-  });
-
-  document.addEventListener('DOMContentLoaded', function() {
-    // Create a custom event that will be triggered after Alpine is loaded
-    document.addEventListener('alpine:initialized', function() {
-      const eventsEl = document.querySelector('[x-data="eventsDirectory"]');
-      if (eventsEl && eventsEl.__x) {
-        const eventsObj = eventsEl.__x.getUnobservedData();
-        // Initialize directly with server-side data instead of fetching
-        eventsObj.events = Alpine.store('eventsData').initialEvents;
-        eventsObj.filteredEvents = Alpine.store('eventsData').initialEvents;
-        
-        // Extract unique categories for filters
-        const allCategories = eventsObj.events.flatMap(event => event.categories || []);
-        eventsObj.availableFilters.categories = [...new Set(allCategories)].sort();
-        
-        // Update the Alpine component
-        eventsEl.__x.updateElements();
-      }
-    });
-  });
-</script>

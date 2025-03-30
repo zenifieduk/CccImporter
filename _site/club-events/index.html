@@ -1,846 +1,469 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Classic Car Events | Classic Car Clubs</title>
-  <meta name="description" content="Find classic car events, rallies, shows, and gatherings near you. Browse our comprehensive calendar of classic car events across the UK and worldwide.">
-  
-  <!-- Favicon -->
-  <link rel="icon" href="/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-  
-  <!-- CSS -->
-  <link rel="stylesheet" href="/assets/css/styles.css">
-  
-  <!-- Typography -->
+  <title>Classic Car Events | Classic Car Clubs | UK Directory</title>
+  <meta name="description" content="Browse upcoming classic car shows, meets, and events across the UK.">
+  <link rel="icon" type="image/svg+xml" href="/assets/images/ccc-logo.svg">
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Classic Car Clubs Directory",
-      "url": "https://classiccars.club"
-    }
-  </script>
-  
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/ad-banners.css">
+
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script src="/assets/js/alpine-init.js" defer></script>
-  
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            'dark-green': '#0f4c3a',
-            'light-green': '#1a7f62',
-            'accent': '#9ee0d8',
-            'accent-dark': '#79c7bd',
-            'light-cream': '#f9f7f0'
-          },
-          fontFamily: {
-            'sans': ['Public Sans', 'sans-serif'],
-            'serif': ['EB Garamond', 'serif']
-          }
-        }
-      }
-    }
-  </script>
-  <style type="text/tailwindcss">
-    @layer utilities {
-      .line-clamp-2 {
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-      .line-clamp-3 {
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-      }
-      .aspect-w-16 {
-        position: relative;
-        padding-bottom: 56.25%;
-      }
-      .aspect-w-16 img {
-        position: absolute;
-        height: 100%;
-        width: 100%;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        object-fit: cover;
-      }
-    }
-    
-    body {
-      font-family: 'EB Garamond', serif;
-    }
-    
-    h1, h2, h3, h4, h5, h6 {
-      font-family: 'EB Garamond', serif;
-    }
-    
-    nav, button, .button, input, select {
-      font-family: 'Public Sans', sans-serif;
-    }
-    
-    /* Header transparency for home hero */
-    .header-transparent {
-      background-color: rgba(15, 76, 58, 0.8); /* dark-green with opacity */
-    }
-  </style>
-  
-  
+  <script src="/assets/js/alpine-init.js"></script>
 </head>
-<body class="min-h-screen flex flex-col bg-white text-gray-900">
-  <!-- Header -->
-  <header class="bg-dark-green text-white" x-data="mobileMenu">
-    <div class="container mx-auto px-4">
-      <div class="flex justify-between items-center py-4">
-        <!-- Logo -->
-        <a href="/" class="text-2xl font-bold text-white font-serif">
-          Classic Car Clubs
-        </a>
-        
-        <!-- Desktop Navigation -->
-        <nav class="hidden md:flex space-x-6">
-          
-            <a 
-              href="/" 
-              class="text-white hover:text-accent font-medium transition duration-150"
-              
-            >
-              Home
-            </a>
-          
-            <a 
-              href="/club-directory/" 
-              class="text-white hover:text-accent font-medium transition duration-150"
-              
-            >
-              Clubs
-            </a>
-          
-            <a 
-              href="/club-events/" 
-              class="text-white hover:text-accent font-medium transition duration-150"
-              aria-current="page"
-            >
-              Events
-            </a>
-          
-            <a 
-              href="/about/" 
-              class="text-white hover:text-accent font-medium transition duration-150"
-              
-            >
-              About
-            </a>
-          
-            <a 
-              href="/contact/" 
-              class="text-white hover:text-accent font-medium transition duration-150"
-              
-            >
-              Contact
-            </a>
-          
-            <a 
-              href="/" 
-              class="text-white hover:text-accent font-medium transition duration-150"
-              
-            >
-              Home
-            </a>
-          
-            <a 
-              href="/club-directory/" 
-              class="text-white hover:text-accent font-medium transition duration-150"
-              
-            >
-              Club Directory
-            </a>
-          
-            <a 
-              href="/club-events/" 
-              class="text-white hover:text-accent font-medium transition duration-150"
-              aria-current="page"
-            >
-              Events
-            </a>
-          
-            <a 
-              href="/about/" 
-              class="text-white hover:text-accent font-medium transition duration-150"
-              
-            >
-              About Us
-            </a>
-          
-            <a 
-              href="/contact/" 
-              class="text-white hover:text-accent font-medium transition duration-150"
-              
-            >
-              Contact
-            </a>
-          
-        </nav>
-        
-        <!-- Mobile Menu Button -->
-        <button 
-          @click="toggle()"
-          class="md:hidden text-white focus:outline-none"
-          aria-label="Toggle Menu"
-        >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            class="h-6 w-6" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor"
-          >
-            <path 
-              x-show="!open"
-              stroke-linecap="round" 
-              stroke-linejoin="round" 
-              stroke-width="2" 
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-            <path 
-              x-show="open"
-              stroke-linecap="round" 
-              stroke-linejoin="round" 
-              stroke-width="2" 
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-      </div>
-    </div>
-    
-    <!-- Mobile Navigation -->
-    <div 
-      x-show="open" 
-      x-transition:enter="transition ease-out duration-200"
-      x-transition:enter-start="opacity-0 -translate-y-4"
-      x-transition:enter-end="opacity-100 translate-y-0"
-      x-transition:leave="transition ease-in duration-150"
-      x-transition:leave-start="opacity-100 translate-y-0"
-      x-transition:leave-end="opacity-0 -translate-y-4"
-      class="md:hidden bg-green-900"
-    >
-      <nav class="container mx-auto px-4 py-4 flex flex-col space-y-4">
-        
-          <a 
-            href="/" 
-            @click="close()"
-            class="text-white hover:text-accent py-2 font-medium transition duration-150"
-            
-          >
-            Home
-          </a>
-        
-          <a 
-            href="/club-directory/" 
-            @click="close()"
-            class="text-white hover:text-accent py-2 font-medium transition duration-150"
-            
-          >
-            Clubs
-          </a>
-        
-          <a 
-            href="/club-events/" 
-            @click="close()"
-            class="text-white hover:text-accent py-2 font-medium transition duration-150"
-            aria-current="page"
-          >
-            Events
-          </a>
-        
-          <a 
-            href="/about/" 
-            @click="close()"
-            class="text-white hover:text-accent py-2 font-medium transition duration-150"
-            
-          >
-            About
-          </a>
-        
-          <a 
-            href="/contact/" 
-            @click="close()"
-            class="text-white hover:text-accent py-2 font-medium transition duration-150"
-            
-          >
-            Contact
-          </a>
-        
-          <a 
-            href="/" 
-            @click="close()"
-            class="text-white hover:text-accent py-2 font-medium transition duration-150"
-            
-          >
-            Home
-          </a>
-        
-          <a 
-            href="/club-directory/" 
-            @click="close()"
-            class="text-white hover:text-accent py-2 font-medium transition duration-150"
-            
-          >
-            Club Directory
-          </a>
-        
-          <a 
-            href="/club-events/" 
-            @click="close()"
-            class="text-white hover:text-accent py-2 font-medium transition duration-150"
-            aria-current="page"
-          >
-            Events
-          </a>
-        
-          <a 
-            href="/about/" 
-            @click="close()"
-            class="text-white hover:text-accent py-2 font-medium transition duration-150"
-            
-          >
-            About Us
-          </a>
-        
-          <a 
-            href="/contact/" 
-            @click="close()"
-            class="text-white hover:text-accent py-2 font-medium transition duration-150"
-            
-          >
-            Contact
-          </a>
-        
-      </nav>
-    </div>
-  </header>
-  
-  <!-- Main Content -->
-  <main class="flex-grow">
-    
-      
-<div class="bg-dark-green text-white py-16">
-  <div class="container mx-auto px-4 text-center">
-    <h1 class="text-4xl md:text-5xl font-serif mb-4">Classic Car Events</h1>
-    <p class="text-xl max-w-3xl mx-auto">Discover upcoming classic car shows, rallies, and gatherings. Join fellow enthusiasts and showcase your vehicle at these exciting events.</p>
-  </div>
-</div>
-
-<div class="container mx-auto px-4 py-12" x-data="eventsDirectory">
-  <!-- Search and Filters -->
-  <div class="bg-light-cream p-6 rounded-lg mb-8">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <!-- Search bar -->
-      <div>
-        <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
-        <div class="relative">
-          <input 
-            type="text" 
-            id="search" 
-            x-model="searchQuery"
-            @input="search"
-            placeholder="Search by event name or description" 
-            class="w-full py-2 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
-          >
-          <button 
-            class="absolute right-0 top-0 h-full px-3 text-gray-500"
-            @click="searchQuery = ''; search()"
-            x-show="searchQuery"
-          >
-            <span class="sr-only">Clear search</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-      </div>
-      
-      <!-- Category filter -->
-      <div>
-        <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
-        <select 
-          id="category" 
-          x-model="filters.category"
-          @change="filter"
-          class="w-full py-2 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
-        >
-          <option value="">All Categories</option>
-          <template x-for="category in availableFilters.categories" :key="category">
-            <option :value="category" x-text="category"></option>
-          </template>
-        </select>
-      </div>
-      
-      <!-- Month filter -->
-      <div>
-        <label for="month" class="block text-sm font-medium text-gray-700 mb-1">Month</label>
-        <select 
-          id="month" 
-          x-model="filters.month"
-          @change="filter"
-          class="w-full py-2 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
-        >
-          <option value="">Any Month</option>
-          <option value="01">January</option>
-          <option value="02">February</option>
-          <option value="03">March</option>
-          <option value="04">April</option>
-          <option value="05">May</option>
-          <option value="06">June</option>
-          <option value="07">July</option>
-          <option value="08">August</option>
-          <option value="09">September</option>
-          <option value="10">October</option>
-          <option value="11">November</option>
-          <option value="12">December</option>
-        </select>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Results Stats -->
-  <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
-    <div class="text-gray-600 mb-4 md:mb-0">
-      <span x-text="filteredEvents.length"></span> events found
-      <template x-if="filters.category">
-        <span> in <span x-text="filters.category"></span></span>
-      </template>
-      <template x-if="filters.month">
-        <span> in <span x-text="formatMonth(filters.month)"></span></span>
-      </template>
-      <template x-if="searchQuery">
-        <span> matching '<span x-text="searchQuery"></span>'</span>
-      </template>
-    </div>
-    
-    <button 
-      @click="resetFilters"
-      class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
-      x-show="isFiltered"
-    >
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-      </svg>
-      Reset Filters
-    </button>
-  </div>
-  
-  <template x-if="filteredEvents.length === 0">
-    <div class="text-center py-12">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 text-gray-300 mx-auto mb-4">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-      </svg>
-      <h3 class="text-xl font-medium text-gray-900 mb-2">No events found</h3>
-      <p class="text-gray-600 max-w-md mx-auto">
-        We couldn't find any events matching your search criteria. Please try adjusting your filters or search term.
-      </p>
-      <button 
-        @click="resetFilters"
-        class="mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-dark-green hover:bg-light-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
-      >
-        Reset All Filters
-      </button>
-    </div>
-  </template>
-  
-  <template x-if="filteredEvents.length > 0">
-    <!-- Events List -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-      <template x-for="event in paginatedEvents" :key="event.id">
-        <div>
-          <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-200 hover:shadow-lg hover:-translate-y-1">
-            <div class="aspect-w-16 h-48 relative">
-              <img 
-                :src="event.image || '/assets/images/placeholder-event.jpg'" 
-                :alt="event.title"
-                class="w-full h-full object-cover"
-              >
-              <template x-if="event.featured">
-                <div class="absolute top-0 right-0 bg-accent text-dark-green px-3 py-1 font-medium">
-                  Featured
-                </div>
-              </template>
-              
-              <div class="absolute bottom-0 left-0 bg-dark-green text-white p-2">
-                <div class="text-center">
-                  <span class="block text-xs font-medium" x-text="formatDay(event.date)"></span>
-                  <template x-if="event.endDate && event.endDate !== event.date">
-                    <span class="block text-sm font-bold" x-text="formatDay(event.date) + '-' + formatDay(event.endDate)"></span>
-                  </template>
-                </div>
-              </div>
-            </div>
-            
-            <div class="p-5">
-              <h3 class="text-xl font-bold mb-2 font-serif text-dark-green">
-                <a :href="'/events/' + event.slug + '/'" class="hover:text-light-green transition duration-150" x-text="event.title"></a>
-              </h3>
-              
-              <p class="text-gray-600 mb-3 line-clamp-2" x-text="event.description"></p>
-              
-              <template x-if="event.location">
-                <div class="flex items-start mb-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-dark-green mt-0.5 flex-shrink-0 mr-2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
-                  </svg>
-                  <div class="text-sm text-gray-600">
-                    <template x-if="event.location.name">
-                      <span x-text="event.location.name + ', '"></span>
-                    </template>
-                    <template x-if="event.location.city">
-                      <span x-text="event.location.city"></span>
-                    </template>
-                  </div>
-                </div>
-              </template>
-              
-              <template x-if="event.categories && event.categories.length > 0">
-                <div class="flex flex-wrap gap-2 mb-4">
-                  <template x-for="(category, index) in event.categories.slice(0, 2)" :key="index">
-                    <span class="inline-block bg-light-cream text-dark-green text-xs py-1 px-2 rounded-full" x-text="category"></span>
-                  </template>
-                  
-                  <template x-if="event.categories.length > 2">
-                    <span class="inline-block bg-light-cream text-dark-green text-xs py-1 px-2 rounded-full" x-text="'+' + (event.categories.length - 2)"></span>
-                  </template>
-                </div>
-              </template>
-              
-              <div class="flex justify-end">
-                <a 
-                  :href="'/events/' + event.slug + '/'" 
-                  class="inline-block bg-accent hover:bg-accent-dark text-dark-green py-1 px-3 rounded text-sm uppercase tracking-wider font-serif transition duration-150"
-                >
-                  View Event
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </template>
-    </div>
-    
-    <!-- Pagination -->
-    <template x-if="pageCount > 1">
-      <div class="flex justify-center">
-        <nav class="inline-flex rounded-md shadow-sm" aria-label="Pagination">
-          <button
-            @click="goToPage(currentPage - 1)"
-            :disabled="currentPage === 1"
-            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <span class="sr-only">Previous</span>
-            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-            </svg>
-            <span class="ml-1 hidden sm:inline">Previous</span>
-          </button>
-          
-          <template x-for="pageNumber in pageNumbers" :key="pageNumber">
-            <button
-              @click="goToPage(pageNumber)"
-              :class="{
-                'bg-dark-green text-white': pageNumber === currentPage,
-                'bg-white text-gray-500 hover:bg-gray-50': pageNumber !== currentPage
-              }"
-              class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium focus:z-10 focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
-              x-text="pageNumber"
-            ></button>
-          </template>
-          
-          <button
-            @click="goToPage(currentPage + 1)"
-            :disabled="currentPage === pageCount"
-            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <span class="mr-1 hidden sm:inline">Next</span>
-            <span class="sr-only">Next</span>
-            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10l-3.293-3.293a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-            </svg>
-          </button>
-        </nav>
-      </div>
-    </template>
-  </template>
-
-  <!-- Event Submission Banner -->
-  <div class="mt-12 py-8 px-6 bg-light-cream rounded-lg flex flex-col md:flex-row items-center justify-between">
-    <div class="md:w-2/3 mb-6 md:mb-0">
-      <h2 class="text-2xl font-serif font-bold text-dark-green mb-2">Hosting a classic car event?</h2>
-      <p class="text-gray-700">
-        Submit your event details to be featured in our directory. Reach thousands of classic car enthusiasts across the country.
-      </p>
-    </div>
-    <div>
-      <a 
-        href="/submit-event/" 
-        class="inline-block bg-accent hover:bg-accent-dark text-dark-green py-3 px-6 rounded uppercase text-sm tracking-wider font-serif transition duration-150"
-      >
-        Submit Event
+<body class="">
+  <header class="site-header" x-data="mobileMenu">
+  <div class="container">
+    <div class="logo">
+      <a href="/">
+        <img class="logo-image" src="/assets/images/ccc-logo.svg" alt="Classic Car Clubs | UK Directory">
       </a>
     </div>
-  </div>
-</div>
-
-<script>
-  document.addEventListener('alpine:init', () => {
-    Alpine.store('eventsData', {
-      initialEvents: 
-    });
-  });
-
-  document.addEventListener('DOMContentLoaded', function() {
-    // Create a custom event that will be triggered after Alpine is loaded
-    document.addEventListener('alpine:initialized', function() {
-      const eventsEl = document.querySelector('[x-data="eventsDirectory"]');
-      if (eventsEl && eventsEl.__x) {
-        const eventsObj = eventsEl.__x.getUnobservedData();
-        // Initialize directly with server-side data instead of fetching
-        eventsObj.events = Alpine.store('eventsData').initialEvents;
-        eventsObj.filteredEvents = Alpine.store('eventsData').initialEvents;
-        
-        // Extract unique categories for filters
-        const allCategories = eventsObj.events.flatMap(event => event.categories || []);
-        eventsObj.availableFilters.categories = [...new Set(allCategories)].sort();
-        
-        // Update the Alpine component
-        eventsEl.__x.updateElements();
-      }
-    });
-  });
-</script>
     
-  </main>
+    <nav class="desktop-nav">
+      <ul>
+        
+          <li>
+            <a href="/" >
+              Home
+            </a>
+          </li>
+        
+          <li>
+            <a href="/club-directory/" >
+              Club Directory
+            </a>
+          </li>
+        
+          <li>
+            <a href="/club-events/" aria-current="page">
+              Club Events
+            </a>
+          </li>
+        
+          <li>
+            <a href="/contact/" >
+              Contact
+            </a>
+          </li>
+        
+      </ul>
+    </nav>
+    
+    <button class="mobile-menu-toggle" @click="toggle" aria-label="Toggle menu">
+      <span class="hamburger-icon">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </span>
+    </button>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" :class="{ 'active': isOpen }" x-cloak>
+      <div class="mobile-menu-container">
+        <div class="mobile-menu-header">
+          <div class="logo">
+            <a href="/" @click="close">
+              <img class="logo-image" src="/assets/images/ccc-logo.svg" alt="Classic Car Clubs | UK Directory">
+            </a>
+          </div>
+          
+          <button class="mobile-menu-close" @click="close" aria-label="Close menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+        
+        <nav class="mobile-nav">
+          <ul>
+            
+              <li>
+                <a href="/" @click="close" >
+                  Home
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/" @click="close" >
+                  Club Directory
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+              <li>
+                <a href="/club-events/" @click="close" aria-current="page">
+                  Club Events
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+              <li>
+                <a href="/contact/" @click="close" >
+                  Contact
+                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+              </li>
+            
+          </ul>
+        </nav>
+        
+        <div class="mobile-menu-footer">
+          <p class="cta-text">Connect with classic car enthusiasts</p>
+          <a href="/contact/" class="contact-link" @click="close">Get in touch</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+  <main>
+    
+<div class="container">
   
-  <!-- Footer -->
-  <footer class="bg-dark-green text-white py-12">
-    <div class="container mx-auto px-4">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <!-- About -->
-        <div>
-          <h3 class="text-xl font-bold mb-4 font-serif">About Us</h3>
-          <p class="mb-4">Classic Car Clubs is the premier directory for car enthusiasts. Find your perfect club, connect with fellow enthusiasts, and discover events.</p>
-          <div class="flex space-x-4">
-            
-              <a href="https://twitter.com/classiccarclubs" target="_blank" rel="noopener noreferrer" class="text-white hover:text-accent transition duration-150">
-                <span class="sr-only">twitter</span>
+
+
+<div x-data="eventSearch" id="event-directory-app" x-init="initSearch()">
+  <section class="hero-section event-hero-section">
+    <div class="hero-overlay"></div>
+    <div class="container">
+      <div class="breadcrumbs-container">
+        <ul class="breadcrumbs">
+          <li><a href="/" style="color: white;">Home</a></li>
+          <li><a href="/club-events/" style="color: white;">Club Events</a></li>
+        </ul>
+      </div>
+      
+      <div class="hero-content event-hero-content">
+        <h1 class="hero-title">Classic Car Events</h1>
+        <p class="hero-subtitle">Find classic car shows, meets, and events across the UK</p>
+        
+        <div class="hero-search">
+          <div class="search-container event-search">
+            <form class="search-form" @submit.prevent="search()">
+              <div class="search-grid">
+                <div class="custom-search-group">
+                  <label for="search-term">Event Title</label>
+                  <div class="input-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                      <circle cx="11" cy="11" r="8"></circle>
+                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="search-term" class="custom-search-input search-term" placeholder="Enter event title..." x-model="searchTerm">
+                  </div>
+                </div>
                 
-                  <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-                  </svg>
+                <div class="custom-search-group">
+                  <label for="search-category">Event Type</label>
+                  <div class="input-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="3" y1="9" x2="21" y2="9"></line>
+                      <line x1="9" y1="21" x2="9" y2="9"></line>
+                    </svg>
+                    <select id="search-category" class="custom-search-input search-category" x-model="category">
+                      <option value="">All Event Types</option>
+                      <template x-for="cat in availableCategories" :key="cat">
+                        <option :value="cat" :selected="cat === category" x-text="cat"></option>
+                      </template>
+                    </select>
+                  </div>
+                </div>
                 
-              </a>
-            
-              <a href="https://www.facebook.com/classiccarclubs" target="_blank" rel="noopener noreferrer" class="text-white hover:text-accent transition duration-150">
-                <span class="sr-only">facebook</span>
+                <div class="custom-search-group">
+                  <label for="search-location">Location</label>
+                  <div class="input-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <select id="search-location" class="custom-search-input search-location" x-model="location">
+                      <option value="">All Locations</option>
+                      <template x-for="loc in availableLocations" :key="loc">
+                        <option :value="loc" :selected="loc === location" x-text="loc"></option>
+                      </template>
+                    </select>
+                  </div>
+                </div>
                 
-                  <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
-                  </svg>
-                
-              </a>
-            
-              <a href="https://www.instagram.com/classiccarclubs" target="_blank" rel="noopener noreferrer" class="text-white hover:text-accent transition duration-150">
-                <span class="sr-only">instagram</span>
-                
-                  <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                    <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" />
-                  </svg>
-                
-              </a>
-            
+                <div class="search-actions">
+                  <button type="submit" class="search-button">Search</button>
+                  <button type="button" class="reset-button" @click.prevent="reset()">Reset</button>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div x-show="searchTerm || category || location" class="search-status">
+      <p x-text="`Showing ${filteredEvents.length} events`"></p>
+      <button @click="resetFilters()" class="exit-search-button">Clear All Filters</button>
+    </div>
+    
+    <div x-show="isLoading" class="loading-indicator">Loading...</div>
+    
+    <div x-cloak x-show="!isLoading">
+      <div class="featured-section" x-show="filteredEvents.some(event => event.eventFeatured)">
+        <h2>Featured Events</h2>
         
-        <!-- Quick Links -->
-        <div>
-          <h3 class="text-xl font-bold mb-4 font-serif">Quick Links</h3>
-          <ul class="space-y-2">
-            
-              <li>
-                <a href="/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Home
-                </a>
-              </li>
-            
-              <li>
-                <a href="/club-directory/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Clubs
-                </a>
-              </li>
-            
-              <li>
-                <a href="/club-events/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Events
-                </a>
-              </li>
-            
-              <li>
-                <a href="/about/" class="text-gray-300 hover:text-accent transition duration-150">
-                  About
-                </a>
-              </li>
-            
-              <li>
-                <a href="/contact/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Contact
-                </a>
-              </li>
-            
-              <li>
-                <a href="/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Home
-                </a>
-              </li>
-            
-              <li>
-                <a href="/club-directory/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Club Directory
-                </a>
-              </li>
-            
-              <li>
-                <a href="/club-events/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Events
-                </a>
-              </li>
-            
-              <li>
-                <a href="/about/" class="text-gray-300 hover:text-accent transition duration-150">
-                  About Us
-                </a>
-              </li>
-            
-              <li>
-                <a href="/contact/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Contact
-                </a>
-              </li>
-            
-          </ul>
-        </div>
-        
-        <!-- Information -->
-        <div>
-          <h3 class="text-xl font-bold mb-4 font-serif">Information</h3>
-          <ul class="space-y-2">
-            
-              <li>
-                <a href="/privacy/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Privacy Policy
-                </a>
-              </li>
-            
-              <li>
-                <a href="/terms/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Terms of Service
-                </a>
-              </li>
-            
-              <li>
-                <a href="/club-website-design/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Club Website Design
-                </a>
-              </li>
-            
-              <li>
-                <a href="/advertise/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Advertise
-                </a>
-              </li>
-            
-              <li>
-                <a href="/newsletter/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Newsletter
-                </a>
-              </li>
-            
-              <li>
-                <a href="/privacy-policy/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Privacy Policy
-                </a>
-              </li>
-            
-              <li>
-                <a href="/terms-of-service/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Terms of Service
-                </a>
-              </li>
-            
-              <li>
-                <a href="/club-website-design/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Club Website Design
-                </a>
-              </li>
-            
-              <li>
-                <a href="/advertise/" class="text-gray-300 hover:text-accent transition duration-150">
-                  Advertise With Us
-                </a>
-              </li>
-            
-              <li>
-                <a href="/faq/" class="text-gray-300 hover:text-accent transition duration-150">
-                  FAQ
-                </a>
-              </li>
-            
-          </ul>
-        </div>
-        
-        <!-- Newsletter -->
-        <div>
-          <h3 class="text-xl font-bold mb-4 font-serif">Newsletter</h3>
-          <p class="mb-4">Subscribe to our newsletter to receive updates on events, clubs, and classic car news.</p>
-          <form action="/api/subscribe" method="post" class="flex flex-col space-y-3">
-            <input 
-              type="email" 
-              name="email" 
-              placeholder="Your email address" 
-              required
-              class="px-4 py-2 rounded bg-green-800 border border-green-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent"
-            >
-            <button 
-              type="submit" 
-              class="bg-accent hover:bg-accent-dark text-dark-green py-2 px-4 rounded uppercase text-sm tracking-wider font-serif transition duration-150"
-            >
-              Subscribe
-            </button>
-          </form>
+        <div class="event-grid">
+          <template x-for="event in filteredEvents.filter(e => e.eventFeatured).slice(0, 8)" :key="event.eventSlug">
+            <div class="event-card" x-data="eventDisplay">
+              <div x-show="event.eventFeatured" class="event-featured">Featured</div>
+              
+              <div class="event-image">
+                <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
+                
+                <div class="event-date">
+                  <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
+                  <span class="event-day" x-text="formatDay(event.eventStartDateTime)"></span>
+                </div>
+              </div>
+              
+              <div class="event-content">
+                <h3 class="event-title" x-text="event.eventTitle"></h3>
+                
+                <div class="event-location" x-show="event.eventCity || event.eventState">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <span x-text="[event.eventCity, event.eventState].filter(Boolean).join(', ')"></span>
+                </div>
+                
+                <div class="event-time">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span x-text="formatTime(event.eventStartDateTime)"></span>
+                </div>
+                
+                <div class="event-price" x-show="event.eventTicketPrice" x-text="event.eventTicketPrice"></div>
+              </div>
+              
+              <div class="event-actions">
+                <a :href="'/club-events/' + event.eventSlug + '/'" class="button button-primary">View Details</a>
+               <!-- <a x-show="event.eventWebsite" :href="event.eventWebsite" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>-->
+              </div>
+            </div>
+          </template>
         </div>
       </div>
       
-      <div class="mt-8 pt-8 border-t border-green-700 text-center">
-        <p>&copy; 2025 Classic Car Clubs. All rights reserved.</p>
+      <!-- Ad Banner Section -->
+      <!-- Car Rust Ad Banner -->
+<div style="width: 100%; margin: 40px 0; padding: 20px 0; text-align: center; background-color: #f8f8f8; border-top: 1px solid #e0e0e0; border-bottom: 1px solid #e0e0e0; display: block !important; visibility: visible !important;">
+  <a href="https://carrust.co.uk" target="_blank" rel="noopener" style="display: inline-block; margin: 0 auto; text-align: center;">
+    <img src="/assets/images/ads/car-rust-ad-1.jpg" alt="Car Rust Handbook - Practical knowledge-base dedicated to all aspects of vehicle rust prevention and treatment." style="max-width: 920px; width: 100%; height: auto; border-radius: 4px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); display: block !important; margin: 0 auto;">
+  </a>
+</div>
+      
+      <div x-data="pagination" x-effect="items = filteredEvents.filter(e => !e.eventFeatured)">
+        <h2>Upcoming Events</h2>
+        
+        <div class="event-grid" x-show="paginatedItems.length > 0">
+          <template x-for="event in paginatedItems" :key="event.eventSlug">
+            <div class="event-card" x-data="eventDisplay">
+              <div class="event-image">
+                <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
+                
+                <div class="event-date">
+                  <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
+                  <span class="event-day" x-text="formatDay(event.eventStartDateTime)"></span>
+                </div>
+              </div>
+              
+              <div class="event-content">
+                <h3 class="event-title" x-text="event.eventTitle"></h3>
+                
+                <div class="event-location" x-show="event.eventCity || event.eventState">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <span x-text="[event.eventCity, event.eventState].filter(Boolean).join(', ')"></span>
+                </div>
+                
+                <div class="event-time">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span x-text="formatTime(event.eventStartDateTime)"></span>
+                </div>
+                
+                <div class="event-price" x-show="event.eventTicketPrice" x-text="event.eventTicketPrice"></div>
+              </div>
+              
+              <div class="event-actions">
+                <a :href="'/club-events/' + event.eventSlug + '/'" class="button button-primary">View Details</a>
+              <!--  <a x-show="event.eventWebsite" :href="event.eventWebsite" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>-->
+              </div>
+            </div>
+          </template>
+        </div>
+        
+        <div x-show="paginatedItems.length === 0" class="no-results">
+          <p>No events found matching your criteria. Please try different search terms or <button @click="reset" class="reset-link">reset filters</button>.</p>
+        </div>
+        
+        <div class="pagination" x-show="totalPages > 1">
+          <div class="pagination-controls">
+            <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="pagination-arrow pagination-prev" :class="{ 'disabled': currentPage === 1 }">
+              &laquo; Previous
+            </button>
+            
+            <div class="pagination-numbers">
+              <template x-for="(pageNumber, index) in pageNumbers" :key="index">
+                <template x-if="pageNumber === '...'">
+                  <span class="pagination-ellipsis">...</span>
+                </template>
+                <template x-if="pageNumber !== '...'">
+                  <button @click="goToPage(pageNumber)" class="pagination-number" :class="{ 'active': pageNumber === currentPage }" x-text="pageNumber"></button>
+                </template>
+              </template>
+            </div>
+            
+            <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-arrow pagination-next" :class="{ 'disabled': currentPage === totalPages }">
+              Next &raquo;
+            </button>
+          </div>
+          
+          <div class="pagination-info" x-text="`Showing ${startIndex} to ${endIndex} of ${totalItems} events`"></div>
+        </div>
       </div>
     </div>
-  </footer>
-  
-  
+  </div>
+</div>
+
+</div>
+
+  </main>
+
+  <footer class="site-footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="logo-column">
+        <div class="footer-logo">
+          <h3>CLASSIC CAR CLUBS</h3>
+          <p class="tagline">UK NETWORK</p>
+        </div>
+        <p class="footer-blurb">
+          Your ultimate resource for connecting with classic car enthusiasts across the 
+          United Kingdom. Find clubs dedicated to vintage marques, iconic eras, and 
+          specific regions.
+        </p>
+      </div>
+      
+      
+        <div class="footer-column">
+          <h4>Directory</h4>
+          <ul class="footer-links">
+            
+              <li>
+                <a href="/club-directory/">All Clubs</a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/?category=Car%20Club">Car Type Clubs</a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/?category=Regional%20Club">Region Clubs</a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/?featured=true">Featured Clubs</a>
+              </li>
+            
+          </ul>
+        </div>
+      
+        <div class="footer-column">
+          <h4>Events</h4>
+          <ul class="footer-links">
+            
+              <li>
+                <a href="/club-events/">All Events</a>
+              </li>
+            
+              <li>
+                <a href="/club-events/?category=Car%20Show">Car Shows</a>
+              </li>
+            
+              <li>
+                <a href="/club-events/?category=Car%20Meet">Meets</a>
+              </li>
+            
+              <li>
+                <a href="/club-events/?featured=true">Featured Events</a>
+              </li>
+            
+          </ul>
+        </div>
+      
+        <div class="footer-column">
+          <h4>About</h4>
+          <ul class="footer-links">
+            
+              <li>
+                <a href="/privacy-policy/">Privacy Policy</a>
+              </li>
+            
+              <li>
+                <a href="/submit-club/">Submit a Club</a>
+              </li>
+            
+              <li>
+                <a href="/club-websites/">Club Website Design</a>
+              </li>
+            
+              <li>
+                <a href="/advertise/">Advertise With Us</a>
+              </li>
+            
+          </ul>
+        </div>
+      
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2025 Classic Car Clubs UK. All rights reserved. Website by <a href="https://zenified.uk" target="_blank" rel="noopener">Zenified.uk</a></p>
+    </div>
+  </div>
+</footer>
+
+
+  <!-- Scripts -->
+  <script src="/assets/js/search.js"></script>
 </body>
 </html>

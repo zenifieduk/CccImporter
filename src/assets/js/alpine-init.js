@@ -1,351 +1,804 @@
-// Mobile menu component
 document.addEventListener('alpine:init', () => {
-  Alpine.data('mobileMenu', () => ({
-    open: false,
-    
-    toggle() {
-      this.open = !this.open;
+  // Event display component for date/time formatting
+  Alpine.data('eventDisplay', () => ({
+    formatMonth(dateStr) {
+      if (!dateStr) return '';
+      try {
+        const day = dateStr.substring(0, 2);
+        const month = dateStr.substring(2, 4);
+        const year = dateStr.substring(4, 8);
+        
+        const date = new Date(`${year}-${month}-${day}`);
+        return date.toLocaleString('default', { month: 'short' });
+      } catch (e) {
+        console.error('Error formatting month:', e, dateStr);
+        return 'Invalid';
+      }
     },
-    
-    close() {
-      this.open = false;
+
+    formatDay(dateStr) {
+      if (!dateStr) return '';
+      try {
+        const day = dateStr.substring(0, 2);
+        return parseInt(day);
+      } catch (e) {
+        console.error('Error formatting day:', e, dateStr);
+        return '';
+      }
+    },
+
+    formatTime(dateStr) {
+      if (!dateStr) return '';
+      try {
+        const time = dateStr.split(':');
+        if (time.length >= 3) {
+          const hours = parseInt(time[1]);
+          const minutes = time[2];
+          const ampm = hours >= 12 ? 'PM' : 'AM';
+          const hour12 = hours % 12 || 12;
+          return `${hour12}:${minutes} ${ampm}`;
+        }
+        return dateStr; // Return original if format is unexpected
+      } catch (e) {
+        console.error('Error formatting time:', e, dateStr);
+        return '';
+      }
     }
   }));
-  
-  // Club Directory component
-  Alpine.data('clubDirectory', () => ({
+
+  // Search functionality
+  Alpine.data('search', () => ({
+    searchTerm: '',
+    category: '',
+    location: '',
+    letter: '',
     clubs: [],
     filteredClubs: [],
-    searchQuery: '',
-    activeLetter: '',
-    filters: {
-      category: '',
-      founded: ''
-    },
-    availableFilters: {
-      categories: [],
-      decades: []
-    },
-    currentPage: 1,
-    itemsPerPage: 12,
-    
-    async init() {
-      try {
-        // Fetch clubs data
-        const response = await fetch('/clubs.json');
-        this.clubs = await response.json();
-        
-        // Set initial filtered clubs
-        this.filteredClubs = this.clubs;
-        
-        // Extract unique categories and decades
-        const allCategories = this.clubs.flatMap(club => club.categories || []);
-        this.availableFilters.categories = [...new Set(allCategories)].sort();
-        
-        const allYears = this.clubs.map(club => club.founded).filter(Boolean);
-        const decades = allYears.map(year => Math.floor(year / 10) * 10);
-        this.availableFilters.decades = [...new Set(decades)].sort();
-      } catch (error) {
-        console.error('Error fetching clubs data:', error);
+    categories: [],
+    locations: [],
+    availableCategories: [],
+    availableLocations: [],
+
+    init() {
+      this.clubs = window.clubs || [];
+      this.filteredClubs = [...this.clubs];
+
+      // Get unique categories and locations
+      this.categories = [...new Set(this.clubs.flatMap(club => club.clubCategory || []))].sort();
+      this.locations = [...new Set(this.clubs.map(club => club.clubCity).filter(Boolean))].sort();
+
+      // Initialize available options
+      this.availableCategories = [...this.categories];
+      this.availableLocations = [...this.locations];
+
+      // Get URL params
+      const urlParams = new URLSearchParams(window.location.search);
+      this.searchTerm = urlParams.get('search') || '';
+      this.category = urlParams.get('category') || '';
+      this.location = urlParams.get('location') || '';
+      this.letter = urlParams.get('letter') || '';
+
+      if (this.searchTerm || this.category || this.location || this.letter) {
+        this.filter();
       }
     },
-    
+
     filter() {
-      let result = this.clubs;
-      
-      // Filter by letter
-      if (this.activeLetter) {
-        result = result.filter(club => 
-          club.name.charAt(0).toUpperCase() === this.activeLetter
+      let filtered = [...this.clubs];
+
+      // Filter by search term
+      if (this.searchTerm) {
+        const term = this.searchTerm.toLowerCase();
+        filtered = filtered.filter(club => 
+          club.clubName.toLowerCase().includes(term) ||
+          (club.clubCity && club.clubCity.toLowerCase().includes(term))
         );
       }
-      
+
       // Filter by category
-      if (this.filters.category) {
-        result = result.filter(club => 
-          club.categories && club.categories.includes(this.filters.category)
+      if (this.category) {
+        filtered = filtered.filter(club => 
+          club.clubCategory && club.clubCategory.includes(this.category)
         );
       }
-      
-      // Filter by founded decade
-      if (this.filters.founded) {
-        const decadeStart = parseInt(this.filters.founded);
-        const decadeEnd = decadeStart + 9;
-        result = result.filter(club => 
-          club.founded >= decadeStart && club.founded <= decadeEnd
+
+      // Filter by location
+      if (this.location) {
+        filtered = filtered.filter(club => 
+          club.clubCity && club.clubCity === this.location
         );
       }
-      
-      // Apply search query
-      if (this.searchQuery.trim()) {
-        const query = this.searchQuery.toLowerCase();
-        result = result.filter(club => 
-          club.name.toLowerCase().includes(query) || 
-          (club.description && club.description.toLowerCase().includes(query))
+
+      // Filter by letter
+      if (this.letter) {
+        filtered = filtered.filter(club => 
+          club.clubName.charAt(0).toUpperCase() === this.letter
         );
       }
-      
-      this.filteredClubs = result;
-      this.currentPage = 1;
-      
+
+      this.filteredClubs = filtered;
+
       // Update available filter options based on current filtered results
-      this.updateAvailableOptions(result);
+      this.updateAvailableOptions(filtered);
     },
-    
+
     updateAvailableOptions(filtered) {
-      // This could be implemented to dynamically update filter options
-      // based on the current filtered results, but for simplicity we'll keep static options
+      // Update available categories
+      this.availableCategories = [...new Set(filtered.flatMap(club => club.clubCategory || []))].sort();
+
+      // Update available locations
+      this.availableLocations = [...new Set(filtered.map(club => club.clubCity).filter(Boolean))].sort();
     },
-    
+
     search() {
+      // Update URL
+      const urlParams = new URLSearchParams(window.location.search);
+      if (this.searchTerm) urlParams.set('search', this.searchTerm);
+      else urlParams.delete('search');
+      if (this.category) urlParams.set('category', this.category);
+      else urlParams.delete('category');
+      if (this.location) urlParams.set('location', this.location);
+      else urlParams.delete('location');
+      if (this.letter) urlParams.set('letter', this.letter);
+      else urlParams.delete('letter');
+
+      const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+      window.history.pushState({}, '', newUrl);
+
       this.filter();
     },
-    
-    resetFilters() {
-      this.searchQuery = '';
-      this.activeLetter = '';
-      this.filters.category = '';
-      this.filters.founded = '';
-      this.filteredClubs = this.clubs;
-      this.currentPage = 1;
+
+    reset() {
+      this.searchTerm = '';
+      this.category = '';
+      this.location = '';
+      this.letter = '';
+
+      // Update URL
+      window.history.pushState({}, '', window.location.pathname);
+
+      this.filter();
+      // Reset available options to all options
+      this.availableCategories = this.categories;
+      this.availableLocations = this.locations;
     },
-    
+
     setLetter(letter) {
-      this.activeLetter = letter;
-      this.filter();
-    },
-    
-    paginate() {
-      const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-      const endIndex = startIndex + this.itemsPerPage;
-      return this.filteredClubs.slice(startIndex, endIndex);
-    },
-    
-    goToPage(page) {
-      if (page >= 1 && page <= this.pageCount) {
-        this.currentPage = page;
-      }
-    },
-    
-    get pageCount() {
-      return Math.ceil(this.filteredClubs.length / this.itemsPerPage);
-    },
-    
-    get pageNumbers() {
-      const pages = [];
-      const maxVisiblePages = 5;
-      
-      if (this.pageCount <= maxVisiblePages) {
-        // Show all pages if there are few
-        for (let i = 1; i <= this.pageCount; i++) {
-          pages.push(i);
-        }
-      } else {
-        // Show a subset of pages with current page in the middle if possible
-        let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
-        let endPage = Math.min(this.pageCount, startPage + maxVisiblePages - 1);
-        
-        // Adjust if we're near the end
-        if (endPage === this.pageCount) {
-          startPage = Math.max(1, endPage - maxVisiblePages + 1);
-        }
-        
-        for (let i = startPage; i <= endPage; i++) {
-          pages.push(i);
-        }
-      }
-      
-      return pages;
-    },
-    
-    get paginatedClubs() {
-      return this.paginate();
-    },
-    
-    get startIndex() {
-      return (this.currentPage - 1) * this.itemsPerPage + 1;
-    },
-    
-    get endIndex() {
-      return Math.min(this.startIndex + this.itemsPerPage - 1, this.filteredClubs.length);
-    },
-    
-    get isFiltered() {
-      return this.searchQuery || this.activeLetter || this.filters.category || this.filters.founded;
+      this.letter = this.letter === letter ? '' : letter;
+      this.search();
     }
   }));
-  
-  // Events Directory component
-  Alpine.data('eventsDirectory', () => ({
+
+  // Event search functionality  
+  Alpine.data('eventSearch', () => ({
+    searchTerm: '',
+    category: '',
+    location: '',
     events: [],
     filteredEvents: [],
-    searchQuery: '',
-    filters: {
-      category: '',
-      month: ''
-    },
-    availableFilters: {
-      categories: []
-    },
-    currentPage: 1,
-    itemsPerPage: 9,
-    
+    categories: [],
+    locations: [],
+    availableCategories: [],
+    availableLocations: [],
+    isLoading: true,
+
     async init() {
       try {
-        // Fetch events data
+        const urlParams = new URLSearchParams(window.location.search);
+        this.searchTerm = urlParams.get('search') || '';
+        this.category = urlParams.get('category') || '';
+        this.location = urlParams.get('location') || '';
+
         const response = await fetch('/events.json');
         this.events = await response.json();
-        
-        // Set initial filtered events
-        this.filteredEvents = this.events;
-        
-        // Extract unique categories
-        const allCategories = this.events.flatMap(event => event.categories || []);
-        this.availableFilters.categories = [...new Set(allCategories)].sort();
+        this.filter();
+
+        this.isLoading = false;
       } catch (error) {
-        console.error('Error fetching events data:', error);
+        console.error('Error initializing event search:', error);
+        this.isLoading = false;
       }
     },
-    
+
     filter() {
-      let result = this.events;
-      
-      // Filter by category
-      if (this.filters.category) {
-        result = result.filter(event => 
-          event.categories && event.categories.includes(this.filters.category)
+      let filtered = [...this.events];
+
+      if (this.searchTerm) {
+        const term = this.searchTerm.toLowerCase();
+        filtered = filtered.filter(event => 
+          event.eventTitle.toLowerCase().includes(term) ||
+          (event.eventCity && event.eventCity.toLowerCase().includes(term)) ||
+          (event.eventState && event.eventState.toLowerCase().includes(term))
         );
       }
-      
-      // Filter by month
-      if (this.filters.month) {
-        result = result.filter(event => {
-          if (!event.date) return false;
-          const eventDate = new Date(event.date);
-          const eventMonth = (eventDate.getMonth() + 1).toString().padStart(2, '0');
-          return eventMonth === this.filters.month;
-        });
-      }
-      
-      // Apply search query
-      if (this.searchQuery.trim()) {
-        const query = this.searchQuery.toLowerCase();
-        result = result.filter(event => 
-          event.title.toLowerCase().includes(query) || 
-          (event.description && event.description.toLowerCase().includes(query))
+
+      if (this.category) {
+        filtered = filtered.filter(event => 
+          event.eventCategory && event.eventCategory.includes(this.category)
         );
       }
-      
-      this.filteredEvents = result;
-      this.currentPage = 1;
+
+      if (this.location) {
+        filtered = filtered.filter(event => 
+          (event.eventCity && event.eventCity === this.location) ||
+          (event.eventState && event.eventState === this.location)
+        );
+      }
+
+      this.filteredEvents = filtered;
+      this.updateAvailableOptions(filtered);
     },
-    
+
     updateAvailableOptions(filtered) {
-      // This could be implemented to dynamically update filter options
-      // based on the current filtered results, but for simplicity we'll keep static options
+      this.availableCategories = [...new Set(filtered.flatMap(event => event.eventCategory || []))].sort();
+      this.availableLocations = [...new Set([
+        ...filtered.map(event => event.eventCity),
+        ...filtered.map(event => event.eventState)
+      ].filter(Boolean))].sort();
     },
-    
+
     search() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (this.searchTerm) urlParams.set('search', this.searchTerm);
+      else urlParams.delete('search');
+      if (this.category) urlParams.set('category', this.category);
+      else urlParams.delete('category');
+      if (this.location) urlParams.set('location', this.location);
+      else urlParams.delete('location');
+
+      const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+      window.history.pushState({}, '', newUrl);
+
       this.filter();
     },
-    
+
     reset() {
-      this.searchQuery = '';
-      this.filters.category = '';
-      this.filters.month = '';
-      this.filteredEvents = this.events;
-      this.currentPage = 1;
+      this.searchTerm = '';
+      this.category = '';
+      this.location = '';
+
+      window.history.pushState({}, '', window.location.pathname);
+      this.filter();
+    }
+  }));
+
+  Alpine.data('mobileMenu', () => ({
+    isOpen: false,
+    toggle() {
+      this.isOpen = !this.isOpen;
+      if (this.isOpen) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = '';
+      }
     },
-    
+    close() {
+      this.isOpen = false;
+      document.body.style.overflow = '';
+    }
+  }));
+
+  Alpine.data('clubSearch', () => ({
+    searchTerm: '',
+    category: '',
+    location: '',
+    letter: '',
+    clubs: [],
+    filteredClubs: [],
+    categories: [],
+    locations: [],
+    availableCategories: [], // Categories available after filtering
+    availableLocations: [], // Locations available after filtering
+    isLoading: true,
+
+    async init() {
+      try {
+        // Get URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        this.searchTerm = urlParams.get('search') || '';
+        this.category = urlParams.get('category') || '';
+        this.location = urlParams.get('location') || '';
+        this.letter = urlParams.get('letter') || '';
+
+        // Fetch clubs
+        const response = await fetch('/clubs.json');
+        this.clubs = await response.json();
+
+        // For debugging
+        console.log('Loaded clubs:', this.clubs.length);
+        console.log('Search term:', this.searchTerm);
+
+        // Extract unique categories and locations for dropdown options (all available)
+        const categorySet = new Set();
+        const locationSet = new Set();
+
+        this.clubs.forEach(club => {
+          if (club.category) categorySet.add(club.category);
+          if (club.city) locationSet.add(club.city);
+        });
+
+        this.categories = [...categorySet].sort();
+        this.locations = [...locationSet].sort();
+
+        console.log('All categories loaded:', this.categories.length);
+        console.log('All locations loaded:', this.locations.length);
+
+        // Set available options initially to all options
+        this.availableCategories = this.categories;
+        this.availableLocations = this.locations;
+
+        // Apply filters only if there are any parameters
+        if (this.searchTerm || this.category || this.location || this.letter) {
+          this.filter();
+          this.updateAvailableOptions();
+        } else {
+          // Initialize filteredClubs with all clubs if no filters are active
+          this.filteredClubs = [...this.clubs];
+        }
+
+        // For debugging
+        console.log('Filtered clubs:', this.filteredClubs.length);
+        console.log('Available categories after filtering:', this.availableCategories.length);
+        console.log('Available locations after filtering:', this.availableLocations.length);
+
+        this.isLoading = false;
+
+        // Add watchers for real-time filter updates
+        this.$watch('category', value => {
+          if (this.category !== undefined) {
+            // Update the available options for other dropdowns when category changes
+            this.updateAvailableOptions();
+          }
+        });
+
+        this.$watch('location', value => {
+          if (this.location !== undefined) {
+            // Update the available options for other dropdowns when location changes
+            this.updateAvailableOptions();
+          }
+        });
+
+        this.$watch('letter', value => {
+          if (this.letter !== undefined) {
+            // Update the available options for other dropdowns when letter changes
+            this.updateAvailableOptions();
+          }
+        });
+      } catch (error) {
+        console.error('Error initializing search:', error);
+        this.isLoading = false;
+      }
+    },
+
+    // Method to manually initialize search - can be called from the template
+    initSearch() {
+      // This method can be called from the x-init directive in the template
+      // It ensures that if we come directly to the page with URL parameters,
+      // the search is properly applied
+
+      // Add a popstate event listener to handle browser back/forward buttons
+      window.addEventListener('popstate', () => {
+        // Get URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        this.searchTerm = urlParams.get('search') || '';
+        this.category = urlParams.get('category') || '';
+        this.location = urlParams.get('location') || '';
+        this.letter = urlParams.get('letter') || '';
+
+        // Apply the filters immediately
+        this.filter();
+      });
+
+      // Get URL params again to ensure we have the latest
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchTerm = urlParams.get('search') || '';
+      const category = urlParams.get('category') || '';
+      const location = urlParams.get('location') || '';
+      const letter = urlParams.get('letter') || '';
+
+      // Update the model
+      this.searchTerm = searchTerm;
+      this.category = category;
+      this.location = location;
+      this.letter = letter;
+
+      // Apply search if there are parameters
+      if (searchTerm || category || location || letter) {
+        // Apply the search immediately - no delay needed as we're inside an init function
+        // which will be called after data is available
+        this.filter();
+        this.updateAvailableOptions();
+      }
+    },
+
+    // Method to update available options based on current filters
+    updateAvailableOptions() {
+      // Determine which filters are active
+      const hasSearchTerm = this.searchTerm && this.searchTerm.trim() !== '';
+      const hasCategory = this.category && this.category !== '';
+      const hasLocation = this.location && this.location !== '';
+      const hasLetter = this.letter && this.letter !== '';
+
+      // If no filters are active, all options are available
+      if (!hasSearchTerm && !hasCategory && !hasLocation && !hasLetter) {
+        this.availableCategories = this.categories;
+        this.availableLocations = this.locations;
+        return;
+      }
+
+      // Create a temporary filter function that excludes the category or location filter
+      // This will be used to determine available options for each dropdown
+
+      // For category dropdown (exclude category filter)
+      const forCategoryOptions = [...this.clubs].filter(club => {
+        // Apply all filters except category
+        let include = true;
+
+        if (hasSearchTerm) {
+          const term = this.searchTerm.toLowerCase().trim();
+          const titleMatch = club.title && club.title.toLowerCase().includes(term);
+          const cityMatch = club.city && club.city.toLowerCase().includes(term);
+          const stateMatch = club.state && club.state.toLowerCase().includes(term);
+          const marqueMatch = club.marque && club.marque.toLowerCase().includes(term);
+
+          include = include && (titleMatch || cityMatch || stateMatch || marqueMatch);
+        }
+
+        if (hasLocation) {
+          include = include && (club.city && club.city === this.location);
+        }
+
+        if (hasLetter) {
+          include = include && (club.title && club.title.toLowerCase().startsWith(this.letter.toLowerCase()));
+        }
+
+        return include;
+      });
+
+      // For location dropdown (exclude location filter)
+      const forLocationOptions = [...this.clubs].filter(club => {
+        // Apply all filters except location
+        let include = true;
+
+        if (hasSearchTerm) {
+          const term = this.searchTerm.toLowerCase().trim();
+          const titleMatch = club.title && club.title.toLowerCase().includes(term);
+          const cityMatch = club.city && club.city.toLowerCase().includes(term);
+          const stateMatch = club.state && club.state.toLowerCase().includes(term);
+          const marqueMatch = club.marque && club.marque.toLowerCase().includes(term);
+
+          include = include && (titleMatch || cityMatch || stateMatch || marqueMatch);
+        }
+
+        if (hasCategory) {
+          include = include && (club.category && club.category.toLowerCase() === this.category.toLowerCase());
+        }
+
+        if (hasLetter) {
+          include = include && (club.title && club.title.toLowerCase().startsWith(this.letter.toLowerCase()));
+        }
+
+        return include;
+      });
+
+      // Extract available categories and locations from filtered results
+      const availableCategorySet = new Set();
+      forCategoryOptions.forEach(club => {
+        if (club.category) availableCategorySet.add(club.category);
+      });
+
+      const availableLocationSet = new Set();
+      forLocationOptions.forEach(club => {
+        if (club.city) availableLocationSet.add(club.city);
+      });
+
+      // Update available options
+      this.availableCategories = [...availableCategorySet].sort();
+      this.availableLocations = [...availableLocationSet].sort();
+    },
+
+    filter() {
+      // Start with a copy of all clubs
+      let filtered = [...this.clubs];
+
+      // Filter by search term (case insensitive)
+      if (this.searchTerm && this.searchTerm.trim() !== '') {
+        const term = this.searchTerm.toLowerCase().trim();
+        console.log('Filtering by term:', term);
+
+        filtered = filtered.filter(club => {
+          // Check various fields for the search term
+          const titleMatch = club.title && club.title.toLowerCase().includes(term);
+          const cityMatch = club.city && club.city.toLowerCase().includes(term);
+          const stateMatch = club.state && club.state.toLowerCase().includes(term);
+          const marqueMatch = club.marque && club.marque.toLowerCase().includes(term);
+
+          return titleMatch || cityMatch || stateMatch || marqueMatch;
+        });
+
+        console.log('After term filtering:', filtered.length);
+      }
+
+      // Filter by category (exact match, case insensitive)
+      if (this.category && this.category !== '') {
+        console.log('Filtering by category:', this.category);
+
+        filtered = filtered.filter(club =>
+          club.category && club.category.toLowerCase() === this.category.toLowerCase()
+        );
+
+        console.log('After category filtering:', filtered.length);
+      }
+
+      // Filter by location (exact match)
+      if (this.location && this.location !== '') {
+        console.log('Filtering by location:', this.location);
+
+        filtered = filtered.filter(club =>
+          club.city && club.city === this.location
+        );
+
+        console.log('After location filtering:', filtered.length);
+      }
+
+      // Filter by letter (starts with)
+      if (this.letter && this.letter !== '') {
+        console.log('Filtering by letter:', this.letter);
+
+        filtered = filtered.filter(club =>
+          club.title && club.title.toLowerCase().startsWith(this.letter.toLowerCase())
+        );
+
+        console.log('After letter filtering:', filtered.length);
+      }
+
+      this.filteredClubs = filtered;
+
+      // Update the available filter options based on the filtered results
+      this.updateAvailableOptions();
+    },
+
+    search() {
+      // Update URL params
+      const urlParams = new URLSearchParams();
+      if (this.searchTerm) urlParams.set('search', this.searchTerm);
+      if (this.category) urlParams.set('category', this.category);
+      if (this.location) urlParams.set('location', this.location);
+      if (this.letter) urlParams.set('letter', this.letter);
+
+      const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+      window.history.pushState({}, '', newUrl);
+
+      this.filter();
+      // Available options are already updated in the filter method
+    },
+
+    reset() {
+      this.searchTerm = '';
+      this.category = '';
+      this.location = '';
+      this.letter = '';
+
+      // Update URL
+      window.history.pushState({}, '', window.location.pathname);
+
+      this.filter();
+      // Reset available options to all options
+      this.availableCategories = this.categories;
+      this.availableLocations = this.locations;
+    },
+
     resetFilters() {
-      this.reset();
+      this.searchTerm = '';
+      this.category = '';
+      this.location = '';
+      this.letter = '';
+
+      // Update URL
+      window.history.pushState({}, '', window.location.pathname);
+
+      this.filter();
+      // Reset available options to all options
+      this.availableCategories = this.categories;
+      this.availableLocations = this.locations;
     },
-    
-    formatMonth(monthStr) {
-      const months = [
-        'January', 'February', 'March', 'April', 'May', 'June', 
-        'July', 'August', 'September', 'October', 'November', 'December'
-      ];
-      const monthIndex = parseInt(monthStr, 10) - 1;
-      return months[monthIndex];
+
+    setLetter(letter) {
+      this.letter = this.letter === letter ? '' : letter;
+      this.search();
+    }
+  }));
+
+  Alpine.data('eventSearch', () => ({
+    searchTerm: '',
+    category: '',
+    location: '',
+    events: [],
+    filteredEvents: [],
+    categories: [],
+    locations: [],
+    availableCategories: [],
+    availableLocations: [],
+    isLoading: true,
+
+    async init() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        this.searchTerm = urlParams.get('search') || '';
+        this.category = urlParams.get('category') || '';
+        this.location = urlParams.get('location') || '';
+
+        const response = await fetch('/events.json');
+        this.events = await response.json();
+        this.filter();
+
+        this.isLoading = false;
+      } catch (error) {
+        console.error('Error initializing event search:', error);
+        this.isLoading = false;
+      }
     },
-    
-    formatDay(dateTimeString) {
-      if (!dateTimeString) return '';
-      const date = new Date(dateTimeString);
-      return date.toLocaleString('en-GB', { 
-        day: 'numeric', 
-        month: 'short'
+
+    filter() {
+      let filtered = [...this.events];
+
+      if (this.searchTerm) {
+        const term = this.searchTerm.toLowerCase();
+        filtered = filtered.filter(event =>
+          event.eventTitle.toLowerCase().includes(term) ||
+          (event.eventCity && event.eventCity.toLowerCase().includes(term)) ||
+          (event.eventState && event.eventState.toLowerCase().includes(term))
+        );
+      }
+
+      if (this.category) {
+        filtered = filtered.filter(event =>
+          event.eventCategory && event.eventCategory.includes(this.category)
+        );
+      }
+
+      if (this.location) {
+        filtered = filtered.filter(event =>
+          (event.eventCity && event.eventCity === this.location) ||
+          (event.eventState && event.eventState === this.location)
+        );
+      }
+
+      this.filteredEvents = filtered;
+      this.updateAvailableOptions(filtered);
+    },
+
+    updateAvailableOptions(filtered) {
+      this.availableCategories = [...new Set(filtered.flatMap(event => event.eventCategory || []))].sort();
+      this.availableLocations = [...new Set([
+        ...filtered.map(event => event.eventCity),
+        ...filtered.map(event => event.eventState)
+      ].filter(Boolean))].sort();
+    },
+
+    search() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (this.searchTerm) urlParams.set('search', this.searchTerm);
+      else urlParams.delete('search');
+      if (this.category) urlParams.set('category', this.category);
+      else urlParams.delete('category');
+      if (this.location) urlParams.set('location', this.location);
+      else urlParams.delete('location');
+
+      const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+      window.history.pushState({}, '', newUrl);
+
+      this.filter();
+    },
+
+    reset() {
+      this.searchTerm = '';
+      this.category = '';
+      this.location = '';
+
+      window.history.pushState({}, '', window.location.pathname);
+      this.filter();
+    }
+  }));
+
+  Alpine.data('pagination', () => ({
+    currentPage: 1,
+    itemsPerPage: 40,
+    totalItems: 0,
+    totalPages: 0,
+    items: [],
+    paginatedItems: [],
+
+    init() {
+      // Get URL params
+      const urlParams = new URLSearchParams(window.location.search);
+      this.currentPage = parseInt(urlParams.get('page') || '1');
+
+      this.$watch('items', (items) => {
+        this.totalItems = items.length;
+        this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
+        this.paginate();
       });
     },
-    
-    formatTime(dateTimeString) {
-      if (!dateTimeString) return '';
-      const date = new Date(dateTimeString);
-      return date.toLocaleString('en-GB', { 
-        hour: '2-digit', 
-        minute: '2-digit',
-        hour12: true
-      });
-    },
-    
+
     paginate() {
       const startIndex = (this.currentPage - 1) * this.itemsPerPage;
       const endIndex = startIndex + this.itemsPerPage;
-      return this.filteredEvents.slice(startIndex, endIndex);
+      this.paginatedItems = this.items.slice(startIndex, endIndex);
     },
-    
+
     goToPage(page) {
-      if (page >= 1 && page <= this.pageCount) {
-        this.currentPage = page;
+      if (page < 1 || page > this.totalPages) return;
+
+      this.currentPage = page;
+      this.paginate();
+
+      // Update URL
+      const urlParams = new URLSearchParams(window.location.search);
+      if (page > 1) {
+        urlParams.set('page', page);
+      } else {
+        urlParams.delete('page');
       }
+
+      const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+      window.history.pushState({}, '', newUrl);
+
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     },
-    
-    get pageCount() {
-      return Math.ceil(this.filteredEvents.length / this.itemsPerPage);
-    },
-    
+
     get pageNumbers() {
       const pages = [];
-      const maxVisiblePages = 5;
-      
-      if (this.pageCount <= maxVisiblePages) {
-        // Show all pages if there are few
-        for (let i = 1; i <= this.pageCount; i++) {
+
+      // For fewer pages, just show all numbers
+      if (this.totalPages <= 7) {
+        for (let i = 1; i <= this.totalPages; i++) {
+          pages.push(i);
+        }
+        return pages;
+      }
+
+      // Always show first page
+      pages.push(1);
+
+      // Show first few pages based on current location
+      if (this.currentPage <= 4) {
+        // When near the beginning, show first 5 pages
+        for (let i = 2; i <= 5; i++) {
+          if (i <= this.totalPages) pages.push(i);
+        }
+        // Add ellipsis if there are more pages
+        if (this.totalPages > 6) pages.push('...');
+        // Add the last page if not already included
+        if (this.totalPages > 5) pages.push(this.totalPages);
+      } else if (this.currentPage > this.totalPages - 4) {
+        // When near the end
+        pages.push('...');
+        // Show last 5 pages
+        for (let i = Math.max(2, this.totalPages - 4); i <= this.totalPages; i++) {
           pages.push(i);
         }
       } else {
-        // Show a subset of pages with current page in the middle if possible
-        let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
-        let endPage = Math.min(this.pageCount, startPage + maxVisiblePages - 1);
-        
-        // Adjust if we're near the end
-        if (endPage === this.pageCount) {
-          startPage = Math.max(1, endPage - maxVisiblePages + 1);
-        }
-        
-        for (let i = startPage; i <= endPage; i++) {
+        // When in the middle
+        pages.push('...');
+        // Show current page and some neighbors
+        for (let i = this.currentPage - 1; i <= Math.min(this.currentPage + 1, this.totalPages - 1); i++) {
           pages.push(i);
         }
+        pages.push('...');
+        pages.push(this.totalPages);
       }
-      
+
       return pages;
     },
-    
-    get paginatedEvents() {
-      return this.paginate();
-    },
-    
+
     get startIndex() {
-      return (this.currentPage - 1) * this.itemsPerPage + 1;
+      return Math.min(this.totalItems, (this.currentPage - 1) * this.itemsPerPage + 1);
     },
-    
+
     get endIndex() {
-      return Math.min(this.startIndex + this.itemsPerPage - 1, this.filteredEvents.length);
-    },
-    
-    get isFiltered() {
-      return this.searchQuery || this.filters.category || this.filters.month;
+      return Math.min(this.totalItems, this.currentPage * this.itemsPerPage);
     }
   }));
 });
