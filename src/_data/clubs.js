@@ -343,21 +343,30 @@ module.exports = function() {
   
   allClubs.forEach((club, index) => {
     // Create a base slug from the title
-    const baseSlug = club.slug || club.title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+    let baseSlug = club.slug || club.title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
     
     // Check if this slug already exists in our map
     if (slugMap[baseSlug]) {
-      // Increment the count for this slug
-      slugMap[baseSlug]++;
-      // Create a unique slug by appending a short ID (current count)
-      club.slug = `${baseSlug}-${slugMap[baseSlug]}`;
-    } else {
-      // This is the first occurrence of this slug
-      slugMap[baseSlug] = 1;
-      club.slug = baseSlug;
+      // For duplicates, create a unique slug by adding location or other information
+      if (club.city) {
+        baseSlug = `${baseSlug}-${club.city.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')}`;
+      } else if (club.state) {
+        baseSlug = `${baseSlug}-${club.state.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')}`;
+      } else if (club.marque) {
+        baseSlug = `${baseSlug}-${club.marque.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-')}`;
+      }
+      
+      // If we still have a duplicate, add something unique
+      if (slugMap[baseSlug]) {
+        baseSlug = `${baseSlug}-club`;
+      }
     }
     
-    // Also add an ID for reference
+    // Set the slug and mark it as used
+    slugMap[baseSlug] = true;
+    club.slug = baseSlug;
+    
+    // Also add an ID for reference (we'll keep this but won't use it in URLs)
     club.id = index + 1;
   });
   
