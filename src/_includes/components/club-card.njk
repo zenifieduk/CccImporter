@@ -36,7 +36,7 @@
   </div>
   
   <div class="club-actions">
-    <a href="/club-directory/{{ club.slug | slugify }}-{{ club.id if club.id else (loop.index0 + 1) }}/" class="button button-primary">View Details</a>
+    <a href="/club-directory/{{ club.slug | slugify }}-{{ club.id if club.id else '0' }}/" class="button button-primary">View Details</a>
     {% if club.website %}
      <!-- <a href="{{ club.website }}" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
     {% endif %}
@@ -70,7 +70,7 @@
   </div>
   
   <div class="club-actions">
-    <a href="/club-directory/{{ club.slug | slugify }}-{{ club.id if club.id else (loop.index0 + 1) }}/" class="button button-primary">View Details</a>
+    <a href="/club-directory/{{ club.slug | slugify }}-{{ club.id if club.id else '0' }}/" class="button button-primary">View Details</a>
     {% if club.website %}
      <!-- <a href="{{ club.website }}" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
     {% endif %}

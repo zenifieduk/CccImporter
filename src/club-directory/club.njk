@@ -5,7 +5,7 @@ pagination:
   size: 1
   alias: club
   addAllPagesToCollections: false
-permalink: "club-directory/{{ club.slug | slugify }}-{{ club.id if club.id else (pagination.pageNumber + 1) }}/"
+permalink: "club-directory/{{ club.slug | slugify }}-{{ club.id if club.id else pagination.pageNumber }}/"
 eleventyComputed:
   title: "{{ club.title }}"
   description: "Discover information about {{ club.title }}, including contact details, events, and more."
@@ -13,7 +13,7 @@ eleventyComputed:
 
 {% set breadcrumbs = [
   { url: '/club-directory/', label: 'Club Directory' },
-  { url: '/club-directory/' + club.slug | slugify + '-' + (club.id if club.id else (pagination.pageNumber + 1)) + '/', label: club.title }
+  { url: '/club-directory/' + club.slug | slugify + '-' + (club.id if club.id else pagination.pageNumber) + '/', label: club.title }
 ] %}
 
 <div class="detail-header">
