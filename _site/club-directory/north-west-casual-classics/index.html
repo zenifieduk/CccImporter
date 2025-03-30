@@ -239,7 +239,128 @@
     <h2 class="section-title">Other Classic Car Clubs</h2>
   </div>
   
-  <script>
+  <style>
+  /* Special styles for related club cards to make them more compact */
+  #related-clubs-container .club-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  #related-clubs-container .club-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: white;
+    height: 100%;
+  }
+  
+  #related-clubs-container .club-featured {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #FFD700;
+    color: #333;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    z-index: 2;
+  }
+  
+  #related-clubs-container .club-image {
+    height: 150px;
+    overflow: hidden;
+  }
+  
+  #related-clubs-container .club-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  #related-clubs-container .club-content {
+    padding: 16px;
+    flex-grow: 1;
+  }
+  
+  #related-clubs-container .club-title {
+    font-size: 1.2rem;
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #333;
+    font-family: 'Playfair Display', serif;
+  }
+  
+  #related-clubs-container .club-location {
+    display: flex;
+    align-items: center;
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+  }
+  
+  #related-clubs-container .club-category {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  
+  #related-clubs-container .category-tag {
+    background-color: #f0f0f0;
+    color: #555;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+  }
+  
+  #related-clubs-container .club-actions {
+    padding: 16px;
+    border-top: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  
+  #related-clubs-container .button {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #9ee0d8;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+    font-size: 0.85rem;
+    border: none;
+    cursor: pointer;
+    font-family: 'Playfair Display', serif;
+  }
+  
+  #related-clubs-container .button:hover {
+    background-color: #7accc2;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    #related-clubs-container .club-grid {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+  }
+  
+  @media (max-width: 480px) {
+    #related-clubs-container .club-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
   document.addEventListener('DOMContentLoaded', function() {
     // This is the URL of the current club page
     const currentUrl = window.location.pathname;
@@ -326,14 +447,14 @@
         </div>
         <div class="club-content">
           <h3 class="club-title">${club.title}</h3>
-          <div class="club-location" style="margin-top: 8px;">
+          <div class="club-location">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
               <circle cx="12" cy="10" r="3"></circle>
             </svg>
             <span>${club.location}</span>
           </div>
-          <div class="club-category" style="margin-top: 8px;">
+          <div class="club-category">
             <span class="category-tag">${club.category}</span>
             <span class="category-tag">${club.marque}</span>
           </div>
@@ -362,14 +483,14 @@
         </div>
         <div class="club-content">
           <h3 class="club-title">Alvis Owners Club</h3>
-          <div class="club-location" style="margin-top: 8px;">
+          <div class="club-location">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
               <circle cx="12" cy="10" r="3"></circle>
             </svg>
             <span>Lichfield, Staffordshire</span>
           </div>
-          <div class="club-category" style="margin-top: 8px;">
+          <div class="club-category">
             <span class="category-tag">Classic Car Club</span>
             <span class="category-tag">Alvis</span>
           </div>
@@ -386,14 +507,14 @@
         </div>
         <div class="club-content">
           <h3 class="club-title">Classic Car Club London</h3>
-          <div class="club-location" style="margin-top: 8px;">
+          <div class="club-location">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
               <circle cx="12" cy="10" r="3"></circle>
             </svg>
             <span>London</span>
           </div>
-          <div class="club-category" style="margin-top: 8px;">
+          <div class="club-category">
             <span class="category-tag">Classic Car Club</span>
             <span class="category-tag">Various</span>
           </div>
@@ -410,14 +531,14 @@
         </div>
         <div class="club-content">
           <h3 class="club-title">Ford Classic and Capri Owners Club</h3>
-          <div class="club-location" style="margin-top: 8px;">
+          <div class="club-location">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
               <circle cx="12" cy="10" r="3"></circle>
             </svg>
             <span>Colchester, Essex</span>
           </div>
-          <div class="club-category" style="margin-top: 8px;">
+          <div class="club-category">
             <span class="category-tag">Classic Car Club</span>
             <span class="category-tag">Ford</span>
           </div>
