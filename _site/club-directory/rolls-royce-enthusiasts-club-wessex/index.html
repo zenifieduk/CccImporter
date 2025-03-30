@@ -6,10 +6,16 @@
   <title>Rolls-Royce Enthusiasts&amp;#39; Wessex Section | Classic Car Clubs | UK Directory</title>
   <meta name="description" content="Discover information about Rolls-Royce Enthusiasts&amp;#39; Wessex Section, including contact details, events, and more.">
   <link rel="icon" type="image/svg+xml" href="/assets/images/ccc-logo.svg">
-  
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+
   <!-- Styles -->
   <link rel="stylesheet" href="/assets/css/styles.css">
-  
+  <link rel="stylesheet" href="/assets/css/ad-banners.css">
+
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="/assets/js/alpine-init.js"></script>
@@ -41,12 +47,6 @@
           <li>
             <a href="/club-events/" >
               Club Events
-            </a>
-          </li>
-        
-          <li>
-            <a href="/advertise/" >
-              Advertise
             </a>
           </li>
         
@@ -119,16 +119,6 @@
               </li>
             
               <li>
-                <a href="/advertise/" @click="close" >
-                  Advertise
-                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </a>
-              </li>
-            
-              <li>
                 <a href="/contact/" @click="close" >
                   Contact
                   <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -150,7 +140,7 @@
   </div>
 </header>
 
-  
+
   <main>
     
 <div class="container">
@@ -168,7 +158,7 @@
             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
             <line x1="7" y1="7" x2="7.01" y2="7"></line>
           </svg>
-          Car Club
+          Classic Car Club
         </div>
       
       
@@ -203,14 +193,10 @@
     
       <div class="club-description">
         <h2>About This Club</h2>
-        <p>The Wessex Section of the Rolls-Royce Enthusiasts&#39; Club, serving members in the South West of England.</p>
+        <p>Rolls-Royce Enthusiasts&#39; Wessex Section is a car club.</p>
       </div>
     
     
-    
-      <div class="club-gallery" style="margin: 2rem 0;">
-        <img src="/assets/images/rolls-royce-enthusiasts-wessex.jpg" alt="Rolls-Royce Enthusiasts&#39; Wessex Section" style="max-width: 100%; border-radius: 8px;">
-      </div>
     
   </div>
   
@@ -258,17 +244,9 @@
     
     
       
-<div class="club-card featured-club-card">
-  <div class="club-featured">Featured</div>
-  
-  <div class="club-image">
-    
-      <img src="/assets/images/alvis-owners-club.jpg" alt="Alvis Owners Club">
-    
-  </div>
-  
+<div class="club-card standard-club-card">
   <div class="club-content">
-    <h3 class="club-title">Alvis Owners Club</h3>
+    <h3 class="club-title">500 Owners Association - The</h3>
     
     
       <div class="club-location">
@@ -276,81 +254,35 @@
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
           <circle cx="12" cy="10" r="3"></circle>
         </svg>
-        Lichfield
+        Norwich
         , 
-        Staffordshire
+        Cheshire
       </div>
     
     
     
       <div class="club-category">
-        <span class="category-tag">Car Club</span>
+        <span class="category-tag">Motorcycle Club</span>
         
-          <span class="category-tag">Alvis</span>
+          <span class="category-tag">Classic</span>
         
       </div>
     
   </div>
   
   <div class="club-actions">
-    <a href="/club-directory/alvis-owners-club/" class="button button-primary">View Details</a>
+    <a href="/club-directory/500-owners-association-the/" class="button button-primary">View Details</a>
     
-      <a href="https://www.alvisoc.org" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
-    
-  </div>
-</div>
-
-
-    
-      
-<div class="club-card featured-club-card">
-  <div class="club-featured">Featured</div>
-  
-  <div class="club-image">
-    
-      <img src="/assets/images/rolls-royce-enthusiasts.jpg" alt="Rolls-Royce Enthusiasts&#39; Club">
-    
-  </div>
-  
-  <div class="club-content">
-    <h3 class="club-title">Rolls-Royce Enthusiasts&#39; Club</h3>
-    
-    
-      <div class="club-location">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-          <circle cx="12" cy="10" r="3"></circle>
-        </svg>
-        Paulerspury
-        , 
-        Northamptonshire
-      </div>
-    
-    
-    
-      <div class="club-category">
-        <span class="category-tag">Car Club</span>
-        
-          <span class="category-tag">Rolls-Royce</span>
-        
-      </div>
-    
-  </div>
-  
-  <div class="club-actions">
-    <a href="/club-directory/rolls-royce-enthusiasts-club/" class="button button-primary">View Details</a>
-    
-      <a href="https://rrec.org.uk/" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
+     <!-- <a href="https://www.500race.org" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
     
   </div>
 </div>
-
 
     
       
 <div class="club-card standard-club-card">
   <div class="club-content">
-    <h3 class="club-title">Rolls-Royce Enthusiasts&#39; Wessex Section</h3>
+    <h3 class="club-title">750 Motor Club</h3>
     
     
       <div class="club-location">
@@ -358,30 +290,65 @@
           <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
           <circle cx="12" cy="10" r="3"></circle>
         </svg>
+        Derby
         
         
-        Wessex
       </div>
     
     
     
       <div class="club-category">
-        <span class="category-tag">Car Club</span>
+        <span class="category-tag">Motor Club</span>
         
-          <span class="category-tag">Rolls-Royce</span>
+          <span class="category-tag">Classic</span>
         
       </div>
     
   </div>
   
   <div class="club-actions">
-    <a href="/club-directory/rolls-royce-enthusiasts-club-wessex/" class="button button-primary">View Details</a>
+    <a href="/club-directory/750-motor-club/" class="button button-primary">View Details</a>
     
-      <a href="https://rrecwessex.org.uk/" target="_blank" rel="noopener" class="button button-secondary">Visit</a>
+     <!-- <a href="https://www.750mc.co.uk/" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
     
   </div>
 </div>
 
+    
+      
+<div class="club-card standard-club-card">
+  <div class="club-content">
+    <h3 class="club-title">A602s Street and Strip Rods</h3>
+    
+    
+      <div class="club-location">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        Cambridge
+        , 
+        Cambridgeshire
+      </div>
+    
+    
+    
+      <div class="club-category">
+        <span class="category-tag">Hot Rod Club</span>
+        
+          <span class="category-tag">Classic</span>
+        
+      </div>
+    
+  </div>
+  
+  <div class="club-actions">
+    <a href="/club-directory/a602s-street-strip-rods/" class="button button-primary">View Details</a>
+    
+     <!-- <a href="http://www.a602sstreetandstriprods.com/" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
+    
+  </div>
+</div>
 
     
   </div>
@@ -394,7 +361,7 @@
 </div>
 
   </main>
-  
+
   <footer class="site-footer">
   <div class="container">
     <div class="footer-content">
@@ -462,15 +429,15 @@
           <ul class="footer-links">
             
               <li>
-                <a href="/contact/">Contact Us</a>
-              </li>
-            
-              <li>
                 <a href="/privacy-policy/">Privacy Policy</a>
               </li>
             
               <li>
                 <a href="/submit-club/">Submit a Club</a>
+              </li>
+            
+              <li>
+                <a href="/club-websites/">Club Website Design</a>
               </li>
             
               <li>
@@ -483,12 +450,12 @@
     </div>
     
     <div class="footer-bottom">
-      <p>&copy; YYYY Classic Car Clubs UK. All rights reserved.</p>
+      <p>&copy; 2025 Classic Car Clubs UK. All rights reserved. Website by <a href="https://zenified.uk" target="_blank" rel="noopener">Zenified.uk</a></p>
     </div>
   </div>
 </footer>
 
-  
+
   <!-- Scripts -->
   <script src="/assets/js/search.js"></script>
 </body>

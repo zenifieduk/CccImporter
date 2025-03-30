@@ -338,6 +338,29 @@ module.exports = function() {
   // Combine the original and curated clubs
   const allClubs = [...originalClubs, ...curatedClubs];
   
+  // Create a map to track duplicate slugs and make them unique
+  const slugMap = {};
+  
+  allClubs.forEach((club, index) => {
+    // Create a base slug from the title
+    const baseSlug = club.slug || club.title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+    
+    // Check if this slug already exists in our map
+    if (slugMap[baseSlug]) {
+      // Increment the count for this slug
+      slugMap[baseSlug]++;
+      // Create a unique slug by appending a short ID (current count)
+      club.slug = `${baseSlug}-${slugMap[baseSlug]}`;
+    } else {
+      // This is the first occurrence of this slug
+      slugMap[baseSlug] = 1;
+      club.slug = baseSlug;
+    }
+    
+    // Also add an ID for reference
+    club.id = index + 1;
+  });
+  
   // Normalize categories to ensure consistency
   allClubs.forEach(club => {
     // First, normalize all the similar categories that should become 'Car Club'
