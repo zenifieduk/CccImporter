@@ -1,4 +1,3 @@
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const { exec } = require('child_process');
@@ -11,62 +10,60 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Configure SendGrid
+// Always set the API key - we know it exists from environment variables
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 // Serve static files from the _site directory
 app.use(express.static('_site'));
 
 // API endpoint for contact form submissions
-app.post('/contact', async (req, res) => {
-  if (!process.env.SENDGRID_API_KEY) {
-    console.error('SendGrid API key not found');
-    return res.status(500).json({
-      success: false,
-      message: 'Email configuration error'
-    });
-  }
-
+app.post('/api/send-email', async (req, res) => {
+  console.log('Received contact form submission:', req.body);
+  
   const { name, email, message, 'contact-reason': contactReason } = req.body;
-
-  // Validate form data
+  
+  // Validate form fields
   if (!name || !email || !message) {
-    return res.status(400).json({
-      success: false,
-      message: 'Please provide all required fields'
+    console.log('Missing required fields');
+    return res.status(400).json({ 
+      success: false, 
+      message: 'Please provide all required fields: name, email, and message' 
     });
   }
-
-  // Configure SendGrid
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
+  
   try {
-    await sgMail.send({
+    // Create message for SendGrid
+    const msg = {
       to: 'enquiries@classiccarclubs.uk',
-      from: process.env.SENDGRID_VERIFIED_SENDER || 'noreply@classiccarclubs.uk',
+      from: 'noreply@classiccarclubs.uk',
       subject: `Contact Form: ${contactReason || 'General Inquiry'}`,
       text: `
-Name: ${name}
-Email: ${email}
-Reason: ${contactReason || 'Not specified'}
-Message: ${message}
+        Name: ${name}
+        Email: ${email}
+        Reason: ${contactReason || 'Not specified'}
+        
+        Message:
+        ${message}
       `,
       html: `
-        <h3>New Contact Form Submission</h3>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Reason:</strong> ${contactReason || 'Not specified'}</p>
         <p><strong>Message:</strong></p>
         <p>${message.replace(/\n/g, '<br>')}</p>
       `
-    });
-
-    res.status(200).json({
-      success: true,
-      message: 'Message sent successfully'
-    });
+    };
+    
+    console.log('Sending email via SendGrid');
+    await sgMail.send(msg);
+    console.log('Email sent successfully');
+    return res.status(200).json({ success: true, message: 'Email sent successfully' });
   } catch (error) {
-    console.error('SendGrid Error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to send message'
+    console.error('Error sending email:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Failed to send email. Please try again later.' 
     });
   }
 });
@@ -82,11 +79,15 @@ function startEleventy() {
   eleventy.stderr.on('data', (data) => {
     console.error(`[eleventy error] ${data}`);
   });
+  
+  eleventy.on('close', (code) => {
+    console.log(`Eleventy process exited with code ${code}`);
+  });
 }
 
 // Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, '0.0.0.0', () => {
+const PORT = process.env.PORT || 5500;
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   startEleventy();
 });
