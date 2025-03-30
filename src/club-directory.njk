@@ -182,19 +182,54 @@ pagination:
             </button>
             
             <div class="pagination-numbers">
-              <template x-for="page in pageNumbers" :key="page">
-                <template x-if="page === '...'">
-                  <span class="pagination-ellipsis">...</span>
-                </template>
-                <template x-if="page !== '...'">
-                  <button 
-                    @click="goToPage(page)" 
-                    class="pagination-number" 
-                    :class="{ 'active': page === currentPage }"
-                    x-text="page"
-                  ></button>
-                </template>
-              </template>
+              <!-- Display first page -->
+              <button 
+                @click="goToPage(1)" 
+                class="pagination-number" 
+                :class="{ 'active': currentPage === 1 }"
+              >1</button>
+              
+              <!-- Display ellipsis if needed -->
+              <span class="pagination-ellipsis" x-show="currentPage > 3">...</span>
+              
+              <!-- Display page before current if not first or second page -->
+              <button 
+                x-show="currentPage > 2" 
+                @click="goToPage(currentPage - 1)" 
+                class="pagination-number"
+              >
+                <span x-text="currentPage - 1"></span>
+              </button>
+              
+              <!-- Display current page if not first page -->
+              <button 
+                x-show="currentPage !== 1 && currentPage !== totalPages" 
+                class="pagination-number active"
+              >
+                <span x-text="currentPage"></span>
+              </button>
+              
+              <!-- Display page after current if not last or second-to-last page -->
+              <button 
+                x-show="currentPage < totalPages - 1" 
+                @click="goToPage(currentPage + 1)" 
+                class="pagination-number"
+              >
+                <span x-text="currentPage + 1"></span>
+              </button>
+              
+              <!-- Display ellipsis if needed -->
+              <span class="pagination-ellipsis" x-show="currentPage < totalPages - 2">...</span>
+              
+              <!-- Display last page if more than one page -->
+              <button 
+                x-show="totalPages > 1" 
+                @click="goToPage(totalPages)" 
+                class="pagination-number" 
+                :class="{ 'active': currentPage === totalPages }"
+              >
+                <span x-text="totalPages"></span>
+              </button>
             </div>
             
             <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-arrow pagination-next" :class="{ 'disabled': currentPage === totalPages }">
