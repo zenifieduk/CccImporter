@@ -31,7 +31,7 @@ showBreadcrumb: false
     </div>
 
     <div class="club-grid featured-club-grid">
-      {% set featuredClubs = clubs | filter("featured") | limit(8) %}
+      {% set featuredClubs = merged-clubs | filter("featured") | limit(8) %}
       {% for club in featuredClubs %}
         {% include "components/club-card.njk" %}
       {% endfor %}
@@ -83,7 +83,7 @@ showBreadcrumb: false
       <p class="section-subtitle">Classic car shows, meets, and events across the UK</p>
     </div>
 
-    <div class="event-grid">
+    <div class="event-grid" x-data="eventDisplay">
       {% set upcomingEvents = merged-events | limit(3) %}
       {% for event in upcomingEvents %}
         {% include "components/event-card.njk" %}

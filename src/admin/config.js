@@ -23,8 +23,18 @@ class CustomProxy {
 
   entriesByFolder(folder, extension) {
     const collection = folder.split('/').pop();
+    console.log('Fetching collection:', collection);
     return fetch(`${this.options.proxyUrl}/collections/${collection}`)
-      .then(response => response.json())
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Failed to fetch entries: ${response.statusText}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Fetched entries:', data);
+        return data;
+      })
       .catch(error => {
         console.error('Error fetching entries:', error);
         return [];
