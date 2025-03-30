@@ -1,39 +1,27 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Classic Car Clubs CMS</title>
+  <!-- Include the Netlify Identity Widget for authentication -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
   <!-- Include the DecapCMS script -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   
   <script>
-    // Configure local backend
-    window.CMS.init({
-      config: {
-        backend: {
-          name: 'test-repo'
-        },
-        publish_mode: 'simple',
-        media_folder: 'public/images',
-        collections: [
-          {
-            name: 'events',
-            label: 'Events',
-            folder: 'src/_data/events',
-            create: true,
-            fields: [
-              { label: 'Title', name: 'title', widget: 'string' },
-              { label: 'Date', name: 'date', widget: 'datetime' },
-              { label: 'Description', name: 'description', widget: 'text' }
-            ]
-          }
-        ]
-      }
-    });
+    // Check if the user is authenticated when they return from the authentication process
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
   </script>
 </body>
 </html>
