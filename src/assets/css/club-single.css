@@ -1,0 +1,21 @@
+
+
+.update-notice {
+  background-color: #f8f9fa;
+  border-top: 1px solid #eee;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #666;
+  margin-top: 2rem;
+}
+
+.notice-link {
+  color: var(--primary-color, #1b5e20);
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+.notice-link:hover {
+  text-decoration: none;
+}

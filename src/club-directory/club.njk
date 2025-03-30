@@ -19,7 +19,7 @@ eleventyComputed:
 <div class="detail-header">
   <div class="container">
     <h1 class="detail-title">{{ club.title }}</h1>
-    
+
     <div class="detail-meta">
       {% if club.category %}
         <div class="detail-meta-item">
@@ -30,7 +30,7 @@ eleventyComputed:
           {{ club.category }}
         </div>
       {% endif %}
-      
+
       {% if club.city or club.state %}
         <div class="detail-meta-item">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
@@ -42,7 +42,7 @@ eleventyComputed:
           {% if club.state %}{{ club.state }}{% endif %}
         </div>
       {% endif %}
-      
+
       {% if club.marque %}
         <div class="detail-meta-item">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
@@ -65,14 +65,14 @@ eleventyComputed:
         <p>{{ club.description }}</p>
       </div>
     {% endif %}
-    
+
     {% if club.imageUrl %}
       <div class="club-gallery" style="margin: 2rem 0;">
         <img src="{{ club.imageUrl }}" alt="{{ club.title }}" style="max-width: 100%; border-radius: 8px;">
       </div>
     {% endif %}
   </div>
-  
+
   <div class="detail-sidebar">
     <div class="detail-sidebar-section">
       <h3 class="detail-sidebar-title">Contact Information</h3>
@@ -83,21 +83,21 @@ eleventyComputed:
             {{ club.address }}
           </li>
         {% endif %}
-        
+
         {% if club.phone %}
           <li style="margin-bottom: 1rem;">
             <strong>Phone:</strong><br>
             <a href="tel:{{ club.phone | replace(' ', '') }}">{{ club.phone }}</a>
           </li>
         {% endif %}
-        
+
         {% if club.email %}
           <li style="margin-bottom: 1rem;">
             <strong>Email:</strong><br>
             <a href="mailto:{{ club.email }}">{{ club.email }}</a>
           </li>
         {% endif %}
-        
+
         {% if club.website %}
           <li style="margin-bottom: 1rem;">
             <strong>Website:</strong><br>
@@ -106,10 +106,13 @@ eleventyComputed:
         {% endif %}
       </ul>
     </div>
-    
+
     <div class="detail-sidebar-section">
       <a href="{{ club.website }}" target="_blank" rel="noopener" class="button button-primary" style="width: 100%; text-align: center;">Visit Club Website</a>
     </div>
+  </div>
+  <div class="update-notice">
+    <p>Is this information incorrect or outdated? Please <a href="/contact" class="notice-link">contact us</a> using our form and we'll update it as soon as possible.</p>
   </div>
 </div>
 
@@ -117,9 +120,9 @@ eleventyComputed:
   <div class="section-header">
     <h2 class="section-title">Other Classic Car Clubs</h2>
   </div>
-  
+
   {% include "components/related-clubs.njk" %}
-  
+
   <div style="text-align: center; margin-top: 2rem;">
     <a href="/club-directory/" class="button button-primary">View All Clubs</a>
   </div>
