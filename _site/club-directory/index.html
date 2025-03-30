@@ -381,7 +381,7 @@
                 </template>
                 <template x-if="page !== '...'">
                   <button 
-                    @click="goToPage(page); document.getElementById('club-list-section').scrollIntoView({behavior: 'smooth'})" 
+                    @click="goToPage(page)" 
                     class="pagination-number" 
                     :class="{ 'active': page === currentPage }"
                     x-text="page"

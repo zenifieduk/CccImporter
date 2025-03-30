@@ -287,7 +287,7 @@
   </a>
 </div>
       
-      <div x-data="pagination" x-effect="items = filteredEvents.filter(e => !e.eventFeatured)">
+      <div x-data="pagination" x-effect="items = filteredEvents.filter(e => !e.eventFeatured)" id="event-list-section">
         <h2>Upcoming Events</h2>
         
         <div class="event-grid" x-show="paginatedItems.length > 0">

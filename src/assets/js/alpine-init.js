@@ -744,8 +744,11 @@ document.addEventListener('alpine:init', () => {
       const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
       window.history.pushState({}, '', newUrl);
 
-      // Scroll to top
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Scroll to 'Club List' section instead of top
+      const clubListSection = document.getElementById('club-list-section');
+      if (clubListSection) {
+        clubListSection.scrollIntoView({ behavior: 'smooth' });
+      }
     },
 
     get pageNumbers() {
