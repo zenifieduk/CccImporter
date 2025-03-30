@@ -129,3 +129,41 @@ eleventyComputed:
     <a href="/club-directory/" class="button button-primary">View All Clubs</a>
   </div>
 </div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AutomotiveBusiness",
+  "name": "{{ club.title }}",
+  "description": "{{ club.description }}",
+  "url": "{{ site.url }}/club-directory/{{ club.slug | slugify }}/",
+  {% if club.address %}
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "{{ club.address }}",
+    "addressLocality": "{{ club.city or '' }}",
+    "addressRegion": "{{ club.state or '' }}",
+    "postalCode": "{{ club.postalCode or '' }}",
+    "addressCountry": "GB"
+  },
+  {% endif %}
+  {% if club.phone %}
+  "telephone": "{{ club.phone }}",
+  {% endif %}
+  {% if club.email %}
+  "email": "{{ club.email }}",
+  {% endif %}
+  {% if club.imageUrl %}
+  "image": "{{ club.imageUrl }}",
+  {% endif %}
+  {% if club.facebook or club.twitter or club.website %}
+  "sameAs": [
+    {% if club.website %}"{{ club.website }}"{% endif %}
+    {% if club.website and (club.facebook or club.twitter) %},{% endif %}
+    {% if club.facebook %}"{{ club.facebook }}"{% endif %}
+    {% if club.facebook and club.twitter %},{% endif %}
+    {% if club.twitter %}"{{ club.twitter }}"{% endif %}
+  ]
+  {% endif %}
+}
+</script>

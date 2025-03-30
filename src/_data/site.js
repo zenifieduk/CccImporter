@@ -2,7 +2,7 @@ module.exports = {
   title: "Classic Car Clubs | UK Directory",
   description:
     "Discover classic car clubs across the UK with contact details and more.",
-  url: process.env.URL || "http://localhost:8080",
+  url: process.env.URL || "https://classiccarclubs.uk",
   author: "Classic Car Clubs UK",
   email: "enquiries@classiccarclubs.uk",
   buildTime: new Date(),
