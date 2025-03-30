@@ -4,69 +4,97 @@ title: Contact Us
 description: Get in touch with the Classic Car Clubs UK team for inquiries, submissions, and advertising opportunities.
 ---
 
-<div class="contact-page">
-  <h1>Contact Us</h1>
-  <p>Have a question, suggestion, or need to get in touch with our team? Fill out the form below and we'll get back to you as soon as possible.</p>
-
-  <form id="contactForm" action="/api/send-email" method="POST">
-    <div class="form-group">
-      <label for="name" class="form-label">Your Name</label>
-      <input type="text" id="name" name="name" class="form-input" required>
+<section class="hero-section contact-hero-section">
+  <div class="hero-overlay"></div>
+  <div class="container">
+    <div class="breadcrumbs-container">
+      <ul class="breadcrumbs">
+        <li><a href="/" style="color: white;">Home</a></li>
+        <li><a href="/contact/" style="color: white;">Contact</a></li>
+      </ul>
     </div>
-
-    <div class="form-group">
-      <label for="email" class="form-label">Email Address</label>
-      <input type="email" id="email" name="email" class="form-input" required>
+    <div class="hero-content">
+      <h1 class="hero-title">Contact Us</h1>
+      <p class="hero-subtitle">Get in touch with the Classic Car Clubs UK team</p>
     </div>
+  </div>
+</section>
 
-    <div class="form-group">
-      <label for="contact-reason" class="form-label">Reason for contact</label>
-      <select id="contact-reason" name="contact-reason" class="form-input">
-        <option value="general">General enquiry</option>
-        <option value="submit-club">Submit a club</option>
-        <option value="advertising">Advertising</option>
-        <option value="other">Something else</option>
-      </select>
-    </div>
+<div class="detail-content" style="margin: 2rem 0;">
+  <div class="detail-main">
+    <div class="contact-form">
+      <p style="margin-bottom: 1.5rem;">
+        Have a question, suggestion, or need to get in touch with our team? Fill out the form below and we'll get back to you as soon as possible.
+      </p>
 
-    <div class="form-group">
-      <label for="message" class="form-label">Message</label>
-      <textarea id="message" name="message" class="form-input form-textarea" required></textarea>
-    </div>
+      <form id="contactForm" action="/api/send-email" method="POST">
+        <div class="form-group">
+          <label for="name" class="form-label">Your Name</label>
+          <input type="text" id="name" name="name" class="form-input" required>
+        </div>
 
-    <div class="form-group">
-      <button type="submit" class="form-submit" id="submitButton">Send Message</button>
-      <div id="formSpinner" style="display: none; margin-top: 1rem; text-align: center;">
-        <div class="spinner"></div>
-        <span style="margin-left: 0.5rem;">Sending...</span>
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="email" id="email" name="email" class="form-input" required>
+        </div>
+
+        <div class="form-group">
+          <label for="contact-reason" class="form-label">Reason for contact</label>
+          <select id="contact-reason" name="contact-reason" class="form-input">
+            <option value="general">General enquiry</option>
+            <option value="submit-club">Submit a club</option>
+            <option value="advertising">Advertising</option>
+            <option value="other">Something else</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="message" class="form-label">Message</label>
+          <textarea id="message" name="message" class="form-input form-textarea" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <button type="submit" class="form-submit" id="submitButton">Send Message</button>
+          <div id="formSpinner" style="display: none; margin-top: 1rem; text-align: center;">
+            <div class="spinner"></div>
+            <span style="margin-left: 0.5rem;">Sending...</span>
+          </div>
+        </div>
+      </form>
+
+      <div id="formSuccess" style="display: none;" class="alert alert-success">
+        Thank you for your message! We'll get back to you as soon as possible.
+      </div>
+
+      <div id="formError" style="display: none;" class="alert alert-error">
+        There was an error sending your message. Please try again or contact us directly at enquiries@classiccarclubs.uk
       </div>
     </div>
-  </form>
-
-  <div id="formSuccess" style="display: none;" class="alert alert-success">
-    Thank you for your message! We'll get back to you as soon as possible.
   </div>
 
-  <div id="formError" style="display: none;" class="alert alert-error">
-    There was an error sending your message. Please try again or contact us directly at enquiries@classiccarclubs.uk
-  </div>
-
-  <div class="contact-info">
-    <h2>Contact Information</h2>
-    <ul>
-      <li>
-        <strong>Email:</strong><br>
-        <a href="mailto:enquiries@classiccarclubs.uk">enquiries@classiccarclubs.uk</a>
-      </li>
-      <li>
-        <strong>Social Media:</strong><br>
-        <div class="social-links">
-          <a href="https://facebook.com/classiccarclubsuk" target="_blank" rel="noopener">Facebook</a>
-          <a href="https://twitter.com/classiccarclubs" target="_blank" rel="noopener">Twitter</a>
-          <a href="https://instagram.com/classiccarclubsuk" target="_blank" rel="noopener">Instagram</a>
-        </div>
-      </li>
-    </ul>
+  <div class="detail-sidebar">
+    <div class="detail-sidebar-section">
+      <h3 class="detail-sidebar-title">Contact Information</h3>
+      <ul style="list-style: none; padding: 0;">
+        <li style="margin-bottom: 1rem;">
+          <strong>Email:</strong><br>
+          <a href="mailto:enquiries@classiccarclubs.uk">enquiries@classiccarclubs.uk</a>
+        </li>
+        <li style="margin-bottom: 1rem;">
+          <strong>Social Media:</strong><br>
+          <div class="social-links">
+            <a href="https://facebook.com/classiccarclubsuk" target="_blank" rel="noopener">Facebook</a>
+            <a href="https://twitter.com/classiccarclubs" target="_blank" rel="noopener">Twitter</a>
+            <a href="https://instagram.com/classiccarclubsuk" target="_blank" rel="noopener">Instagram</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="detail-sidebar-section">
+      <h3 class="detail-sidebar-title">Advertise With Us</h3>
+      <p>Interested in promoting your business or event to classic car enthusiasts across the UK?</p>
+      <a href="/advertise/" class="button button-secondary" style="width: 100%; text-align: center; margin-top: 1rem;">Advertising Opportunities</a>
+    </div>
   </div>
 </div>
 
@@ -96,7 +124,7 @@ description: Get in touch with the Classic Car Clubs UK team for inquiries, subm
         formDataObj[key] = value;
       });
 
-      // Send form data
+      // Send form data via AJAX/fetch
       fetch('/api/send-email', {
         method: 'POST',
         headers: {
@@ -106,22 +134,40 @@ description: Get in touch with the Classic Car Clubs UK team for inquiries, subm
       })
       .then(response => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error('Network response was not ok ' + response.statusText);
         }
         return response.json();
       })
       .then(data => {
+        // Hide spinner
         formSpinner.style.display = 'none';
+
+        // Show success message
         formSuccess.style.display = 'block';
+
+        // Reset form
         contactForm.reset();
+
+        // Scroll to success message
         formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        // Re-enable submit button
         submitButton.disabled = false;
       })
       .catch(error => {
-        console.error('Error:', error);
+        console.error('Form submission error:', error);
+
+        // Hide spinner
         formSpinner.style.display = 'none';
+
+        // Show error message
+        formError.innerText = 'There was an error sending your message. Please try again or contact us directly.';
         formError.style.display = 'block';
+
+        // Scroll to error message
         formError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+        // Re-enable submit button
         submitButton.disabled = false;
       });
     });
