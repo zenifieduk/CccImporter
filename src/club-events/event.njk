@@ -225,15 +225,14 @@ eleventyComputed:
       "addressLocality": "{{ event.eventCity or '' }}",
       "addressRegion": "{{ event.eventState or '' }}",
       "postalCode": "{{ event.eventPostalCode or '' }}",
-      "addressCountry": "{{ event.eventCountry or 'UK' }}"
+      "addressCountry": "{{ event.eventCountry or 'GB' }}"
     }
   },
-  {% if event.eventOrganizer %}
   "organizer": {
     "@type": "Organization",
-    "name": "{{ event.eventOrganizer }}"
+    "name": "{{ event.eventOrganizer or 'Event Organizer' }}",
+    "url": "{{ event.eventWebsite or '' }}"
   },
-  {% endif %}
   "offers": {
     "@type": "Offer",
     "price": "{{ event.eventTicketPrice | replace('£', '') | replace('Free', '0') }}",
@@ -242,6 +241,7 @@ eleventyComputed:
     "url": "{{ event.eventWebsite or page.url }}"
   },
   "eventStatus": "https://schema.org/EventScheduled",
-  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "eventType": [{% for category in event.eventCategory %}{% if not loop.first %}, {% endif %}"{{ category }}"{% endfor %}]
 }
 </script>
