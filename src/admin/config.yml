@@ -25,28 +25,18 @@ collections:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Slug", name: "slug", widget: "string", hint: "URL-friendly version of the title, lowercase with hyphens" }
       - { label: "ID", name: "id", widget: "number", hint: "Unique identifier for the club" }
-      - { label: "Description", name: "description", widget: "text" }
-      - { label: "Category", name: "category", widget: "string", default: "Classic Car Club" }
-      - { label: "Marque", name: "marque", widget: "string", required: false, hint: "Car make/brand (e.g., Ford, Jaguar)" }
+      - { label: "Website", name: "website", widget: "string", required: false }
+      - { label: "Address", name: "address", widget: "string", required: false }
+      - { label: "Phone", name: "phone", widget: "string", required: false }
+      - { label: "Email", name: "email", widget: "string", required: false }
       - { label: "City", name: "city", widget: "string", required: false }
       - { label: "State/County", name: "state", widget: "string", required: false }
-      - { label: "Country", name: "country", widget: "string", default: "United Kingdom" }
-      - { label: "Website", name: "website", widget: "string", required: false }
-      - { label: "Email", name: "email", widget: "string", required: false }
-      - { label: "Phone", name: "phone", widget: "string", required: false }
-      - { label: "Featured", name: "featured", widget: "boolean", default: false }
+      - { label: "Postal Code", name: "postalCode", widget: "string", required: false }
+      - { label: "Country Code", name: "countryCode", widget: "string", default: "GB" }
+      - { label: "Category", name: "category", widget: "string", default: "Car Club" }
       - { label: "Image URL", name: "imageUrl", widget: "image", required: false, allow_multiple: false }
-      - { label: "Founded", name: "founded", widget: "string", required: false, hint: "Year the club was founded" }
-      - { label: "Membership Fee", name: "membershipFee", widget: "string", required: false, hint: "Annual membership cost" }
-      - { label: "Meeting Frequency", name: "meetingFrequency", widget: "string", required: false, hint: "How often the club meets" }
-      - { label: "Meeting Location", name: "meetingLocation", widget: "string", required: false }
-      - { label: "Membership Benefits", name: "membershipBenefits", widget: "list", required: false }
-      - { label: "Social Media Links", name: "socialMedia", widget: "object", required: false, fields: [
-          { label: "Facebook", name: "facebook", widget: "string", required: false },
-          { label: "Twitter", name: "twitter", widget: "string", required: false },
-          { label: "Instagram", name: "instagram", widget: "string", required: false },
-          { label: "YouTube", name: "youtube", widget: "string", required: false }
-        ]}
+      - { label: "Featured", name: "featured", widget: "boolean", default: false }
+      - { label: "Description", name: "description", widget: "text", required: false }
   
   - name: "events"
     label: "Events"
@@ -60,24 +50,17 @@ collections:
       - { label: "Event Title", name: "eventTitle", widget: "string" }
       - { label: "Event Slug", name: "eventSlug", widget: "string", hint: "URL-friendly version of the title, lowercase with hyphens" }
       - { label: "Event Description", name: "eventDescription", widget: "text" }
-      - { label: "Event Start Date/Time", name: "eventStartDateTime", widget: "datetime", format: "DD/MM/YYYY:HH:mm:ss" }
-      - { label: "Event End Date/Time", name: "eventEndDateTime", widget: "datetime", format: "DD/MM/YYYY:HH:mm:ss" }
-      - { label: "Event Category", name: "eventCategory", widget: "string", default: "Car Show" }
-      - { label: "Event Location", name: "eventLocation", widget: "string" }
-      - { label: "Event City", name: "eventCity", widget: "string" }
-      - { label: "Event State/County", name: "eventState", widget: "string" }
-      - { label: "Event Country", name: "eventCountry", widget: "string", default: "United Kingdom" }
-      - { label: "Event Venue", name: "eventVenue", widget: "string" }
-      - { label: "Event Website", name: "eventWebsite", widget: "string", required: false }
-      - { label: "Event Contact Email", name: "eventContactEmail", widget: "string", required: false }
-      - { label: "Event Contact Phone", name: "eventContactPhone", widget: "string", required: false }
+      - { label: "Event Start Date/Time", name: "eventStartDateTime", widget: "string", hint: "Format: DDMMYYYY:HH:mm:ss (e.g., 08062025:10:00:00)" }
+      - { label: "Event End Date/Time", name: "eventEndDateTime", widget: "string", hint: "Format: DDMMYYYY:HH:mm:ss (e.g., 08062025:16:00:00)" }
       - { label: "Event Ticket Price", name: "eventTicketPrice", widget: "string", required: false }
+      - { label: "Event Website", name: "eventWebsite", widget: "string", required: false }
+      - { label: "Event Address", name: "eventAddress", widget: "string", required: false }
+      - { label: "Event Phone", name: "eventPhone", widget: "string", required: false }
+      - { label: "Event Email", name: "eventEmail", widget: "string", required: false }
+      - { label: "Event City", name: "eventCity", widget: "string", required: false }
+      - { label: "Event State/County", name: "eventState", widget: "string", required: false }
+      - { label: "Event Postal Code", name: "eventPostalCode", widget: "string", required: false }
+      - { label: "Event Country Code", name: "eventCountryCode", widget: "string", default: "GB" }
+      - { label: "Event Category", name: "eventCategory", widget: "list", required: false, hint: "One or more categories like 'Car Show', 'Truck Show'" }
       - { label: "Event Featured", name: "eventFeatured", widget: "boolean", default: false }
       - { label: "Event Image", name: "eventImageUrl", widget: "image", required: false, allow_multiple: false }
-      - { label: "Event Organizer", name: "eventOrganizer", widget: "string", required: false }
-      - { label: "Social Media Links", name: "eventSocialMedia", widget: "object", required: false, fields: [
-          { label: "Facebook", name: "facebook", widget: "string", required: false },
-          { label: "Twitter", name: "twitter", widget: "string", required: false },
-          { label: "Instagram", name: "instagram", widget: "string", required: false }
-        ]}
-      - { label: "Event Highlights", name: "eventHighlights", widget: "list", required: false }

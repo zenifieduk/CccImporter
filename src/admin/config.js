@@ -62,6 +62,10 @@ class CustomProxy {
 
   persistEntry(entry, mediaFiles, options) {
     const collection = options.collectionName;
+    console.log('Persisting entry:', entry);
+    console.log('Collection:', collection);
+    console.log('Media files:', mediaFiles);
+    
     return Promise.all(
       mediaFiles.map(file => this.persistMedia(file))
     ).then(mediaData => {
@@ -73,12 +77,24 @@ class CustomProxy {
 
       // Replace media pointers with URLs in the entry data
       const entryData = { ...entry.data };
-      if (entryData.imageUrl && entryData.imageUrl.includes('/')) {
-        entryData.imageUrl = entryData.imageUrl;
+      
+      // Add slug if it's not present (derived from title)
+      if (!entryData.slug && entryData.title) {
+        entryData.slug = entryData.title
+          .toLowerCase()
+          .replace(/[^\w\s-]/g, '')
+          .replace(/\s+/g, '-');
       }
-      if (entryData.eventImageUrl && entryData.eventImageUrl.includes('/')) {
-        entryData.eventImageUrl = entryData.eventImageUrl;
+      
+      // Add eventSlug if it's not present (derived from eventTitle)
+      if (!entryData.eventSlug && entryData.eventTitle) {
+        entryData.eventSlug = entryData.eventTitle
+          .toLowerCase()
+          .replace(/[^\w\s-]/g, '')
+          .replace(/\s+/g, '-');
       }
+      
+      console.log('Entry data to save:', entryData);
 
       return fetch(`${this.options.proxyUrl}/collections/${collection}`, {
         method: 'POST',
@@ -86,13 +102,22 @@ class CustomProxy {
         body: JSON.stringify(entryData)
       })
         .then(response => {
+          console.log('Save response status:', response.status);
           if (!response.ok) {
-            throw new Error(`Failed to persist entry: ${response.statusText}`);
+            return response.text().then(text => {
+              console.error('Error response text:', text);
+              throw new Error(`Failed to persist entry: ${response.statusText}`);
+            });
           }
           return response.json();
         })
         .then(data => {
-          return { ...entry, data: data.data };
+          console.log('Save response data:', data);
+          return { ...entry, data: data.data || entryData };
+        })
+        .catch(error => {
+          console.error('Error saving entry:', error);
+          throw error;
         });
     });
   }
