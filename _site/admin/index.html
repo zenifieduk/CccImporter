@@ -4,23 +4,54 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Classic Car Clubs CMS</title>
-  <!-- Include the Netlify Identity Widget for authentication -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
   <!-- Include the DecapCMS script -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   
+  <!-- Initialize the CMS -->
   <script>
-    // Check if the user is authenticated when they return from the authentication process
-    if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
-        if (!user) {
-          window.netlifyIdentity.on("login", () => {
-            document.location.href = "/admin/";
-          });
-        }
-      });
+    // For local development, enable local backend
+    if (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1") {
+      window.CMS_MANUAL_INIT = true;
+      window.decapCmsConfig = {
+        backend: {
+          name: 'test-repo',
+          login: false,
+        },
+        media_folder: "public/assets/images/uploads",
+        public_folder: "/assets/images/uploads",
+        collections: [
+          {
+            name: "clubs",
+            label: "Clubs",
+            folder: "src/_data/clubs-json",
+            create: true,
+            slug: "",
+            extension: "json",
+            fields: [
+              { label: "Title", name: "title", widget: "string" },
+              { label: "Description", name: "description", widget: "text" },
+              { label: "Category", name: "category", widget: "string", default: "Classic Car Club" }
+              // Other fields would be added here
+            ]
+          },
+          {
+            name: "events",
+            label: "Events",
+            folder: "src/_data/events-json",
+            create: true,
+            slug: "",
+            extension: "json",
+            fields: [
+              { label: "Event Title", name: "eventTitle", widget: "string" },
+              { label: "Event Description", name: "eventDescription", widget: "text" }
+              // Other fields would be added here
+            ]
+          }
+        ]
+      };
+      window.CMS.init({ config: window.decapCmsConfig });
     }
   </script>
 </body>

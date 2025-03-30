@@ -1,6 +1,10 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: username/repo-name  # Replace with your actual GitHub username/repo
   branch: main
+  
+# Enable the editorial workflow for drafts, review, and publishing
+publish_mode: editorial_workflow
   
 media_folder: "public/assets/images/uploads"
 public_folder: "/assets/images/uploads"
