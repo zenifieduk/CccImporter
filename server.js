@@ -11,9 +11,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Configure SendGrid
-if (process.env.SENDGRID_API_KEY) {
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-}
+// Always set the API key - we know it exists from environment variables
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Serve static files from the _site directory
 app.use(express.static('_site'));
@@ -31,40 +30,30 @@ app.post('/api/send-email', async (req, res) => {
   }
   
   try {
-    // If SendGrid is configured, send email
-    if (process.env.SENDGRID_API_KEY) {
-      const msg = {
-        to: 'enquiries@classiccarclubs.uk',
-        from: 'noreply@classiccarclubs.uk',
-        subject: `Contact Form: ${contactReason || 'General Inquiry'}`,
-        text: `
-          Name: ${name}
-          Email: ${email}
-          Reason: ${contactReason || 'Not specified'}
-          
-          Message:
-          ${message}
-        `,
-        html: `
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Reason:</strong> ${contactReason || 'Not specified'}</p>
-          <p><strong>Message:</strong></p>
-          <p>${message.replace(/\n/g, '<br>')}</p>
-        `
-      };
-      
-      await sgMail.send(msg);
-      return res.status(200).json({ success: true, message: 'Email sent successfully' });
-    } else {
-      // If SendGrid is not configured, log the message and return success
-      console.log('SendGrid API key not configured. Form submission received:');
-      console.log({ name, email, contactReason, message });
-      return res.status(200).json({ 
-        success: true, 
-        message: 'Message received (note: email delivery is disabled)' 
-      });
-    }
+    // We know SendGrid is configured with API key
+    const msg = {
+      to: 'enquiries@classiccarclubs.uk',
+      from: 'noreply@classiccarclubs.uk',
+      subject: `Contact Form: ${contactReason || 'General Inquiry'}`,
+      text: `
+        Name: ${name}
+        Email: ${email}
+        Reason: ${contactReason || 'Not specified'}
+        
+        Message:
+        ${message}
+      `,
+      html: `
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Reason:</strong> ${contactReason || 'Not specified'}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message.replace(/\n/g, '<br>')}</p>
+      `
+    };
+    
+    await sgMail.send(msg);
+    return res.status(200).json({ success: true, message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);
     return res.status(500).json({ 
