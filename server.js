@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { exec } = require('child_process');
 const sendEmailHandler = require('./src/api/send-email').handler;
 
 const app = express();
@@ -11,21 +10,15 @@ app.use(express.static('_site'));
 
 app.post('/api/send-email', sendEmailHandler);
 
-function startEleventy() {
-  const eleventy = exec('npx @11ty/eleventy --serve --port 5001');
+// Add CORS headers for development
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  next();
+});
 
-  eleventy.stdout.on('data', (data) => {
-    console.log(`[eleventy] ${data}`);
-  });
-
-  eleventy.stderr.on('data', (data) => {
-    console.error(`[eleventy error] ${data}`);
-  });
-
-}
-
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
-  startEleventy();
 });

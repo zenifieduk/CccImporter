@@ -125,7 +125,7 @@ description: Get in touch with the Classic Car Clubs UK team for inquiries, subm
       });
 
       // Send form data via AJAX/fetch
-      fetch('/api/send-email', {
+      fetch('http://localhost:5001/api/send-email', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -133,10 +133,12 @@ description: Get in touch with the Classic Car Clubs UK team for inquiries, subm
         body: JSON.stringify(formDataObj)
       })
       .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
+        return response.json().then(data => {
+          if (!response.ok) {
+            throw new Error(data.error || 'Network response was not ok ' + response.statusText);
+          }
+          return data;
+        });
       })
       .then(data => {
         // Hide spinner
@@ -160,8 +162,8 @@ description: Get in touch with the Classic Car Clubs UK team for inquiries, subm
         // Hide spinner
         formSpinner.style.display = 'none';
 
-        // Show error message
-        formError.innerText = 'There was an error sending your message. Please try again or contact us directly.';
+        // Show error message with details if available
+        formError.innerText = `There was an error sending your message: ${error.message || 'Unknown error'}. Please try again or contact us directly at enquiries@classiccarclubs.uk`;
         formError.style.display = 'block';
 
         // Scroll to error message
