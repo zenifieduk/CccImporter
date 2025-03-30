@@ -119,8 +119,8 @@ eleventyComputed:
   </div>
   
   <div class="club-grid">
-    {% set otherClubs = clubs | limit(3) %}
-    {% for club in otherClubs %}
+    {% set otherClubs = relatedClubs.getRelatedClubs(clubs, club, 3) %}
+    {% for otherClub in otherClubs %}
       {% include "components/club-card-clean.njk" %}
     {% endfor %}
   </div>
