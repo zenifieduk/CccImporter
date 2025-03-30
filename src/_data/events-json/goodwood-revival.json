@@ -1,0 +1,19 @@
+{
+  "eventTitle": "Goodwood Revival 2025",
+  "eventSlug": "goodwood-revival-2025",
+  "eventDescription": "The Goodwood Revival is the world's greatest historic motor race meeting, and the only sporting event of its kind to be staged entirely in a period theme. More than just an unrivaled weekend of historic racing, it's an immersive celebration of a less disposable world, where 'make do and mend' was a way of life rather than a casual slogan.",
+  "eventStartDateTime": "12092025:09:00:00",
+  "eventEndDateTime": "14092025:18:00:00",
+  "eventTicketPrice": "£65.00 - £215.00",
+  "eventWebsite": "https://www.goodwood.com/motorsport/goodwood-revival/",
+  "eventAddress": "Goodwood Circuit, Chichester, West Sussex, PO18 0PH",
+  "eventPhone": "01243 755055",
+  "eventEmail": "ticket.office@goodwood.com",
+  "eventCity": "Chichester",
+  "eventState": "West Sussex",
+  "eventPostalCode": "PO18 0PH",
+  "eventCountryCode": "GB",
+  "eventImageUrl": "/assets/images/goodwood-revival.jpg",
+  "eventCategory": ["Car Show", "Racing"],
+  "eventFeatured": true
+}
