@@ -1,148 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Highland Car Club Ltd | Classic Car Clubs | UK Directory</title>
+  <title>Highland Car Club Ltd</title>
   <meta name="description" content="Discover information about Highland Car Club Ltd, including contact details, events, and more.">
-  <link rel="icon" type="image/svg+xml" href="/assets/images/ccc-logo.svg">
-
-  <!-- Google Fonts -->
+  
+  <!-- Favicon -->
+  <link rel="icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  
+  <!-- Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
-
-  <!-- Styles -->
-  <link rel="stylesheet" href="/assets/css/styles.css">
-  <link rel="stylesheet" href="/assets/css/ad-banners.css">
-
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Public+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Classic Car Clubs | UK Directory",
+      "url": "http://localhost:8080"
+    }
+  </script>
+  
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-  <script src="/assets/js/alpine-init.js"></script>
-</head>
-<body class="">
-  <header class="site-header" x-data="mobileMenu">
-  <div class="container">
-    <div class="logo">
-      <a href="/">
-        <img class="logo-image" src="/assets/images/ccc-logo.svg" alt="Classic Car Clubs | UK Directory">
-      </a>
-    </div>
+  <script src="/assets/js/alpine-init.js" defer></script>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'dark-green': '#0f4c3a',
+            'light-green': '#1a7f62',
+            'accent': '#9ee0d8',
+            'accent-dark': '#79c7bd',
+            'light-cream': '#f9f7f0'
+          },
+          fontFamily: {
+            'sans': ['Public Sans', 'sans-serif'],
+            'serif': ['EB Garamond', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .line-clamp-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+      .aspect-w-16 {
+        position: relative;
+        padding-bottom: 56.25%;
+      }
+      .aspect-w-16 img {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        object-fit: cover;
+      }
+    }
     
-    <nav class="desktop-nav">
-      <ul>
+    body {
+      font-family: 'EB Garamond', serif;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'EB Garamond', serif;
+    }
+    
+    nav, button, .button, input, select {
+      font-family: 'Public Sans', sans-serif;
+    }
+    
+    /* Header transparency for home hero */
+    .header-transparent {
+      background-color: rgba(15, 76, 58, 0.8); /* dark-green with opacity */
+    }
+  </style>
+  
+  
+</head>
+<body class="min-h-screen flex flex-col bg-white text-gray-900">
+  <!-- Header -->
+  <header class="bg-dark-green text-white" x-data="mobileMenu">
+    <div class="container mx-auto px-4">
+      <div class="flex justify-between items-center py-4">
+        <!-- Logo -->
+        <a href="/" class="text-2xl font-bold text-white font-serif">
+          Classic Car Clubs
+        </a>
         
-          <li>
-            <a href="/" >
+        <!-- Desktop Navigation -->
+        <nav class="hidden md:flex space-x-6">
+          
+            <a 
+              href="/" 
+              class="text-white hover:text-accent font-medium transition duration-150"
+              
+            >
               Home
             </a>
-          </li>
-        
-          <li>
-            <a href="/club-directory/" >
-              Club Directory
+          
+            <a 
+              href="/club-directory/" 
+              class="text-white hover:text-accent font-medium transition duration-150"
+              
+            >
+              Clubs
             </a>
-          </li>
-        
-          <li>
-            <a href="/club-events/" >
-              Club Events
+          
+            <a 
+              href="/club-events/" 
+              class="text-white hover:text-accent font-medium transition duration-150"
+              
+            >
+              Events
             </a>
-          </li>
-        
-          <li>
-            <a href="/contact/" >
+          
+            <a 
+              href="/about/" 
+              class="text-white hover:text-accent font-medium transition duration-150"
+              
+            >
+              About
+            </a>
+          
+            <a 
+              href="/contact/" 
+              class="text-white hover:text-accent font-medium transition duration-150"
+              
+            >
               Contact
             </a>
-          </li>
-        
-      </ul>
-    </nav>
-    
-    <button class="mobile-menu-toggle" @click="toggle" aria-label="Toggle menu">
-      <span class="hamburger-icon">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
-      </span>
-    </button>
-    
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" :class="{ 'active': isOpen }" x-cloak>
-      <div class="mobile-menu-container">
-        <div class="mobile-menu-header">
-          <div class="logo">
-            <a href="/" @click="close">
-              <img class="logo-image" src="/assets/images/ccc-logo.svg" alt="Classic Car Clubs | UK Directory">
-            </a>
-          </div>
           
-          <button class="mobile-menu-close" @click="close" aria-label="Close menu">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-        </div>
-        
-        <nav class="mobile-nav">
-          <ul>
-            
-              <li>
-                <a href="/" @click="close" >
-                  Home
-                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </a>
-              </li>
-            
-              <li>
-                <a href="/club-directory/" @click="close" >
-                  Club Directory
-                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </a>
-              </li>
-            
-              <li>
-                <a href="/club-events/" @click="close" >
-                  Club Events
-                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </a>
-              </li>
-            
-              <li>
-                <a href="/contact/" @click="close" >
-                  Contact
-                  <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </a>
-              </li>
-            
-          </ul>
         </nav>
         
-        <div class="mobile-menu-footer">
-          <p class="cta-text">Connect with classic car enthusiasts</p>
-          <a href="/contact/" class="contact-link" @click="close">Get in touch</a>
-        </div>
+        <!-- Mobile Menu Button -->
+        <button 
+          @click="toggle()"
+          class="md:hidden text-white focus:outline-none"
+          aria-label="Toggle Menu"
+        >
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            class="h-6 w-6" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path 
+              x-show="!open"
+              stroke-linecap="round" 
+              stroke-linejoin="round" 
+              stroke-width="2" 
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+            <path 
+              x-show="open"
+              stroke-linecap="round" 
+              stroke-linejoin="round" 
+              stroke-width="2" 
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
       </div>
     </div>
-  </div>
-</header>
-
-
-  <main>
     
+    <!-- Mobile Navigation -->
+    <div 
+      x-show="open" 
+      x-transition:enter="transition ease-out duration-200"
+      x-transition:enter-start="opacity-0 -translate-y-4"
+      x-transition:enter-end="opacity-100 translate-y-0"
+      x-transition:leave="transition ease-in duration-150"
+      x-transition:leave-start="opacity-100 translate-y-0"
+      x-transition:leave-end="opacity-0 -translate-y-4"
+      class="md:hidden bg-green-900"
+    >
+      <nav class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+        
+          <a 
+            href="/" 
+            @click="close()"
+            class="text-white hover:text-accent py-2 font-medium transition duration-150"
+            
+          >
+            Home
+          </a>
+        
+          <a 
+            href="/club-directory/" 
+            @click="close()"
+            class="text-white hover:text-accent py-2 font-medium transition duration-150"
+            
+          >
+            Clubs
+          </a>
+        
+          <a 
+            href="/club-events/" 
+            @click="close()"
+            class="text-white hover:text-accent py-2 font-medium transition duration-150"
+            
+          >
+            Events
+          </a>
+        
+          <a 
+            href="/about/" 
+            @click="close()"
+            class="text-white hover:text-accent py-2 font-medium transition duration-150"
+            
+          >
+            About
+          </a>
+        
+          <a 
+            href="/contact/" 
+            @click="close()"
+            class="text-white hover:text-accent py-2 font-medium transition duration-150"
+            
+          >
+            Contact
+          </a>
+        
+      </nav>
+    </div>
+  </header>
+  
+  <!-- Main Content -->
+  <main class="flex-grow">
+    
+      
 <div class="container">
   
 
@@ -248,113 +362,89 @@
   <div class="club-grid">
     
     
-      
-<div class="club-card standard-club-card">
-  <div class="club-content">
-    <h3 class="club-title">500 Owners Association - The</h3>
-    
-    
-      <div class="club-location">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-          <circle cx="12" cy="10" r="3"></circle>
-        </svg>
-        Norwich
-        , 
-        Cheshire
-      </div>
-    
-    
-    
-      <div class="club-category">
-        <span class="category-tag">Motorcycle Club</span>
-        
-          <span class="category-tag">Classic</span>
-        
-      </div>
-    
+      <div 
+  class="club-card rounded-lg shadow-sm border overflow-hidden transition-transform hover:shadow-md hover:-translate-y-1 h-full"
+  class="bg-white"
+>
+  <div class="aspect-w-16 aspect-h-9 bg-gray-100">
+    <img 
+      src="/assets/images/placeholder-club.jpg" 
+      alt=" logo" 
+      class="object-cover w-full h-full"
+      loading="lazy"
+    >
   </div>
-  
-  <div class="club-actions">
-    <a href="/club-directory/500-owners-association-the-1/" class="button button-primary">View Details</a>
+  <div class="p-4 flex flex-col h-full">
     
-     <!-- <a href="https://www.500race.org" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
     
+    <h3 class="text-xl font-serif mb-2">500 Owners Association - The</h3>
+    <p class="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">500 Owners Association - The is a car club based in Norwich.</p>
+    
+    <div class="flex flex-wrap gap-2 mb-4">
+      
+    </div>
+    
+    <a href="/club-directory/500-owners-association-the/" class="inline-block bg-dark-green hover:bg-green-700 text-white py-2 px-4 rounded uppercase text-sm tracking-wider font-serif transition duration-150 mt-auto">
+      View Club
+    </a>
   </div>
 </div>
-
     
-      
-<div class="club-card standard-club-card">
-  <div class="club-content">
-    <h3 class="club-title">750 Motor Club</h3>
-    
-    
-      <div class="club-location">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-          <circle cx="12" cy="10" r="3"></circle>
-        </svg>
-        Derby
-        
-        
-      </div>
-    
-    
-    
-      <div class="club-category">
-        <span class="category-tag">Motor Club</span>
-        
-          <span class="category-tag">Classic</span>
-        
-      </div>
-    
+      <div 
+  class="club-card rounded-lg shadow-sm border overflow-hidden transition-transform hover:shadow-md hover:-translate-y-1 h-full"
+  class="bg-white"
+>
+  <div class="aspect-w-16 aspect-h-9 bg-gray-100">
+    <img 
+      src="/assets/images/placeholder-club.jpg" 
+      alt=" logo" 
+      class="object-cover w-full h-full"
+      loading="lazy"
+    >
   </div>
-  
-  <div class="club-actions">
-    <a href="/club-directory/750-motor-club-2/" class="button button-primary">View Details</a>
+  <div class="p-4 flex flex-col h-full">
     
-     <!-- <a href="https://www.750mc.co.uk/" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
     
+    <h3 class="text-xl font-serif mb-2">750 Motor Club</h3>
+    <p class="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">750 Motor Club is a car club based in Derby.</p>
+    
+    <div class="flex flex-wrap gap-2 mb-4">
+      
+    </div>
+    
+    <a href="/club-directory/750-motor-club/" class="inline-block bg-dark-green hover:bg-green-700 text-white py-2 px-4 rounded uppercase text-sm tracking-wider font-serif transition duration-150 mt-auto">
+      View Club
+    </a>
   </div>
 </div>
-
     
-      
-<div class="club-card standard-club-card">
-  <div class="club-content">
-    <h3 class="club-title">A602s Street and Strip Rods</h3>
-    
-    
-      <div class="club-location">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
-          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-          <circle cx="12" cy="10" r="3"></circle>
-        </svg>
-        Cambridge
-        , 
-        Cambridgeshire
-      </div>
-    
-    
-    
-      <div class="club-category">
-        <span class="category-tag">Hot Rod Club</span>
-        
-          <span class="category-tag">Classic</span>
-        
-      </div>
-    
+      <div 
+  class="club-card rounded-lg shadow-sm border overflow-hidden transition-transform hover:shadow-md hover:-translate-y-1 h-full"
+  class="bg-white"
+>
+  <div class="aspect-w-16 aspect-h-9 bg-gray-100">
+    <img 
+      src="/assets/images/placeholder-club.jpg" 
+      alt=" logo" 
+      class="object-cover w-full h-full"
+      loading="lazy"
+    >
   </div>
-  
-  <div class="club-actions">
-    <a href="/club-directory/a602s-street-strip-rods-3/" class="button button-primary">View Details</a>
+  <div class="p-4 flex flex-col h-full">
     
-     <!-- <a href="http://www.a602sstreetandstriprods.com/" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
     
+    <h3 class="text-xl font-serif mb-2">A602s Street and Strip Rods</h3>
+    <p class="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">A602s Street and Strip Rods is a car club based in Cambridge.</p>
+    
+    <div class="flex flex-wrap gap-2 mb-4">
+      
+    </div>
+    
+    <a href="/club-directory/a602s-street-strip-rods/" class="inline-block bg-dark-green hover:bg-green-700 text-white py-2 px-4 rounded uppercase text-sm tracking-wider font-serif transition duration-150 mt-auto">
+      View Club
+    </a>
   </div>
 </div>
-
     
   </div>
   
@@ -365,103 +455,153 @@
 
 </div>
 
+    
   </main>
-
-  <footer class="site-footer">
-  <div class="container">
-    <div class="footer-content">
-      <div class="logo-column">
-        <div class="footer-logo">
-          <h3>CLASSIC CAR CLUBS</h3>
-          <p class="tagline">UK NETWORK</p>
+  
+  <!-- Footer -->
+  <footer class="bg-dark-green text-white py-12">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- About -->
+        <div>
+          <h3 class="text-xl font-bold mb-4 font-serif">About Us</h3>
+          <p class="mb-4">Classic Car Clubs is the premier directory for car enthusiasts. Find your perfect club, connect with fellow enthusiasts, and discover events.</p>
+          <div class="flex space-x-4">
+            
+              <a href="https://twitter.com/classiccarclubs" target="_blank" rel="noopener noreferrer" class="text-white hover:text-accent transition duration-150">
+                <span class="sr-only">twitter</span>
+                
+                  <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
+                  </svg>
+                
+              </a>
+            
+              <a href="https://facebook.com/classiccarclubs" target="_blank" rel="noopener noreferrer" class="text-white hover:text-accent transition duration-150">
+                <span class="sr-only">facebook</span>
+                
+                  <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" />
+                  </svg>
+                
+              </a>
+            
+              <a href="https://instagram.com/classiccarclubs" target="_blank" rel="noopener noreferrer" class="text-white hover:text-accent transition duration-150">
+                <span class="sr-only">instagram</span>
+                
+                  <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" />
+                  </svg>
+                
+              </a>
+            
+          </div>
         </div>
-        <p class="footer-blurb">
-          Your ultimate resource for connecting with classic car enthusiasts across the 
-          United Kingdom. Find clubs dedicated to vintage marques, iconic eras, and 
-          specific regions.
-        </p>
+        
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-xl font-bold mb-4 font-serif">Quick Links</h3>
+          <ul class="space-y-2">
+            
+              <li>
+                <a href="/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Home
+                </a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Clubs
+                </a>
+              </li>
+            
+              <li>
+                <a href="/club-events/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Events
+                </a>
+              </li>
+            
+              <li>
+                <a href="/about/" class="text-gray-300 hover:text-accent transition duration-150">
+                  About
+                </a>
+              </li>
+            
+              <li>
+                <a href="/contact/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Contact
+                </a>
+              </li>
+            
+          </ul>
+        </div>
+        
+        <!-- Information -->
+        <div>
+          <h3 class="text-xl font-bold mb-4 font-serif">Information</h3>
+          <ul class="space-y-2">
+            
+              <li>
+                <a href="/privacy/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Privacy Policy
+                </a>
+              </li>
+            
+              <li>
+                <a href="/terms/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Terms of Service
+                </a>
+              </li>
+            
+              <li>
+                <a href="/club-website-design/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Club Website Design
+                </a>
+              </li>
+            
+              <li>
+                <a href="/advertise/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Advertise
+                </a>
+              </li>
+            
+              <li>
+                <a href="/newsletter/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Newsletter
+                </a>
+              </li>
+            
+          </ul>
+        </div>
+        
+        <!-- Newsletter -->
+        <div>
+          <h3 class="text-xl font-bold mb-4 font-serif">Newsletter</h3>
+          <p class="mb-4">Subscribe to our newsletter to receive updates on events, clubs, and classic car news.</p>
+          <form action="/api/subscribe" method="post" class="flex flex-col space-y-3">
+            <input 
+              type="email" 
+              name="email" 
+              placeholder="Your email address" 
+              required
+              class="px-4 py-2 rounded bg-green-800 border border-green-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-accent"
+            >
+            <button 
+              type="submit" 
+              class="bg-accent hover:bg-accent-dark text-dark-green py-2 px-4 rounded uppercase text-sm tracking-wider font-serif transition duration-150"
+            >
+              Subscribe
+            </button>
+          </form>
+        </div>
       </div>
       
-      
-        <div class="footer-column">
-          <h4>Directory</h4>
-          <ul class="footer-links">
-            
-              <li>
-                <a href="/club-directory/">All Clubs</a>
-              </li>
-            
-              <li>
-                <a href="/club-directory/?category=Car%20Club">Car Type Clubs</a>
-              </li>
-            
-              <li>
-                <a href="/club-directory/?category=Regional%20Club">Region Clubs</a>
-              </li>
-            
-              <li>
-                <a href="/club-directory/?featured=true">Featured Clubs</a>
-              </li>
-            
-          </ul>
-        </div>
-      
-        <div class="footer-column">
-          <h4>Events</h4>
-          <ul class="footer-links">
-            
-              <li>
-                <a href="/club-events/">All Events</a>
-              </li>
-            
-              <li>
-                <a href="/club-events/?category=Car%20Show">Car Shows</a>
-              </li>
-            
-              <li>
-                <a href="/club-events/?category=Car%20Meet">Meets</a>
-              </li>
-            
-              <li>
-                <a href="/club-events/?featured=true">Featured Events</a>
-              </li>
-            
-          </ul>
-        </div>
-      
-        <div class="footer-column">
-          <h4>About</h4>
-          <ul class="footer-links">
-            
-              <li>
-                <a href="/privacy-policy/">Privacy Policy</a>
-              </li>
-            
-              <li>
-                <a href="/submit-club/">Submit a Club</a>
-              </li>
-            
-              <li>
-                <a href="/club-websites/">Club Website Design</a>
-              </li>
-            
-              <li>
-                <a href="/advertise/">Advertise With Us</a>
-              </li>
-            
-          </ul>
-        </div>
-      
+      <div class="mt-8 pt-8 border-t border-green-700 text-center">
+        <p>&copy; 2025 Classic Car Clubs. All rights reserved.</p>
+      </div>
     </div>
-    
-    <div class="footer-bottom">
-      <p>&copy; 2025 Classic Car Clubs UK. All rights reserved. Website by <a href="https://zenified.uk" target="_blank" rel="noopener">Zenified.uk</a></p>
-    </div>
-  </div>
-</footer>
-
-
-  <!-- Scripts -->
-  <script src="/assets/js/search.js"></script>
+  </footer>
+  
+  
 </body>
 </html>

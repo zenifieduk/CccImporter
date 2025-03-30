@@ -1,0 +1,146 @@
+backend:
+  name: git-gateway
+  branch: main
+  commit_messages:
+    create: Create {{collection}} "{{slug}}"
+    update: Update {{collection}} "{{slug}}"
+    delete: Delete {{collection}} "{{slug}}"
+    uploadMedia: Upload "{{path}}"
+    deleteMedia: Delete "{{path}}"
+
+# Essential Decap CMS settings 
+site_url: https://classic-car-clubs.netlify.app
+display_url: https://classiccarclubs.org
+logo_url: /assets/images/classic-car-clubs-logo.svg
+publish_mode: editorial_workflow
+media_folder: src/assets/images
+public_folder: /assets/images
+locale: en
+
+# Decap CMS Authentication
+# Using Netlify Identity service for auth
+identity_url: "https://api.netlify.com"
+gateway_url: "https://api.netlify.com"
+site_domain: "classic-car-clubs.netlify.app"
+
+# Content Collections
+collections:
+  - name: "clubs"
+    label: "Car Clubs"
+    folder: "src/_data/clubs-json"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Club Name", name: "name", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string", hint: "URL-friendly identifier (no spaces, lowercase)" }
+      - { label: "Image", name: "image", widget: "image", hint: "Club logo or featured image", required: false }
+      - { label: "Featured", name: "featured", widget: "boolean", default: false, hint: "Display this club prominently on the homepage" }
+      - { label: "Description", name: "description", widget: "text", hint: "Brief club description for listings" }
+      - { label: "Full Description", name: "fullDescription", widget: "markdown", hint: "Detailed club information", required: false }
+      - label: "Contact Information"
+        name: "contact"
+        widget: "object"
+        fields:
+          - { label: "Email", name: "email", widget: "string", required: false }
+          - { label: "Phone", name: "phone", widget: "string", required: false }
+          - { label: "Website", name: "website", widget: "string", required: false }
+      - label: "Location"
+        name: "location"
+        widget: "object"
+        fields:
+          - { label: "Address", name: "address", widget: "string", required: false }
+          - { label: "City", name: "city", widget: "string", required: false }
+          - { label: "County", name: "county", widget: "string", required: false }
+          - { label: "Postcode", name: "postcode", widget: "string", required: false }
+      - label: "Categories"
+        name: "categories"
+        widget: "select"
+        multiple: true
+        options:
+          - { label: "Classic", value: "classic" }
+          - { label: "Vintage", value: "vintage" }
+          - { label: "Modern Classic", value: "modern-classic" }
+          - { label: "Sports Cars", value: "sports" }
+          - { label: "Luxury", value: "luxury" }
+          - { label: "British", value: "british" }
+          - { label: "European", value: "european" }
+          - { label: "American", value: "american" }
+          - { label: "Japanese", value: "japanese" }
+          - { label: "Motorcycles", value: "motorcycles" }
+      - label: "Social Media"
+        name: "social"
+        widget: "object"
+        required: false
+        fields:
+          - { label: "Facebook", name: "facebook", widget: "string", required: false }
+          - { label: "Twitter", name: "twitter", widget: "string", required: false }
+          - { label: "Instagram", name: "instagram", widget: "string", required: false }
+          - { label: "YouTube", name: "youtube", widget: "string", required: false }
+      - { label: "Founded", name: "founded", widget: "string", required: false }
+      - { label: "Member Count", name: "memberCount", widget: "number", required: false, value_type: "int" }
+
+  - name: "events"
+    label: "Car Events"
+    folder: "src/_data/events-json"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Event Title", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string", hint: "URL-friendly identifier (no spaces, lowercase)" }
+      - { label: "Location", name: "location", widget: "string" }
+      - { label: "Start Date", name: "startDate", widget: "datetime", time_format: true, date_format: "YYYY-MM-DD" }
+      - { label: "End Date", name: "endDate", widget: "datetime", time_format: true, date_format: "YYYY-MM-DD", required: false }
+      - { label: "Image", name: "image", widget: "image", hint: "Event featured image", required: false }
+      - { label: "Featured", name: "featured", widget: "boolean", default: false, hint: "Display this event prominently on the homepage" }
+      - { label: "Description", name: "description", widget: "text", hint: "Brief event description for listings" }
+      - { label: "Full Description", name: "fullDescription", widget: "markdown", hint: "Detailed event information", required: false }
+      - label: "Organizer"
+        name: "organizer"
+        widget: "object"
+        fields:
+          - { label: "Name", name: "name", widget: "string" }
+          - { label: "Email", name: "email", widget: "string", required: false }
+          - { label: "Phone", name: "phone", widget: "string", required: false }
+          - { label: "Website", name: "website", widget: "string", required: false }
+      - label: "Categories"
+        name: "categories"
+        widget: "select"
+        multiple: true
+        options:
+          - { label: "Show", value: "show" }
+          - { label: "Rally", value: "rally" }
+          - { label: "Racing", value: "racing" }
+          - { label: "Concours", value: "concours" }
+          - { label: "Auction", value: "auction" }
+          - { label: "Meet", value: "meet" }
+          - { label: "Tour", value: "tour" }
+          - { label: "Festival", value: "festival" }
+      - { label: "Ticket Price", name: "ticketPrice", widget: "string", required: false }
+      - { label: "Ticket URL", name: "ticketUrl", widget: "string", required: false }
+
+  - name: "pages"
+    label: "Pages"
+    files:
+      - name: "home"
+        label: "Homepage"
+        file: "src/_data/home.json"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Hero Heading", name: "heroHeading", widget: "string" }
+          - { label: "Hero Subheading", name: "heroSubheading", widget: "string" }
+          - { label: "Featured Clubs Heading", name: "featuredClubsHeading", widget: "string" }
+          - { label: "Featured Events Heading", name: "featuredEventsHeading", widget: "string" }
+      - name: "about"
+        label: "About Page"
+        file: "src/_data/about.json"
+        fields:
+          - { label: "Title", name: "title", widget: "string" }
+          - { label: "Content", name: "content", widget: "markdown" }
+          - label: "Team Members"
+            name: "team"
+            widget: "list"
+            fields:
+              - { label: "Name", name: "name", widget: "string" }
+              - { label: "Role", name: "role", widget: "string" }
+              - { label: "Bio", name: "bio", widget: "text" }
+              - { label: "Photo", name: "photo", widget: "image", required: false }

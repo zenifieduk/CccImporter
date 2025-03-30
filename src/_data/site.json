@@ -1,0 +1,27 @@
+{
+  "title": "Classic Car Clubs",
+  "description": "Discover and connect with classic car clubs and events across the UK and beyond.",
+  "url": "https://classiccarclubs.org",
+  "authorName": "Classic Car Clubs",
+  "authorEmail": "info@classiccarclubs.org",
+  "locale": "en_GB",
+  "social": {
+    "twitter": "https://twitter.com/classiccarclubs",
+    "facebook": "https://facebook.com/classiccarclubs",
+    "instagram": "https://instagram.com/classiccarclubs"
+  },
+  "nav": [
+    { "text": "Home", "url": "/" },
+    { "text": "Clubs", "url": "/club-directory/" },
+    { "text": "Events", "url": "/club-events/" },
+    { "text": "About", "url": "/about/" },
+    { "text": "Contact", "url": "/contact/" }
+  ],
+  "footerNav": [
+    { "text": "Privacy Policy", "url": "/privacy/" },
+    { "text": "Terms of Service", "url": "/terms/" },
+    { "text": "Club Website Design", "url": "/club-website-design/" },
+    { "text": "Advertise", "url": "/advertise/" },
+    { "text": "Newsletter", "url": "/newsletter/" }
+  ]
+}

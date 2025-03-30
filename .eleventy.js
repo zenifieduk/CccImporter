@@ -1,4 +1,6 @@
 const { DateTime } = require("luxon");
+const filters = require('./src/_data/filters');
+const markdownIt = require("markdown-it");
 
 module.exports = function(eleventyConfig) {
   // Copy assets directory
@@ -7,15 +9,45 @@ module.exports = function(eleventyConfig) {
   // Copy public directory
   eleventyConfig.addPassthroughCopy({ "public": "/" });
   
-  // Copy admin directory for Decap CMS
-  eleventyConfig.addPassthroughCopy("src/admin");
+  // Copy admin directory for Decap CMS - only use the root level one
+  // eleventyConfig.addPassthroughCopy("src/admin");
+  
+  // Copy root admin directory for Netlify CMS/Decap CMS
+  eleventyConfig.addPassthroughCopy({ "admin": "/" });
+  
+  // Add JSON feed endpoints for data
+  eleventyConfig.addPassthroughCopy({ "src/clubs.json.njk": "clubs.json" });
+  eleventyConfig.addPassthroughCopy({ "src/events.json.njk": "events.json" });
+  
+  // Register custom filters
+  Object.keys(filters).forEach(filterName => {
+    eleventyConfig.addFilter(filterName, filters[filterName]);
+  });
+  
+  // Configure Markdown rendering
+  const md = markdownIt({
+    html: true,
+    breaks: true,
+    linkify: true
+  });
+  
+  eleventyConfig.addFilter("markdown", function(content) {
+    if (!content) return '';
+    return md.render(content);
+  });
+  
+  // Add toLocaleString filter for numbers
+  eleventyConfig.addFilter("toLocaleString", function(number) {
+    if (typeof number !== 'number') return number;
+    return number.toLocaleString();
+  });
   
   // Add JSON filter
   eleventyConfig.addFilter("json", function(value) {
     return JSON.stringify(value);
   });
   
-  // Add a filter to format dates
+  // Add a filter to format dates (legacy - prefer the custom filters.formatDate)
   eleventyConfig.addFilter("formatDate", function(dateObj) {
     return DateTime.fromJSDate(dateObj).toFormat("dd LLL yyyy");
   });
@@ -23,6 +55,12 @@ module.exports = function(eleventyConfig) {
   // Add a filter to format time
   eleventyConfig.addFilter("formatTime", function(dateObj) {
     return DateTime.fromJSDate(dateObj).toFormat("HH:mm");
+  });
+  
+  // Add split filter for strings
+  eleventyConfig.addFilter("split", function(str, separator = " ") {
+    if (!str || typeof str !== "string") return [];
+    return str.split(separator);
   });
 
   // Add a filter for limit

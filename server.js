@@ -1,219 +1,152 @@
+// This is the server.js file for the Classic Car Clubs website
+// It uses Express.js to serve the static site built by 11ty
+// and handle API requests
+
 const express = require('express');
-const bodyParser = require('body-parser');
-const fileUpload = require('express-fileupload');
-const cors = require('cors');
-const fs = require('fs');
 const path = require('path');
-const { exec } = require('child_process');
-
-// Initialize Express app
+const fileUpload = require('express-fileupload');
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-// Configure middleware
-app.use(cors());
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
+// For parsing application/json
+app.use(express.json());
+// For parsing application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+// For file uploads
 app.use(fileUpload({
-  useTempFiles: true,
-  tempFileDir: '/tmp/',
-  createParentPath: true
+  createParentPath: true,
+  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max file size
 }));
 
-// Serve static files from the _site directory
-app.use(express.static('_site'));
+// Enable CORS
+const cors = require('cors');
+app.use(cors());
 
-// CMS API endpoints
-// API Routes for Decap CMS
-const clubsDir = path.join(__dirname, 'src', '_data', 'clubs-json');
-const eventsDir = path.join(__dirname, 'src', '_data', 'events-json');
-const uploadsDir = path.join(__dirname, 'public', 'assets', 'images', 'uploads');
+// Serve static files from _site directory (the 11ty output)
+app.use(express.static(path.join(__dirname, '_site')));
 
-// Ensure directories exist
-[clubsDir, eventsDir, uploadsDir].forEach(dir => {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-});
-
-// Get collections
-app.get('/api/collections/:collection', (req, res) => {
-  const { collection } = req.params;
-  let dir;
-  
-  if (collection === 'clubs') {
-    dir = clubsDir;
-  } else if (collection === 'events') {
-    dir = eventsDir;
-  } else {
-    return res.status(404).json({ error: 'Collection not found' });
-  }
-  
+// Subscribe endpoint
+app.post('/api/subscribe', async (req, res) => {
   try {
-    const files = fs.readdirSync(dir).filter(file => file.endsWith('.json'));
-    const items = files.map(file => {
-      const data = fs.readFileSync(path.join(dir, file), 'utf8');
-      return JSON.parse(data);
-    });
+    const { email } = req.body;
     
-    res.json(items);
-  } catch (error) {
-    console.error(`Error reading collection ${collection}:`, error);
-    res.status(500).json({ error: 'Failed to read collection' });
-  }
-});
-
-// Get a single entry
-app.get('/api/collections/:collection/:slug', (req, res) => {
-  const { collection, slug } = req.params;
-  let dir;
-  
-  if (collection === 'clubs') {
-    dir = clubsDir;
-  } else if (collection === 'events') {
-    dir = eventsDir;
-  } else {
-    return res.status(404).json({ error: 'Collection not found' });
-  }
-  
-  try {
-    const filePath = path.join(dir, `${slug}.json`);
-    if (!fs.existsSync(filePath)) {
-      return res.status(404).json({ error: 'Entry not found' });
+    if (!email) {
+      return res.status(400).json({ error: 'Email is required' });
     }
     
-    const data = fs.readFileSync(filePath, 'utf8');
-    res.json(JSON.parse(data));
-  } catch (error) {
-    console.error(`Error reading entry ${slug}:`, error);
-    res.status(500).json({ error: 'Failed to read entry' });
-  }
-});
-
-// Create or update an entry
-app.post('/api/collections/:collection', (req, res) => {
-  const { collection } = req.params;
-  const data = req.body;
-  let dir;
-  
-  if (collection === 'clubs') {
-    dir = clubsDir;
+    // Here you would normally add the email to a database or newsletter service
+    // For development, we'll just log it
+    console.log(`Subscription request for email: ${email}`);
     
-    // Add an ID if not present
-    if (!data.id) {
-      // Read all club files to find highest ID
-      const files = fs.readdirSync(dir).filter(file => file.endsWith('.json'));
-      let maxId = 899; // Start from where the existing clubs end
-      
-      files.forEach(file => {
-        try {
-          const clubData = JSON.parse(fs.readFileSync(path.join(dir, file), 'utf8'));
-          if (clubData.id && clubData.id > maxId) {
-            maxId = clubData.id;
-          }
-        } catch (err) {
-          console.error(`Error reading file ${file}:`, err);
-        }
-      });
-      
-      data.id = maxId + 1;
-    }
-  } else if (collection === 'events') {
-    dir = eventsDir;
-  } else {
-    return res.status(404).json({ error: 'Collection not found' });
-  }
-  
-  try {
-    if (!data.slug) {
-      return res.status(400).json({ error: 'Slug is required' });
-    }
-    
-    const filePath = path.join(dir, `${data.slug}.json`);
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-    
-    // Rebuild the site
-    exec('npx @11ty/eleventy', (error) => {
-      if (error) {
-        console.error('Error rebuilding site:', error);
+    // If we have SendGrid configured, send a confirmation email
+    if (process.env.SENDGRID_API_KEY) {
+      try {
+        const sgMail = require('@sendgrid/mail');
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        
+        const msg = {
+          to: email,
+          from: 'info@classiccars.club', // Verified sender in SendGrid
+          subject: 'Welcome to Classic Car Clubs Newsletter',
+          text: 'Thank you for subscribing to our newsletter. You will now receive updates on classic car events, news, and more.',
+          html: `
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+              <h1 style="color: #0f4c3a;">Welcome to Classic Car Clubs!</h1>
+              <p>Thank you for subscribing to our newsletter. You will now receive updates on:</p>
+              <ul>
+                <li>Classic car events and rallies</li>
+                <li>News from car clubs around the country</li>
+                <li>Restoration tips and advice</li>
+                <li>Special offers from our partners</li>
+              </ul>
+              <p>We're excited to have you join our community!</p>
+              <p><a href="https://classiccars.club" style="color: #1a7f62;">Visit our website</a></p>
+            </div>
+          `,
+        };
+        
+        await sgMail.send(msg);
+        console.log('Confirmation email sent');
+      } catch (emailError) {
+        console.error('Error sending confirmation email:', emailError);
+        // Continue with the response even if email fails
       }
-    });
-    
-    res.status(201).json({ message: 'Entry created/updated successfully', data });
-  } catch (error) {
-    console.error(`Error saving entry to ${collection}:`, error);
-    res.status(500).json({ error: 'Failed to save entry' });
-  }
-});
-
-// Handle file uploads
-app.post('/api/upload', (req, res) => {
-  try {
-    console.log('Upload request received');
-    console.log('Files:', req.files);
-    
-    if (!req.files || Object.keys(req.files).length === 0) {
-      console.log('No files were uploaded');
-      // If this is a URL validation only (no actual file)
-      if (req.body && req.body.url) {
-        console.log('URL validation request for:', req.body.url);
-        return res.json({ url: req.body.url });
-      }
-      return res.status(400).json({ error: 'No files were uploaded' });
     }
     
-    const uploadedFile = req.files.file;
-    
-    // Clean the filename to be URL-friendly
-    const cleanFilename = uploadedFile.name
-      .toLowerCase()
-      .replace(/[^a-z0-9.]/g, '-');
-    
-    const uploadPath = path.join(uploadsDir, cleanFilename);
-    
-    console.log('Moving uploaded file to:', uploadPath);
-    
-    // Move the file
-    uploadedFile.mv(uploadPath, (err) => {
-      if (err) {
-        console.error('Error uploading file:', err);
-        return res.status(500).json({ error: 'Failed to upload file', details: err.message });
-      }
-      
-      // Return the URL for the uploaded file
-      const fileUrl = `/assets/images/uploads/${cleanFilename}`;
-      console.log('File uploaded successfully to:', fileUrl);
-      res.json({ url: fileUrl });
-    });
+    // Send a success response
+    res.json({ success: true, message: 'Subscription successful!' });
   } catch (error) {
-    console.error('Error in file upload:', error);
-    res.status(500).json({ 
-      error: 'Failed to process file upload', 
-      details: error.message,
-      stack: error.stack
-    });
+    console.error('Error processing subscription:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// Start eleventy in the background
-function startEleventy() {
-  const eleventy = exec('npx @11ty/eleventy --serve --port 5001');
-  
-  eleventy.stdout.on('data', (data) => {
-    console.log(`[eleventy] ${data}`);
-  });
-  
-  eleventy.stderr.on('data', (data) => {
-    console.error(`[eleventy error] ${data}`);
-  });
-  
-  eleventy.on('close', (code) => {
-    console.log(`Eleventy process exited with code ${code}`);
-  });
-}
+// Contact form endpoint
+app.post('/api/contact', require('./src/api/contact'));
+
+// Event submission endpoint
+app.post('/api/submit-event', async (req, res) => {
+  try {
+    const { title, description, date, endDate, location, organizerName, organizerEmail, categories } = req.body;
+    
+    if (!title || !description || !date || !location || !organizerName || !organizerEmail) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+    
+    // Handle image upload if present
+    let eventImage = null;
+    if (req.files && req.files.eventImage) {
+      const imageFile = req.files.eventImage;
+      const uploadPath = path.join(__dirname, 'public', 'uploads', imageFile.name);
+      
+      try {
+        await imageFile.mv(uploadPath);
+        eventImage = `/uploads/${imageFile.name}`;
+        console.log(`Image uploaded to ${uploadPath}`);
+      } catch (uploadError) {
+        console.error('Error uploading image:', uploadError);
+        // Continue without the image
+      }
+    }
+    
+    // Log the event submission for development
+    console.log(`Event submission: ${title}`);
+    console.log(`Date: ${date} ${endDate ? `- ${endDate}` : ''}`);
+    console.log(`Location: ${JSON.stringify(location)}`);
+    console.log(`Organizer: ${organizerName} (${organizerEmail})`);
+    if (eventImage) {
+      console.log(`Image: ${eventImage}`);
+    }
+    
+    // In a real application, you would save this to a database
+    // For now, we'll just return a success response
+    
+    // Send a success response
+    res.json({ success: true, message: 'Event submitted successfully! It will be reviewed by our team.' });
+  } catch (error) {
+    console.error('Error processing event submission:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// API endpoints for clubs and events data
+// These are served statically by 11ty, but we can add them here for reference
+app.get('/api/clubs', (req, res) => {
+  res.sendFile(path.join(__dirname, '_site', 'clubs.json'));
+});
+
+app.get('/api/events', (req, res) => {
+  res.sendFile(path.join(__dirname, '_site', 'events.json'));
+});
+
+// Catch-all route - serve the 11ty site
+// This allows for client-side routing with history API
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '_site', 'index.html'));
+});
 
 // Start the server
-const PORT = process.env.PORT || 5500;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  startEleventy();
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Visit http://localhost:${PORT} in your browser`);
 });

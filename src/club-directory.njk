@@ -1,212 +1,421 @@
 ---
-layout: layouts/page.njk
-title: Classic Car Clubs Directory
-description: Browse our comprehensive directory of classic car clubs across the UK.
-pagination:
-  data: merged-clubs
-  size: 4
+layout: layouts/base.njk
+title: Club Directory | Classic Car Clubs
+description: Browse and discover classic car clubs from around the world. Filter by marque, location, or club type to find your perfect classic car community.
 ---
 
-{% set breadcrumbs = [{ url: '/club-directory/', label: 'Club Directory' }] %}
+<div class="bg-dark-green text-white py-16">
+  <div class="container mx-auto px-4 text-center">
+    <h1 class="text-4xl md:text-5xl font-serif mb-4">Classic Car Club Directory</h1>
+    <p class="text-xl max-w-3xl mx-auto">Find your perfect club from our comprehensive directory of classic car clubs. Whether you're into British sports cars, American muscle, or European elegance, there's a community waiting for you.</p>
+  </div>
+</div>
 
-<div x-data="clubSearch" id="club-directory-app" x-init="initSearch()">
-  <section class="hero-section club-hero-section">
-    <div class="hero-overlay"></div>
-    <div class="container">
-      <div class="breadcrumbs-container">
-        <ul class="breadcrumbs">
-          <li><a href="/" style="color: white;">Home</a></li>
-          <li><a href="/club-directory/" style="color: white;">Club Directory</a></li>
-        </ul>
-      </div>
-      
-      <div class="hero-content club-hero-content">
-        <h1 class="hero-title">Classic Car Clubs Directory</h1>
-        <p class="hero-subtitle">Welcome to our comprehensive classic car clubs directory – your ultimate resource for connecting with classic car enthusiasts across the United Kingdom.</p>
-        
-        <div class="hero-search">
-          <div class="search-container event-search">
-            <form class="search-form" @submit.prevent="search()">
-              <div class="search-grid">
-                <div class="custom-search-group">
-                  <label for="search-term">Club Name</label>
-                  <div class="input-wrapper">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
-                      <circle cx="11" cy="11" r="8"></circle>
-                      <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                    <input type="text" id="search-term" class="custom-search-input search-term" placeholder="Enter club name..." x-model="searchTerm">
-                  </div>
-                </div>
-                
-                <div class="custom-search-group">
-                  <label for="search-category">Category</label>
-                  <div class="input-wrapper">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
-                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                    </svg>
-                    <select id="search-category" class="custom-search-input search-category" x-model="category">
-                      <option value="">All Categories</option>
-                      <template x-for="cat in availableCategories" :key="cat">
-                        <option :value="cat" :selected="cat === category" x-text="cat"></option>
-                      </template>
-                    </select>
-                  </div>
-                </div>
-                
-                <div class="custom-search-group">
-                  <label for="search-location">Location</label>
-                  <div class="input-wrapper">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                      <circle cx="12" cy="10" r="3"></circle>
-                    </svg>
-                    <select id="search-location" class="custom-search-input search-location" x-model="location">
-                      <option value="">All Locations</option>
-                      <template x-for="loc in availableLocations" :key="loc">
-                        <option :value="loc" :selected="loc === location" x-text="loc"></option>
-                      </template>
-                    </select>
-                  </div>
-                </div>
-                
-                <div class="search-actions">
-                  <button type="submit" class="search-button">Search</button>
-                  <button type="button" class="reset-button" @click.prevent="reset()">Reset</button>
-                </div>
-              </div>
-            </form>
-          </div>
+<div class="container mx-auto px-4 py-12" x-data="clubDirectory">
+  <!-- Search and Filters -->
+  <div class="bg-light-cream p-6 rounded-lg mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <!-- Search bar -->
+      <div>
+        <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+        <div class="relative">
+          <input 
+            type="text" 
+            id="search" 
+            x-model="searchQuery"
+            @input="search"
+            placeholder="Search by club name or description" 
+            class="w-full py-2 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
+          >
+          <button 
+            class="absolute right-0 top-0 h-full px-3 text-gray-500"
+            @click="searchQuery = ''; search()"
+            x-show="searchQuery"
+          >
+            <span class="sr-only">Clear search</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
       </div>
-    </div>
-  </section>
-
-  <div class="container">
-    <div class="az-filter-container">
-      <div class="filter-header">Filter by letter:</div>
-      <div class="az-filter-letters">
-        <a href="#" class="az-filter-letter" data-letter="" @click.prevent="resetFilters()" :class="{ 'active': !letter }">All</a>
-        {% for letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
-          <a href="#" class="az-filter-letter" data-letter="{{ letter }}" @click.prevent="setLetter('{{ letter }}')" :class="{ 'active': letter === '{{ letter }}' }" aria-label="Filter by letter {{ letter }}">{{ letter }}</a>
-        {% endfor %}
-      </div>
-    </div>
-    
-    <div x-show="letter || searchTerm || category || location" class="search-status">
-      <p x-text="`Showing ${filteredClubs.length} clubs ${letter ? `starting with '${letter}'` : ''}`"></p>
-      <button @click="resetFilters()" class="exit-search-button">Clear All Filters</button>
-    </div>
-    
-    <div x-show="isLoading" class="loading-indicator">Loading...</div>
-    
-    <div x-cloak x-show="!isLoading">
-      <div class="featured-section" x-show="filteredClubs.some(club => club.featured)">
-        <h2>Featured Clubs</h2>
-        
-        <div class="club-grid">
-          <template x-for="club in filteredClubs.filter(c => c.featured).slice(0, 9)" :key="club.slug">
-            <div class="club-card featured-club-card">
-              <div class="club-featured">Featured</div>
-              
-              <div class="club-image">
-                <img :src="club.imageUrl || '/assets/images/club-placeholder.jpg'" :alt="club.title">
-              </div>
-              
-              <div class="club-content">
-                <h3 class="club-title" x-text="club.title"></h3>
-                
-                <div class="club-location" x-show="club.city || club.state">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  <span x-text="[club.city, club.state].filter(Boolean).join(', ')"></span>
-                </div>
-                
-                <div class="club-category" x-show="club.category">
-                  <span class="category-tag" x-text="club.category"></span>
-                  <span class="category-tag" x-text="club.marque" x-show="club.marque"></span>
-                </div>
-              </div>
-              
-              <div class="club-actions">
-                <a :href="`/club-directory/${club.slug.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${club.id}/`" class="button button-primary">View Details</a>
-               <!-- <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
-              </div>
-            </div>
+      
+      <!-- Category filter -->
+      <div>
+        <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+        <select 
+          id="category" 
+          x-model="filters.category"
+          @change="filter"
+          class="w-full py-2 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
+        >
+          <option value="">All Categories</option>
+          <template x-for="category in availableFilters.categories" :key="category">
+            <option :value="category" x-text="category"></option>
           </template>
-        </div>
+        </select>
       </div>
       
-      <!-- Ad Banner Section -->
-      {% include "components/ad-banner.njk" %}
-      
-      <div x-data="pagination" x-effect="items = filteredClubs.filter(c => !c.featured)" id="club-list-section">
-        <h2>Club List</h2>
-        <div class="club-grid" x-show="paginatedItems.length > 0">
-          <template x-for="club in paginatedItems" :key="club.slug">
-            <div class="club-card standard-club-card">
-              <div class="club-content">
-                <h3 class="club-title" x-text="club.title"></h3>
-                
-                <div class="club-location" x-show="club.city || club.state">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  <span x-text="[club.city, club.state].filter(Boolean).join(', ')"></span>
-                </div>
-                
-                <div class="club-category" x-show="club.category">
-                  <span class="category-tag" x-text="club.category"></span>
-                  <span class="category-tag" x-text="club.marque" x-show="club.marque"></span>
-                </div>
-              </div>
-              
-              <div class="club-actions">
-                <a :href="`/club-directory/${club.slug.toLowerCase().replace(/[^a-z0-9]+/g, '-')}-${club.id}/`" class="button button-primary">View Details</a>
-               <!-- <a x-show="club.website" :href="club.website" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
-              </div>
-            </div>
+      <!-- Founded year filter -->
+      <div>
+        <label for="founded" class="block text-sm font-medium text-gray-700 mb-1">Founded</label>
+        <select 
+          id="founded" 
+          x-model="filters.founded"
+          @change="filter"
+          class="w-full py-2 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
+        >
+          <option value="">Any Year</option>
+          <template x-for="decade in availableFilters.decades" :key="decade">
+            <option :value="decade" x-text="decade + 's'"></option>
           </template>
-        </div>
-        
-        <div x-show="paginatedItems.length === 0" class="no-results">
-          <p>No clubs found matching your criteria. Please try different search terms or <button @click="reset" class="reset-link">reset filters</button>.</p>
-        </div>
-        
-        <div class="pagination" x-show="totalPages > 1">
-          <div class="pagination-controls">
-            <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="pagination-arrow pagination-prev" :class="{ 'disabled': currentPage === 1 }">
-              &laquo; Previous
-            </button>
-            
-            <div class="pagination-numbers">
-              <template x-for="page in pageNumbers" :key="page">
-                <template x-if="page === '...'">
-                  <span class="pagination-ellipsis">...</span>
-                </template>
-                <template x-if="page !== '...'">
-                  <button 
-                    @click="goToPage(page); document.getElementById('club-list-section').scrollIntoView({behavior: 'smooth'})" 
-                    class="pagination-number" 
-                    :class="{ 'active': page === currentPage }"
-                    x-text="page"
-                  ></button>
-                </template>
-              </template>
-            </div>
-            
-            <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-arrow pagination-next" :class="{ 'disabled': currentPage === totalPages }">
-              Next &raquo;
-            </button>
-          </div>
-          
-          <div class="pagination-info" x-text="`Showing ${startIndex} to ${endIndex} of ${totalItems} clubs`"></div>
-        </div>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Filter by letter -->
+    <div class="overflow-x-auto pb-2">
+      <div class="flex space-x-1 min-w-max">
+        <button 
+          @click="setLetter('')"
+          class="w-8 h-8 flex items-center justify-center rounded font-medium text-sm"
+          :class="activeLetter === '' ? 'bg-dark-green text-white' : 'bg-white text-gray-700 hover:bg-gray-100'"
+        >
+          All
+        </button>
+        <template x-for="letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')" :key="letter">
+          <button 
+            @click="setLetter(letter)"
+            class="w-8 h-8 flex items-center justify-center rounded font-medium text-sm"
+            :class="activeLetter === letter ? 'bg-dark-green text-white' : 'bg-white text-gray-700 hover:bg-gray-100'"
+            x-text="letter"
+          ></button>
+        </template>
       </div>
     </div>
   </div>
+  
+  <!-- Results Stats -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+    <div class="text-gray-600 mb-4 md:mb-0">
+      <span x-text="filteredClubs.length"></span> clubs found
+      <template x-if="activeLetter">
+        <span> starting with '<span x-text="activeLetter"></span>'</span>
+      </template>
+      <template x-if="filters.category">
+        <span> in <span x-text="filters.category"></span></span>
+      </template>
+      <template x-if="filters.founded">
+        <span> founded in the <span x-text="filters.founded + 's'"></span></span>
+      </template>
+      <template x-if="searchQuery">
+        <span> matching '<span x-text="searchQuery"></span>'</span>
+      </template>
+    </div>
+    
+    <button 
+      @click="resetFilters"
+      class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
+      x-show="isFiltered"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+      </svg>
+      Reset Filters
+    </button>
+  </div>
+  
+  <template x-if="filteredClubs.length === 0">
+    <div class="text-center py-12">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 text-gray-300 mx-auto mb-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+      </svg>
+      <h3 class="text-xl font-medium text-gray-900 mb-2">No clubs found</h3>
+      <p class="text-gray-600 max-w-md mx-auto">
+        We couldn't find any clubs matching your search criteria. Please try adjusting your filters or search term.
+      </p>
+      <button 
+        @click="resetFilters"
+        class="mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-dark-green hover:bg-light-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
+      >
+        Reset All Filters
+      </button>
+    </div>
+  </template>
+  
+  <template x-if="filteredClubs.length > 0">
+    <!-- Club Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+      <template x-for="club in paginatedClubs" :key="club.id">
+        <div>
+          <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-200 hover:shadow-lg hover:-translate-y-1">
+            <div class="aspect-w-16 h-48 relative">
+              <img 
+                :src="club.image || '/assets/images/placeholder-club.jpg'" 
+                :alt="club.name"
+                class="w-full h-full object-cover"
+              >
+              <template x-if="club.featured">
+                <div class="absolute top-0 right-0 bg-accent text-dark-green px-3 py-1 font-medium">
+                  Featured
+                </div>
+              </template>
+            </div>
+            
+            <div class="p-5">
+              <h3 class="text-xl font-bold mb-2 font-serif text-dark-green">
+                <a :href="'/club-directory/' + club.slug + '/'" class="hover:text-light-green transition duration-150" x-text="club.name"></a>
+              </h3>
+              
+              <p class="text-gray-600 mb-4 line-clamp-3" x-text="club.description"></p>
+              
+              <template x-if="club.categories && club.categories.length > 0">
+                <div class="flex flex-wrap gap-2 mb-4">
+                  <template x-for="(category, index) in club.categories.slice(0, 3)" :key="index">
+                    <span class="inline-block bg-light-cream text-dark-green text-xs py-1 px-2 rounded-full" x-text="category"></span>
+                  </template>
+                  
+                  <template x-if="club.categories.length > 3">
+                    <span class="inline-block bg-light-cream text-dark-green text-xs py-1 px-2 rounded-full" x-text="'+' + (club.categories.length - 3)"></span>
+                  </template>
+                </div>
+              </template>
+              
+              <div class="flex justify-between items-center">
+                <template x-if="club.founded">
+                  <span class="text-sm text-gray-500" x-text="'Founded ' + club.founded"></span>
+                </template>
+                
+                <a 
+                  :href="'/club-directory/' + club.slug + '/'" 
+                  class="inline-block bg-accent hover:bg-accent-dark text-dark-green py-1 px-3 rounded text-sm uppercase tracking-wider font-serif transition duration-150"
+                >
+                  View Club
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+    
+    <!-- Pagination -->
+    <template x-if="pageCount > 1">
+      <div class="flex justify-center">
+        <nav class="inline-flex rounded-md shadow-sm" aria-label="Pagination">
+          <button
+            @click="goToPage(currentPage - 1)"
+            :disabled="currentPage === 1"
+            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span class="sr-only">Previous</span>
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            <span class="ml-1 hidden sm:inline">Previous</span>
+          </button>
+          
+          <template x-for="pageNumber in pageNumbers" :key="pageNumber">
+            <button
+              @click="goToPage(pageNumber)"
+              :class="{
+                'bg-dark-green text-white': pageNumber === currentPage,
+                'bg-white text-gray-500 hover:bg-gray-50': pageNumber !== currentPage
+              }"
+              class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium focus:z-10 focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
+              x-text="pageNumber"
+            ></button>
+          </template>
+          
+          <button
+            @click="goToPage(currentPage + 1)"
+            :disabled="currentPage === pageCount"
+            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span class="mr-1 hidden sm:inline">Next</span>
+            <span class="sr-only">Next</span>
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10l-3.293-3.293a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </nav>
+      </div>
+    </template>
+  </template>
+  
+  <!-- Advertising Banner -->
+  <div class="mt-12 py-8 px-6 bg-light-cream rounded-lg flex flex-col md:flex-row items-center justify-between">
+    <div class="md:w-2/3 mb-6 md:mb-0">
+      <h2 class="text-2xl font-serif font-bold text-dark-green mb-2">Does your club need a website?</h2>
+      <p class="text-gray-700">
+        We design professional websites specifically for classic car clubs. Get online, attract new members, and showcase your events with a custom website.
+      </p>
+    </div>
+    <div>
+      <a 
+        href="/club-website-design/" 
+        class="inline-block bg-accent hover:bg-accent-dark text-dark-green py-3 px-6 rounded uppercase text-sm tracking-wider font-serif transition duration-150"
+      >
+        Learn More
+      </a>
+    </div>
+  </div>
 </div>
+
+<script>
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('clubDirectory', () => ({
+      clubs: {{ mergedClubs | json | safe }},
+      filteredClubs: [],
+      searchQuery: '',
+      activeLetter: '',
+      filters: {
+        category: '',
+        founded: ''
+      },
+      availableFilters: {
+        categories: [],
+        decades: []
+      },
+      currentPage: 1,
+      itemsPerPage: 12,
+      
+      init() {
+        // Set initial filtered clubs
+        this.filteredClubs = this.clubs;
+        
+        // Extract unique categories and decades
+        const allCategories = this.clubs.flatMap(club => club.categories || []);
+        this.availableFilters.categories = [...new Set(allCategories)].sort();
+        
+        const allYears = this.clubs.map(club => club.founded).filter(Boolean);
+        const decades = allYears.map(year => Math.floor(year / 10) * 10);
+        this.availableFilters.decades = [...new Set(decades)].sort();
+      },
+      
+      filter() {
+        let result = this.clubs;
+        
+        // Filter by letter
+        if (this.activeLetter) {
+          result = result.filter(club => 
+            club.name.charAt(0).toUpperCase() === this.activeLetter
+          );
+        }
+        
+        // Filter by category
+        if (this.filters.category) {
+          result = result.filter(club => 
+            club.categories && club.categories.includes(this.filters.category)
+          );
+        }
+        
+        // Filter by founded decade
+        if (this.filters.founded) {
+          const decadeStart = parseInt(this.filters.founded);
+          const decadeEnd = decadeStart + 9;
+          result = result.filter(club => 
+            club.founded >= decadeStart && club.founded <= decadeEnd
+          );
+        }
+        
+        // Apply search query
+        if (this.searchQuery.trim()) {
+          const query = this.searchQuery.toLowerCase();
+          result = result.filter(club => 
+            club.name.toLowerCase().includes(query) || 
+            (club.description && club.description.toLowerCase().includes(query))
+          );
+        }
+        
+        this.filteredClubs = result;
+        this.currentPage = 1;
+        
+        // Update available filter options based on current filtered results
+        this.updateAvailableOptions(result);
+      },
+      
+      updateAvailableOptions(filtered) {
+        // This could be implemented to dynamically update filter options
+        // based on the current filtered results, but for simplicity we'll keep static options
+      },
+      
+      search() {
+        this.filter();
+      },
+      
+      resetFilters() {
+        this.searchQuery = '';
+        this.activeLetter = '';
+        this.filters.category = '';
+        this.filters.founded = '';
+        this.filteredClubs = this.clubs;
+        this.currentPage = 1;
+      },
+      
+      setLetter(letter) {
+        this.activeLetter = letter;
+        this.filter();
+      },
+      
+      paginate() {
+        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+        const endIndex = startIndex + this.itemsPerPage;
+        return this.filteredClubs.slice(startIndex, endIndex);
+      },
+      
+      goToPage(page) {
+        if (page >= 1 && page <= this.pageCount) {
+          this.currentPage = page;
+        }
+      },
+      
+      get pageCount() {
+        return Math.ceil(this.filteredClubs.length / this.itemsPerPage);
+      },
+      
+      get pageNumbers() {
+        const pages = [];
+        const maxVisiblePages = 5;
+        
+        if (this.pageCount <= maxVisiblePages) {
+          // Show all pages if there are few
+          for (let i = 1; i <= this.pageCount; i++) {
+            pages.push(i);
+          }
+        } else {
+          // Show a subset of pages with current page in the middle if possible
+          let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+          let endPage = Math.min(this.pageCount, startPage + maxVisiblePages - 1);
+          
+          // Adjust if we're near the end
+          if (endPage === this.pageCount) {
+            startPage = Math.max(1, endPage - maxVisiblePages + 1);
+          }
+          
+          for (let i = startPage; i <= endPage; i++) {
+            pages.push(i);
+          }
+        }
+        
+        return pages;
+      },
+      
+      get paginatedClubs() {
+        return this.paginate();
+      },
+      
+      get startIndex() {
+        return (this.currentPage - 1) * this.itemsPerPage + 1;
+      },
+      
+      get endIndex() {
+        return Math.min(this.startIndex + this.itemsPerPage - 1, this.filteredClubs.length);
+      },
+      
+      get isFiltered() {
+        return this.searchQuery || this.activeLetter || this.filters.category || this.filters.founded;
+      }
+    }));
+  });
+</script>
