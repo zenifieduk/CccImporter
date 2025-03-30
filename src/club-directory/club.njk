@@ -5,7 +5,7 @@ pagination:
   size: 1
   alias: club
   addAllPagesToCollections: false
-permalink: "club-directory/{{ club.slug | slugify }}-{{ pagination.pageNumber + 1 }}/"
+permalink: "club-directory/{{ club.slug | slugify }}-{{ club.id if club.id else (pagination.pageNumber + 1) }}/"
 eleventyComputed:
   title: "{{ club.title }}"
   description: "Discover information about {{ club.title }}, including contact details, events, and more."
