@@ -4,6 +4,8 @@ document.addEventListener('alpine:init', () => {
     formatMonth(dateStr) {
       if (!dateStr) return '';
       try {
+        // Handle format like "08062025:10:00:00"
+        // where day = 08, month = 06, year = 2025
         const day = dateStr.substring(0, 2);
         const month = dateStr.substring(2, 4);
         const year = dateStr.substring(4, 8);
@@ -19,6 +21,7 @@ document.addEventListener('alpine:init', () => {
     formatDay(dateStr) {
       if (!dateStr) return '';
       try {
+        // Handle format like "08062025:10:00:00"
         const day = dateStr.substring(0, 2);
         return parseInt(day);
       } catch (e) {
@@ -30,10 +33,13 @@ document.addEventListener('alpine:init', () => {
     formatTime(dateStr) {
       if (!dateStr) return '';
       try {
-        const time = dateStr.split(':');
-        if (time.length >= 3) {
-          const hours = parseInt(time[1]);
-          const minutes = time[2];
+        // Handle format like "08062025:10:00:00"
+        const parts = dateStr.split(':');
+        if (parts.length >= 3) {
+          // The first part contains the date and hours, e.g., "08062025"
+          const datePart = parts[0];
+          const hours = parseInt(parts[1]);
+          const minutes = parts[2];
           const ampm = hours >= 12 ? 'PM' : 'AM';
           const hour12 = hours % 12 || 12;
           return `${hour12}:${minutes} ${ampm}`;

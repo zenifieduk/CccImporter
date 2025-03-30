@@ -23,9 +23,25 @@ module.exports = function() {
         try {
           const filePath = path.join(clubsJsonDir, file);
           const fileContent = fs.readFileSync(filePath, 'utf8');
-          return JSON.parse(fileContent);
+          
+          // Check if the file starts with HTML doctype (common error)
+          if (fileContent.trim().toLowerCase().startsWith('<!doctype')) {
+            console.error(`Error: File ${file} contains HTML instead of JSON`);
+            return null;
+          }
+          
+          // Try to parse the JSON content
+          const parsedContent = JSON.parse(fileContent);
+          
+          // Validate that it contains required fields for a club
+          if (!parsedContent.title) {
+            console.error(`Error: File ${file} is missing required 'title' field`);
+            return null;
+          }
+          
+          return parsedContent;
         } catch (error) {
-          console.error(`Error reading club JSON file: ${file}`, error);
+          console.error(`Error reading club JSON file: ${file}`, error.message);
           return null;
         }
       })
