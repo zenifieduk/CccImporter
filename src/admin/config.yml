@@ -1,6 +1,10 @@
 backend:
-  name: test-repo
-  local_backend: true
+  name: proxy
+  proxy_url: http://localhost:5500/api
+  branch: main
+
+# When using the proxy backend, it is considered "local"
+local_backend: true
 
 # Enable the editorial workflow for drafts, review, and publishing
 publish_mode: editorial_workflow

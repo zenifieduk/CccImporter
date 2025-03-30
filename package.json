@@ -15,7 +15,9 @@
     "@sendgrid/mail": "^8.1.4",
     "alpinejs": "^3.14.9",
     "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
     "express": "^4.21.2",
+    "express-fileupload": "^1.5.1",
     "luxon": "^3.6.0",
     "nunjucks": "^3.2.4",
     "sharp": "^0.33.5"
