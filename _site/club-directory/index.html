@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Classic Car Clubs Directory</title>
-  <meta name="description" content="Discover and connect with classic car clubs across the UK and worldwide. Find your perfect club by car type, location or club features.">
+  <title>Club Directory | Classic Car Clubs</title>
+  <meta name="description" content="Browse and discover classic car clubs from around the world. Filter by marque, location, or club type to find your perfect classic car community.">
   
   <!-- Favicon -->
   <link rel="icon" href="/favicon.ico">
@@ -24,8 +24,8 @@
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "Classic Car Clubs | UK Directory",
-      "url": "http://localhost:8080"
+      "name": "Classic Car Clubs Directory",
+      "url": "https://classiccars.club"
     }
   </script>
   
@@ -157,6 +157,46 @@
               Contact
             </a>
           
+            <a 
+              href="/" 
+              class="text-white hover:text-accent font-medium transition duration-150"
+              
+            >
+              Home
+            </a>
+          
+            <a 
+              href="/club-directory/" 
+              class="text-white hover:text-accent font-medium transition duration-150"
+              aria-current="page"
+            >
+              Club Directory
+            </a>
+          
+            <a 
+              href="/club-events/" 
+              class="text-white hover:text-accent font-medium transition duration-150"
+              
+            >
+              Events
+            </a>
+          
+            <a 
+              href="/about/" 
+              class="text-white hover:text-accent font-medium transition duration-150"
+              
+            >
+              About Us
+            </a>
+          
+            <a 
+              href="/contact/" 
+              class="text-white hover:text-accent font-medium transition duration-150"
+              
+            >
+              Contact
+            </a>
+          
         </nav>
         
         <!-- Mobile Menu Button -->
@@ -249,6 +289,51 @@
             Contact
           </a>
         
+          <a 
+            href="/" 
+            @click="close()"
+            class="text-white hover:text-accent py-2 font-medium transition duration-150"
+            
+          >
+            Home
+          </a>
+        
+          <a 
+            href="/club-directory/" 
+            @click="close()"
+            class="text-white hover:text-accent py-2 font-medium transition duration-150"
+            aria-current="page"
+          >
+            Club Directory
+          </a>
+        
+          <a 
+            href="/club-events/" 
+            @click="close()"
+            class="text-white hover:text-accent py-2 font-medium transition duration-150"
+            
+          >
+            Events
+          </a>
+        
+          <a 
+            href="/about/" 
+            @click="close()"
+            class="text-white hover:text-accent py-2 font-medium transition duration-150"
+            
+          >
+            About Us
+          </a>
+        
+          <a 
+            href="/contact/" 
+            @click="close()"
+            class="text-white hover:text-accent py-2 font-medium transition duration-150"
+            
+          >
+            Contact
+          </a>
+        
       </nav>
     </div>
   </header>
@@ -257,171 +342,284 @@
   <main class="flex-grow">
     
       
-<div class="hero hero--centered bg-dark-green text-white py-16">
-  <div class="container mx-auto px-4">
-    <h1 class="text-4xl md:text-5xl font-serif mb-4">Classic Car Clubs Directory</h1>
-    <p class="text-xl max-w-3xl mx-auto">Find the perfect club for your classic car passion. Browse our comprehensive directory of clubs across the UK and beyond.</p>
+<div class="bg-dark-green text-white py-16">
+  <div class="container mx-auto px-4 text-center">
+    <h1 class="text-4xl md:text-5xl font-serif mb-4">Classic Car Club Directory</h1>
+    <p class="text-xl max-w-3xl mx-auto">Find your perfect club from our comprehensive directory of classic car clubs. Whether you're into British sports cars, American muscle, or European elegance, there's a community waiting for you.</p>
   </div>
 </div>
 
-<div class="container mx-auto px-4 py-12">
-  <div class="mb-8" x-data="clubDirectory" x-init="await init()">
-    <div class="mb-8 bg-light-cream p-6 rounded-lg shadow-sm">
-      <div class="flex flex-col md:flex-row gap-4 mb-6">
-        <div class="w-full md:w-1/2">
-          <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search Clubs</label>
-          <div class="relative">
-            <input 
-              type="text" 
-              id="search" 
-              x-model="searchQuery" 
-              @input="search()"
-              placeholder="Search by name, location, or car type" 
-              class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
-            >
-            <button @click="searchQuery = ''; search()" class="absolute right-3 top-3 text-gray-400 hover:text-gray-600" x-show="searchQuery">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-        </div>
-        
-        <div class="w-full md:w-1/2">
-          <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Filter by Category</label>
-          <div class="relative">
-            <select 
-              id="category" 
-              x-model="selectedCategory" 
-              @change="filter()"
-              class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500 appearance-none"
-            >
-              <option value="">All Categories</option>
-              <template x-for="category in availableCategories" :key="category">
-                <option :value="category" x-text="category"></option>
-              </template>
-            </select>
-            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
-              </svg>
-            </div>
-          </div>
+<div class="container mx-auto px-4 py-12" x-data="clubDirectory">
+  <!-- Search and Filters -->
+  <div class="bg-light-cream p-6 rounded-lg mb-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+      <!-- Search bar -->
+      <div>
+        <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+        <div class="relative">
+          <input 
+            type="text" 
+            id="search" 
+            x-model="searchQuery"
+            @input="search"
+            placeholder="Search by club name or description" 
+            class="w-full py-2 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
+          >
+          <button 
+            class="absolute right-0 top-0 h-full px-3 text-gray-500"
+            @click="searchQuery = ''; search()"
+            x-show="searchQuery"
+          >
+            <span class="sr-only">Clear search</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
       </div>
       
-      <div class="flex flex-wrap gap-2 mb-6">
+      <!-- Category filter -->
+      <div>
+        <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+        <select 
+          id="category" 
+          x-model="filters.category"
+          @change="filter"
+          class="w-full py-2 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
+        >
+          <option value="">All Categories</option>
+          <template x-for="category in availableFilters.categories" :key="category">
+            <option :value="category" x-text="category"></option>
+          </template>
+        </select>
+      </div>
+      
+      <!-- Founded year filter -->
+      <div>
+        <label for="founded" class="block text-sm font-medium text-gray-700 mb-1">Founded</label>
+        <select 
+          id="founded" 
+          x-model="filters.founded"
+          @change="filter"
+          class="w-full py-2 px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-accent"
+        >
+          <option value="">Any Year</option>
+          <template x-for="decade in availableFilters.decades" :key="decade">
+            <option :value="decade" x-text="decade + 's'"></option>
+          </template>
+        </select>
+      </div>
+    </div>
+    
+    <!-- Filter by letter -->
+    <div class="overflow-x-auto pb-2">
+      <div class="flex space-x-1 min-w-max">
+        <button 
+          @click="setLetter('')"
+          class="w-8 h-8 flex items-center justify-center rounded font-medium text-sm"
+          :class="activeLetter === '' ? 'bg-dark-green text-white' : 'bg-white text-gray-700 hover:bg-gray-100'"
+        >
+          All
+        </button>
         <template x-for="letter in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')" :key="letter">
           <button 
-            @click="setLetter(letter)" 
-            :class="{'bg-dark-green text-white': selectedLetter === letter, 'bg-gray-200 text-gray-700 hover:bg-gray-300': selectedLetter !== letter}"
-            class="px-3 py-1 rounded font-medium text-sm transition duration-150"
+            @click="setLetter(letter)"
+            class="w-8 h-8 flex items-center justify-center rounded font-medium text-sm"
+            :class="activeLetter === letter ? 'bg-dark-green text-white' : 'bg-white text-gray-700 hover:bg-gray-100'"
             x-text="letter"
           ></button>
         </template>
-        <button 
-          @click="setLetter('')" 
-          :class="{'bg-dark-green text-white': selectedLetter === '', 'bg-gray-200 text-gray-700 hover:bg-gray-300': selectedLetter !== ''}"
-          class="px-3 py-1 rounded font-medium text-sm transition duration-150"
-        >All</button>
-      </div>
-      
-      <div class="flex justify-between">
-        <div class="text-sm text-gray-600" x-show="filteredClubs.length">
-          Showing <span x-text="startIndex + 1"></span>-<span x-text="Math.min(endIndex, filteredClubs.length)"></span> of <span x-text="filteredClubs.length"></span> clubs
-        </div>
-        <button 
-          @click="resetFilters()" 
-          class="text-sm text-dark-green hover:text-green-700 font-medium flex items-center"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-          </svg>
-          Reset Filters
-        </button>
       </div>
     </div>
+  </div>
+  
+  <!-- Results Stats -->
+  <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+    <div class="text-gray-600 mb-4 md:mb-0">
+      <span x-text="filteredClubs.length"></span> clubs found
+      <template x-if="activeLetter">
+        <span> starting with '<span x-text="activeLetter"></span>'</span>
+      </template>
+      <template x-if="filters.category">
+        <span> in <span x-text="filters.category"></span></span>
+      </template>
+      <template x-if="filters.founded">
+        <span> founded in the <span x-text="filters.founded + 's'"></span></span>
+      </template>
+      <template x-if="searchQuery">
+        <span> matching '<span x-text="searchQuery"></span>'</span>
+      </template>
+    </div>
     
-    <div x-show="filteredClubs.length === 0" class="text-center py-12 bg-light-cream rounded-lg">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto text-gray-400 mb-4">
+    <button 
+      @click="resetFilters"
+      class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
+      x-show="isFiltered"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+      </svg>
+      Reset Filters
+    </button>
+  </div>
+  
+  <template x-if="filteredClubs.length === 0">
+    <div class="text-center py-12">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 text-gray-300 mx-auto mb-4">
         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
       </svg>
-      <h3 class="text-xl font-medium mb-2">No clubs found</h3>
-      <p class="text-gray-600 max-w-md mx-auto">We couldn't find any clubs matching your search criteria. Try adjusting your filters or search query.</p>
+      <h3 class="text-xl font-medium text-gray-900 mb-2">No clubs found</h3>
+      <p class="text-gray-600 max-w-md mx-auto">
+        We couldn't find any clubs matching your search criteria. Please try adjusting your filters or search term.
+      </p>
+      <button 
+        @click="resetFilters"
+        class="mt-4 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-dark-green hover:bg-light-green focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-accent"
+      >
+        Reset All Filters
+      </button>
     </div>
-    
-    <div 
-      x-show="filteredClubs.length > 0" 
-      class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-    >
-      <template x-for="(club, index) in paginatedClubs" :key="club.slug">
-        <div 
-          :class="{'bg-light-cream border-green-300': club.featured, 'bg-white': !club.featured}"
-          class="club-card rounded-lg shadow-sm border overflow-hidden transition-transform hover:shadow-md hover:-translate-y-1"
-        >
-          <div class="aspect-w-16 aspect-h-9 bg-gray-100">
-            <img 
-              :src="club.image || '/assets/images/placeholder-club.jpg'" 
-              :alt="club.name + ' logo'" 
-              class="object-cover w-full h-full"
-              loading="lazy"
-            >
-          </div>
-          <div class="p-4">
-            <div x-show="club.featured" class="mb-3">
-              <span class="inline-block bg-green-100 text-dark-green text-xs font-medium py-1 px-2 rounded">
-                Featured Club
-              </span>
-            </div>
-            <h3 class="text-xl font-serif mb-2" x-text="club.title || club.name"></h3>
-            <p class="text-gray-600 text-sm mb-4 line-clamp-2" x-text="club.description"></p>
-            
-            <div class="flex flex-wrap gap-2 mb-4">
-              <template x-for="(category, i) in (club.categories || []).slice(0, 3)" :key="i">
-                <span class="inline-block bg-gray-100 text-gray-700 text-xs py-1 px-2 rounded">
-                  <span x-text="category"></span>
-                </span>
+  </template>
+  
+  <template x-if="filteredClubs.length > 0">
+    <!-- Club Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+      <template x-for="club in paginatedClubs" :key="club.id">
+        <div>
+          <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform duration-200 hover:shadow-lg hover:-translate-y-1">
+            <div class="aspect-w-16 h-48 relative">
+              <img 
+                :src="club.image || '/assets/images/placeholder-club.jpg'" 
+                :alt="club.name"
+                class="w-full h-full object-cover"
+              >
+              <template x-if="club.featured">
+                <div class="absolute top-0 right-0 bg-accent text-dark-green px-3 py-1 font-medium">
+                  Featured
+                </div>
               </template>
             </div>
             
-            <a :href="'/club-directory/' + club.slug + '/'" class="inline-block bg-dark-green hover:bg-green-700 text-white py-2 px-4 rounded uppercase text-sm tracking-wider font-serif transition duration-150">
-              View Club
-            </a>
+            <div class="p-5">
+              <h3 class="text-xl font-bold mb-2 font-serif text-dark-green">
+                <a :href="'/club/' + club.slug + '-0/'" class="hover:text-light-green transition duration-150" x-text="club.name"></a>
+              </h3>
+              
+              <p class="text-gray-600 mb-4 line-clamp-3" x-text="club.description"></p>
+              
+              <template x-if="club.categories && club.categories.length > 0">
+                <div class="flex flex-wrap gap-2 mb-4">
+                  <template x-for="(category, index) in club.categories.slice(0, 3)" :key="index">
+                    <span class="inline-block bg-light-cream text-dark-green text-xs py-1 px-2 rounded-full" x-text="category"></span>
+                  </template>
+                  
+                  <template x-if="club.categories.length > 3">
+                    <span class="inline-block bg-light-cream text-dark-green text-xs py-1 px-2 rounded-full" x-text="'+' + (club.categories.length - 3)"></span>
+                  </template>
+                </div>
+              </template>
+              
+              <div class="flex justify-between items-center">
+                <template x-if="club.founded">
+                  <span class="text-sm text-gray-500" x-text="'Founded ' + club.founded"></span>
+                </template>
+                
+                <a 
+                  :href="'/club/' + club.slug + '-0/'" 
+                  class="inline-block bg-accent hover:bg-accent-dark text-dark-green py-1 px-3 rounded text-sm uppercase tracking-wider font-serif transition duration-150"
+                >
+                  View Club
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </template>
     </div>
     
-    <div x-show="pageCount > 1" class="mt-8 flex justify-center">
-      <div class="flex items-center space-x-1">
-        <button 
-          @click="currentPage > 1 && goToPage(currentPage - 1)" 
-          :class="{'opacity-50 cursor-not-allowed': currentPage === 1}"
-          class="px-4 py-2 bg-gray-100 text-gray-800 rounded-l hover:bg-gray-200"
-        >
-          &laquo; Previous
-        </button>
-        
-        <template x-for="page in pageNumbers" :key="page">
-          <button 
-            @click="goToPage(page)"
-            :class="{'bg-dark-green text-white': currentPage === page, 'bg-gray-100 text-gray-800 hover:bg-gray-200': currentPage !== page}"
-            class="px-4 py-2 rounded-sm"
-            x-text="page"
-          ></button>
-        </template>
-        
-        <button 
-          @click="currentPage < pageCount && goToPage(currentPage + 1)" 
-          :class="{'opacity-50 cursor-not-allowed': currentPage === pageCount}"
-          class="px-4 py-2 bg-gray-100 text-gray-800 rounded-r hover:bg-gray-200"
-        >
-          Next &raquo;
-        </button>
+    <!-- Pagination -->
+    <template x-if="pageCount > 1">
+      <div class="flex justify-center">
+        <nav class="inline-flex rounded-md shadow-sm" aria-label="Pagination">
+          <button
+            @click="goToPage(currentPage - 1)"
+            :disabled="currentPage === 1"
+            class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span class="sr-only">Previous</span>
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+            </svg>
+            <span class="ml-1 hidden sm:inline">Previous</span>
+          </button>
+          
+          <template x-for="pageNumber in pageNumbers" :key="pageNumber">
+            <button
+              @click="goToPage(pageNumber)"
+              :class="{
+                'bg-dark-green text-white': pageNumber === currentPage,
+                'bg-white text-gray-500 hover:bg-gray-50': pageNumber !== currentPage
+              }"
+              class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium focus:z-10 focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent"
+              x-text="pageNumber"
+            ></button>
+          </template>
+          
+          <button
+            @click="goToPage(currentPage + 1)"
+            :disabled="currentPage === pageCount"
+            class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span class="mr-1 hidden sm:inline">Next</span>
+            <span class="sr-only">Next</span>
+            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10l-3.293-3.293a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </nav>
       </div>
+    </template>
+  </template>
+  
+  <!-- Advertising Banner -->
+  <div class="mt-12 py-8 px-6 bg-light-cream rounded-lg flex flex-col md:flex-row items-center justify-between">
+    <div class="md:w-2/3 mb-6 md:mb-0">
+      <h2 class="text-2xl font-serif font-bold text-dark-green mb-2">Does your club need a website?</h2>
+      <p class="text-gray-700">
+        We design professional websites specifically for classic car clubs. Get online, attract new members, and showcase your events with a custom website.
+      </p>
+    </div>
+    <div>
+      <a 
+        href="/club-website-design/" 
+        class="inline-block bg-accent hover:bg-accent-dark text-dark-green py-3 px-6 rounded uppercase text-sm tracking-wider font-serif transition duration-150"
+      >
+        Learn More
+      </a>
     </div>
   </div>
 </div>
+
+<script>
+  // Initialize clubDirectory component with data from server
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof Alpine !== 'undefined') {
+      // Override the clubs data in the clubDirectory component
+      const clubDirectoryData = Alpine.store('clubDirectoryData', {
+        initialClubs: 
+      });
+      
+      // Get the clubDirectory element
+      const clubDirectoryEl = document.querySelector('[x-data="clubDirectory"]');
+      if (clubDirectoryEl && clubDirectoryEl.__x) {
+        // Initialize with server-side data instead of fetching
+        clubDirectoryEl.__x.getUnobservedData().clubs = clubDirectoryData.initialClubs;
+        clubDirectoryEl.__x.getUnobservedData().filteredClubs = clubDirectoryData.initialClubs;
+        clubDirectoryEl.__x.updateElements();
+      }
+    }
+  });
+</script>
     
   </main>
   
@@ -444,7 +642,7 @@
                 
               </a>
             
-              <a href="https://facebook.com/classiccarclubs" target="_blank" rel="noopener noreferrer" class="text-white hover:text-accent transition duration-150">
+              <a href="https://www.facebook.com/classiccarclubs" target="_blank" rel="noopener noreferrer" class="text-white hover:text-accent transition duration-150">
                 <span class="sr-only">facebook</span>
                 
                   <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -453,7 +651,7 @@
                 
               </a>
             
-              <a href="https://instagram.com/classiccarclubs" target="_blank" rel="noopener noreferrer" class="text-white hover:text-accent transition duration-150">
+              <a href="https://www.instagram.com/classiccarclubs" target="_blank" rel="noopener noreferrer" class="text-white hover:text-accent transition duration-150">
                 <span class="sr-only">instagram</span>
                 
                   <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -500,6 +698,36 @@
                 </a>
               </li>
             
+              <li>
+                <a href="/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Home
+                </a>
+              </li>
+            
+              <li>
+                <a href="/club-directory/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Club Directory
+                </a>
+              </li>
+            
+              <li>
+                <a href="/club-events/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Events
+                </a>
+              </li>
+            
+              <li>
+                <a href="/about/" class="text-gray-300 hover:text-accent transition duration-150">
+                  About Us
+                </a>
+              </li>
+            
+              <li>
+                <a href="/contact/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Contact
+                </a>
+              </li>
+            
           </ul>
         </div>
         
@@ -535,6 +763,36 @@
               <li>
                 <a href="/newsletter/" class="text-gray-300 hover:text-accent transition duration-150">
                   Newsletter
+                </a>
+              </li>
+            
+              <li>
+                <a href="/privacy-policy/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Privacy Policy
+                </a>
+              </li>
+            
+              <li>
+                <a href="/terms-of-service/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Terms of Service
+                </a>
+              </li>
+            
+              <li>
+                <a href="/club-website-design/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Club Website Design
+                </a>
+              </li>
+            
+              <li>
+                <a href="/advertise/" class="text-gray-300 hover:text-accent transition duration-150">
+                  Advertise With Us
+                </a>
+              </li>
+            
+              <li>
+                <a href="/faq/" class="text-gray-300 hover:text-accent transition duration-150">
+                  FAQ
                 </a>
               </li>
             

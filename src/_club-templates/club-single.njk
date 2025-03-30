@@ -4,7 +4,8 @@ pagination:
   data: clubs
   size: 1
   alias: club
-permalink: "/club-directory/{{ club.slug or club.id }}/"
+  addAllPagesToCollections: true
+permalink: "/club/{{ club.slug or club.id }}-{{ pagination.pageNumber }}/index.html"
 eleventyComputed:
   title: "{{ club.name or club.title }} | Classic Car Clubs"
   description: "{{ club.description }}"

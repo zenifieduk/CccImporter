@@ -271,169 +271,28 @@ description: Find classic car events, rallies, shows, and gatherings near you. B
 
 <script>
   document.addEventListener('alpine:init', () => {
-    Alpine.data('eventsDirectory', () => ({
-      events: {{ mergedEvents | json | safe }},
-      filteredEvents: [],
-      searchQuery: '',
-      filters: {
-        category: '',
-        month: ''
-      },
-      availableFilters: {
-        categories: []
-      },
-      currentPage: 1,
-      itemsPerPage: 9,
-      
-      init() {
-        // Set initial filtered events
-        this.filteredEvents = this.events;
+    Alpine.store('eventsData', {
+      initialEvents: {{ mergedEvents | json | safe }}
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    // Create a custom event that will be triggered after Alpine is loaded
+    document.addEventListener('alpine:initialized', function() {
+      const eventsEl = document.querySelector('[x-data="eventsDirectory"]');
+      if (eventsEl && eventsEl.__x) {
+        const eventsObj = eventsEl.__x.getUnobservedData();
+        // Initialize directly with server-side data instead of fetching
+        eventsObj.events = Alpine.store('eventsData').initialEvents;
+        eventsObj.filteredEvents = Alpine.store('eventsData').initialEvents;
         
-        // Extract unique categories
-        const allCategories = this.events.flatMap(event => event.categories || []);
-        this.availableFilters.categories = [...new Set(allCategories)].sort();
-      },
-      
-      filter() {
-        let result = this.events;
+        // Extract unique categories for filters
+        const allCategories = eventsObj.events.flatMap(event => event.categories || []);
+        eventsObj.availableFilters.categories = [...new Set(allCategories)].sort();
         
-        // Filter by category
-        if (this.filters.category) {
-          result = result.filter(event => 
-            event.categories && event.categories.includes(this.filters.category)
-          );
-        }
-        
-        // Filter by month
-        if (this.filters.month) {
-          result = result.filter(event => {
-            if (!event.date) return false;
-            const eventDate = new Date(event.date);
-            const eventMonth = (eventDate.getMonth() + 1).toString().padStart(2, '0');
-            return eventMonth === this.filters.month;
-          });
-        }
-        
-        // Apply search query
-        if (this.searchQuery.trim()) {
-          const query = this.searchQuery.toLowerCase();
-          result = result.filter(event => 
-            event.title.toLowerCase().includes(query) || 
-            (event.description && event.description.toLowerCase().includes(query))
-          );
-        }
-        
-        this.filteredEvents = result;
-        this.currentPage = 1;
-      },
-      
-      updateAvailableOptions(filtered) {
-        // This could be implemented to dynamically update filter options
-        // based on the current filtered results, but for simplicity we'll keep static options
-      },
-      
-      search() {
-        this.filter();
-      },
-      
-      reset() {
-        this.searchQuery = '';
-        this.filters.category = '';
-        this.filters.month = '';
-        this.filteredEvents = this.events;
-        this.currentPage = 1;
-      },
-      
-      resetFilters() {
-        this.reset();
-      },
-      
-      formatMonth(monthStr) {
-        const months = [
-          'January', 'February', 'March', 'April', 'May', 'June', 
-          'July', 'August', 'September', 'October', 'November', 'December'
-        ];
-        const monthIndex = parseInt(monthStr, 10) - 1;
-        return months[monthIndex];
-      },
-      
-      formatDay(dateTimeString) {
-        if (!dateTimeString) return '';
-        const date = new Date(dateTimeString);
-        return date.toLocaleString('en-GB', { 
-          day: 'numeric', 
-          month: 'short'
-        });
-      },
-      
-      formatTime(dateTimeString) {
-        if (!dateTimeString) return '';
-        const date = new Date(dateTimeString);
-        return date.toLocaleString('en-GB', { 
-          hour: '2-digit', 
-          minute: '2-digit',
-          hour12: true
-        });
-      },
-      
-      paginate() {
-        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-        const endIndex = startIndex + this.itemsPerPage;
-        return this.filteredEvents.slice(startIndex, endIndex);
-      },
-      
-      goToPage(page) {
-        if (page >= 1 && page <= this.pageCount) {
-          this.currentPage = page;
-        }
-      },
-      
-      get pageCount() {
-        return Math.ceil(this.filteredEvents.length / this.itemsPerPage);
-      },
-      
-      get pageNumbers() {
-        const pages = [];
-        const maxVisiblePages = 5;
-        
-        if (this.pageCount <= maxVisiblePages) {
-          // Show all pages if there are few
-          for (let i = 1; i <= this.pageCount; i++) {
-            pages.push(i);
-          }
-        } else {
-          // Show a subset of pages with current page in the middle if possible
-          let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
-          let endPage = Math.min(this.pageCount, startPage + maxVisiblePages - 1);
-          
-          // Adjust if we're near the end
-          if (endPage === this.pageCount) {
-            startPage = Math.max(1, endPage - maxVisiblePages + 1);
-          }
-          
-          for (let i = startPage; i <= endPage; i++) {
-            pages.push(i);
-          }
-        }
-        
-        return pages;
-      },
-      
-      get paginatedEvents() {
-        return this.paginate();
-      },
-      
-      get startIndex() {
-        return (this.currentPage - 1) * this.itemsPerPage + 1;
-      },
-      
-      get endIndex() {
-        return Math.min(this.startIndex + this.itemsPerPage - 1, this.filteredEvents.length);
-      },
-      
-      get isFiltered() {
-        return this.searchQuery || this.filters.category || this.filters.month;
+        // Update the Alpine component
+        eventsEl.__x.updateElements();
       }
-    }));
+    });
   });
 </script>

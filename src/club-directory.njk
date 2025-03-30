@@ -164,7 +164,7 @@ description: Browse and discover classic car clubs from around the world. Filter
             
             <div class="p-5">
               <h3 class="text-xl font-bold mb-2 font-serif text-dark-green">
-                <a :href="'/club-directory/' + club.slug + '/'" class="hover:text-light-green transition duration-150" x-text="club.name"></a>
+                <a :href="'/club/' + club.slug + '-0/'" class="hover:text-light-green transition duration-150" x-text="club.name"></a>
               </h3>
               
               <p class="text-gray-600 mb-4 line-clamp-3" x-text="club.description"></p>
@@ -187,7 +187,7 @@ description: Browse and discover classic car clubs from around the world. Filter
                 </template>
                 
                 <a 
-                  :href="'/club-directory/' + club.slug + '/'" 
+                  :href="'/club/' + club.slug + '-0/'" 
                   class="inline-block bg-accent hover:bg-accent-dark text-dark-green py-1 px-3 rounded text-sm uppercase tracking-wider font-serif transition duration-150"
                 >
                   View Club
@@ -263,159 +263,22 @@ description: Browse and discover classic car clubs from around the world. Filter
 </div>
 
 <script>
-  document.addEventListener('alpine:init', () => {
-    Alpine.data('clubDirectory', () => ({
-      clubs: {{ mergedClubs | json | safe }},
-      filteredClubs: [],
-      searchQuery: '',
-      activeLetter: '',
-      filters: {
-        category: '',
-        founded: ''
-      },
-      availableFilters: {
-        categories: [],
-        decades: []
-      },
-      currentPage: 1,
-      itemsPerPage: 12,
+  // Initialize clubDirectory component with data from server
+  document.addEventListener('DOMContentLoaded', function() {
+    if (typeof Alpine !== 'undefined') {
+      // Override the clubs data in the clubDirectory component
+      const clubDirectoryData = Alpine.store('clubDirectoryData', {
+        initialClubs: {{ mergedClubs | json | safe }}
+      });
       
-      init() {
-        // Set initial filtered clubs
-        this.filteredClubs = this.clubs;
-        
-        // Extract unique categories and decades
-        const allCategories = this.clubs.flatMap(club => club.categories || []);
-        this.availableFilters.categories = [...new Set(allCategories)].sort();
-        
-        const allYears = this.clubs.map(club => club.founded).filter(Boolean);
-        const decades = allYears.map(year => Math.floor(year / 10) * 10);
-        this.availableFilters.decades = [...new Set(decades)].sort();
-      },
-      
-      filter() {
-        let result = this.clubs;
-        
-        // Filter by letter
-        if (this.activeLetter) {
-          result = result.filter(club => 
-            club.name.charAt(0).toUpperCase() === this.activeLetter
-          );
-        }
-        
-        // Filter by category
-        if (this.filters.category) {
-          result = result.filter(club => 
-            club.categories && club.categories.includes(this.filters.category)
-          );
-        }
-        
-        // Filter by founded decade
-        if (this.filters.founded) {
-          const decadeStart = parseInt(this.filters.founded);
-          const decadeEnd = decadeStart + 9;
-          result = result.filter(club => 
-            club.founded >= decadeStart && club.founded <= decadeEnd
-          );
-        }
-        
-        // Apply search query
-        if (this.searchQuery.trim()) {
-          const query = this.searchQuery.toLowerCase();
-          result = result.filter(club => 
-            club.name.toLowerCase().includes(query) || 
-            (club.description && club.description.toLowerCase().includes(query))
-          );
-        }
-        
-        this.filteredClubs = result;
-        this.currentPage = 1;
-        
-        // Update available filter options based on current filtered results
-        this.updateAvailableOptions(result);
-      },
-      
-      updateAvailableOptions(filtered) {
-        // This could be implemented to dynamically update filter options
-        // based on the current filtered results, but for simplicity we'll keep static options
-      },
-      
-      search() {
-        this.filter();
-      },
-      
-      resetFilters() {
-        this.searchQuery = '';
-        this.activeLetter = '';
-        this.filters.category = '';
-        this.filters.founded = '';
-        this.filteredClubs = this.clubs;
-        this.currentPage = 1;
-      },
-      
-      setLetter(letter) {
-        this.activeLetter = letter;
-        this.filter();
-      },
-      
-      paginate() {
-        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-        const endIndex = startIndex + this.itemsPerPage;
-        return this.filteredClubs.slice(startIndex, endIndex);
-      },
-      
-      goToPage(page) {
-        if (page >= 1 && page <= this.pageCount) {
-          this.currentPage = page;
-        }
-      },
-      
-      get pageCount() {
-        return Math.ceil(this.filteredClubs.length / this.itemsPerPage);
-      },
-      
-      get pageNumbers() {
-        const pages = [];
-        const maxVisiblePages = 5;
-        
-        if (this.pageCount <= maxVisiblePages) {
-          // Show all pages if there are few
-          for (let i = 1; i <= this.pageCount; i++) {
-            pages.push(i);
-          }
-        } else {
-          // Show a subset of pages with current page in the middle if possible
-          let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
-          let endPage = Math.min(this.pageCount, startPage + maxVisiblePages - 1);
-          
-          // Adjust if we're near the end
-          if (endPage === this.pageCount) {
-            startPage = Math.max(1, endPage - maxVisiblePages + 1);
-          }
-          
-          for (let i = startPage; i <= endPage; i++) {
-            pages.push(i);
-          }
-        }
-        
-        return pages;
-      },
-      
-      get paginatedClubs() {
-        return this.paginate();
-      },
-      
-      get startIndex() {
-        return (this.currentPage - 1) * this.itemsPerPage + 1;
-      },
-      
-      get endIndex() {
-        return Math.min(this.startIndex + this.itemsPerPage - 1, this.filteredClubs.length);
-      },
-      
-      get isFiltered() {
-        return this.searchQuery || this.activeLetter || this.filters.category || this.filters.founded;
+      // Get the clubDirectory element
+      const clubDirectoryEl = document.querySelector('[x-data="clubDirectory"]');
+      if (clubDirectoryEl && clubDirectoryEl.__x) {
+        // Initialize with server-side data instead of fetching
+        clubDirectoryEl.__x.getUnobservedData().clubs = clubDirectoryData.initialClubs;
+        clubDirectoryEl.__x.getUnobservedData().filteredClubs = clubDirectoryData.initialClubs;
+        clubDirectoryEl.__x.updateElements();
       }
-    }));
+    }
   });
 </script>

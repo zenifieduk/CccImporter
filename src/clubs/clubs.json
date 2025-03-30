@@ -1,5 +1,4 @@
 {
   "layout": "layouts/base.njk",
-  "tags": "clubs",
-  "permalink": "/clubs/{{ slug }}/"
+  "tags": "clubs"
 }
