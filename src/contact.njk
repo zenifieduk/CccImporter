@@ -27,13 +27,7 @@ description: Get in touch with the Classic Car Clubs UK team for inquiries, subm
         Have a question, suggestion, or need to get in touch with our team? Fill out the form below and we'll get back to you as soon as possible.
       </p>
 
-      <form action="https://formsubmit.co/enquiries@classiccarclubs.uk" method="POST" id="contactForm">
-        <!-- FormSubmit configuration -->
-        <input type="hidden" name="_subject" value="New contact form submission from ClassicCarClubs.uk">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_next" value="https://classiccarclubs.uk/thank-you">
-        <input type="text" name="_honey" style="display:none">
-        
+      <form id="contactForm" action="/api/send-email" method="POST">
         <div class="form-group">
           <label for="name" class="form-label">Your Name</label>
           <input type="text" id="name" name="name" class="form-input" required>
@@ -47,10 +41,10 @@ description: Get in touch with the Classic Car Clubs UK team for inquiries, subm
         <div class="form-group">
           <label for="contact-reason" class="form-label">Reason for contact</label>
           <select id="contact-reason" name="contact-reason" class="form-input">
-            <option value="General enquiry">General enquiry</option>
-            <option value="Submit a club">Submit a club</option>
+            <option value="General Inquiry">General Inquiry</option>
+            <option value="Submit a Club">Submit a Club</option>
             <option value="Advertising">Advertising</option>
-            <option value="Something else">Something else</option>
+            <option value="Something Else">Something Else</option>
           </select>
         </div>
 
@@ -60,9 +54,21 @@ description: Get in touch with the Classic Car Clubs UK team for inquiries, subm
         </div>
 
         <div class="form-group">
-          <button type="submit" class="form-submit">Send Message</button>
+          <button type="submit" class="form-submit" id="submitButton">Send Message</button>
+          <div id="formSpinner" style="display: none; margin-top: 1rem; text-align: center;">
+            <div class="spinner"></div>
+            <span style="margin-left: 0.5rem;">Sending...</span>
+          </div>
         </div>
       </form>
+
+      <div id="formSuccess" style="display: none;" class="alert alert-success">
+        Thank you for your message! We'll get back to you as soon as possible.
+      </div>
+
+      <div id="formError" style="display: none;" class="alert alert-error">
+        There was an error sending your message. Please try again or contact us directly at enquiries@classiccarclubs.uk
+      </div>
     </div>
   </div>
 
@@ -92,4 +98,110 @@ description: Get in touch with the Classic Car Clubs UK team for inquiries, subm
   </div>
 </div>
 
-<!-- Using FormSubmit.co for form handling, no JavaScript needed -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.getElementById('contactForm');
+    const formSuccess = document.getElementById('formSuccess');
+    const formError = document.getElementById('formError');
+    const submitButton = document.getElementById('submitButton');
+    const formSpinner = document.getElementById('formSpinner');
+
+    if (contactForm) {
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        // Hide any previous messages
+        formSuccess.style.display = 'none';
+        formError.style.display = 'none';
+
+        // Show loading spinner, disable submit button
+        submitButton.disabled = true;
+        formSpinner.style.display = 'block';
+
+        // Collect form data
+        const formData = new FormData(contactForm);
+        const formDataObj = {};
+        formData.forEach((value, key) => {
+          formDataObj[key] = value;
+        });
+
+        // Send form data via AJAX/fetch
+        fetch('/api/send-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formDataObj)
+        })
+        .then(response => {
+          if (!response.ok) {
+            return response.json().then(data => {
+              throw new Error(data.error || 'Network response was not ok');
+            });
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Hide spinner
+          formSpinner.style.display = 'none';
+
+          // Show success message
+          formSuccess.style.display = 'block';
+
+          // Reset form
+          contactForm.reset();
+
+          // Re-enable submit button
+          submitButton.disabled = false;
+        })
+        .catch(error => {
+          console.error('Form submission error:', error);
+
+          // Hide spinner
+          formSpinner.style.display = 'none';
+
+          // Show error message
+          formError.style.display = 'block';
+
+          // Re-enable submit button
+          submitButton.disabled = false;
+        });
+      });
+    }
+  });
+</script>
+
+<style>
+  .spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0,0,0,.1);
+    border-radius: 50%;
+    border-top-color: #1b5e20;
+    animation: spin 1s ease-in-out infinite;
+    vertical-align: middle;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .alert {
+    padding: 1rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+  }
+
+  .alert-success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+  }
+
+  .alert-error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+  }
+</style>

@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { sendEmailHandler } = require('./src/api-proxy');
+const sgMail = require('@sendgrid/mail');
 
 const app = express();
 
@@ -16,7 +16,74 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('_site'));
 
-app.post('/api/send-email', sendEmailHandler);
+// SendGrid API endpoint
+app.post('/api/send-email', async (req, res) => {
+  try {
+    // Log the request body for debugging
+    console.log('Request body:', req.body);
+    
+    const { name, email, message, 'contact-reason': contactReason } = req.body;
+
+    // Validate required fields
+    if (!name || !email || !message) {
+      return res.status(400).json({ 
+        error: 'Missing required fields',
+        received: req.body
+      });
+    }
+
+    // Check for SendGrid API key
+    if (!process.env.SENDGRID_API_KEY) {
+      console.error('SENDGRID_API_KEY environment variable is not set');
+      return res.status(500).json({ error: 'Email configuration error' });
+    }
+
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+    // Get the verified sender from environment or use a fallback
+    const verifiedSender = process.env.SENDGRID_VERIFIED_SENDER || 'noreply@classiccarclubs.uk';
+    
+    const msg = {
+      to: 'enquiries@classiccarclubs.uk', // Change to your recipient
+      from: verifiedSender, // Change to your verified sender
+      replyTo: email,
+      subject: `Contact Form: ${contactReason || 'General Inquiry'}`,
+      text: `
+Name: ${name}
+Email: ${email}
+Reason: ${contactReason || 'Not specified'}
+
+Message:
+${message}
+      `,
+      html: `
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Reason:</strong> ${contactReason || 'Not specified'}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message.replace(/\n/g, '<br>')}</p>
+      `
+    };
+
+    console.log('Sending email with SendGrid...');
+    await sgMail.send(msg);
+    console.log('Email sent successfully');
+
+    return res.status(200).json({ 
+      success: true,
+      message: 'Email sent successfully' 
+    });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    if (error.response) {
+      console.error('SendGrid Error Response:', error.response.body);
+    }
+    return res.status(500).json({ 
+      error: 'Failed to send email',
+      details: error.message
+    });
+  }
+});
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, '0.0.0.0', () => {
