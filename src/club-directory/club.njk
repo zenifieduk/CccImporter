@@ -119,47 +119,303 @@ eleventyComputed:
   </div>
   
   <div class="club-grid">
-    {# Get the current club details #}
-    {% set currentClubSlug = club.slug %}
-    {% set currentCategory = club.category %}
+    {% if club.slug == "the-military-vehicle-trust-northampton" %}
+      {# Special case for the Military Vehicle Trust #}
+      <div class="club-card">
+        <div class="club-featured">Featured</div>
+        <div class="club-image">
+          <img src="/assets/images/alvis-owners-club.jpg" alt="Alvis Owners Club">
+        </div>
+        <div class="club-content">
+          <h3 class="club-title">Alvis Owners Club</h3>
+          <div class="club-location" style="margin-top: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>Lichfield, Staffordshire</span>
+          </div>
+          <div class="club-category" style="margin-top: 8px;">
+            <span class="category-tag">Classic Car Club</span>
+            <span class="category-tag">Alvis</span>
+          </div>
+        </div>
+        <div class="club-actions">
+          <a href="/club-directory/alvis-owners-club-lichfield/" class="button button-primary">View Details</a>
+        </div>
+      </div>
+      
+      <div class="club-card">
+        <div class="club-featured">Featured</div>
+        <div class="club-image">
+          <img src="/assets/images/classic-car-club-london.jpg" alt="Classic Car Club London">
+        </div>
+        <div class="club-content">
+          <h3 class="club-title">Classic Car Club London</h3>
+          <div class="club-location" style="margin-top: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>London</span>
+          </div>
+          <div class="club-category" style="margin-top: 8px;">
+            <span class="category-tag">Classic Car Club</span>
+            <span class="category-tag">Various</span>
+          </div>
+        </div>
+        <div class="club-actions">
+          <a href="/club-directory/classic-car-club-london/" class="button button-primary">View Details</a>
+        </div>
+      </div>
+      
+      <div class="club-card">
+        <div class="club-featured">Featured</div>
+        <div class="club-image">
+          <img src="/assets/images/vintage-hotrod-association.jpg" alt="Vintage Hot Rod Association">
+        </div>
+        <div class="club-content">
+          <h3 class="club-title">Vintage Hot Rod Association</h3>
+          <div class="club-location" style="margin-top: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>Colchester, Essex</span>
+          </div>
+          <div class="club-category" style="margin-top: 8px;">
+            <span class="category-tag">Hot Rod Club</span>
+            <span class="category-tag">Hot Rod</span>
+          </div>
+        </div>
+        <div class="club-actions">
+          <a href="/club-directory/vintage-hot-rod-association-colchester/" class="button button-primary">View Details</a>
+        </div>
+      </div>
+      
+    {% elif club.category == "Classic Car Club" %}
+      {# If the current club is a Classic Car Club, these are good widely-varied options #}
+      <div class="club-card">
+        <div class="club-featured">Featured</div>
+        <div class="club-image">
+          <img src="/assets/images/alvis-owners-club.jpg" alt="Alvis Owners Club">
+        </div>
+        <div class="club-content">
+          <h3 class="club-title">Alvis Owners Club</h3>
+          <div class="club-location" style="margin-top: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>Lichfield, Staffordshire</span>
+          </div>
+          <div class="club-category" style="margin-top: 8px;">
+            <span class="category-tag">Classic Car Club</span>
+            <span class="category-tag">Alvis</span>
+          </div>
+        </div>
+        <div class="club-actions">
+          <a href="/club-directory/alvis-owners-club-lichfield/" class="button button-primary">View Details</a>
+        </div>
+      </div>
+      
+      <div class="club-card">
+        <div class="club-featured">Featured</div>
+        <div class="club-image">
+          <img src="/assets/images/club-peugeot.jpg" alt="Club Peugeot UK">
+        </div>
+        <div class="club-content">
+          <h3 class="club-title">Club Peugeot UK</h3>
+          <div class="club-location" style="margin-top: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>York, North Yorkshire</span>
+          </div>
+          <div class="club-category" style="margin-top: 8px;">
+            <span class="category-tag">Classic Car Club</span>
+            <span class="category-tag">Peugeot</span>
+          </div>
+        </div>
+        <div class="club-actions">
+          <a href="/club-directory/club-peugeot-uk-york/" class="button button-primary">View Details</a>
+        </div>
+      </div>
+      
+      <div class="club-card">
+        <div class="club-featured">Featured</div>
+        <div class="club-image">
+          <img src="/assets/images/classic-car-club-london.jpg" alt="Classic Car Club London">
+        </div>
+        <div class="club-content">
+          <h3 class="club-title">Classic Car Club London</h3>
+          <div class="club-location" style="margin-top: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>London</span>
+          </div>
+          <div class="club-category" style="margin-top: 8px;">
+            <span class="category-tag">Classic Car Club</span>
+            <span class="category-tag">Various</span>
+          </div>
+        </div>
+        <div class="club-actions">
+          <a href="/club-directory/classic-car-club-london/" class="button button-primary">View Details</a>
+        </div>
+      </div>
+      
+    {% elif club.marque == "Rolls-Royce" %}
+      {# If it's specifically a Rolls-Royce club, show other Rolls-Royce clubs plus one other luxury brand #}
+      
+      <div class="club-card">
+        <div class="club-featured">Featured</div>
+        <div class="club-image">
+          <img src="/assets/images/rolls-royce-surrey.jpg" alt="Rolls-Royce Enthusiasts' Club - Surrey Section">
+        </div>
+        <div class="club-content">
+          <h3 class="club-title">Rolls-Royce Enthusiasts' Club - Surrey Section</h3>
+          <div class="club-location" style="margin-top: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>Surrey</span>
+          </div>
+          <div class="club-category" style="margin-top: 8px;">
+            <span class="category-tag">Classic Car Club</span>
+            <span class="category-tag">Rolls-Royce</span>
+          </div>
+        </div>
+        <div class="club-actions">
+          <a href="/club-directory/rolls-royce-enthusiasts-club-surrey-section/" class="button button-primary">View Details</a>
+        </div>
+      </div>
+      
+      <div class="club-card">
+        <div class="club-featured">Featured</div>
+        <div class="club-image">
+          <img src="/assets/images/rolls-royce-enthusiasts-wessex.jpg" alt="Rolls-Royce Enthusiasts' Wessex Section">
+        </div>
+        <div class="club-content">
+          <h3 class="club-title">Rolls-Royce Enthusiasts' Wessex Section</h3>
+          <div class="club-location" style="margin-top: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>Wessex</span>
+          </div>
+          <div class="club-category" style="margin-top: 8px;">
+            <span class="category-tag">Classic Car Club</span>
+            <span class="category-tag">Rolls-Royce</span>
+          </div>
+        </div>
+        <div class="club-actions">
+          <a href="/club-directory/rolls-royce-enthusiasts-club-wessex/" class="button button-primary">View Details</a>
+        </div>
+      </div>
+      
+      <div class="club-card">
+        <div class="club-featured">Featured</div>
+        <div class="club-image">
+          <img src="/assets/images/range-rover-register.jpg" alt="Range Rover Register">
+        </div>
+        <div class="club-content">
+          <h3 class="club-title">Range Rover Register</h3>
+          <div class="club-location" style="margin-top: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>Cranleigh, Surrey</span>
+          </div>
+          <div class="club-category" style="margin-top: 8px;">
+            <span class="category-tag">Classic Car Club</span>
+            <span class="category-tag">Range Rover</span>
+          </div>
+        </div>
+        <div class="club-actions">
+          <a href="/club-directory/range-rover-register-cranleigh/" class="button button-primary">View Details</a>
+        </div>
+      </div>
     
-    {# First, find clubs with the same category #}
-    {% set categoryClubs = [] %}
-    {% set randomClubs = [] %}
-    {% set seenSlugs = [] %}
-    
-    {# Add the current club slug to the list of seen slugs #}
-    {% set seenSlugs = seenSlugs.concat([currentClubSlug]) %}
-    
-    {# First pass - get related clubs by category #}
-    {% for clubItem in clubs | shuffle %}
-      {% if clubItem.category == currentCategory and clubItem.slug != currentClubSlug and categoryClubs.length < 3 %}
-        {% if not seenSlugs.includes(clubItem.slug) %}
-          {% set categoryClubs = categoryClubs.concat([clubItem]) %}
-          {% set seenSlugs = seenSlugs.concat([clubItem.slug]) %}
-        {% endif %}
-      {% endif %}
-    {% endfor %}
-    
-    {# Second pass - if we need more clubs, get random ones #}
-    {% if categoryClubs.length < 3 %}
-      {% for clubItem in clubs | shuffle %}
-        {% if clubItem.slug != currentClubSlug and randomClubs.length < (3 - categoryClubs.length) %}
-          {% if not seenSlugs.includes(clubItem.slug) %}
-            {% set randomClubs = randomClubs.concat([clubItem]) %}
-            {% set seenSlugs = seenSlugs.concat([clubItem.slug]) %}
-          {% endif %}
-        {% endif %}
-      {% endfor %}
+    {% else %}
+      {# For any other club, show a mix of popular clubs #}
+      <div class="club-card">
+        <div class="club-featured">Featured</div>
+        <div class="club-image">
+          <img src="/assets/images/rover-p5-club.jpg" alt="Rover P5 Owners Club">
+        </div>
+        <div class="club-content">
+          <h3 class="club-title">Rover P5 Owners Club</h3>
+          <div class="club-location" style="margin-top: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>Ashford</span>
+          </div>
+          <div class="club-category" style="margin-top: 8px;">
+            <span class="category-tag">Classic Car Club</span>
+            <span class="category-tag">Rover</span>
+          </div>
+        </div>
+        <div class="club-actions">
+          <a href="/club-directory/rover-p5-owners-club-ashford/" class="button button-primary">View Details</a>
+        </div>
+      </div>
+      
+      <div class="club-card">
+        <div class="club-featured">Featured</div>
+        <div class="club-image">
+          <img src="/assets/images/ford-classic-capri.jpg" alt="Ford Classic and Capri Owners Club">
+        </div>
+        <div class="club-content">
+          <h3 class="club-title">Ford Classic and Capri Owners Club</h3>
+          <div class="club-location" style="margin-top: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>Colchester, Essex</span>
+          </div>
+          <div class="club-category" style="margin-top: 8px;">
+            <span class="category-tag">Classic Car Club</span>
+            <span class="category-tag">Ford</span>
+          </div>
+        </div>
+        <div class="club-actions">
+          <a href="/club-directory/ford-classic-and-capri-owners-club-colchester/" class="button button-primary">View Details</a>
+        </div>
+      </div>
+      
+      <div class="club-card">
+        <div class="club-featured">Featured</div>
+        <div class="club-image">
+          <img src="/assets/images/alvis-owners-club.jpg" alt="Alvis Owners Club">
+        </div>
+        <div class="club-content">
+          <h3 class="club-title">Alvis Owners Club</h3>
+          <div class="club-location" style="margin-top: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span>Lichfield, Staffordshire</span>
+          </div>
+          <div class="club-category" style="margin-top: 8px;">
+            <span class="category-tag">Classic Car Club</span>
+            <span class="category-tag">Alvis</span>
+          </div>
+        </div>
+        <div class="club-actions">
+          <a href="/club-directory/alvis-owners-club-lichfield/" class="button button-primary">View Details</a>
+        </div>
+      </div>
     {% endif %}
-    
-    {# Merge the two lists #}
-    {% set relatedClubsList = categoryClubs.concat(randomClubs) %}
-    
-    {# Render the clubs #}
-    {% for otherClub in relatedClubsList %}
-      {% include "components/club-card-clean.njk" %}
-    {% endfor %}
   </div>
   
   <div style="text-align: center; margin-top: 2rem;">
