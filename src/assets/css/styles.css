@@ -83,13 +83,13 @@ a:hover {
 }
 
 .club-hero-content, .event-hero-content {
-  text-align: center;
+  text-align: left;
   margin: 0 auto;
 }
 
 /* Header styles */
 .site-header {
-  background: var(--primary-color); /* Changed background to black */
+  background: #009294;
   color: white;
   padding: 1rem 0;
   position: relative;
@@ -137,11 +137,14 @@ a:hover {
 }
 
 .site-header .desktop-nav a {
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-  transition: opacity 0.2s;
-  position: relative;
+    color: white;
+    text-decoration: none;
+    font-weight: 100 !important;
+    transition: opacity 0.2s;
+    position: relative;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.02rem;
 }
 
 .site-header .desktop-nav a:hover {
@@ -155,7 +158,7 @@ a:hover {
   height: 2px;
   bottom: -5px;
   left: 0;
-  background-color: #a3e635;
+  background-color: #000;
   transition: width 0.3s;
 }
 
@@ -772,10 +775,10 @@ select.custom-search-input option {
 
 .search-button {
   padding: 0.75rem 1.5rem;
-  background-color: var(--primary-color);
+  background-color: #438981;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 1px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -788,10 +791,10 @@ select.custom-search-input option {
 
 .reset-button {
   padding: 0.75rem 1.5rem;
-  background-color: transparent;
-  color: #666;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  background-color: var(--secondary-color);
+  color: #fff;
+  border: 0px solid #ddd;
+  border-radius: 1px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -1250,7 +1253,7 @@ font-size:1.2rem
   height: 60vh;
   min-height: 750px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   color: white;
   overflow: hidden;
   background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('/assets/images/hero-background.jpg');
@@ -1275,7 +1278,7 @@ font-size:1.2rem
 .hero-content {
   position: relative;
   z-index: 2;
-  max-width: 1180px;
+  max-width: 1360px;
 }
 
 .home-hero-content {
@@ -1311,14 +1314,14 @@ font-size:1.2rem
 }
 
 .club-hero-section {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/assets/images/aston-martin-car-show.jpg');
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/assets/images/classic-car-club-meeting-2025.avif');
   background-size: cover;
   background-position: center;
   padding: 0;
 }
 
 .event-hero-section {
-  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/assets/images/classic-car-event-group.jpg');
+  background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/assets/images/retro-classic-car-show-2025.avif');
   background-size: cover;
   background-position: center;
   padding: 0;
@@ -1527,7 +1530,7 @@ font-size:1.2rem
 
 .az-filter-letter.active {
   color: white;
-  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+  background: #009294;
   border-color: #1b5e20;
   box-shadow: 0 2px 5px rgba(27, 94, 32, 0.4);
 }
@@ -1746,9 +1749,27 @@ font-size:1.2rem
 
 .club-types-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
   margin-top: 1.5rem;
+}
+
+@media (max-width: 1200px) {
+  .club-types-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .club-types-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .club-types-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .club-type-card {
