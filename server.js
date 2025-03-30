@@ -148,27 +148,49 @@ app.post('/api/collections/:collection', (req, res) => {
 // Handle file uploads
 app.post('/api/upload', (req, res) => {
   try {
+    console.log('Upload request received');
+    console.log('Files:', req.files);
+    
     if (!req.files || Object.keys(req.files).length === 0) {
+      console.log('No files were uploaded');
+      // If this is a URL validation only (no actual file)
+      if (req.body && req.body.url) {
+        console.log('URL validation request for:', req.body.url);
+        return res.json({ url: req.body.url });
+      }
       return res.status(400).json({ error: 'No files were uploaded' });
     }
     
     const uploadedFile = req.files.file;
-    const uploadPath = path.join(uploadsDir, uploadedFile.name);
+    
+    // Clean the filename to be URL-friendly
+    const cleanFilename = uploadedFile.name
+      .toLowerCase()
+      .replace(/[^a-z0-9.]/g, '-');
+    
+    const uploadPath = path.join(uploadsDir, cleanFilename);
+    
+    console.log('Moving uploaded file to:', uploadPath);
     
     // Move the file
     uploadedFile.mv(uploadPath, (err) => {
       if (err) {
         console.error('Error uploading file:', err);
-        return res.status(500).json({ error: 'Failed to upload file' });
+        return res.status(500).json({ error: 'Failed to upload file', details: err.message });
       }
       
       // Return the URL for the uploaded file
-      const fileUrl = `/assets/images/uploads/${uploadedFile.name}`;
+      const fileUrl = `/assets/images/uploads/${cleanFilename}`;
+      console.log('File uploaded successfully to:', fileUrl);
       res.json({ url: fileUrl });
     });
   } catch (error) {
     console.error('Error in file upload:', error);
-    res.status(500).json({ error: 'Failed to process file upload' });
+    res.status(500).json({ 
+      error: 'Failed to process file upload', 
+      details: error.message,
+      stack: error.stack
+    });
   }
 });
 

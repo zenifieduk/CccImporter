@@ -123,9 +123,19 @@ class CustomProxy {
   }
 
   persistMedia(mediaFile) {
+    if (!mediaFile || !mediaFile.file) {
+      console.warn('Invalid mediaFile object', mediaFile);
+      return Promise.resolve({
+        name: mediaFile ? mediaFile.name : 'unknown',
+        url: mediaFile && mediaFile.path ? mediaFile.path : ''
+      });
+    }
+
     const formData = new FormData();
     formData.append('file', mediaFile.file);
 
+    console.log('Uploading media file:', mediaFile.name);
+    
     return fetch(`${this.options.proxyUrl}/upload`, {
       method: 'POST',
       body: formData
@@ -136,10 +146,21 @@ class CustomProxy {
         }
         return response.json();
       })
-      .then(json => ({
-        name: mediaFile.name,
-        url: json.url
-      }));
+      .then(json => {
+        console.log('Media upload response:', json);
+        return {
+          name: mediaFile.name,
+          url: json.url || (mediaFile.path || '')
+        };
+      })
+      .catch(error => {
+        console.error('Error uploading media:', error);
+        // Return the original path if upload fails
+        return {
+          name: mediaFile.name,
+          url: mediaFile.path || ''
+        };
+      });
   }
 
   deleteFile(path, commitMessage) {
