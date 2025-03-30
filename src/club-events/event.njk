@@ -202,3 +202,46 @@ eleventyComputed:
     <a href="/club-events/" class="button button-primary">View All Events</a>
   </div>
 </div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "{{ event.eventTitle }}",
+  "description": "{{ event.eventDescription }}",
+  {% if event.eventImageUrl %}
+  "image": "{{ event.eventImageUrl }}",
+  {% endif %}
+  "startDate": "{% if event.eventStartDateTime %}{{ event.eventStartDateTime | substring(4, 8) }}-{{ event.eventStartDateTime | substring(2, 4) }}-{{ event.eventStartDateTime | substring(0, 2) }}T{{ event.eventStartDateTime | substring(9) }}{% else %}{{ '2025-01-01T10:00:00' }}{% endif %}",
+  {% if event.eventEndDateTime %}
+  "endDate": "{{ event.eventEndDateTime | substring(4, 8) }}-{{ event.eventEndDateTime | substring(2, 4) }}-{{ event.eventEndDateTime | substring(0, 2) }}T{{ event.eventEndDateTime | substring(9) }}",
+  {% endif %}
+  "location": {
+    "@type": "Place",
+    "name": "{{ event.eventLocation or event.eventCity or 'Event Venue' }}",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "{{ event.eventAddress or '' }}",
+      "addressLocality": "{{ event.eventCity or '' }}",
+      "addressRegion": "{{ event.eventState or '' }}",
+      "postalCode": "{{ event.eventPostalCode or '' }}",
+      "addressCountry": "{{ event.eventCountry or 'UK' }}"
+    }
+  },
+  {% if event.eventOrganizer %}
+  "organizer": {
+    "@type": "Organization",
+    "name": "{{ event.eventOrganizer }}"
+  },
+  {% endif %}
+  "offers": {
+    "@type": "Offer",
+    "price": "{{ event.eventTicketPrice | replace('£', '') | replace('Free', '0') }}",
+    "priceCurrency": "GBP",
+    "availability": "https://schema.org/InStock",
+    "url": "{{ event.eventWebsite or page.url }}"
+  },
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"
+}
+</script>
