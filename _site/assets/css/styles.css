@@ -1424,42 +1424,36 @@ font-size:1.2rem
   gap: 1.5rem;
   width: 100%;
   margin: 1.5rem 0;
-  width: 100%;
 }
 
+/* Update responsive breakpoints for all grids */
 @media (max-width: 1024px) {
-  .club-grid, .event-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .club-grid,
+  .club-grid.standard-club-grid,
+  .event-grid,
+  .featured-clubs .club-grid,
+  .featured-clubs-section .club-grid,
+  .featured-section .featured-grid,
+  .featured-clubs-section,
+  .featured-events-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
   }
 }
 
-@media (max-width: 640px) {
-  .club-grid, .event-grid {
-    grid-template-columns: 1fr;
+@media (max-width: 768px) {
+  .club-grid,
+  .club-grid.standard-club-grid,
+  .event-grid,
+  .featured-clubs .club-grid,
+  .featured-clubs-section .club-grid,
+  .featured-section .featured-grid,
+  .featured-clubs-section,
+  .featured-events-grid {
+    grid-template-columns: 1fr !important;
   }
 }
 
-.featured-club-grid {
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-}
-
-@media (min-width: 1200px) {
-  .featured-club-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1199px) {
-  .featured-club-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 767px) {
-  .featured-club-grid {
-    grid-template-columns: 1fr;
-  }
-}
+/* Featured club grid is handled by the general grid breakpoints above */
 
 /* Feature Section Styles */
 .featured-section {
@@ -1907,14 +1901,12 @@ font-size:1.2rem
   }
 }
 
+/* Additional club grid settings */
 .club-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
   max-width: 1360px;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 2rem;
 }
 
 .button-primary {
