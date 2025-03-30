@@ -5,16 +5,3 @@ layout: layouts/base.njk
 <div class="container">
   {{ content | safe }}
 </div>
-
----
-layout: layouts/page.njk
----
-{% set pagination = {
-  size: 2,
-  current_page: 1,
-  total_pages: 10
-} %}
-
-{% for i in 1..pagination.total_pages %}
-    <a href="/page/{{ i }}">{{ i }}</a>
-{% endfor %}
