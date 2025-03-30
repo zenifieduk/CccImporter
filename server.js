@@ -19,10 +19,13 @@ app.use(express.static('_site'));
 
 // API endpoint for contact form submissions
 app.post('/api/send-email', async (req, res) => {
+  console.log('Received contact form submission:', req.body);
+  
   const { name, email, message, 'contact-reason': contactReason } = req.body;
   
   // Validate form fields
   if (!name || !email || !message) {
+    console.log('Missing required fields');
     return res.status(400).json({ 
       success: false, 
       message: 'Please provide all required fields: name, email, and message' 
@@ -30,7 +33,7 @@ app.post('/api/send-email', async (req, res) => {
   }
   
   try {
-    // We know SendGrid is configured with API key
+    // Create message for SendGrid
     const msg = {
       to: 'enquiries@classiccarclubs.uk',
       from: 'noreply@classiccarclubs.uk',
@@ -52,7 +55,9 @@ app.post('/api/send-email', async (req, res) => {
       `
     };
     
+    console.log('Sending email via SendGrid');
     await sgMail.send(msg);
+    console.log('Email sent successfully');
     return res.status(200).json({ success: true, message: 'Email sent successfully' });
   } catch (error) {
     console.error('Error sending email:', error);
