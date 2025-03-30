@@ -119,7 +119,11 @@ eleventyComputed:
   </div>
   
   <div class="club-grid">
-    {% set otherClubs = relatedClubs.getRelatedClubs(clubs, club, 3) %}
+    {% set cleanClub = { 
+      slug: club.slug, 
+      category: club.category 
+    } %}
+    {% set otherClubs = relatedClubs.getRelatedClubs(clubs, cleanClub, 3) %}
     {% for otherClub in otherClubs %}
       {% include "components/club-card-clean.njk" %}
     {% endfor %}
