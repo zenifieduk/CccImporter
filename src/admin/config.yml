@@ -1,8 +1,7 @@
 backend:
-  name: github
-  repo: username/repo-name  # Replace with your actual GitHub username/repo
-  branch: main
-  
+  name: test-repo
+  local_backend: true
+
 # Enable the editorial workflow for drafts, review, and publishing
 publish_mode: editorial_workflow
   
