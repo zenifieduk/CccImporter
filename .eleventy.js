@@ -7,6 +7,9 @@ module.exports = function(eleventyConfig) {
   // Copy public directory
   eleventyConfig.addPassthroughCopy({ "public": "/" });
   
+  // Copy admin directory for Decap CMS
+  eleventyConfig.addPassthroughCopy("src/admin");
+  
   // Add JSON filter
   eleventyConfig.addFilter("json", function(value) {
     return JSON.stringify(value);

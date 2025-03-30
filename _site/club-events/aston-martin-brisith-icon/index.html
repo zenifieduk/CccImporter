@@ -19,6 +19,9 @@
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="/assets/js/alpine-init.js"></script>
+  
+  <!-- Netlify Identity Widget for Admin -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body class="">
   <header class="site-header" x-data="mobileMenu">
@@ -574,5 +577,18 @@
 
   <!-- Scripts -->
   <script src="/assets/js/search.js"></script>
+  
+  <!-- Netlify Identity Redirect Script -->
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", user => {
+        if (!user) {
+          window.netlifyIdentity.on("login", () => {
+            document.location.href = "/admin/";
+          });
+        }
+      });
+    }
+  </script>
 </body>
 </html>

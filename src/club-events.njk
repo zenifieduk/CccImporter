@@ -2,6 +2,9 @@
 layout: layouts/page.njk
 title: Classic Car Events
 description: Browse upcoming classic car shows, meets, and events across the UK.
+pagination:
+  data: merged-events
+  size: 100
 ---
 
 {% set breadcrumbs = [{ url: '/club-events/', label: 'Club Events' }] %}

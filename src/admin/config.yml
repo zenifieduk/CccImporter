@@ -1,41 +1,76 @@
-
 backend:
   name: git-gateway
   branch: main
-
-media_folder: "src/assets/images/uploads"
+  
+media_folder: "public/assets/images/uploads"
 public_folder: "/assets/images/uploads"
 
 collections:
   - name: "clubs"
     label: "Clubs"
-    folder: "src/_data/clubs"
+    folder: "src/_data/clubs-json"
     create: true
     slug: "{{slug}}"
+    extension: "json"
+    editor:
+      preview: false
     fields:
-      - {label: "Club Name", name: "clubName", widget: "string"}
-      - {label: "Category", name: "category", widget: "string"}
-      - {label: "Website", name: "website", widget: "string"}
-      - {label: "Description", name: "description", widget: "text"}
-      - {label: "Featured", name: "featured", widget: "boolean", default: false}
-      
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Slug", name: "slug", widget: "string", hint: "URL-friendly version of the title, lowercase with hyphens" }
+      - { label: "ID", name: "id", widget: "number", hint: "Unique identifier for the club" }
+      - { label: "Description", name: "description", widget: "text" }
+      - { label: "Category", name: "category", widget: "string", default: "Classic Car Club" }
+      - { label: "Marque", name: "marque", widget: "string", required: false, hint: "Car make/brand (e.g., Ford, Jaguar)" }
+      - { label: "City", name: "city", widget: "string", required: false }
+      - { label: "State/County", name: "state", widget: "string", required: false }
+      - { label: "Country", name: "country", widget: "string", default: "United Kingdom" }
+      - { label: "Website", name: "website", widget: "string", required: false }
+      - { label: "Email", name: "email", widget: "string", required: false }
+      - { label: "Phone", name: "phone", widget: "string", required: false }
+      - { label: "Featured", name: "featured", widget: "boolean", default: false }
+      - { label: "Image URL", name: "imageUrl", widget: "image", required: false, allow_multiple: false }
+      - { label: "Founded", name: "founded", widget: "string", required: false, hint: "Year the club was founded" }
+      - { label: "Membership Fee", name: "membershipFee", widget: "string", required: false, hint: "Annual membership cost" }
+      - { label: "Meeting Frequency", name: "meetingFrequency", widget: "string", required: false, hint: "How often the club meets" }
+      - { label: "Meeting Location", name: "meetingLocation", widget: "string", required: false }
+      - { label: "Membership Benefits", name: "membershipBenefits", widget: "list", required: false }
+      - { label: "Social Media Links", name: "socialMedia", widget: "object", required: false, fields: [
+          { label: "Facebook", name: "facebook", widget: "string", required: false },
+          { label: "Twitter", name: "twitter", widget: "string", required: false },
+          { label: "Instagram", name: "instagram", widget: "string", required: false },
+          { label: "YouTube", name: "youtube", widget: "string", required: false }
+        ]}
+  
   - name: "events"
     label: "Events"
-    folder: "src/_data/events"
+    folder: "src/_data/events-json"
     create: true
     slug: "{{slug}}"
+    extension: "json"
+    editor:
+      preview: false
     fields:
-      - {label: "Event Title", name: "eventTitle", widget: "string"}
-      - {label: "Event Start Date/Time", name: "eventStartDateTime", widget: "datetime"}
-      - {label: "Event End Date/Time", name: "eventEndDateTime", widget: "datetime"}
-      - {label: "Event Ticket Price", name: "eventTicketPrice", widget: "string"}
-      - {label: "Event Website", name: "eventWebsite", widget: "string"}
-      - {label: "Event Address", name: "eventAddress", widget: "string"}
-      - {label: "Event City", name: "eventCity", widget: "string"}
-      - {label: "Event State", name: "eventState", widget: "string"}
-      - {label: "Event Postal Code", name: "eventPostalCode", widget: "string"}
-      - {label: "Event Country Code", name: "eventCountryCode", widget: "string"}
-      - {label: "Event Image", name: "eventImageUrl", widget: "image"}
-      - {label: "Event Categories", name: "eventCategory", widget: "list"}
-      - {label: "Event Description", name: "eventDescription", widget: "text"}
-      - {label: "Featured Event", name: "eventFeatured", widget: "boolean", default: false}
+      - { label: "Event Title", name: "eventTitle", widget: "string" }
+      - { label: "Event Slug", name: "eventSlug", widget: "string", hint: "URL-friendly version of the title, lowercase with hyphens" }
+      - { label: "Event Description", name: "eventDescription", widget: "text" }
+      - { label: "Event Start Date/Time", name: "eventStartDateTime", widget: "datetime", format: "DD/MM/YYYY:HH:mm:ss" }
+      - { label: "Event End Date/Time", name: "eventEndDateTime", widget: "datetime", format: "DD/MM/YYYY:HH:mm:ss" }
+      - { label: "Event Category", name: "eventCategory", widget: "string", default: "Car Show" }
+      - { label: "Event Location", name: "eventLocation", widget: "string" }
+      - { label: "Event City", name: "eventCity", widget: "string" }
+      - { label: "Event State/County", name: "eventState", widget: "string" }
+      - { label: "Event Country", name: "eventCountry", widget: "string", default: "United Kingdom" }
+      - { label: "Event Venue", name: "eventVenue", widget: "string" }
+      - { label: "Event Website", name: "eventWebsite", widget: "string", required: false }
+      - { label: "Event Contact Email", name: "eventContactEmail", widget: "string", required: false }
+      - { label: "Event Contact Phone", name: "eventContactPhone", widget: "string", required: false }
+      - { label: "Event Ticket Price", name: "eventTicketPrice", widget: "string", required: false }
+      - { label: "Event Featured", name: "eventFeatured", widget: "boolean", default: false }
+      - { label: "Event Image", name: "eventImageUrl", widget: "image", required: false, allow_multiple: false }
+      - { label: "Event Organizer", name: "eventOrganizer", widget: "string", required: false }
+      - { label: "Social Media Links", name: "eventSocialMedia", widget: "object", required: false, fields: [
+          { label: "Facebook", name: "facebook", widget: "string", required: false },
+          { label: "Twitter", name: "twitter", widget: "string", required: false },
+          { label: "Instagram", name: "instagram", widget: "string", required: false }
+        ]}
+      - { label: "Event Highlights", name: "eventHighlights", widget: "list", required: false }

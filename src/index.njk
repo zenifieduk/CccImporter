@@ -59,7 +59,7 @@ showBreadcrumb: false
 
     <div class="club-grid standard-club-grid">
       {% set standardClubs = [] %}
-      {% for club in clubs %}
+      {% for club in merged-clubs %}
         {% if not club.featured %}
           {% set standardClubs = (standardClubs.push(club), standardClubs) %}
         {% endif %}
@@ -84,7 +84,7 @@ showBreadcrumb: false
     </div>
 
     <div class="event-grid">
-      {% set upcomingEvents = events | limit(3) %}
+      {% set upcomingEvents = merged-events | limit(3) %}
       {% for event in upcomingEvents %}
         {% include "components/event-card.njk" %}
       {% endfor %}
