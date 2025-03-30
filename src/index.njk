@@ -33,7 +33,7 @@ showBreadcrumb: false
     <div class="club-grid featured-club-grid">
       {% set featuredClubs = clubs | filter("featured") | limit(8) %}
       {% for club in featuredClubs %}
-        {% include "components/club-card-new.njk" %}
+        {% include "components/club-card-fixed.njk" %}
       {% endfor %}
     </div>
 
@@ -66,7 +66,7 @@ showBreadcrumb: false
       {% endfor %}
 
       {% for club in standardClubs | limit(12) %}
-        {% include "components/club-card-new.njk" %}
+        {% include "components/club-card-fixed.njk" %}
       {% endfor %}
     </div>
 
