@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { exec } = require('child_process');
+const sgMail = require('@sendgrid/mail');
 
 // Initialize Express app
 const app = express();
@@ -9,8 +10,69 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Configure SendGrid
+if (process.env.SENDGRID_API_KEY) {
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+}
+
 // Serve static files from the _site directory
 app.use(express.static('_site'));
+
+// API endpoint for contact form submissions
+app.post('/api/send-email', async (req, res) => {
+  const { name, email, message, 'contact-reason': contactReason } = req.body;
+  
+  // Validate form fields
+  if (!name || !email || !message) {
+    return res.status(400).json({ 
+      success: false, 
+      message: 'Please provide all required fields: name, email, and message' 
+    });
+  }
+  
+  try {
+    // If SendGrid is configured, send email
+    if (process.env.SENDGRID_API_KEY) {
+      const msg = {
+        to: 'enquiries@classiccarclubs.uk',
+        from: 'noreply@classiccarclubs.uk',
+        subject: `Contact Form: ${contactReason || 'General Inquiry'}`,
+        text: `
+          Name: ${name}
+          Email: ${email}
+          Reason: ${contactReason || 'Not specified'}
+          
+          Message:
+          ${message}
+        `,
+        html: `
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> ${email}</p>
+          <p><strong>Reason:</strong> ${contactReason || 'Not specified'}</p>
+          <p><strong>Message:</strong></p>
+          <p>${message.replace(/\n/g, '<br>')}</p>
+        `
+      };
+      
+      await sgMail.send(msg);
+      return res.status(200).json({ success: true, message: 'Email sent successfully' });
+    } else {
+      // If SendGrid is not configured, log the message and return success
+      console.log('SendGrid API key not configured. Form submission received:');
+      console.log({ name, email, contactReason, message });
+      return res.status(200).json({ 
+        success: true, 
+        message: 'Message received (note: email delivery is disabled)' 
+      });
+    }
+  } catch (error) {
+    console.error('Error sending email:', error);
+    return res.status(500).json({ 
+      success: false, 
+      message: 'Failed to send email. Please try again later.' 
+    });
+  }
+});
 
 // Start eleventy in the background
 function startEleventy() {

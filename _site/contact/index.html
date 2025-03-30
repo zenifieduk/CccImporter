@@ -171,7 +171,7 @@
         Have a question, suggestion, or need to get in touch with our team? Fill out the form below and we'll get back to you as soon as possible.
       </p>
       
-      <form action="/api/send-email" method="POST">
+      <form id="contactForm" action="/api/send-email" method="POST">
         
         <div class="form-group">
           <label for="name" class="form-label">Your Name</label>
@@ -199,7 +199,11 @@
         </div>
         
         <div class="form-group">
-          <button type="submit" class="form-submit">Send Message</button>
+          <button type="submit" class="form-submit" id="submitButton">Send Message</button>
+          <div id="formSpinner" style="display: none; margin-top: 1rem; text-align: center;">
+            <div class="spinner" style="display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(0, 0, 0, 0.1); border-radius: 50%; border-top-color: #333; animation: spin 1s ease-in-out infinite;"></div>
+            <span style="margin-left: 0.5rem;">Sending...</span>
+          </div>
         </div>
       </form>
       
@@ -210,6 +214,12 @@
       <div id="formError" style="display: none; background-color: #f8d7da; color: #721c24; padding: 1rem; border-radius: 4px; margin-top: 1rem;">
         There was an error sending your message. Please try again or contact us directly at the email address below.
       </div>
+      
+      <style>
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      </style>
     </div>
   </div>
   
@@ -261,28 +271,77 @@
     const contactForm = document.getElementById('contactForm');
     const formSuccess = document.getElementById('formSuccess');
     const formError = document.getElementById('formError');
+    const submitButton = document.getElementById('submitButton');
+    const formSpinner = document.getElementById('formSpinner');
     
     contactForm.addEventListener('submit', function(e) {
       e.preventDefault();
-      
-      // In a real application, you would submit the form data via AJAX
-      // For demo purposes, we'll just simulate a successful submission
       
       // Hide any previous messages
       formSuccess.style.display = 'none';
       formError.style.display = 'none';
       
-      // Simulate form submission (would be replaced with actual AJAX call)
-      setTimeout(() => {
-        // Show success message
-        formSuccess.style.display = 'block';
+      // Show loading spinner, disable submit button
+      submitButton.disabled = true;
+      formSpinner.style.display = 'block';
+      
+      // Collect form data
+      const formData = new FormData(contactForm);
+      const formDataObj = {};
+      formData.forEach((value, key) => {
+        formDataObj[key] = value;
+      });
+      
+      // Send form data via AJAX/fetch
+      fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formDataObj)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Hide spinner
+        formSpinner.style.display = 'none';
         
-        // Reset form
-        contactForm.reset();
+        if (data.success) {
+          // Show success message
+          formSuccess.style.display = 'block';
+          
+          // Reset form
+          contactForm.reset();
+          
+          // Scroll to success message
+          formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        } else {
+          // Show error message
+          formError.innerText = data.message || 'There was an error sending your message. Please try again or contact us directly.';
+          formError.style.display = 'block';
+          
+          // Scroll to error message
+          formError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          
+          // Re-enable submit button
+          submitButton.disabled = false;
+        }
+      })
+      .catch(error => {
+        // Hide spinner
+        formSpinner.style.display = 'none';
         
-        // Scroll to success message
-        formSuccess.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      }, 1000);
+        // Show error message
+        formError.innerText = 'Network error. Please check your connection and try again.';
+        formError.style.display = 'block';
+        
+        // Scroll to error message
+        formError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        
+        // Re-enable submit button
+        submitButton.disabled = false;
+        
+        console.error('Form submission error:', error);
+      });
     });
   });
 </script>
