@@ -16,12 +16,18 @@ module.exports = {
   footerLinks: {
     Directory: [
       { label: "All Clubs", url: "/club-directory/" },
-      { label: "Car Type Clubs", url: "/club-directory/?category=Car%20Club" },
       {
-        label: "Region Clubs",
-        url: "/club-directory/?category=Regional%20Club",
+        label: "Classic Car Clubs",
+        url: "/club-directory/?category=Classic+Car+Club",
       },
-      { label: "Featured Clubs", url: "/club-directory/?featured=true" },
+      {
+        label: "Miltary Vehicle Clubs",
+        url: "/club-directory/?category=Military+Vehicle+Club",
+      },
+      {
+        label: "Motorcycle Clubs",
+        url: "/club-directory/?category=Motorcycle+Club",
+      },
     ],
     Events: [
       { label: "All Events", url: "/club-events/" },
