@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const subscribeHandler = require('./api/subscribe');
+const { sendEmailHandler } = require('./api-proxy');
 
 const router = express.Router();
 
@@ -10,6 +11,11 @@ router.use(bodyParser.json());
 // Route for subscribe endpoint
 router.post('/subscribe', async (req, res) => {
   await subscribeHandler(req, res);
+});
+
+// Route for send-email endpoint (handles the contact form)
+router.post('/send-email', async (req, res) => {
+  await sendEmailHandler(req, res);
 });
 
 module.exports = router;

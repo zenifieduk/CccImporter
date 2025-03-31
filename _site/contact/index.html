@@ -168,7 +168,7 @@
         Have a question, suggestion, or need to get in touch with our team? Fill out the form below and we'll get back to you as soon as possible.
       </p>
 
-      <form id="contactForm" action="/api/send-email" method="POST">
+      <form id="contactForm" action="http://localhost:5001/api/send-email" method="POST">
         <div class="form-group">
           <label for="name" class="form-label">Your Name</label>
           <input type="text" id="name" name="name" class="form-input" required>
@@ -267,7 +267,7 @@
         });
 
         // Send form data via AJAX/fetch
-        fetch('/api/send-email', {
+        fetch('http://localhost:5001/api/send-email', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
