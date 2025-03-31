@@ -17,6 +17,31 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('_site'));
 
+// Serve clubs.json endpoint for Alpine.js
+app.get('/clubs.json', (req, res) => {
+  try {
+    // Import the clubs data
+    const getClubs = require('./src/_data/clubs.js');
+    const clubs = getClubs();
+    res.json(clubs);
+  } catch (error) {
+    console.error('Error serving clubs.json:', error);
+    res.status(500).json({ error: 'Failed to load clubs data' });
+  }
+});
+
+// Serve events.json endpoint for Alpine.js
+app.get('/events.json', (req, res) => {
+  try {
+    // Import the events data
+    const events = require('./src/_data/events.js');
+    res.json(events);
+  } catch (error) {
+    console.error('Error serving events.json:', error);
+    res.status(500).json({ error: 'Failed to load events data' });
+  }
+});
+
 // SendGrid API endpoint
 app.post('/api/send-email', async (req, res) => {
   try {
