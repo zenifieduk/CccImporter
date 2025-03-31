@@ -1,20 +1,6 @@
 const { DateTime } = require("luxon");
-const apiRoutes = require('./src/api');
 
 module.exports = function(eleventyConfig) {
-  // Use server middlewares for API routes
-  eleventyConfig.setServerOptions({
-    middleware: {
-      // Add middleware function for API routes
-      middleware: function(req, res, next) {
-        // Handle API routes
-        if (req.url.startsWith('/api/')) {
-          return apiRoutes(req, res, next);
-        }
-        next();
-      }
-    }
-  });
   // Copy assets directory
   eleventyConfig.addPassthroughCopy("src/assets");
   
@@ -38,18 +24,12 @@ module.exports = function(eleventyConfig) {
 
   // Add a filter for limit
   eleventyConfig.addFilter("limit", function(array, limit) {
-    if (!array || !Array.isArray(array)) return [];
     return array.slice(0, limit);
   });
   
   // Add filter for getting featured items
   eleventyConfig.addFilter("filter", function(array, property) {
-    if (!array || !Array.isArray(array)) return [];
-    return array.filter(item => {
-      // For boolean properties like featured, we just check if it's truthy
-      // For non-boolean properties, we check if it exists
-      return item[property] === true;
-    });
+    return array.filter(item => item[property]);
   });
   
   // Add unique filter for arrays

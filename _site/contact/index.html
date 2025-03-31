@@ -15,7 +15,6 @@
   <!-- Styles -->
   <link rel="stylesheet" href="/assets/css/styles.css">
   <link rel="stylesheet" href="/assets/css/ad-banners.css">
-  <link rel="stylesheet" href="/assets/css/breadcrumbs.css">
 
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -146,7 +145,6 @@
     
 <div class="container">
   
-  
 <section class="hero-section contact-hero-section">
   <div class="hero-overlay"></div>
   <div class="container">
@@ -170,11 +168,7 @@
         Have a question, suggestion, or need to get in touch with our team? Fill out the form below and we'll get back to you as soon as possible.
       </p>
 
-            <form
-  action="https://formspree.io/f/xldjwaap"
-  method="POST"
->
-        
+      <form id="contactForm" action="http://localhost:5001/api/send-email" method="POST">
         <div class="form-group">
           <label for="name" class="form-label">Your Name</label>
           <input type="text" id="name" name="name" class="form-input" required>
@@ -186,8 +180,8 @@
         </div>
 
         <div class="form-group">
-          <label for="contactReason" class="form-label">Reason for contact</label>
-          <select id="contactReason" name="contactReason" class="form-input">
+          <label for="contact-reason" class="form-label">Reason for contact</label>
+          <select id="contact-reason" name="contact-reason" class="form-input">
             <option value="General Inquiry">General Inquiry</option>
             <option value="Submit a Club">Submit a Club</option>
             <option value="Advertising">Advertising</option>
@@ -272,8 +266,8 @@
           formDataObj[key] = value;
         });
 
-        // Send form data to the API endpoint
-        fetch('/api/send-email', {
+        // Send form data via AJAX/fetch
+        fetch('http://localhost:5001/api/send-email', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

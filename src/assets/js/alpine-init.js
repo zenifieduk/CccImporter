@@ -302,20 +302,10 @@ document.addEventListener('alpine:init', () => {
 
         // Fetch clubs
         const response = await fetch('/clubs.json');
-        const data = await response.json();
-        
-        // Handle both single object and array formats
-        if (Array.isArray(data)) {
-          console.log('Loaded clubs as array:', data.length);
-          this.clubs = data;
-        } else if (typeof data === 'object' && data !== null) {
-          console.log('Loaded single club object, converting to array');
-          this.clubs = [data];
-        } else {
-          console.error('Unexpected data format:', data);
-          this.clubs = [];
-        }
-        
+        this.clubs = await response.json();
+
+        // For debugging
+        console.log('Loaded clubs:', this.clubs.length);
         console.log('Search term:', this.searchTerm);
 
         // Extract unique categories and locations for dropdown options (all available)

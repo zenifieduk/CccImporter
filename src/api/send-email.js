@@ -1,60 +1,74 @@
+
 const sgMail = require('@sendgrid/mail');
-require('dotenv').config();
 
-// Set the SendGrid API key from environment variables
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+exports.handler = async (request, response) => {
+  if (request.method !== 'POST') {
+    return response.status(405).json({ error: 'Method not allowed' });
+  }
 
-// Handler for the contact form email
-async function sendEmailHandler(req, res) {
+  // Log the request body for debugging
+  console.log('Request body:', request.body);
+  
+  const { name, email, message, 'contact-reason': contactReason } = request.body;
+
+  if (!name || !email || !message) {
+    return response.status(400).json({ 
+      error: 'Missing required fields',
+      received: request.body
+    });
+  }
+
+  if (!process.env.SENDGRID_API_KEY) {
+    console.error('SENDGRID_API_KEY environment variable is not set');
+    return response.status(500).json({ 
+      error: 'Email configuration error' 
+    });
+  }
+
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+  // Get the verified sender from environment or use a fallback with the form submitter's email
+  const verifiedSender = process.env.SENDGRID_VERIFIED_SENDER || 'noreply@classiccarclubs.uk';
+  
   try {
-    // Get form data from request
-    const { name, email, contactReason, message } = req.body;
-
-    // Validate required fields
-    if (!name || !email || !message) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Please provide name, email, and message.' 
-      });
-    }
-
-    // Create email message with environment variables
     const msg = {
-      to: process.env.TO_EMAIL_ADDRESS || 'enquiries@classiccarclubs.uk',
-      from: { 
-        email: process.env.FROM_EMAIL_ADDRESS || 'noreply@classiccarclubs.uk', 
-        name: "Classic Car Clubs Contact Form" 
-      },
+      to: 'enquiries@classiccarclubs.uk', // Change this to your actual email
+      from: verifiedSender,
       replyTo: email,
-      subject: `Classic Car Clubs Contact: ${contactReason || 'General Inquiry'}`,
-      text: `Name: ${name}\nEmail: ${email}\nReason: ${contactReason || 'Not specified'}\nMessage: ${message}`,
+      subject: `Contact Form: ${contactReason || 'General Inquiry'}`,
+      text: `
+Name: ${name}
+Email: ${email}
+Reason: ${contactReason || 'Not specified'}
+
+Message:
+${message}
+      `,
       html: `
-        <h2>New Contact Form Submission</h2>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Reason:</strong> ${contactReason || 'Not specified'}</p>
         <p><strong>Message:</strong></p>
         <p>${message.replace(/\n/g, '<br>')}</p>
-      `,
+      `
     };
 
-    // Send email
+    console.log('Sending email with SendGrid...');
     await sgMail.send(msg);
+    console.log('Email sent successfully');
 
-    // Return success response
-    return res.status(200).json({ 
-      success: true, 
-      message: 'Email sent successfully.' 
+    return response.status(200).json({ 
+      success: true,
+      message: 'Email sent successfully' 
     });
   } catch (error) {
-    console.error('SendGrid Error:', error);
-    
-    // Return error response
-    return res.status(500).json({ 
-      success: false, 
-      error: 'Failed to send email. Please try again later.'
+    console.error('Error sending email:', error);
+    if (error.response) {
+      console.error('SendGrid Error Response:', error.response.body);
+    }
+    return response.status(500).json({ 
+      error: 'Failed to send email',
+      details: error.message
     });
   }
-}
-
-module.exports = sendEmailHandler;
+};

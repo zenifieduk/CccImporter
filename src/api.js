@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const subscribeHandler = require('./api/subscribe');
-const sendEmailHandler = require('./api/send-email');
+const { sendEmailHandler } = require('./api-proxy');
 
 const router = express.Router();
 

@@ -5,17 +5,15 @@ pagination:
   size: 1
   alias: club
   addAllPagesToCollections: false
-permalink: "club-directory/club-{{ club.id | default(pagination.pageNumber) }}/"
+permalink: "club-directory/{{ club.slug | slugify }}/"
 eleventyComputed:
   title: "{{ club.title }}"
   description: "Discover information about {{ club.title }}, including contact details, events, and more."
 ---
 
-{% set pageUrl = '/club-directory/club-' + (club.id | default(pagination.pageNumber)) + '/' %}
-
 {% set breadcrumbs = [
   { url: '/club-directory/', label: 'Club Directory' },
-  { url: pageUrl, label: club.title }
+  { url: '/club-directory/' + club.slug | slugify + '/', label: club.title }
 ] %}
 
 <div class="detail-header">
@@ -136,7 +134,7 @@ eleventyComputed:
   "@type": "AutomotiveBusiness",
   "name": "{{ club.title }}",
   "description": "{{ club.description }}",
-  "url": "{{ site.url }}{{ pageUrl }}",
+  "url": "{{ site.url }}/club-directory/{{ club.slug | slugify }}/",
   {% if club.address %}
   "address": {
     "@type": "PostalAddress",

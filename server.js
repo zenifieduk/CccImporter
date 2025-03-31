@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const sgMail = require('@sendgrid/mail');
@@ -23,7 +22,7 @@ app.post('/api/send-email', async (req, res) => {
     // Log the request body for debugging
     console.log('Request body:', req.body);
     
-    const { name, email, message, contactReason } = req.body;
+    const { name, email, message, 'contact-reason': contactReason } = req.body;
 
     // Validate required fields
     if (!name || !email || !message) {
@@ -41,12 +40,12 @@ app.post('/api/send-email', async (req, res) => {
 
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-    // Get the sender and recipient from environment variables
-    const fromEmail = process.env.FROM_EMAIL_ADDRESS || 'noreply@classiccarclubs.uk';
+    // Get the verified sender from environment or use a fallback
+    const verifiedSender = process.env.SENDGRID_VERIFIED_SENDER || 'noreply@classiccarclubs.uk';
     
     const msg = {
-      to: process.env.TO_EMAIL_ADDRESS || 'enquiries@classiccarclubs.uk', // Get recipient from env
-      from: { email: fromEmail, name: "Classic Car Clubs Contact Form" }, // Format as per SendGrid docs
+      to: 'enquiries@classiccarclubs.uk', // Change to your recipient
+      from: verifiedSender, // Change to your verified sender
       replyTo: email,
       subject: `Contact Form: ${contactReason || 'General Inquiry'}`,
       text: `

@@ -32,11 +32,6 @@ showBreadcrumb: false
 
     <div class="club-grid featured-club-grid">
       {% set featuredClubs = clubs | filter("featured") | limit(8) %}
-      {% if featuredClubs.length < 1 %}
-        <!-- Fallback if no featured clubs are found -->
-        {% set featuredClubs = clubs | limit(8) %}
-      {% endif %}
-      
       {% for club in featuredClubs %}
         {% include "components/club-card-fixed.njk" %}
       {% endfor %}
@@ -63,21 +58,14 @@ showBreadcrumb: false
     </div>
 
     <div class="club-grid standard-club-grid">
-      <!-- Get clubs that are not featured -->
-      {% set nonFeaturedClubs = [] %}
+      {% set standardClubs = [] %}
       {% for club in clubs %}
         {% if not club.featured %}
-          {% set nonFeaturedClubs = (nonFeaturedClubs.push(club), nonFeaturedClubs) %}
+          {% set standardClubs = (standardClubs.push(club), standardClubs) %}
         {% endif %}
       {% endfor %}
-      
-      {% set standardClubs = nonFeaturedClubs | shuffle | limit(12) %}
-      {% if standardClubs.length < 1 %}
-        <!-- Fallback if no non-featured clubs are found -->
-        {% set standardClubs = clubs | limit(12) %}
-      {% endif %}
-      
-      {% for club in standardClubs %}
+
+      {% for club in standardClubs | limit(12) %}
         {% include "components/club-card-fixed.njk" %}
       {% endfor %}
     </div>

@@ -1,4 +1,4 @@
-module.exports = (function () {
+module.exports = function () {
   // This would typically be fetched from a headless CMS
   // For now, using static data based on the provided sample
   return [
@@ -68,4 +68,4 @@ module.exports = (function () {
         "The display will be limited to 50 curated examples of the marque.",
     },
   ];
-})();
+};
