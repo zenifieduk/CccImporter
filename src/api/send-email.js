@@ -8,7 +8,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 async function sendEmailHandler(req, res) {
   try {
     // Get form data from request
-    const { name, email, club, message } = req.body;
+    const { name, email, contactReason, message } = req.body;
 
     // Validate required fields
     if (!name || !email || !message) {
@@ -26,13 +26,13 @@ async function sendEmailHandler(req, res) {
         name: "Classic Car Clubs Contact Form" 
       },
       replyTo: email,
-      subject: `Classic Car Clubs Contact: ${club ? `Regarding ${club}` : 'General Inquiry'}`,
-      text: `Name: ${name}\nEmail: ${email}\n${club ? `Club: ${club}\n` : ''}Message: ${message}`,
+      subject: `Classic Car Clubs Contact: ${contactReason || 'General Inquiry'}`,
+      text: `Name: ${name}\nEmail: ${email}\nReason: ${contactReason || 'General Inquiry'}\nMessage: ${message}`,
       html: `
         <h2>New Contact Form Submission</h2>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
-        ${club ? `<p><strong>Club:</strong> ${club}</p>` : ''}
+        <p><strong>Reason:</strong> ${contactReason || 'General Inquiry'}</p>
         <p><strong>Message:</strong></p>
         <p>${message.replace(/\n/g, '<br>')}</p>
       `,
