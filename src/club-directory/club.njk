@@ -4,10 +4,8 @@ pagination:
   data: clubs
   size: 1
   alias: club
-  addAllPagesToCollections: false
-  filter: 
-    - "slug"
-permalink: "{% if club.slug %}/club-directory/{{ club.slug }}/{% endif %}"
+  addAllPagesToCollections: true
+permalink: "/club-directory/{{ club.slug }}/"
 eleventyComputed:
   title: "{{ club.title }}"
   description: "Discover information about {{ club.title }}, including contact details, events, and more."
