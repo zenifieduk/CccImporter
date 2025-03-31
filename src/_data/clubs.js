@@ -9,7 +9,7 @@ function enhanceClubData(club) {
   };
 }
 
-module.exports = function() {
+module.exports = (function() {
   // Enhance the club data with descriptions and featured flags
   const originalClubs = origClubs.map(enhanceClubData);
   
@@ -392,4 +392,4 @@ module.exports = function() {
   });
 
   return allClubs;
-};
+})();
