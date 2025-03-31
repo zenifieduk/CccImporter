@@ -180,8 +180,8 @@
         </div>
 
         <div class="form-group">
-          <label for="contact-reason" class="form-label">Reason for contact</label>
-          <select id="contact-reason" name="contact-reason" class="form-input">
+          <label for="contactReason" class="form-label">Reason for contact</label>
+          <select id="contactReason" name="contactReason" class="form-input">
             <option value="General Inquiry">General Inquiry</option>
             <option value="Submit a Club">Submit a Club</option>
             <option value="Advertising">Advertising</option>
@@ -266,8 +266,8 @@
           formDataObj[key] = value;
         });
 
-        // Send form data directly to server.js via port 5001
-        fetch('https://' + window.location.hostname.replace('5000', '5001') + '/api/send-email', {
+        // Send form data to the API endpoint
+        fetch('/api/send-email', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

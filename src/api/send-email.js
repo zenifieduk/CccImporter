@@ -18,10 +18,13 @@ async function sendEmailHandler(req, res) {
       });
     }
 
-    // Create email message
+    // Create email message with environment variables
     const msg = {
-      to: 'contact@classiccars.club', // Replace with your preferred recipient email
-      from: 'noreply@classiccars.club', // Replace with your verified sender email
+      to: process.env.TO_EMAIL_ADDRESS || 'enquiries@classiccarclubs.uk',
+      from: { 
+        email: process.env.FROM_EMAIL_ADDRESS || 'noreply@classiccarclubs.uk', 
+        name: "Classic Car Clubs Contact Form" 
+      },
       replyTo: email,
       subject: `Classic Car Clubs Contact: ${club ? `Regarding ${club}` : 'General Inquiry'}`,
       text: `Name: ${name}\nEmail: ${email}\n${club ? `Club: ${club}\n` : ''}Message: ${message}`,
