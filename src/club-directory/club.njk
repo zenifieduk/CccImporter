@@ -1,10 +1,12 @@
 ---
 layout: layouts/page.njk
 pagination:
-  data: clubs 
+  data: clubs
   size: 1
   alias: club
   addAllPagesToCollections: false
+  filter: 
+    - "slug"
 permalink: "{% if club.slug %}/club-directory/{{ club.slug }}/{% endif %}"
 eleventyComputed:
   title: "{{ club.title }}"
