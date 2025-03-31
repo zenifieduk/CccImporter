@@ -45,7 +45,11 @@ module.exports = function(eleventyConfig) {
   // Add filter for getting featured items
   eleventyConfig.addFilter("filter", function(array, property) {
     if (!array || !Array.isArray(array)) return [];
-    return array.filter(item => item[property]);
+    return array.filter(item => {
+      // For boolean properties like featured, we just check if it's truthy
+      // For non-boolean properties, we check if it exists
+      return item[property] === true;
+    });
   });
   
   // Add unique filter for arrays
