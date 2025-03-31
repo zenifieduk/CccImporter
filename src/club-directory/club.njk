@@ -1,11 +1,11 @@
 ---
 layout: layouts/page.njk
 pagination:
-  data: clubs
+  data: clubs 
   size: 1
   alias: club
-  addAllPagesToCollections: true
-permalink: "/club-directory/{{ club.slug }}/"
+  addAllPagesToCollections: false
+permalink: "club-directory/{{ club.slug | slugify }}/"
 eleventyComputed:
   title: "{{ club.title }}"
   description: "Discover information about {{ club.title }}, including contact details, events, and more."
