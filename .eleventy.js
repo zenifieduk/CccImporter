@@ -1,6 +1,20 @@
 const { DateTime } = require("luxon");
+const apiRoutes = require('./src/api');
 
 module.exports = function(eleventyConfig) {
+  // Use server middlewares for API routes
+  eleventyConfig.setServerOptions({
+    middleware: {
+      // Add middleware function for API routes
+      middleware: function(req, res, next) {
+        // Handle API routes
+        if (req.url.startsWith('/api/')) {
+          return apiRoutes(req, res, next);
+        }
+        next();
+      }
+    }
+  });
   // Copy assets directory
   eleventyConfig.addPassthroughCopy("src/assets");
   

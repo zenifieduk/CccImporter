@@ -1,0 +1,128 @@
+Open the .env file and enter those details like this:
+
+Bash
+
+Copy Code
+SENDGRID_API_KEY=SG.YOUR_API_KEY
+TO_EMAIL_ADDRESS=YOUR_TO_ADDRESS
+FROM_EMAIL_ADDRESS=YOUR_FROM_ADDRESS
+Now it's time to write some code to send your first email.
+
+Sending an email
+To send an email with SendGrid, you'll first install the SendGrid Node helper library. In your project directory, run the following command:
+
+Bash
+
+Copy Code
+npm install @sendgrid/mail
+Now, create a file in the functions directory called send-email.js and open it. Start by requiring the helper library you just installed:
+
+JavaScript
+
+Copy Code
+const sg = require("@sendgrid/mail");
+This file will act as a Twilio Function, so you need to create a handler function that receives 3 arguments: context, event, and callback:
+
+JavaScript
+
+Copy Code
+exports.handler = async function(context, event, callback) {
+}
+Now, the code to send the email. Back in send-email.js, you need to configure the SendGrid library with the API key. The context object contains all of your environment variables from the .env file. Then, build an object with the properties to, from, subject, and text.
+
+JavaScript
+
+Copy Code
+exports.handler = async function(context, event, callback) {
+  sg.setApiKey(context.SENDGRID_API_KEY);
+  const msg = {
+    to: context.TO_EMAIL_ADDRESS,
+    from: { email: context.FROM_EMAIL_ADDRESS, name: "Your contact form" },
+    subject: "New email",
+    text: "This is a brand new email.",
+  };
+}
+To send the email, pass this object to the send function of the sg object. This is an asynchronous operation, so await the result and wrap the whole thing in a try/catch block.
+
+JavaScript
+
+Copy Code
+exports.handler = async function(context, event, callback) {
+  sg.setApiKey(context.SENDGRID_API_KEY);
+  const msg = {
+    to: context.TO_EMAIL_ADDRESS,
+    from: { email: context.FROM_EMAIL_ADDRESS, name: "Your contact form" },
+    subject: "New email",
+    text: "This is a brand new email.",
+  };
+  try {
+    await sg.send(msg);
+    return callback(null, "Email sent!");
+  } catch (error) {
+    console.error(error);
+    return callback(error);
+  }
+}
+This is all the code you need to send an email. In the terminal, run the app with this command:
+
+Bash
+
+Copy Code
+npm start
+Then open the URL http://localhost:3000/send-email, this will run the function. If you get the message "Email sent!" check your inbox, you should have received an email!
+
+If there's an error, check the console to see more information. Alternatively, if the code did run successfully but you did not receive the email, check the Email Activity page in your SendGrid dashboard to see what happened.
+
+Create the contact form
+So far this code sends the same email every time you request the URL. To build a contact form, you need a front-end that will take some input, like the subject, content of the email, and the email address of the person sending it. You then need to take that user input and change your existing code to send the email with the submitted content and make the submitted email the reply-to address in your email.
+
+Start by creating a file called index.html in the assets directory, and enter this code:
+
+HTML
+
+Copy Code
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact form</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <main>
+      <h1>Contact Form</h1>
+      <form action="/send-email" method="POST" id="contact-form">
+        <div class="form-field">
+          <label for="email">Your email address</label>
+          <input
+            type="email"
+            inputmode="email"
+            name="from"
+            id="from"
+            required
+          />
+        </div>
+        <div class="form-field">
+          <label for="subject">Subject</label>
+          <input type="text" name="subject" id="subject" required />
+        </div>
+        <div class="form-field">
+          <label for="content">Your message</label>
+          <textarea name="content" id="content" required></textarea>
+        </div>
+        <div class="actions">
+          <button type="submit" id="submit-button" class="button-primary">
+            Send
+          </button>
+        </div>
+      </form>
+      <p id="status" class="status" hidden></p>
+    </main>
+  </body>
+</html>
+This is an HTML page that includes a form with inputs for the email address and the subject, and a textarea for the content of the email. Submitting the form makes a POST request to your /send-email function.
+
+Let's add a bit of style to this to make it a little easier on the eye. Create a file in the assets directory called style.css and add the following code to the file:
+

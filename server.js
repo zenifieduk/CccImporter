@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const sgMail = require('@sendgrid/mail');
@@ -44,8 +45,8 @@ app.post('/api/send-email', async (req, res) => {
     const verifiedSender = process.env.SENDGRID_VERIFIED_SENDER || 'noreply@classiccarclubs.uk';
     
     const msg = {
-      to: 'enquiries@classiccarclubs.uk', // Change to your recipient
-      from: verifiedSender, // Change to your verified sender
+      to: process.env.CONTACT_FORM_RECIPIENT || 'enquiries@classiccarclubs.uk', // Get recipient from env
+      from: verifiedSender, // Use verified sender from env
       replyTo: email,
       subject: `Contact Form: ${contactReason || 'General Inquiry'}`,
       text: `
