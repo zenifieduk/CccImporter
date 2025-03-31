@@ -2,4 +2,8 @@
 permalink: /clubs.json
 eleventyExcludeFromCollections: true
 ---
-{{ clubs | json | indent(0) }}
+[
+{% for club in clubs %}
+{{ club | json }}{% if not loop.last %},{% endif %}
+{% endfor %}
+]
