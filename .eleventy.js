@@ -38,11 +38,13 @@ module.exports = function(eleventyConfig) {
 
   // Add a filter for limit
   eleventyConfig.addFilter("limit", function(array, limit) {
+    if (!array || !Array.isArray(array)) return [];
     return array.slice(0, limit);
   });
   
   // Add filter for getting featured items
   eleventyConfig.addFilter("filter", function(array, property) {
+    if (!array || !Array.isArray(array)) return [];
     return array.filter(item => item[property]);
   });
   

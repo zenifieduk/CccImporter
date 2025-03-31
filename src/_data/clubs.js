@@ -342,8 +342,19 @@ module.exports = (function() {
   const slugMap = {};
   
   allClubs.forEach((club, index) => {
-    // Create a base slug from the title
-    let baseSlug = club.slug || club.title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+    // Add an ID for all clubs
+    club.id = index + 1;
+    
+    // Create a base slug from the title, use a default if all else fails
+    let baseSlug = club.slug;
+    
+    if (!baseSlug && club.title) {
+      baseSlug = club.title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
+    } 
+    
+    if (!baseSlug) {
+      baseSlug = `club-${club.id}`;
+    }
     
     // Check if this slug already exists in our map
     if (slugMap[baseSlug]) {
@@ -365,9 +376,6 @@ module.exports = (function() {
     // Set the slug and mark it as used
     slugMap[baseSlug] = true;
     club.slug = baseSlug;
-    
-    // Also add an ID for reference (we'll keep this but won't use it in URLs)
-    club.id = index + 1;
   });
   
   // Normalize categories to ensure consistency
