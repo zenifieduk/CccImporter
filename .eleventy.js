@@ -43,6 +43,7 @@ module.exports = function(eleventyConfig) {
   
   // Add filter for getting featured items
   eleventyConfig.addFilter("filter", function(array, property) {
+    if (!array || !Array.isArray(array)) return [];
     return array.filter(item => item[property]);
   });
   
