@@ -13,7 +13,7 @@ eleventyComputed:
 
 {% set breadcrumbs = [
   { url: '/club-directory/', label: 'Club Directory' },
-  { url: '/club-directory/' + club.slug | slugify + '/', label: club.title }
+  { url: '/club-directory/' + club.slug + '/', label: club.title }
 ] %}
 
 <div class="detail-header">
