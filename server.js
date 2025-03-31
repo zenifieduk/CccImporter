@@ -23,10 +23,21 @@ app.get('/clubs.json', (req, res) => {
     // Import the clubs data
     const getClubs = require('./src/_data/clubs.js');
     const clubs = getClubs();
+    
+    // Debug log to see the structure of the clubs data
+    console.log('Clubs data type:', typeof clubs);
+    console.log('Is array:', Array.isArray(clubs));
+    console.log('Clubs count:', Array.isArray(clubs) ? clubs.length : 'Not an array');
+    
+    if (!Array.isArray(clubs)) {
+      console.error('Clubs data is not an array');
+      return res.status(500).json({ error: 'Clubs data format is invalid' });
+    }
+    
     res.json(clubs);
   } catch (error) {
     console.error('Error serving clubs.json:', error);
-    res.status(500).json({ error: 'Failed to load clubs data' });
+    res.status(500).json({ error: 'Failed to load clubs data', details: error.message });
   }
 });
 
@@ -34,11 +45,23 @@ app.get('/clubs.json', (req, res) => {
 app.get('/events.json', (req, res) => {
   try {
     // Import the events data
-    const events = require('./src/_data/events.js');
+    const getEvents = require('./src/_data/events.js');
+    const events = getEvents();
+    
+    // Debug log to see the structure of the events data
+    console.log('Events data type:', typeof events);
+    console.log('Is array:', Array.isArray(events));
+    console.log('Events count:', Array.isArray(events) ? events.length : 'Not an array');
+    
+    if (!Array.isArray(events)) {
+      console.error('Events data is not an array');
+      return res.status(500).json({ error: 'Events data format is invalid' });
+    }
+    
     res.json(events);
   } catch (error) {
     console.error('Error serving events.json:', error);
-    res.status(500).json({ error: 'Failed to load events data' });
+    res.status(500).json({ error: 'Failed to load events data', details: error.message });
   }
 });
 
