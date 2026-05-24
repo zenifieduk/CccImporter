@@ -6,14 +6,14 @@ eleventyExcludeFromCollections: true
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>{{ site.url }}/club-events/</loc>
-    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <lastmod>{{ site.buildTime }}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   {% for event in events %}
   <url>
     <loc>{{ site.url }}/club-events/{{ event.eventSlug }}/</loc>
-    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <lastmod>{{ site.buildTime }}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

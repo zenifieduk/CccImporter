@@ -6,7 +6,7 @@ eleventyExcludeFromCollections: true
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>{{ site.url }}/auction-houses/</loc>
-    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <lastmod>{{ site.buildTime }}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -14,7 +14,7 @@ eleventyExcludeFromCollections: true
   {% for house in auctionHouses %}
   <url>
     <loc>{{ site.url }}/auction-houses/{{ house.slug }}/</loc>
-    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <lastmod>{{ site.buildTime }}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

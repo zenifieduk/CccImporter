@@ -5,7 +5,7 @@ module.exports = {
   url: "https://classiccarclubs.uk",
   author: "Classic Car Clubs UK",
   email: "enquiries@classiccarclubs.uk",
-  buildTime: new Date(),
+  buildTime: new Date().toISOString(),
   navigation: [
     { label: "Home", url: "/" },
     {
