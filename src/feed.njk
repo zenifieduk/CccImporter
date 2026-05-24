@@ -50,7 +50,7 @@ metadata:
     {% endif %}
     <content type="html">
       <![CDATA[
-      {{ post.templateContent | htmlToAbsoluteUrls(site.url) | safe }}
+      {{ post.templateContent | htmlToAbsoluteUrls("https://classiccarclubs.uk") | safe }}
       ]]>
     </content>
   </entry>
