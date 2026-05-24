@@ -1,0 +1,22 @@
+---
+permalink: sitemap-auction-houses.xml
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>{{ site.url }}/auction-houses/</loc>
+    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  {% for house in auctionHouses %}
+  <url>
+    <loc>{{ site.url }}/auction-houses/{{ house.slug }}/</loc>
+    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  {% endfor %}
+</urlset> 

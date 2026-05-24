@@ -1,24 +1,40 @@
 ---
 layout: layouts/base.njk
 title: Classic Car Clubs UK
-description: Discover classic car clubs across the UK with contact details and more.
+description: Classic car clubs UK helps you discover popular vintage and classic vehicle clubs and societies across the United Kingdom, with contact details and more.
 showBreadcrumb: false
 ---
 
 <section class="hero-section home-hero-section">
   <div class="hero-video-container">
-    <video autoplay muted loop class="hero-video">
-      <source src="/assets/videos/ccc5.webm" type="video/webm">
-    </video>
-    <div class="hero-overlay"></div>
-  </div>
+  <video autoplay muted playsinline loop poster="/assets/images/ccc-poster.avif" class="hero-video">
+    <source src="/assets/videos/ccc5.webm" type="video/webm">
+  </video>
+  <div class="hero-overlay"></div>
+</div>
   <div class="container">
     <div class="hero-content home-hero-content">
-      <h1 class="hero-title">Classic Car Clubs Directory</h1>
-      <p class="hero-subtitle">Discover classic car clubs across the UK, with contact details and more.</p>
+      <h1 class="hero-title">Classic Car Clubs UK</h1>
+      <p class="hero-subtitle">Classic car clubs UK helps you discover popular vintage and classic vehicle clubs and societies across the United Kingdom, with contact details and more.</p>
       <div class="hero-buttons">
         <a href="/club-directory/" class="button button-primary">Browse Directory</a>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="showcase-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Showcase Clubs</h2>
+      <p class="section-subtitle">Discover some of our most active and vibrant classic car clubs, each offering unique experiences and a welcoming community for enthusiasts.</p>
+    </div>
+
+    <div class="club-grid showcase-club-grid">
+      {% set showcaseClubs = clubs | filter("showcase") | limit(3) %}
+      {% for club in showcaseClubs %}
+        {% include "components/club-card-fixed.njk" %}
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -27,11 +43,11 @@ showBreadcrumb: false
   <div class="container">
     <div class="section-header">
       <h2 class="section-title">Featured Car Clubs</h2>
-      <p class="section-subtitle">Discover popular classic car clubs from across the UK</p>
+      <p class="section-subtitle">These featured <a href="/club-directory">classic car clubs</a> offer exceptional experiences and vibrant communities. From specialist marque clubs to regional historic vehicle gatherings, each provides unique opportunities for members to engage deeply with their automotive passion.</p>
     </div>
 
     <div class="club-grid featured-club-grid">
-      {% set featuredClubs = clubs | filter("featured") | limit(8) %}
+      {% set featuredClubs = clubs | filter("featured") | rejectattr("showcase", "truthy") | limit(9) %}
       {% for club in featuredClubs %}
         {% include "components/club-card-fixed.njk" %}
       {% endfor %}
@@ -49,12 +65,18 @@ showBreadcrumb: false
     {% include "components/ad-banner.njk" %}
   </div>
 </section>
+<section>
+  <div class="container">
+    <iframe src="https://embeds.beehiiv.com/e6b43c29-16f4-4e4f-972d-540b14478731" data-test-id="beehiiv-embed" width="100%" height="320" frameborder="0" scrolling="no" style="border-radius: 4px; border: 2px solid #e5e7eb; margin: 0; background-color: transparent;"></iframe>
+  </div>
+</section>
 
 <section class="standard-clubs-section">
   <div class="container">
     <div class="section-header">
       <h2 class="section-title">Classic Vehicle Clubs</h2>
-      <p class="section-subtitle">Find your perfect classic vehicle club from our comprehensive directory</p>
+      <p class="section-subtitle">Explore a hand-picked mix of classic car clubs, motorcycle clubs, hotrod and vintage vehicle clubs from our nationwide network of 800+ enthusiast groups. Whether you're into chrome, two wheels, or retro mods — there's a club for you.
+</p>
     </div>
 
     <div class="club-grid standard-club-grid">
@@ -83,8 +105,8 @@ showBreadcrumb: false
       <p class="section-subtitle">Classic car shows, meets, and events across the UK</p>
     </div>
 
-    <div class="event-grid">
-      {% set upcomingEvents = events | limit(3) %}
+    <div class="event-grid club-events-page">
+      {% set upcomingEvents = helpers.getUpcomingEvents(events) | limit(3) %}
       {% for event in upcomingEvents %}
         {% include "components/event-card.njk" %}
       {% endfor %}
@@ -96,16 +118,169 @@ showBreadcrumb: false
   </div>
 </section>
 
+<section class="featured-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Upcoming Auctions</h2>
+      <p class="section-subtitle">Find classic car auctions across the UK</p>
+    </div>
+
+    <div class="auction-grid auction-page">
+      {% set featuredAuctions = auctions | filter("auctionFeatured") | limit(3) %}
+      {% set upcomingAuctions = [] %}
+      {% for auction in auctions %}
+        {% if not auction.auctionFeatured and upcomingAuctions.length < 3 %}
+          {% set upcomingAuctions = (upcomingAuctions.push(auction), upcomingAuctions) %}
+        {% endif %}
+      {% endfor %}
+
+      {% if featuredAuctions.length > 0 %}
+        {% for auction in featuredAuctions %}
+          <div x-data="eventDisplay">
+            <div class="event-card">
+              {% if auction.auctionFeatured %}
+                <div class="event-featured">Featured</div>
+              {% endif %}
+              
+              <div style="padding: 20px; text-align: center; background-color: #f0f0f0; min-height: 150px; display: flex; align-items: center; justify-content: center; position: relative;">
+                <div class="event-date" style="position: absolute; top: 10px; left: 10px; background-color: var(--primary-color); color: white; padding: 5px 10px; border-radius: 4px; text-align: center; min-width: 50px; z-index: 1;">
+                  {% if auction.auctionStartDateTime %}
+                    <span class="event-month" x-text="formatMonth('{{ auction.auctionStartDateTime }}')"></span>
+                    <span class="event-day" x-text="formatDay('{{ auction.auctionStartDateTime }}')"></span>
+                  {% endif %}
+                </div>
+                <h4 style="margin: 0; font-size: 1.2em;">{{ auction.auctionHouse }}</h4>
+              </div>
+              
+              <div class="event-content">
+                <h3 class="event-title">{{ auction.auctionTitle }}</h3>
+                
+                {% if auction.auctionCity or auction.auctionState %}
+                  <div class="event-location">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    {% if auction.auctionCity %}{{ auction.auctionCity }}{% endif %}
+                    {% if auction.auctionCity and auction.auctionState %}, {% endif %}
+                    {% if auction.auctionState %}{{ auction.auctionState }}{% endif %}
+                  </div>
+                {% endif %}
+                
+                <div class="event-time">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  {% if auction.auctionStartDateTime %}
+                    <span x-text="formatTime('{{ auction.auctionStartDateTime }}')"></span>
+                  {% endif %}
+                </div>
+                
+                {% if auction.auctionHouse %}
+                  <div class="event-location">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                      <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    <span><a href="/auction-houses/{% if auction.auctionHouse == "H&H Classics" %}h-and-h-classics{% else %}{{ auction.auctionHouse | slugify }}{% endif %}/">{{ auction.auctionHouse }}</a></span>
+                  </div>
+                {% endif %}
+                
+                {% if auction.auctionHighlightsHtml %}
+                  <div class="event-price">{{ auction.auctionHighlightsHtml | safe }}</div>
+                {% elif auction.auctionHighlights %}
+                  <div class="event-price">{{ auction.auctionHighlights }}</div>
+                {% endif %}
+              </div>
+              
+              <div class="event-actions">
+                <a href="/auctions/{{ auction.auctionSlug }}/" class="button button-primary">View Details</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        {% for auction in upcomingAuctions %}
+          <div x-data="eventDisplay">
+            <div class="event-card">
+              <div style="padding: 20px; text-align: center; background-color: #f0f0f0; min-height: 150px; display: flex; align-items: center; justify-content: center; position: relative;">
+                <div class="event-date" style="position: absolute; top: 10px; left: 10px; background-color: var(--primary-color); color: white; padding: 5px 10px; border-radius: 4px; text-align: center; min-width: 50px; z-index: 1;">
+                  {% if auction.auctionStartDateTime %}
+                    <span class="event-month" x-text="formatMonth('{{ auction.auctionStartDateTime }}')"></span>
+                    <span class="event-day" x-text="formatDay('{{ auction.auctionStartDateTime }}')"></span>
+                  {% endif %}
+                </div>
+                <h4 style="margin: 0; font-size: 1.2em;">{{ auction.auctionHouse }}</h4>
+              </div>
+              
+              <div class="event-content">
+                <h3 class="event-title">{{ auction.auctionTitle }}</h3>
+                
+                {% if auction.auctionCity or auction.auctionState %}
+                  <div class="event-location">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    {% if auction.auctionCity %}{{ auction.auctionCity }}{% endif %}
+                    {% if auction.auctionCity and auction.auctionState %}, {% endif %}
+                    {% if auction.auctionState %}{{ auction.auctionState }}{% endif %}
+                  </div>
+                {% endif %}
+                
+                <div class="event-time">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  {% if auction.auctionStartDateTime %}
+                    <span x-text="formatTime('{{ auction.auctionStartDateTime }}')"></span>
+                  {% endif %}
+                </div>
+                
+                {% if auction.auctionHouse %}
+                  <div class="event-location">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                      <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    <span><a href="/auction-houses/{% if auction.auctionHouse == "H&H Classics" %}h-and-h-classics{% else %}{{ auction.auctionHouse | slugify }}{% endif %}/">{{ auction.auctionHouse }}</a></span>
+                  </div>
+                {% endif %}
+                
+                {% if auction.auctionHighlightsHtml %}
+                  <div class="event-price">{{ auction.auctionHighlightsHtml | safe }}</div>
+                {% elif auction.auctionHighlights %}
+                  <div class="event-price">{{ auction.auctionHighlights }}</div>
+                {% endif %}
+              </div>
+              
+              <div class="event-actions">
+                <a href="/auctions/{{ auction.auctionSlug }}/" class="button button-primary">View Details</a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+
+    <div style="text-align: center; margin-top: 1rem;">
+      <a href="/auctions/" class="button button-primary">View All Auctions</a>
+    </div>
+  </div>
+</section>
+
 <section class="about-section">
   <div class="container">
     <div class="section-header">
-      <h2 class="section-title">About The Classic Car Clubs Directory</h2>
+      <h2 class="section-title">About Classic Car Clubs UK Directory</h2>
     </div>
 
     <div class="about-content">
       <div class="about-text">
         <p>
-          Welcome to the UK's premier directory of classic car clubs. Our mission is to connect enthusiasts with local and national clubs dedicated to preserving and celebrating classic automobiles.
+          Welcome to the UK's newest directory of vintage and classic car clubs. Our mission is to connect enthusiasts with local and national clubs dedicated to preserving and celebrating classic automobiles.
         </p>
         <p>
           Whether you're looking to join a club for your specific make or model, or simply want to connect with fellow classic car enthusiasts in your area, our comprehensive directory has you covered.
@@ -124,7 +299,7 @@ showBreadcrumb: false
 <section class="club-types-section">
   <div class="container">
     <div class="section-header">
-      <h2 class="section-title">Popular Car Club Types</h2>
+      <h2 class="section-title">Popular Car Club Types & Marques</h2>
     </div>
 
     <div class="club-types-grid">
@@ -206,13 +381,69 @@ showBreadcrumb: false
   </div>
 </section>
 
-<section class="cta-section">
+<section class="featured-section">
   <div class="container">
-    <div class="cta-container">
-      <h2 class="cta-title">Can't find your club?</h2>
-      <p class="cta-text">If you run or know of a classic car club that's not listed in our directory, we'd love to include it.</p>
-      <a href="/contact/" class="button button-primary cta-button">Submit Your Club</a>
+    <div class="section-header">
+      <h2 class="section-title">Classic Car Clubs in London</h2>
+      <p class="section-subtitle">
+        Discover standout <strong>classic car clubs in London</strong>, from historic marque groups to city-based gatherings and restoration crews. Tap into the capital's vibrant motoring scene and find the perfect club near you.
+      </p>
+    </div>
+
+    <div class="club-grid featured-club-grid">
+      {% set featuredClubs = clubs | filter("featured") | rejectattr("showcase", "truthy") %}
+      {% for club in featuredClubs %}
+        {% if club.city and club.city | lower == "london" %}
+          {% include "components/club-card-fixed.njk" %}
+        {% endif %}
+      {% endfor %}
+    </div>
+
+
+    <div style="text-align: center; margin-top: 1rem;">
+       <a href="/club-directory/london/" class="button button-primary">View London Clubs</a>
     </div>
   </div>
 </section>
+
+<section class="cta-section" style="background-color: #f9f9f9; width: 100vw; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); margin-top: 40px; margin-bottom: 0; padding: 4rem 0 4rem; text-align: center;">
+  <div class="container">
+    <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Can't find your club?</h2>
+    <p style="font-size: 1.125rem; max-width: 800px; margin: 0 auto 2rem;">If you run or know of a classic car club that's not listed in our directory, we'd love to include it.</p>
+    <a href="/pricing/" class="button button-primary">SUBMIT YOUR CLUB</a>
+  </div>
+</section>
+
+<script>
+  document.addEventListener('alpine:init', () => {
+    // Define the eventDisplay Alpine component for auction date formatting
+    Alpine.data('eventDisplay', () => ({
+      formatMonth(dateStr) {
+        // Convert a date string in "DDMMYYYY:HH:MM:SS" format to a valid Date object.
+        const day = dateStr.substring(0, 2);
+        const month = dateStr.substring(2, 4);
+        const year = dateStr.substring(4, 8);
+        const time = dateStr.substring(9); // time starts after the colon at index 8
+        const date = new Date(year + '-' + month + '-' + day + 'T' + time);
+        return date.toLocaleString('default', { month: 'short' });
+      },
+      formatDay(dateStr) {
+        const day = dateStr.substring(0, 2);
+        const month = dateStr.substring(2, 4);
+        const year = dateStr.substring(4, 8);
+        const time = dateStr.substring(9);
+        const date = new Date(year + '-' + month + '-' + day + 'T' + time);
+        return date.getDate();
+      },
+      formatTime(dateStr) {
+        const day = dateStr.substring(0, 2);
+        const month = dateStr.substring(2, 4);
+        const year = dateStr.substring(4, 8);
+        const time = dateStr.substring(9);
+        const date = new Date(year + '-' + month + '-' + day + 'T' + time);
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
+    }));
+  });
+</script>
 

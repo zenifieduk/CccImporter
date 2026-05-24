@@ -1,0 +1,9 @@
+{
+  "layout": "layouts/chronicle/post.njk",
+  "tags": ["chronicle"],
+  "permalink": "/chronicle/{{ slug }}/index.html",
+  "author": "Classic Car Clubs",
+  "eleventyComputed": {
+    "slug": "{% if slug %}{{ slug }}{% else %}{{ title | slug }}{% endif %}"
+  }
+} 

@@ -344,24 +344,30 @@ document.addEventListener('alpine:init', () => {
         this.isLoading = false;
 
         // Add watchers for real-time filter updates
+        this.$watch('searchTerm', value => {
+          if (this.searchTerm !== undefined) {
+            console.log("ClubSearch: searchTerm changed to:", this.searchTerm);
+            this.search();
+          }
+        });
         this.$watch('category', value => {
           if (this.category !== undefined) {
-            // Update the available options for other dropdowns when category changes
-            this.updateAvailableOptions();
+            console.log("ClubSearch: category changed to:", this.category);
+            this.search();
           }
         });
 
         this.$watch('location', value => {
           if (this.location !== undefined) {
-            // Update the available options for other dropdowns when location changes
-            this.updateAvailableOptions();
+            console.log("ClubSearch: location changed to:", this.location);
+            this.search();
           }
         });
 
         this.$watch('letter', value => {
           if (this.letter !== undefined) {
-            // Update the available options for other dropdowns when letter changes
-            this.updateAvailableOptions();
+            console.log("ClubSearch: letter changed to:", this.letter);
+            this.search();
           }
         });
       } catch (error) {
@@ -404,10 +410,13 @@ document.addEventListener('alpine:init', () => {
 
       // Apply search if there are parameters
       if (searchTerm || category || location || letter) {
-        // Apply the search immediately - no delay needed as we're inside an init function
-        // which will be called after data is available
-        this.filter();
-        this.updateAvailableOptions();
+        // Apply the search immediately
+        this.search();
+      } else {
+        // If no params, ensure all clubs are shown and options are full
+        this.filteredClubs = [...this.clubs];
+        this.availableCategories = [...this.categories];
+        this.availableLocations = [...this.locations];
       }
     },
 
@@ -535,7 +544,8 @@ document.addEventListener('alpine:init', () => {
         console.log('Filtering by location:', this.location);
 
         filtered = filtered.filter(club =>
-          club.city && club.city === this.location
+          (club.city && club.city === this.location) ||
+          (club.state && club.state === this.location)
         );
 
         console.log('After location filtering:', filtered.length);
@@ -556,11 +566,15 @@ document.addEventListener('alpine:init', () => {
 
       // Update the available filter options based on the filtered results
       this.updateAvailableOptions();
+
+      // For debugging
+      console.log('Final filtered clubs:', this.filteredClubs.length);
     },
 
     search() {
-      // Update URL params
-      const urlParams = new URLSearchParams();
+      console.log("ClubSearch: search() called with searchTerm:", this.searchTerm, "category:", this.category, "location:", this.location, "letter:", this.letter);
+      // Update URL
+      const urlParams = new URLSearchParams(); // Use window.location.search if you want to preserve existing unrelated params
       if (this.searchTerm) urlParams.set('search', this.searchTerm);
       if (this.category) urlParams.set('category', this.category);
       if (this.location) urlParams.set('location', this.location);
@@ -570,7 +584,6 @@ document.addEventListener('alpine:init', () => {
       window.history.pushState({}, '', newUrl);
 
       this.filter();
-      // Available options are already updated in the filter method
     },
 
     reset() {
@@ -580,124 +593,18 @@ document.addEventListener('alpine:init', () => {
       this.letter = '';
 
       // Update URL
-      window.history.pushState({}, '', window.location.pathname);
+      window.history.pushState({}, '', window.location.pathname + '#results-section'); // Go to results section
 
-      this.filter();
-      // Reset available options to all options
-      this.availableCategories = this.categories;
-      this.availableLocations = this.locations;
+      this.filter(); // This will also call updateAvailableOptions
     },
 
     resetFilters() {
-      this.searchTerm = '';
-      this.category = '';
-      this.location = '';
-      this.letter = '';
-
-      // Update URL
-      window.history.pushState({}, '', window.location.pathname);
-
-      this.filter();
-      // Reset available options to all options
-      this.availableCategories = this.categories;
-      this.availableLocations = this.locations;
+      this.reset();
     },
 
     setLetter(letter) {
       this.letter = this.letter === letter ? '' : letter;
-      this.search();
-    }
-  }));
-
-  Alpine.data('eventSearch', () => ({
-    searchTerm: '',
-    category: '',
-    location: '',
-    events: [],
-    filteredEvents: [],
-    categories: [],
-    locations: [],
-    availableCategories: [],
-    availableLocations: [],
-    isLoading: true,
-
-    async init() {
-      try {
-        const urlParams = new URLSearchParams(window.location.search);
-        this.searchTerm = urlParams.get('search') || '';
-        this.category = urlParams.get('category') || '';
-        this.location = urlParams.get('location') || '';
-
-        const response = await fetch('/events.json');
-        this.events = await response.json();
-        this.filter();
-
-        this.isLoading = false;
-      } catch (error) {
-        console.error('Error initializing event search:', error);
-        this.isLoading = false;
-      }
-    },
-
-    filter() {
-      let filtered = [...this.events];
-
-      if (this.searchTerm) {
-        const term = this.searchTerm.toLowerCase();
-        filtered = filtered.filter(event =>
-          event.eventTitle.toLowerCase().includes(term) ||
-          (event.eventCity && event.eventCity.toLowerCase().includes(term)) ||
-          (event.eventState && event.eventState.toLowerCase().includes(term))
-        );
-      }
-
-      if (this.category) {
-        filtered = filtered.filter(event =>
-          event.eventCategory && event.eventCategory.includes(this.category)
-        );
-      }
-
-      if (this.location) {
-        filtered = filtered.filter(event =>
-          (event.eventCity && event.eventCity === this.location) ||
-          (event.eventState && event.eventState === this.location)
-        );
-      }
-
-      this.filteredEvents = filtered;
-      this.updateAvailableOptions(filtered);
-    },
-
-    updateAvailableOptions(filtered) {
-      this.availableCategories = [...new Set(filtered.flatMap(event => event.eventCategory || []))].sort();
-      this.availableLocations = [...new Set([
-        ...filtered.map(event => event.eventCity),
-        ...filtered.map(event => event.eventState)
-      ].filter(Boolean))].sort();
-    },
-
-    search() {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (this.searchTerm) urlParams.set('search', this.searchTerm);
-      else urlParams.delete('search');
-      if (this.category) urlParams.set('category', this.category);
-      else urlParams.delete('category');
-      if (this.location) urlParams.set('location', this.location);
-      else urlParams.delete('location');
-
-      const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
-      window.history.pushState({}, '', newUrl);
-
-      this.filter();
-    },
-
-    reset() {
-      this.searchTerm = '';
-      this.category = '';
-      this.location = '';
-
-      window.history.pushState({}, '', window.location.pathname);
-      this.filter();
+      this.search(); // This will trigger filtering and URL update
     }
   }));
 

@@ -16,8 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (category) urlParams.set('category', category);
       if (location) urlParams.set('location', location);
       
-      // Redirect to search results
-      const redirectUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+      // Build redirect URL and append the hash for the club list section
+      const basePath = window.location.pathname;
+      const queryString = urlParams.toString() ? '?' + urlParams.toString() : '';
+      const redirectUrl = basePath + queryString + '#results-section';
+      
+      // Redirect to search results with hash
       window.location.href = redirectUrl;
     });
     
@@ -63,8 +67,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Reset page
         params.delete('page');
         
-        // Update URL and reload
+        // Update URL with hash and reload
         url.search = params.toString();
+        url.hash = '#results-section';
         window.location.href = url.toString();
       });
     });

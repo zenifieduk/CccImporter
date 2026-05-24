@@ -1,0 +1,46 @@
+name: Update Auction Data
+
+on:
+  schedule:
+    # Run daily at 6 AM UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  update-auctions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Install dependencies
+        run: npm ci
+        
+      - name: Check for expired auctions
+        run: |
+          echo "Checking for expired auctions..."
+          # This could run a script to validate auction dates
+          # or fetch fresh data from external sources
+          node scripts/check-auction-dates.js
+          
+      - name: Commit changes (if any)
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add -A
+          git diff --staged --quiet || git commit -m "Auto-update: Remove expired auctions [skip ci]"
+          git push
+          
+      - name: Trigger site rebuild
+        if: github.event_name == 'schedule'
+        run: |
+          # Trigger a deployment/rebuild if auction data was updated
+          echo "Auction data updated, triggering site rebuild..."
+          # This could call your hosting provider's webhook or API 

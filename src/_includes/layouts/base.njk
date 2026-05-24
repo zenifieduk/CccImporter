@@ -4,21 +4,56 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% if title %}{{ title }} | {% endif %}{{ site.title }}</title>
-  <meta name="description" content="{{ description or site.description }}">
-  <link rel="icon" type="image/svg+xml" href="/assets/images/ccc-logo.svg">
+  <meta name="description" content="{% if excerpt %}{{ excerpt | excerpt }}{% elif description %}{{ description | excerpt }}{% elif content %}{{ content | excerpt }}{% else %}{{ site.description | excerpt }}{% endif %}">
+ <link rel="icon" type="image/svg+xml" href="/assets/svg/favicon.svg">
+ 
+<!-- Open Graph / Facebook -->
+  <meta property="og:type" content="{% if page.url == '/' %}website{% else %}article{% endif %}">
+  <meta property="og:title" content="{% if title %}{{ title }}{% else %}{{ site.title }}{% endif %}">
+  <meta property="og:description" content="{% if excerpt %}{{ excerpt | excerpt }}{% elif description %}{{ description | excerpt }}{% elif content %}{{ content | excerpt }}{% else %}{{ site.description | excerpt }}{% endif %}">
+  <meta property="og:image" content="{% if featuredImage %}{{ site.url }}{{ featuredImage }}{% else %}{{ site.url }}/assets/images/classic-car-club-london.jpg{% endif %}">
+  <meta property="og:url" content="{{ site.url }}{{ page.url | url }}">
+  <meta property="og:site_name" content="{{ site.title }}">
 
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{% if title %}{{ title }}{% else %}{{ site.title }}{% endif %}">
+  <meta name="twitter:description" content="{% if excerpt %}{{ excerpt | excerpt }}{% elif description %}{{ description | excerpt }}{% elif content %}{{ content | excerpt }}{% else %}{{ site.description | excerpt }}{% endif %}">
+  <meta name="twitter:image" content="{% if featuredImage %}{{ site.url }}{{ featuredImage }}{% else %}{{ site.url }}/assets/images/classic-car-club-london.jpg{% endif %}">
+  <!-- RSS/Atom Feeds -->
+  <link rel="alternate" type="application/atom+xml" href="{{ site.url }}/feed.xml" title="{{ site.title }} - All Updates">
+  <link rel="alternate" type="application/atom+xml" href="{{ site.url }}/chronicle/feed.xml" title="{{ site.title }} - The Classic Chronicle">
+  <link rel="alternate" type="application/atom+xml" href="{{ site.url }}/club-directory/feed/" title="{{ site.title }} - Club Directory">
+ 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Instrument+Serif:ital@0;1&family=Inter+Tight:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
   <!-- Styles -->
   <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/footer.css">
   <link rel="stylesheet" href="/assets/css/ad-banners.css">
+  
+  <!-- Feather Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons@4.29.0/dist/feather.min.css">
 
   <!-- Alpine.js -->
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
   <script src="/assets/js/alpine-init.js"></script>
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-W5LHP0M7N7"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-E56XSSJD89');
+  </script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4010094870422057"
+     crossorigin="anonymous"></script>
+  
 </head>
 <body class="{% if page.url === '/' %}home{% endif %}">
   {% include "components/header.njk" %}
@@ -32,11 +67,50 @@
   <!-- Scripts -->
   <script src="/assets/js/search.js"></script>
   
+<script src="https://cdn.botpress.cloud/webchat/v2.3/inject.js"></script>
+<script src="https://files.bpcontent.cloud/2025/03/26/14/20250326145832-5ISEBDQ6.js"></script>
+  
+  {# Only load Google Maps API when specifically requested by the page #}
+  {% if loadGoogleMaps %}
   <script>
-    // Global initialization script for components across the site
-    document.addEventListener('DOMContentLoaded', function() {
-      // Any global component initialization goes here
+    // Global flag to indicate if Google Maps is loaded
+    window.googleMapsLoaded = false;
+    
+    // Global function to initialize all maps
+    window.initAllMaps = function() {
+      window.googleMapsLoaded = true;
+      
+      // Call any page-specific initialization functions
+      if (typeof initAuctionMap === 'function') {
+        initAuctionMap();
+      }
+      
+      if (typeof initEventMap === 'function') {
+        initEventMap();
+      }
+      
+      if (typeof initMap === 'function') {
+        initMap();
+      }
+      
+      console.log('Google Maps initialized');
+    };
+    
+    // Function to load Google Maps API
+    function loadGoogleMapsApi() {
+      var script = document.createElement('script');
+      script.src = "https://maps.googleapis.com/maps/api/js?key={% env 'GOOGLE_MAPS_API_KEY' %}&callback=initAllMaps";
+      script.async = true;
+      script.defer = true;
+      document.body.appendChild(script);
+    }
+    
+    // Load the API when the page is fully loaded
+    window.addEventListener('load', function() {
+      loadGoogleMapsApi();
     });
   </script>
+  {% endif %}
 </body>
+
 </html>

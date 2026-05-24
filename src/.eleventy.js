@@ -110,6 +110,34 @@ module.exports = function(eleventyConfig) {
     return Array.from(categories).sort();
   });
   
+  eleventyConfig.addCollection("auctions", function(collectionApi) {
+    return require("./src/_data/auctions.js")();
+  });
+eleventyConfig.addCollection("upcomingAuctions", collection => {
+    const now = new Date();
+    return require("./src/_data/auctions.js")()
+      .filter(auction => {
+        if (!auction.auctionStartDateTime) return false;
+
+        try {
+          const day = auction.auctionStartDateTime.substring(0, 2);
+          const month = auction.auctionStartDateTime.substring(2, 4);
+          const year = auction.auctionStartDateTime.substring(4, 8);
+          const time = auction.auctionStartDateTime.substring(9);
+
+          const auctionDate = new Date(`${year}-${month}-${day}T${time}`);
+          return auctionDate >= now;
+        } catch (error) {
+          return false;
+        }
+      })
+      .sort((a, b) => {
+        const dateA = new Date(`${a.auctionStartDateTime.substring(4, 8)}-${a.auctionStartDateTime.substring(2, 4)}-${a.auctionStartDateTime.substring(0, 2)}T${a.auctionStartDateTime.substring(9)}`);
+        const dateB = new Date(`${b.auctionStartDateTime.substring(4, 8)}-${b.auctionStartDateTime.substring(2, 4)}-${b.auctionStartDateTime.substring(0, 2)}T${b.auctionStartDateTime.substring(9)}`);
+        return dateA - dateB;
+      });
+  });
+  
   // Add filters
   eleventyConfig.addFilter("limit", function(array, limit) {
     return array.slice(0, limit);
@@ -224,6 +252,11 @@ module.exports = function(eleventyConfig) {
   
   eleventyConfig.addFilter("urlencode", function(value) {
     return encodeURIComponent(value);
+  });
+  
+  eleventyConfig.addFilter("substring", function(value, start, end) {
+    if (!value) return '';
+    return value.substring(start, end);
   });
   
   // Configure eleventy

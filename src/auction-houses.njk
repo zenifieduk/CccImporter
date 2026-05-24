@@ -1,0 +1,224 @@
+---
+layout: layouts/page.njk
+title: Classic Car Auction Houses
+description: Browse classic car auction houses across the UK and worldwide.
+---
+
+{% set breadcrumbs = [{ url: '/auction-houses/', label: 'Auction Houses' }] %}
+
+<div class="auction-houses-page">
+  <section class="hero-section auction-hero-section">
+    <!-- Pattern overlay -->
+    <div style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('/assets/images/1_7ZTVWhHzBwFScytC0YsVSw.webp');
+      background-repeat: repeat;
+      background-size: 3% auto;
+      opacity: 0.15;
+      mix-blend-mode: overlay;
+      z-index: 1;
+    "></div>
+    <div class="hero-overlay" style="z-index: 2;"></div>
+    <div class="container" style="position: relative; z-index: 3;">
+      <div class="breadcrumbs-container">
+        <ul class="breadcrumbs">
+          <li><a href="/" style="color: white;">Home</a></li>
+          <li><a href="/auction-houses/" style="color: white;">Auction Houses</a></li>
+        </ul>
+      </div>
+      
+      <div class="hero-content auction-hero-content" style="position: relative; z-index: 3;">
+        <h1 class="hero-title">Classic Car Auction Houses</h1>
+        <p class="hero-subtitle">Find specialist classic vehicle auction houses across the UK and worldwide</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="auction-houses-intro">
+      <p>Browse our comprehensive directory of classic car auction houses. Click on any auction house to view their upcoming auctions, past events, and company information.</p>
+    </div>
+    
+    <div x-data="auctionHousesApp()" x-init="init()">
+      <!-- Search box -->
+      <div class="search-box">
+        <input type="text" x-model="searchTerm" placeholder="Search auction houses..." class="search-input">
+      </div>
+      
+      <!-- Auction houses list -->
+      <div class="auction-houses-list">
+        <template x-for="house in filteredHouses" :key="house.slug">
+          <a :href="'/auction-houses/' + house.slug + '/'" class="auction-house-card">
+            <div class="auction-house-logo">
+              <img :src="house.logoUrl" :alt="house.name + ' Logo'" onerror="this.src='/assets/images/auctions/auction-house-placeholder.svg'">
+            </div>
+            <div class="auction-house-info">
+              <h3 class="auction-house-name" x-text="house.name"></h3>
+              <p class="auction-house-location" x-text="house.location || 'Location not specified'"></p>
+              <p class="auction-house-snippet" x-html="house.description ? (house.description.length > 120 ? house.description.substring(0, 120) + '...' : house.description) : 'View details'"></p>
+            </div>
+          </a>
+        </template>
+      </div>
+      
+      <!-- No results message -->
+      <div class="no-results" x-show="filteredHouses.length === 0">
+        <p>No auction houses found matching your search criteria.</p>
+        <button @click="searchTerm = ''" class="button button-primary">Clear Search</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="auction-cta-section" style="background-color: #f9f9f9; width: 100vw; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); margin-top: 40px; margin-bottom: 0; padding: 4rem 0 4rem; text-align: center;">
+    <div class="container">
+      <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Add your Auction House</h2>
+      <p style="font-size: 1.125rem; max-width: 800px; margin: 0 auto 2rem;">Get discovered by thousands of classic car collectors actively searching for their next purchase. Join our directory and connect with serious buyers today.</p>
+      <a href="/contact/" class="button button-primary">JOIN OUR DIRECTORY</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function auctionHousesApp() {
+    return {
+      searchTerm: '',
+      filteredHouses: [],
+      allHouses: {{ auctionHouses | dump | safe }},
+      
+      init() {
+        this.filteredHouses = [...this.allHouses];
+        
+        this.$watch('searchTerm', () => {
+          this.filterHouses();
+        });
+      },
+      
+      filterHouses() {
+        if (!this.searchTerm || this.searchTerm.trim() === '') {
+          this.filteredHouses = [...this.allHouses];
+          return;
+        }
+        
+        const term = this.searchTerm.toLowerCase().trim();
+        this.filteredHouses = this.allHouses.filter(house => 
+          house.name.toLowerCase().includes(term) || 
+          (house.location && house.location.toLowerCase().includes(term))
+        );
+      }
+    };
+  }
+</script>
+
+<style>
+  .auction-houses-intro {
+    margin: 2rem 0;
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+  
+  .search-box {
+    margin-bottom: 2rem;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .auction-houses-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  
+  .auction-house-card {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    height: 100%;
+  }
+  
+  .auction-house-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .auction-house-logo {
+    height: auto;
+    background-color: #f9f9f9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+  
+  .auction-house-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  
+  .auction-house-info {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+  }
+  
+  .auction-house-name {
+    font-size: 1.25rem;
+    margin: 0 0 0.5rem;
+    color: #333;
+    transition: color 0.3s ease;
+  }
+  
+  .auction-house-card:hover .auction-house-name {
+    color: var(--primary-color);
+  }
+  
+  .auction-house-location {
+    color: #666;
+    margin: 0 0 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .auction-house-snippet {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #555;
+    flex-grow: 1;
+  }
+  
+  .no-results {
+    text-align: center;
+    padding: 3rem 0;
+  }
+  
+  .no-results p {
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    color: #666;
+  }
+  
+  @media (max-width: 768px) {
+    .auction-houses-list {
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+  }
+</style> 

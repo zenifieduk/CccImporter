@@ -1,0 +1,87 @@
+---
+layout: layouts/base.njk
+---
+
+<link rel="stylesheet" href="/assets/css/blog.css">
+
+<section class="blog-hero" {% if featuredImage %}style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ featuredImage }}'); background-size: cover; background-position: center;"{% endif %}>
+  <div class="container">
+    <div class="breadcrumbs-container">
+      <ul class="breadcrumbs">
+        <li><a href="/" style="color: white;">Home</a></li>
+        <li><a href="/blog/" style="color: white;">Blog</a></li>
+        <li><a href="/blog/{{ slug }}/" style="color: white;">{{ title }}</a></li>
+      </ul>
+    </div>
+
+    <div class="blog-hero-content">
+      <h1 class="blog-hero-title">{{ title }}</h1>
+      {% if subtitle %}<p class="blog-hero-subtitle">{{ subtitle }}</p>{% endif %}
+      
+      <div class="blog-meta">
+        <span class="blog-date">{{ date | blogDate }}</span>
+        <span class="blog-author">By {{ author }}</span>
+        <span class="blog-reading-time">{{ content | readingTime }} min read</span>
+      </div>
+      
+      {% if tags %}
+        <div class="blog-tags">
+          {% for tag in tags %}
+            {% if tag != "blog" %}
+              <a href="/blog/tags/{{ tag | slug }}/" class="tag">{{ tag }}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<article class="blog-post">
+  <div class="container">
+    <div class="blog-content">
+      {{ content | safe }}
+    </div>
+    
+    <div class="blog-share">
+      <h3>Share this article</h3>
+      <div class="share-links">
+        <a href="https://twitter.com/intent/tweet?text={{ title | urlencode }}&url={{ page.url | urlencode }}" target="_blank" rel="noopener noreferrer">Twitter</a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ page.url | urlencode }}" target="_blank" rel="noopener noreferrer">Facebook</a>
+        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ page.url | urlencode }}&title={{ title | urlencode }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      </div>
+      <div class="followit-container" style="margin-top: 1.5rem;">
+        <a href="https://follow.it/classic-car-clubs-uk?leanpub" target="_blank" rel="noopener noreferrer nofollow">
+          <img src="/assets/images/followit-button.png" alt="Follow it" style="max-width: 200px;">
+        </a>
+      </div>
+    </div>
+    
+    {% if collections.blog.length > 1 %}
+      <div class="related-posts">
+        <h3>Related Posts</h3>
+        <div class="blog-grid">
+          {% set relatedPosts = collections.blog | filterOutCurrent(slug) | limit(3) %}
+          {% for post in relatedPosts %}
+            <div class="blog-card">
+              {% if post.data.featuredImage %}
+                <div class="blog-card-image">
+                  <img src="{{ post.data.featuredImage }}" alt="{{ post.data.title }}">
+                </div>
+              {% endif %}
+              <div class="blog-card-content">
+                <h4><a href="{{ post.url }}">{{ post.data.title }}</a></h4>
+                <div class="blog-card-meta">
+                  <span class="blog-date">{{ post.date | blogDate }}</span>
+                  <span class="blog-reading-time">{{ post.templateContent | readingTime }} min read</span>
+                </div>
+                <p>{{ post.data.excerpt or post.templateContent | excerpt }}</p>
+                <a href="{{ post.url }}" class="read-more">Read More</a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</article> 

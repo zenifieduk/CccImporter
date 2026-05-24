@@ -1,4 +1,3 @@
-
 <header class="site-header">
   <nav class="site-nav" x-data="{ mobileMenuOpen: false }">
     <div class="container">
@@ -8,10 +7,36 @@
           <span></span>
         </button>
         <div class="nav-links" :class="{ 'active': mobileMenuOpen }">
-          <a href="/club-directory">Browse Directory</a>
-          <a href="/club-events">Events</a>
-          <a href="/contact">Contact Us</a>
+          {% for item in site.navigation %}
+            {% if item.children and item.children.length > 0 %}
+              <div class="dropdown" x-data="{ open: false, mobileOpen: false }">
+                <a href="{{ item.url }}" class="dropdown-toggle" @click.prevent="open = !open; if (mobileMenuOpen) mobileOpen = !mobileOpen">
+                  {{ item.label }} <span class="dropdown-arrow" :class="{ 'rotate': open }">▼</span>
+                </a>
+                {# Desktop Dropdown #}
+                <div class="dropdown-menu" x-show="open" @click.outside="open = false" x-cloak>
+                  <a href="{{ item.url }}">{{ item.label }} (Main)</a> {# Link to main item page #}
+                  {% for child in item.children %}
+                    <a href="{{ child.url }}">{{ child.label }}</a>
+                  {% endfor %}
+                </div>
+                {# Mobile Dropdown (Accordion style) - Only if mobileMenuOpen is true #}
+                <div x-show="mobileOpen && mobileMenuOpen" class="mobile-dropdown-menu" x-cloak>
+                  <a href="{{ item.url }}" @click="mobileMenuOpen = false">{{ item.label }} (Main)</a>
+                  {% for child in item.children %}
+                    <a href="{{ child.url }}" @click="mobileMenuOpen = false">{{ child.label }}</a>
+                  {% endfor %}
+                </div>
+              </div>
+            {% else %}
+              <a href="{{ item.url }}">{{ item.label }}</a>
+            {% endif %}
+          {% endfor %}
+          {# Keep other links like "Submit Your Club" if they are separate #}
+          {# Based on screenshot, "Submit Your Club" is outside this loop. #}
+          {# The original header had a hardcoded "Contact Us". If this is needed, it should be in site.js or added explicitly #}
         </div>
+        <a href="/contact/" class="button button-primary nav-button">SUBMIT YOUR CLUB</a>
       </div>
     </div>
   </nav>

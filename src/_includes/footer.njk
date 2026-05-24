@@ -1,20 +1,123 @@
-
 <footer class="site-footer">
   <div class="container">
     <div class="footer-content">
+      {# Loop through footerLinks from site.js to create columns #}
+      {% for columnTitle, links in site.footerLinks %}
       <div class="footer-column">
-        <h3>Classic Car Clubs</h3>
-        <p>Connecting classic car enthusiasts across the UK</p>
+        <h4>{{ columnTitle }}</h4>
+        {% for link in links %}
+        <a href="{{ link.url }}">{{ link.label }}</a>
+        {% endfor %}
       </div>
-      <div class="footer-column">
-        <h4>Quick Links</h4>
-        <a href="/privacy-policy">Privacy Policy</a>
-        <a href="/advertise">Advertise</a>
-        <a href="/contact">Contact</a>
-      </div>
+      {% endfor %}
     </div>
     <div class="footer-bottom">
-      <p>&copy; {{ currentYear }} Classic Car Clubs. All rights reserved.</p>
+      <span class="footer-legal-links">
+        <a href="/privacy-policy/">Privacy Policy</a>
+        <span class="separator">|</span>
+        <a href="/disclaimer/">Disclaimer</a>
+        <span class="separator">|</span>
+        <a href="/terms-of-use/">Terms of Use</a>
+      </span>
+      <span class="footer-copyright">
+        &copy; {{ site.buildTime | date('YYYY') }} {{ site.title }}. All rights reserved.
+        {# Consider adding "Website by Zenified.uk" if needed #}
+      </span>
     </div>
   </div>
 </footer>
+
+<style>
+  /* General Footer Styling */
+  .site-footer {
+    padding: 2rem 0;
+    /* Assuming a dark background as per the image. Adjust if your actual background is different. */
+    background-color: #000000; /* Black background */
+    color: #E0E0E0; /* Light grey default text color for the footer */
+    line-height: 1.6;
+  }
+
+  /* Main Footer Columns Area */
+  .footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1.5rem; /* Space between columns */
+    margin-bottom: 2rem; /* Space before the footer-bottom row */
+  }
+
+  .footer-column {
+    flex: 1 1 180px;
+    min-width: 160px;
+  }
+
+  .footer-column h4 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: 1.05em;
+    font-weight: 600;
+    color: #FFFFFF; /* White for column titles for better contrast if needed */
+  }
+
+  .footer-column a {
+    display: block;
+    margin-bottom: 0.4rem;
+    text-decoration: none;
+    color: inherit; /* Inherits light grey from .site-footer */
+  }
+  .footer-column a:hover {
+    text-decoration: underline;
+    color: #FFFFFF; /* Brighter on hover */
+  }
+
+  /* Footer Bottom: Legal Links and Copyright */
+  .footer-bottom {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #333333; /* Darker border for dark theme */
+    font-size: 0.875em;
+    display: flex;
+    flex-direction: column; /* Stack by default for mobile-first approach */
+    align-items: center; /* Center items when stacked */
+    text-align: center;
+    gap: 0.5rem; /* Gap between stacked items */
+  }
+
+  .footer-legal-links,
+  .footer-copyright {
+    color: #CCCCCC; /* Light grey for legal links and copyright */
+    font-size: 0.9em;
+  }
+
+  .footer-legal-links a {
+    color: #CCCCCC; /* Ensure links also get this color */
+    text-decoration: none;
+    margin: 0 0.1em; /* Minimal margin around link text itself */
+  }
+  .footer-legal-links a:hover {
+    text-decoration: underline;
+    color: #FFFFFF;
+  }
+  .footer-legal-links .separator {
+    margin: 0 0.4em; /* Space around separators */
+    color: #AAAAAA; /* Slightly dimmer color for separators */
+  }
+
+  .footer-copyright {
+    margin-top: 0.25rem; /* Add a bit of space if legal links are above */
+  }
+
+  /* Desktop layout for footer-bottom: side-by-side */
+  @media (min-width: 769px) {
+    .footer-bottom {
+      flex-direction: row; /* Side-by-side on larger screens */
+      justify-content: center; /* Center the group */
+      gap: 1rem; /* Gap between legal links block and copyright block */
+    }
+    .footer-copyright {
+      margin-top: 0; /* Reset margin-top */
+    }
+  }
+
+  /* Responsive column wrapping for .footer-content is handled by flex-wrap */
+</style>

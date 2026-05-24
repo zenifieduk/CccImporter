@@ -1,0 +1,136 @@
+---
+layout: layouts/page.njk
+title: Classic Car Clubs London | Club Directory
+description: Discover the best classic car clubs in London. Join communities of vintage car enthusiasts across the capital.
+heroImage: /assets/images/classic-car-clubs-london.avif
+pagination:
+  data: clubs
+  size: 1000
+permalink: "/club-directory/london/index.html"
+---
+
+{% set breadcrumbs = [
+  { url: '/club-directory/', label: 'Club Directory' },
+  { url: '/club-directory/london/', label: 'London' }
+] %}
+
+{% set featuredLondonClubs = [] %}
+{% for club in clubs %}
+  {% if club.city and club.city | lower == "london" and club.featured == true and not club.showcase %}
+    {% set featuredLondonClubs = featuredLondonClubs.concat([club]) %}
+  {% endif %}
+{% endfor %}
+
+<div x-data="clubSearch" id="club-directory-london" x-init="initSearch('London')">
+  <section class="hero-section secondary-hero-section" style="background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/assets/images/classic-car-clubs-london.avif'); background-size: cover; background-position: center;">
+    <div class="hero-overlay"></div>
+    <div class="container">
+      <div class="breadcrumbs-container">
+        <ul class="breadcrumbs">
+          <li><a href="/" style="color: white;">Home</a></li>
+          <li><a href="/club-directory/" style="color: white;">Club Directory</a></li>
+          <li><a href="/club-directory/london/" style="color: white;">London</a></li>
+        </ul>
+      </div>
+
+      <div class="hero-content club-hero-content">
+        <h1 class="hero-title">Classic Car Clubs London</h1>
+        <p class="hero-subtitle">Looking for classic car clubs London enthusiasts trust? Whether you're passionate about vintage models, restoration projects, or motoring heritage, our London-based directory highlights the best places to connect, showcase, and celebrate your classic car passion in the capital.</p>
+      </div>
+    </div>
+  </section>
+
+
+<div x-cloak x-show="!isLoading">
+  <div class="featured-section" x-show="filteredClubs.filter(c => c.city && c.city.toLowerCase() === 'london').some(c => c.featured)">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Featured Classic Car Clubs in London</h2>
+        <p class="section-subtitle">These featured <a href="/club-directory/london/">classic car clubs in London</a> offer exceptional experiences and vibrant communities. From specialist marque clubs to regional historic vehicle gatherings, each provides unique opportunities for members to engage deeply with their automotive passion.</p>
+      </div>
+
+      <div class="club-grid">
+        <template x-for="club in filteredClubs.filter(c => c.city && c.city.toLowerCase() === 'london' && c.featured).slice(0, 3)" :key="club.slug">
+          <div class="club-card featured-club-card">
+            <div class="club-featured">Featured</div>
+
+            <div class="club-image">
+              <img :src="club.imageUrl || '/assets/images/club-placeholder.jpg'" :alt="club.title">
+            </div>
+
+            <div class="club-content">
+              <h3 class="club-title" x-text="club.title"></h3>
+
+              <div class="club-location" x-show="club.city || club.state">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span x-text="[club.city, club.state].filter(Boolean).join(', ')"></span>
+              </div>
+
+              <div class="club-category" x-show="club.category">
+                <span class="category-tag" x-text="club.category"></span>
+                <span class="category-tag" x-text="club.marque" x-show="club.marque"></span>
+              </div>
+            </div>
+
+            <div class="club-actions">
+              <a :href="`/club-directory/${club.slug}/`" class="button button-primary">View Details</a>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <section class="featured-section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Explore Classic Car Clubs in London</h2>
+        <p class="section-subtitle">
+          From Chelsea to Camden, London is home to a vibrant range of <strong>classic car clubs</strong> celebrating vintage motoring culture. Whether you're interested in historic marques, city-based meetups, or restoration communities, these London clubs offer the perfect way to connect with fellow enthusiasts across the capital.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ad Banner Section -->
+<section>
+  <div class="container">
+    {% include "components/ad-banner.njk" %}
+  </div>
+</section>
+
+  <div class="club-grid" x-data="pagination" x-effect="items = filteredClubs.filter(c => c.city && c.city.toLowerCase() === 'london')">
+    <template x-for="club in paginatedItems" :key="club.slug">
+      <div class="club-card">
+        <div class="club-content">
+          <h3 class="club-title" x-text="club.title"></h3>
+
+          <div class="club-location" x-show="club.city || club.state">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <span x-text="[club.city, club.state].filter(Boolean).join(', ')"></span>
+          </div>
+
+          <div class="club-category" x-show="club.category">
+            <span class="category-tag" x-text="club.category"></span>
+            <span class="category-tag" x-text="club.marque" x-show="club.marque"></span>
+          </div>
+        </div>
+
+        <div class="club-actions">
+          <a :href="`/club-directory/${club.slug}/`" class="button button-primary">View Details</a>
+        </div>
+      </div>
+    </template>
+  </div>
+
+  <div x-show="paginatedItems.length === 0" class="no-results">
+    <p>No clubs found in London. Try exploring other locations or use the main <a href="/club-directory/">directory</a>.</p>
+  </div>
+</div>

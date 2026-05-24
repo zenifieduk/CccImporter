@@ -1,0 +1,1249 @@
+---
+layout: layouts/page.njk
+title: Classic Car Auctions
+description: Browse upcoming classic car auctions across the UK.
+---
+
+<!-- Import auctions data from _data/auctions.js -->
+<script>
+  // The "auctions" variable is automatically available from _data/auctions.js.
+  var auctionsData = {{ auctions | dump | safe }};
+</script>
+
+<script>
+  // Convert a date string in "DDMMYYYY:HH:MM:SS" format to a valid Date object.
+  function parseAuctionDate(dateStr) {
+    // Extract day, month, year, and time parts.
+    var day = dateStr.substring(0, 2);
+    var month = dateStr.substring(2, 4);
+    var year = dateStr.substring(4, 8);
+    var time = dateStr.substring(9); // time starts after the colon at index 8
+    return new Date(year + '-' + month + '-' + day + 'T' + time);
+  }
+
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('auctionSearch', () => ({
+      auctionHouse: '',
+      category: '',
+      location: '',
+      filteredAuctions: [],
+      allAuctions: [],
+      isLoading: true,
+      availableCategories: [],
+      availableLocations: [],
+      availableAuctionHouses: [],
+      allCategories: [],
+      allLocations: [],
+      allAuctionHouses: [],
+      
+      init() {
+        // Start loading
+        this.isLoading = true;
+        
+        // Load auctions from auctionsData and sort them by start date (earliest first)
+        this.allAuctions = [...auctionsData];
+        this.allAuctions.sort((a, b) => parseAuctionDate(a.auctionStartDateTime) - parseAuctionDate(b.auctionStartDateTime));
+        
+        // Initialize filtered results with all auctions
+        this.filteredAuctions = [...this.allAuctions];
+        
+        // Extract unique categories, locations, and auction houses
+        this.extractFilterOptions();
+        
+        // Get URL params if any
+        const urlParams = new URLSearchParams(window.location.search);
+        this.auctionHouse = urlParams.get('auction_house') || '';
+        this.category = urlParams.get('category') || '';
+        this.location = urlParams.get('location') || '';
+        
+        // Apply filters if we have URL parameters
+        if (this.auctionHouse || this.category || this.location) {
+          this.filter();
+        }
+        
+        // Finished loading
+        this.isLoading = false;
+        
+        // Add watchers for real-time filter updates
+        this.$watch('auctionHouse', () => {
+          if (this.auctionHouse !== undefined) {
+            console.log("Auction House changed to:", this.auctionHouse);
+            this.search();
+          }
+        });
+        
+        this.$watch('category', () => {
+          if (this.category !== undefined) {
+            console.log("Category changed to:", this.category);
+            this.search();
+          }
+        });
+        
+        this.$watch('location', () => {
+          if (this.location !== undefined) {
+            console.log("Location changed to:", this.location);
+            this.search();
+          }
+        });
+      },
+      
+      // Extract unique categories, locations, and auction houses from auctions
+      extractFilterOptions() {
+        const categories = new Set();
+        const locations = new Set();
+        const auctionHouses = new Set();
+        
+        this.allAuctions.forEach(auction => {
+          if (auction.auctionCategory) {
+            if (typeof auction.auctionCategory === 'string') {
+              const cat = auction.auctionCategory.trim();
+              if (cat) categories.add(cat);
+            } else if (Array.isArray(auction.auctionCategory)) {
+              auction.auctionCategory.forEach(cat => {
+                if (typeof cat === 'string') {
+                  const trimmedCat = cat.trim();
+                  if (trimmedCat) categories.add(trimmedCat);
+                }
+              });
+            }
+          }
+          
+          if (auction.auctionLocation && typeof auction.auctionLocation === 'string') {
+            const loc = auction.auctionLocation.trim();
+            if (loc) locations.add(loc);
+          } else if (Array.isArray(auction.auctionLocation)) {
+            auction.auctionLocation.forEach(loc => {
+              if (typeof loc === 'string') {
+                const trimmedLoc = loc.trim();
+                if (trimmedLoc) locations.add(trimmedLoc);
+              }
+            });
+          }
+
+          if (auction.auctionHouse && typeof auction.auctionHouse === 'string') {
+            const house = auction.auctionHouse.trim();
+            if (house) auctionHouses.add(house);
+          } else if (Array.isArray(auction.auctionHouse)) {
+            auction.auctionHouse.forEach(house => {
+              if (typeof house === 'string') {
+                const trimmedHouse = house.trim();
+                if (trimmedHouse) auctionHouses.add(trimmedHouse);
+              }
+            });
+          }
+        });
+        
+        this.availableCategories = [...categories].sort();
+        this.availableLocations = [...locations].sort();
+        this.availableAuctionHouses = [...auctionHouses].sort();
+      },
+      
+      // Main filtering function
+      filter() {
+        console.log("Filtering auctions...");
+        console.log("Filters:", this.auctionHouse, this.category, this.location);
+        
+        // Start with all auctions
+        let filtered = [...this.allAuctions];
+        
+        // Filter by auction house
+        if (this.auctionHouse && this.auctionHouse.trim() !== '') {
+          const term = this.auctionHouse.toLowerCase().trim();
+          console.log("Filtering by auction house:", term);
+          
+          filtered = filtered.filter(auction => {
+            if (!auction.auctionHouse) return false;
+            if (typeof auction.auctionHouse === 'string') {
+              return auction.auctionHouse.toLowerCase().trim() === term;
+            } else if (Array.isArray(auction.auctionHouse)) {
+              return auction.auctionHouse.some(h => h.toLowerCase().trim() === term);
+            }
+            return false;
+          });
+          
+          console.log("After auction house filtering:", filtered.length);
+        }
+        
+        // Filter by category
+        if (this.category && this.category.trim() !== '') {
+          const categoryValue = this.category.toLowerCase().trim();
+          console.log("Filtering by category:", categoryValue);
+          
+          filtered = filtered.filter(auction => {
+            if (!auction.auctionCategory) return false;
+            if (typeof auction.auctionCategory === 'string') {
+              return auction.auctionCategory.toLowerCase().trim() === categoryValue;
+            } else if (Array.isArray(auction.auctionCategory)) {
+              return auction.auctionCategory.some(c => c.toLowerCase().trim() === categoryValue);
+            }
+            return false;
+          });
+          
+          console.log("After category filtering:", filtered.length);
+        }
+        
+        // Filter by location (state/county only, checks auction.auctionState)
+        if (this.location && this.location.trim() !== '') {
+          const locationValue = this.location.toLowerCase().trim();
+          console.log("Filtering by location (state/county):", locationValue);
+          
+          filtered = filtered.filter(auction => {
+            if (!auction.auctionState) return false; // Assuming location filter targets auctionState
+            if (typeof auction.auctionState === 'string') {
+              return auction.auctionState.toLowerCase().trim() === locationValue;
+            } else if (Array.isArray(auction.auctionState)) {
+              return auction.auctionState.some(s => s.toLowerCase().trim() === locationValue);
+            }
+            return false;
+          });
+          
+          console.log("After location filtering:", filtered.length);
+        }
+        
+        // Update filtered auctions
+        this.filteredAuctions = filtered;
+        console.log("Final filtered count:", this.filteredAuctions.length);
+        
+        // Update available options based on filters
+        this.updateAvailableOptions();
+      },
+      
+      // Handle search form submission
+      search() {
+        console.log("Search function called");
+        
+        // Update URL params
+        const urlParams = new URLSearchParams();
+        if (this.auctionHouse) urlParams.set('auction_house', this.auctionHouse);
+        if (this.category) urlParams.set('category', this.category);
+        if (this.location) urlParams.set('location', this.location);
+        
+        const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+        window.history.pushState({}, '', newUrl);
+        
+        // Apply filters
+        this.filter();
+      },
+      
+      // Reset all filters
+      reset() {
+        console.log("Reset called");
+        this.auctionHouse = '';
+        this.category = '';
+        this.location = '';
+        
+        // Update URL - remove all params
+        window.history.pushState({}, '', window.location.pathname);
+        
+        // Reset to all auctions
+        this.filteredAuctions = [...this.allAuctions];
+        
+        // Reset available options to all options
+        this.availableCategories = [...this.allCategories];
+        this.availableLocations = [...this.allLocations];
+        this.availableAuctionHouses = [...this.allAuctionHouses];
+      },
+      
+      // Alias for reset (for UI consistency)
+      resetFilters() {
+        this.reset();
+      },
+      
+      // Update available dropdown options based on current filters
+      updateAvailableOptions() {
+        const categories = new Set();
+        const locations = new Set();
+        const auctionHouses = new Set();
+
+        // Determine current filters for concise checking
+        const currentCategory = this.category ? this.category.toLowerCase().trim() : null;
+        const currentLocation = this.location ? this.location.toLowerCase().trim() : null;
+        const currentAuctionHouse = this.auctionHouse ? this.auctionHouse.toLowerCase().trim() : null;
+
+        this.allAuctions.forEach(auction => {
+            // Populate categories based on current filters (excluding category itself)
+            let passesCategoryPopulationFilter = true;
+            if (currentAuctionHouse) {
+                if (typeof auction.auctionHouse === 'string') {
+                    if (auction.auctionHouse.toLowerCase().trim() !== currentAuctionHouse) passesCategoryPopulationFilter = false;
+                } else if (Array.isArray(auction.auctionHouse)) {
+                    if (!auction.auctionHouse.some(h => h.toLowerCase().trim() === currentAuctionHouse)) passesCategoryPopulationFilter = false;
+                } else { passesCategoryPopulationFilter = false; }
+            }
+            if (currentLocation) {
+                if (typeof auction.auctionState === 'string') {
+                    if (auction.auctionState.toLowerCase().trim() !== currentLocation) passesCategoryPopulationFilter = false;
+                } else if (Array.isArray(auction.auctionState)) {
+                    if (!auction.auctionState.some(s => s.toLowerCase().trim() === currentLocation)) passesCategoryPopulationFilter = false;
+                } else { passesCategoryPopulationFilter = false; }
+            }
+            if (passesCategoryPopulationFilter && auction.auctionCategory) {
+                if (typeof auction.auctionCategory === 'string') {
+                    const cat = auction.auctionCategory.trim();
+                    if (cat) categories.add(cat);
+                } else if (Array.isArray(auction.auctionCategory)) {
+                    auction.auctionCategory.forEach(cat => {
+                        if (typeof cat === 'string') {
+                            const trimmedCat = cat.trim();
+                            if (trimmedCat) categories.add(trimmedCat);
+                        }
+                    });
+                }
+            }
+
+            // Populate locations based on current filters (excluding location itself)
+            let passesLocationPopulationFilter = true;
+            if (currentAuctionHouse) {
+                if (typeof auction.auctionHouse === 'string') {
+                    if (auction.auctionHouse.toLowerCase().trim() !== currentAuctionHouse) passesLocationPopulationFilter = false;
+                } else if (Array.isArray(auction.auctionHouse)) {
+                    if (!auction.auctionHouse.some(h => h.toLowerCase().trim() === currentAuctionHouse)) passesLocationPopulationFilter = false;
+                } else { passesLocationPopulationFilter = false; }
+            }
+            if (currentCategory) {
+                if (typeof auction.auctionCategory === 'string') {
+                    if (auction.auctionCategory.toLowerCase().trim() !== currentCategory) passesLocationPopulationFilter = false;
+                } else if (Array.isArray(auction.auctionCategory)) {
+                    if (!auction.auctionCategory.some(c => c.toLowerCase().trim() === currentCategory)) passesLocationPopulationFilter = false;
+                } else { passesLocationPopulationFilter = false; }
+            }
+            if (passesLocationPopulationFilter && auction.auctionState) { // Assuming location refers to auctionState
+                if (typeof auction.auctionState === 'string') {
+                    const loc = auction.auctionState.trim();
+                    if (loc) locations.add(loc);
+                } else if (Array.isArray(auction.auctionState)) {
+                    auction.auctionState.forEach(loc => {
+                        if (typeof loc === 'string') {
+                            const trimmedLoc = loc.trim();
+                            if (trimmedLoc) locations.add(trimmedLoc);
+                        }
+                    });
+                }
+            }
+
+            // Populate auction houses based on current filters (excluding auction house itself)
+            let passesAuctionHousePopulationFilter = true;
+            if (currentCategory) {
+                if (typeof auction.auctionCategory === 'string') {
+                    if (auction.auctionCategory.toLowerCase().trim() !== currentCategory) passesAuctionHousePopulationFilter = false;
+                } else if (Array.isArray(auction.auctionCategory)) {
+                    if (!auction.auctionCategory.some(c => c.toLowerCase().trim() === currentCategory)) passesAuctionHousePopulationFilter = false;
+                } else { passesAuctionHousePopulationFilter = false; }
+            }
+            if (currentLocation) {
+                if (typeof auction.auctionState === 'string') {
+                    if (auction.auctionState.toLowerCase().trim() !== currentLocation) passesAuctionHousePopulationFilter = false;
+                } else if (Array.isArray(auction.auctionState)) {
+                    if (!auction.auctionState.some(s => s.toLowerCase().trim() === currentLocation)) passesAuctionHousePopulationFilter = false;
+                } else { passesAuctionHousePopulationFilter = false; }
+            }
+            if (passesAuctionHousePopulationFilter && auction.auctionHouse) {
+                if (typeof auction.auctionHouse === 'string') {
+                    const house = auction.auctionHouse.trim();
+                    if (house) auctionHouses.add(house);
+                } else if (Array.isArray(auction.auctionHouse)) {
+                    auction.auctionHouse.forEach(house => {
+                        if (typeof house === 'string') {
+                            const trimmedHouse = house.trim();
+                            if (trimmedHouse) auctionHouses.add(trimmedHouse);
+                        }
+                    });
+                }
+            }
+        });
+
+        this.availableCategories = [...categories].sort();
+        this.availableLocations = [...locations].sort();
+        this.availableAuctionHouses = [...auctionHouses].sort();
+        
+        // If a filter is not set, its available options should be from the global list populated by extractFilterOptions
+        // This ensures that if you select "BMW", the location dropdown still shows all possible locations for BMWs,
+        // not just locations that also match a previously selected (but now cleared) auction house.
+        // However, the extractFilterOptions already populates these initially.
+        // The logic above dynamically updates them based on *other* active filters.
+        // A simpler approach for availableOptions if less dependent filtering is needed:
+        // if (!currentCategory) this.availableCategories = [...this.allCategoriesFromExtract]; // assuming allCategoriesFromExtract is stored from extractFilterOptions
+        // Similar for location and auctionHouse. The current approach is for more interdependent filtering.
+
+        console.log("Available Categories updated:", this.availableCategories);
+        console.log("Available Locations updated:", this.availableLocations);
+        console.log("Available Auction Houses updated:", this.availableAuctionHouses);
+      }
+    }));
+
+    // Define the eventDisplay Alpine component for auction date formatting
+    Alpine.data('eventDisplay', () => ({
+      formatMonth(dateStr) {
+        const date = parseAuctionDate(dateStr);
+        return date.toLocaleString('default', { month: 'short' });
+      },
+      formatDay(dateStr) {
+        const date = parseAuctionDate(dateStr);
+        return date.getDate();
+      },
+      formatTime(dateStr) {
+        const date = parseAuctionDate(dateStr);
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
+    }));
+
+    Alpine.data('pagination', () => ({
+      items: [],
+      currentPage: 1,
+      perPage: 21,
+      get totalItems() {
+        return this.items.length;
+      },
+      get totalPages() {
+        return Math.ceil(this.totalItems / this.perPage);
+      },
+      get paginatedItems() {
+        const start = (this.currentPage - 1) * this.perPage;
+        return this.items.slice(start, start + this.perPage);
+      },
+      get startIndex() {
+        return (this.currentPage - 1) * this.perPage + 1;
+      },
+      get endIndex() {
+        return Math.min(this.currentPage * this.perPage, this.totalItems);
+      },
+      goToPage(page) {
+        if (page >= 1 && page <= this.totalPages) {
+          this.currentPage = page;
+          const resultsSection = document.getElementById('all-upcoming-auctions-heading');
+          if (resultsSection) {
+            // Scroll to the heading with a small offset from the top for better visibility
+            const yOffset = -20; 
+            const y = resultsSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({top: y, behavior: 'smooth'});
+          } else {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
+        }
+      }
+    }));
+  });
+</script>
+
+{% set breadcrumbs = [{ url: '/auctions/', label: 'Auctions' }] %}
+<div x-data="auctionSearch" id="auction-directory-app" class="auction-page" x-init="init()">
+  <section class="hero-section auction-hero-section">
+    <!-- Pattern overlay -->
+    <div style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('/assets/images/1_7ZTVWhHzBwFScytC0YsVSw.webp');
+      background-repeat: repeat;
+      background-size: 3% auto;
+      opacity: 0.15;
+      mix-blend-mode: overlay;
+      z-index: 1;
+    "></div>
+    <div class="hero-overlay" style="z-index: 2;"></div>
+    <div class="container" style="position: relative; z-index: 3;">
+      <div class="breadcrumbs-container">
+        <ul class="breadcrumbs">
+          <li><a href="/" style="color: white;">Home</a></li>
+          <li><a href="/auctions/" style="color: white;">Auctions</a></li>
+        </ul>
+      </div>
+      
+      <div class="hero-content auction-hero-content" style="position: relative; z-index: 3;">
+        <h1 class="hero-title">Classic Car Auctions</h1>
+        <p class="hero-subtitle">Find classic car auctions across the UK</p>
+        
+        <div class="hero-search">
+          <div class="search-container auction-search" style="
+            background-color: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 1.5rem;
+          ">
+            <form class="search-form" @submit.prevent="search">
+              <div class="search-grid">
+                <!-- Auction Type Filter -->
+                <div class="custom-search-group">
+                  <label for="search-category" style="color: white; font-weight: 600; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);">Auction Type</label>
+                  <div class="input-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="3" y1="9" x2="21" y2="9"></line>
+                      <line x1="9" y1="21" x2="9" y2="9"></line>
+                    </svg>
+                    <select id="search-category" class="custom-search-input search-category" x-model="category" style="background-color: rgba(255, 255, 255, 0.9); min-height: 40px;">
+                      <option value="">All Auction Types</option>
+                      <template x-for="cat in availableCategories" :key="cat">
+                        <option :value="cat" :selected="cat === category" x-text="cat"></option>
+                      </template>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Auction House Filter -->
+                <div class="custom-search-group">
+                  <label for="search-auction-house" style="color: white; font-weight: 600; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);">Auction House</label>
+                  <div class="input-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="3" y1="9" x2="21" y2="9"></line>
+                      <line x1="9" y1="21" x2="9" y2="9"></line>
+                    </svg>
+                    <select id="search-auction-house" class="custom-search-input" x-model="auctionHouse" style="background-color: rgba(255, 255, 255, 0.9); min-height: 40px;">
+                      <option value="">All Auction Houses</option>
+                      <template x-for="house in availableAuctionHouses" :key="house">
+                        <option :value="house" :selected="house === auctionHouse" x-text="house"></option>
+                      </template>
+                    </select>
+                  </div>
+                </div>
+                
+                <!-- Location Filter -->
+                <div class="custom-search-group">
+                  <label for="search-location" style="color: white; font-weight: 600; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);">Location</label>
+                  <div class="input-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <select id="search-location" class="custom-search-input search-location" x-model="location" style="background-color: rgba(255, 255, 255, 0.9); min-height: 40px;">
+                      <option value="">All Locations</option>
+                      <template x-for="loc in availableLocations" :key="loc">
+                        <option :value="loc" :selected="loc === location" x-text="loc"></option>
+                      </template>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="search-actions">
+                  <button type="button" class="reset-button" @click.prevent="reset()">Reset</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="search-status" x-show="auctionHouse || category || location" style="background-color: #fff3cd; padding: 10px 15px; border-radius: 4px; margin: 25px 0 20px; display: flex; justify-content: space-between; align-items: center;">
+      <p style="margin: 0; color: #856404;">
+        <span x-text="`Showing upcoming auctions (${filteredAuctions.filter(e => parseAuctionDate(e.auctionStartDateTime) >= new Date()).length} found)`"></span>
+        <span style="font-size: 0.9em; display: block; margin-top: 2px;">Past auctions are also visible in calendar view</span>
+      </p>
+      <button @click="resetFilters()" class="exit-search-button" style="background-color: #856404; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Clear All Filters</button>
+    </div>
+    
+    <div x-show="isLoading" class="loading-indicator">Loading...</div>
+    
+    <div x-cloak x-show="!isLoading">
+      <!-- View Toggle -->
+      <div class="auctions-view-toggle" style="display:flex;gap:1rem;margin-bottom:1.5rem;margin-top:2rem;">
+        <button id="cardsViewBtnAuction" class="button button-primary active-view">Cards View</button>
+        <button id="calendarViewBtnAuction" class="button button-secondary">CALENDAR (ALL AUCTIONS)</button>
+      </div>
+
+      <!-- Calendar View (New) -->
+      <div id="auctionsCalendarView" style="display:none;margin-bottom:2rem;">
+        <div class="calendar-controls">
+          <button id="prevMonthAuction" class="button button-secondary" style="min-width:auto;padding:0.5rem 1rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+            </svg>
+          </button>
+          <h3 id="calendarTitleAuction" style="margin:0;">Month Year</h3>
+          <button id="nextMonthAuction" class="button button-secondary" style="min-width:auto;padding:0.5rem 1rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="calendar-grid">
+          <div id="calendarAuction" class="responsive-calendar"></div>
+        </div>
+      </div>
+
+      <!-- Cards View -->
+      <div id="auctionsCardsView" style="display:block;">
+        <!-- Featured Auctions Section -->
+        <div class="featured-section" x-show="filteredAuctions.some(auction => auction.auctionFeatured)">
+          <h2>Upcoming Featured Auctions</h2>
+          
+          <div class="auction-grid">
+            <template x-for="auction in filteredAuctions.filter(e => e.auctionFeatured)
+                                          .filter(e => {
+                                            // Filter out past auctions by comparing with current date
+                                            const now = new Date();
+                                            const auctionDate = parseAuctionDate(e.auctionStartDateTime);
+                                            return auctionDate >= now; // Only include auctions from today or in the future
+                                          })
+                                          .sort((a, b) => parseAuctionDate(a.auctionStartDateTime) - parseAuctionDate(b.auctionStartDateTime))
+                                          .slice(0, 8)" :key="auction.auctionSlug">
+              {% include "components/auction-card.njk" %}
+            </template>
+          </div>
+        </div>
+        
+        <!-- All Upcoming Auctions Section -->
+        <div x-data="pagination" x-effect="items = filteredAuctions
+                                .filter(e => parseAuctionDate(e.auctionStartDateTime) >= new Date())
+                                .filter(e => !e.auctionFeatured) // Filter out featured auctions
+                                .sort((a, b) => parseAuctionDate(a.auctionStartDateTime) - parseAuctionDate(b.auctionStartDateTime))">
+          <h2 id="all-upcoming-auctions-heading">All Upcoming Auctions</h2>
+          
+          <div class="auction-grid">
+            <template x-for="auction in paginatedItems" :key="auction.auctionSlug">
+              {% include "components/auction-card.njk" %}
+            </template>
+          </div>
+          
+          <!-- Pagination Controls -->
+          <div class="pagination-container" x-show="totalPages > 1">
+            <div class="pagination-controls">
+              <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="pagination-arrow pagination-prev" :class="{ 'disabled': currentPage === 1 }">
+                &laquo; Previous
+              </button>
+              
+              <div class="pagination-numbers">
+                <!-- Display first page -->
+                <button 
+                  @click="goToPage(1)" 
+                  class="pagination-number" 
+                  :class="{ 'active': currentPage === 1 }"
+                >1</button>
+                
+                <!-- Display ellipsis if needed -->
+                <span class="pagination-ellipsis" x-show="currentPage > 3">...</span>
+                
+                <!-- Display page before current if not first or second page -->
+                <button 
+                  x-show="currentPage > 2" 
+                  @click="goToPage(currentPage - 1)" 
+                  class="pagination-number"
+                >
+                  <span x-text="currentPage - 1"></span>
+                </button>
+                
+                <!-- Display current page if not first page and not last page -->
+                <button 
+                  x-show="currentPage !== 1 && currentPage !== totalPages" 
+                  class="pagination-number active"
+                >
+                  <span x-text="currentPage"></span>
+                </button>
+                
+                <!-- Display page after current if not last or second to last page -->
+                <button 
+                  x-show="currentPage < totalPages - 1" 
+                  @click="goToPage(currentPage + 1)" 
+                  class="pagination-number"
+                >
+                  <span x-text="currentPage + 1"></span>
+                </button>
+                
+                <!-- Display ellipsis if needed -->
+                <span class="pagination-ellipsis" x-show="currentPage < totalPages - 2">...</span>
+                
+                <!-- Display last page if not first page -->
+                <button 
+                  x-show="totalPages > 1" 
+                  @click="goToPage(totalPages)" 
+                  class="pagination-number" 
+                  :class="{ 'active': currentPage === totalPages }"
+                >
+                  <span x-text="totalPages"></span>
+                </button>
+              </div>
+              
+              <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-arrow pagination-next" :class="{ 'disabled': currentPage === totalPages }">
+                Next &raquo;
+              </button>
+            </div>
+            
+            <div class="pagination-info">
+              Showing <span x-text="startIndex"></span> to <span x-text="endIndex"></span> of <span x-text="totalItems"></span> auctions
+            </div>
+          </div>
+        </div>
+        
+        <!-- No Results Message -->
+        <div x-show="filteredAuctions.filter(e => parseAuctionDate(e.auctionStartDateTime) >= new Date()).filter(e => !e.auctionFeatured).length === 0 && !filteredAuctions.some(e => e.auctionFeatured)" class="no-results">
+          <p>No upcoming auctions found matching your criteria.</p>
+          <button @click="resetFilters()" class="button button-primary">Clear Filters</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="auction-cta-section" style="background-color: #f9f9f9; width: 100vw; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); margin-top: 40px; margin-bottom: 0; padding: 4rem 0 4rem; text-align: center;">
+  <div class="container">
+    <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Add your Auction</h2>
+    <p style="font-size: 1.125rem; max-width: 800px; margin: 0 auto 2rem;">Get discovered by thousands of classic car collectors actively searching for their next purchase. Join our directory and connect with serious buyers today.</p>
+    <a href="/contact/" class="button button-primary">SUBMIT YOUR AUCTION</a>
+    <div style="margin-top: 2rem;">
+      <p style="font-size: 1.125rem;">Looking for a specific auction house?</p>
+      <a href="/auction-houses/" class="button button-secondary">BROWSE AUCTION HOUSES</a>
+    </div>
+  </div>
+</div>
+
+<!-- Auction Modal -->
+<div id="auctionModal" class="auction-modal" style="display: none;">
+  <div class="auction-modal-content">
+    <span class="close-modal-auction">&times;</span>
+    <h3 class="auction-modal-title"></h3>
+    <div class="auction-modal-meta"></div>
+    <div class="auction-modal-description"></div>
+  </div>
+</div>
+
+<!-- Calendar Responsive Styles -->
+<style>
+  .responsive-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    width: 100%;
+  }
+  
+  .calendar-day-header {
+    font-weight: bold;
+    text-align: center;
+    padding: 8px 4px;
+    background: #f5f5f5;
+    border-bottom: 2px solid var(--button-colour); /* Assuming --button-colour is defined globally */
+    font-family: var(--font-sans); /* Assuming --font-sans is defined globally */
+    font-size: 0.9rem;
+  }
+  
+  .calendar-day {
+    min-height: 90px;
+    border: 1px solid #eee;
+    padding: 8px;
+    position: relative;
+    background: white;
+    transition: background-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .calendar-day.empty {
+    background: #f9f9f9;
+    min-height: 90px;
+  }
+  
+  .calendar-day.has-auctions { /* Renamed from has-events */
+    background: #f0f7f0;
+  }
+  
+  .day-number {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  .calendar-auction { /* Renamed from calendar-event */
+    font-size: 0.8rem;
+    padding: 6px 8px;
+    margin-bottom: 6px;
+    background: var(--button-colour); /* Assuming --button-colour is defined globally */
+    color: white;
+    border-radius: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    word-break: break-word;
+  }
+  
+  .calendar-auction:hover { /* Renamed from calendar-event:hover */
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Mobile Specific Styles */
+  @media (max-width: 768px) {
+    .responsive-calendar {
+      gap: 2px;
+    }
+    
+    .calendar-day-header {
+      padding: 4px 2px;
+      font-size: 0.8rem;
+    }
+    
+    .calendar-day, .calendar-day.empty {
+      min-height: 80px;
+      padding: 4px;
+    }
+    
+    .day-number {
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    
+    .calendar-auction { /* Renamed from calendar-event */
+      font-size: 0.75rem;
+      padding: 4px 6px;
+      margin-bottom: 4px;
+      white-space: normal;
+      display: -webkit-box;
+      -webkit-line-clamp: 3; /* Increased from 2 to 3 */
+      -webkit-box-orient: vertical;
+      line-height: 1.2;
+      height: auto;
+      max-height: 3.6em; /* Adjusted from 2.4em to 3.6em */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .responsive-calendar {
+      gap: 1px;
+    }
+    
+    .calendar-day-header {
+      font-size: 0.7rem;
+      padding: 3px 1px;
+    }
+    
+    .calendar-day, .calendar-day.empty {
+      min-height: 60px;
+      padding: 3px;
+    }
+    
+    .day-number {
+      font-size: 0.8rem;
+      margin-bottom: 2px;
+    }
+    
+    .calendar-auction { /* Renamed from calendar-event */
+      font-size: 0.7rem;
+      padding: 2px 4px;
+      margin-bottom: 2px;
+    }
+    
+    .auction-modal-content { /* Renamed */
+      width: 90%;
+      margin: 15% auto;
+      padding: 15px;
+    }
+  }
+  
+  /* Modal Styles */
+  .auction-modal { /* Renamed */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+  
+  .auction-modal-content { /* Renamed */
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .close-modal-auction { /* Renamed */
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close-modal-auction:hover, /* Renamed */
+  .close-modal-auction:focus { /* Renamed */
+    color: black;
+    text-decoration: none;
+  }
+  
+  .auction-modal-title { /* Renamed */
+    margin-top: 0;
+    color: var(--button-colour); /* Assuming --button-colour is defined globally */
+  }
+  
+  .auction-modal-meta { /* Renamed */
+    margin-bottom: 15px;
+    color: #666;
+  }
+  
+  .calendar-auction.more-auctions { /* Renamed from .calendar-event.more-events */
+    background: #e5e5e5;
+    color: #333;
+    text-align: center;
+    font-style: italic;
+    font-size: 0.75rem;
+  }
+  
+  .auctions-list { /* Renamed from .events-list */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .auction-list-item { /* Renamed from .event-list-item */
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+    margin-bottom: 10px;
+  }
+  
+  .auction-list-item:last-child { /* Renamed */
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+  
+  .auction-list-item h4 { /* Renamed */
+    margin-top: 0;
+    color: var(--button-colour); /* Assuming --button-colour is defined globally */
+  }
+</style>
+
+<!-- Calendar Script -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Toggle between views
+    const cardsViewBtn = document.getElementById('cardsViewBtnAuction');
+    const calendarViewBtn = document.getElementById('calendarViewBtnAuction');
+    const auctionsCardsView = document.getElementById('auctionsCardsView');
+    const auctionsCalendarView = document.getElementById('auctionsCalendarView');
+    const auctionModal = document.getElementById('auctionModal'); // Renamed
+    const closeModal = document.querySelector('.close-modal-auction'); // Renamed
+    
+    if (cardsViewBtn && calendarViewBtn && auctionsCardsView && auctionsCalendarView) {
+      cardsViewBtn.addEventListener('click', function() {
+        auctionsCardsView.style.display = 'block';
+        auctionsCalendarView.style.display = 'none';
+        cardsViewBtn.classList.add('active-view');
+        cardsViewBtn.classList.remove('button-secondary');
+        cardsViewBtn.classList.add('button-primary');
+        calendarViewBtn.classList.remove('active-view');
+        calendarViewBtn.classList.remove('button-primary');
+        calendarViewBtn.classList.add('button-secondary');
+      });
+      
+      calendarViewBtn.addEventListener('click', function() {
+        auctionsCardsView.style.display = 'none';
+        auctionsCalendarView.style.display = 'block';
+        calendarViewBtn.classList.add('active-view');
+        calendarViewBtn.classList.remove('button-secondary');
+        calendarViewBtn.classList.add('button-primary');
+        cardsViewBtn.classList.remove('active-view');
+        cardsViewBtn.classList.remove('button-primary');
+        cardsViewBtn.classList.add('button-secondary');
+      });
+    }
+    
+    // Close modal when clicking X or outside modal
+    if (closeModal) {
+      closeModal.addEventListener('click', function() {
+        auctionModal.style.display = 'none';
+      });
+    }
+    
+    window.addEventListener('click', function(auction) { // Changed event to auction to avoid conflict
+      if (auction.target === auctionModal) {
+        auctionModal.style.display = 'none';
+      }
+    });
+    
+    // Calendar functionality
+    const calendar = document.getElementById('calendarAuction'); // Renamed
+    const calendarTitle = document.getElementById('calendarTitleAuction'); // Renamed
+    const prevMonthBtn = document.getElementById('prevMonthAuction'); // Renamed
+    const nextMonthBtn = document.getElementById('nextMonthAuction'); // Renamed
+    
+    if (!calendar || !calendarTitle || !prevMonthBtn || !nextMonthBtn) {
+        console.error("Calendar elements not found!");
+        return;
+    }
+    
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
+    
+    // Format auctions for the calendar
+    function formatAuctions() { // Renamed from formatEvents
+      return auctionsData.map(auction => { // Changed eventsData to auctionsData, event to auction
+        let auctionDateVal; // Renamed from eventDate
+        try {
+          // Use existing parseAuctionDate function
+          auctionDateVal = parseAuctionDate(auction.auctionStartDateTime);
+        } catch (error) {
+          console.error('Error parsing auction date:', auction.auctionStartDateTime, error);
+          auctionDateVal = new Date(); // Default to today if parsing fails
+        }
+        
+        return {
+          ...auction,
+          parsedDate: auctionDateVal
+        };
+      });
+    }
+    
+    function renderCalendar() {
+      // Clear previous calendar
+      calendar.innerHTML = '';
+      
+      // Update header
+      const monthNames = ["January", "February", "March", "April", "May", "June", 
+                         "July", "August", "September", "October", "November", "December"];
+      calendarTitle.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+      
+      // Add day headers
+      const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      dayNames.forEach(day => {
+        const dayHeader = document.createElement('div');
+        dayHeader.className = 'calendar-day-header';
+        dayHeader.textContent = day;
+        calendar.appendChild(dayHeader);
+      });
+      
+      // Get first day of month and last day of month
+      const firstDay = new Date(currentYear, currentMonth, 1);
+      const lastDay = new Date(currentYear, currentMonth + 1, 0);
+      
+      // Add empty cells for days before the first day of the month
+      for (let i = 0; i < firstDay.getDay(); i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'calendar-day empty';
+        calendar.appendChild(emptyCell);
+      }
+      
+      // Get formatted auctions
+      const formattedAuctions = formatAuctions(); // Renamed from formattedEvents
+      
+      // Add cells for each day of the month
+      for (let day = 1; day <= lastDay.getDate(); day++) {
+        const cell = document.createElement('div');
+        cell.className = 'calendar-day';
+        
+        // Add day number
+        const dayNumber = document.createElement('div');
+        dayNumber.className = 'day-number';
+        dayNumber.textContent = day;
+        cell.appendChild(dayNumber);
+        
+        // Check if there are auctions on this day
+        const dayAuctions = formattedAuctions.filter(auction => { // Renamed from dayEvents, event to auction
+          return auction.parsedDate.getDate() === day && 
+                 auction.parsedDate.getMonth() === currentMonth && 
+                 auction.parsedDate.getFullYear() === currentYear;
+        });
+        
+        // Add auctions to the cell
+        if (dayAuctions.length > 0) { // Renamed from dayEvents
+          cell.classList.add('has-auctions'); // Renamed from has-events
+          
+          // Sort auctions by time if available
+          dayAuctions.sort((a, b) => { // Renamed from dayEvents
+            if (a.parsedDate && b.parsedDate) {
+              return a.parsedDate.getTime() - b.parsedDate.getTime();
+            }
+            return 0;
+          });
+          
+          const isMobile = window.innerWidth <= 768;
+          const auctionsToShow = isMobile ? Math.min(2, dayAuctions.length) : dayAuctions.length; // Renamed
+          
+          for (let i = 0; i < auctionsToShow; i++) {
+            const auction = dayAuctions[i]; // Renamed from event
+            const auctionEl = document.createElement('div'); // Renamed from eventEl
+            auctionEl.className = 'calendar-auction'; // Renamed from calendar-event
+            auctionEl.textContent = auction.auctionTitle; // Changed event.eventTitle to auction.auctionTitle
+            
+            function createAuctionClickHandler(currentAuction) { // Renamed, currentAuction to avoid conflict
+              return function() {
+                const modal = document.getElementById('auctionModal'); // Renamed
+                const modalTitle = modal.querySelector('.auction-modal-title'); // Renamed
+                const modalMeta = modal.querySelector('.auction-modal-meta'); // Renamed
+                const modalDescription = modal.querySelector('.auction-modal-description'); // Renamed
+                
+                modalTitle.textContent = currentAuction.auctionTitle; // Changed to currentAuction
+                
+                const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const formattedDate = currentAuction.parsedDate.toLocaleDateString('en-US', dateOptions);
+                
+                // Adjust for auction data fields (e.g. auctionLocation, auctionHouse.auctionHouseName if available)
+                // Assuming auction items have: auctionTitle, auctionStartDateTime, auctionLocation (might be auction.auctionVenue.venueAddress), auctionDescription, auctionSlug.
+                // The global 'auctionsData' should have these details.
+                // We need to ensure `currentAuction` has all necessary fields. `formatAuctions` spreads `...auction` so it should.
+
+                let auctionHouseInfo = '';
+                if (currentAuction.auctionHouse && currentAuction.auctionHouse.auctionHouseName) {
+                    auctionHouseInfo = `<p><strong>Auction House:</strong> ${currentAuction.auctionHouse.auctionHouseName}</p>`;
+                }
+                
+                let locationInfo = '';
+                if (currentAuction.auctionVenue && currentAuction.auctionVenue.venueCity && currentAuction.auctionVenue.venueState) {
+                    locationInfo = `<p><strong>Location:</strong> ${currentAuction.auctionVenue.venueCity}, ${currentAuction.auctionVenue.venueState}</p>`;
+                } else if (currentAuction.auctionLocation) { // Fallback
+                    locationInfo = `<p><strong>Location:</strong> ${currentAuction.auctionLocation}</p>`;
+                }
+
+
+                modalMeta.innerHTML = `
+                  <p><strong>Date:</strong> ${formattedDate}</p>
+                  <p><strong>Time:</strong> ${currentAuction.parsedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                  ${auctionHouseInfo}
+                  ${locationInfo}
+                `;
+                
+                // Use auctionDescription or a default
+                modalDescription.innerHTML = currentAuction.auctionDescription || '<p>No description available</p>';
+                
+                // Add View Auction Details button
+                const buttonContainer = document.createElement('div');
+                buttonContainer.style.marginTop = "30px";
+                buttonContainer.style.textAlign = "center";
+                
+                const detailsButton = document.createElement('a');
+                detailsButton.href = `/auctions/${currentAuction.auctionSlug}/`; // Link to auction details page
+                detailsButton.className = "button button-primary";
+                detailsButton.style.display = "inline-block";
+                detailsButton.style.padding = "12px 25px";
+                detailsButton.style.fontSize = "16px";
+                detailsButton.style.textTransform = "uppercase";
+                detailsButton.style.fontWeight = "bold";
+                detailsButton.textContent = "View Auction Details";
+                
+                // Clear previous button if any, then add new one
+                const existingButtonContainer = modalDescription.querySelector('div[style*="margin-top: 30px"]');
+                if (existingButtonContainer) {
+                    existingButtonContainer.remove();
+                }
+                buttonContainer.appendChild(detailsButton);
+                modalDescription.appendChild(buttonContainer);
+                                
+                modal.style.display = 'block';
+                
+                const closeBtn = modal.querySelector('.close-modal-auction'); // Renamed
+                closeBtn.onclick = function() {
+                  modal.style.display = 'none';
+                };
+                
+                window.onclick = function(auctionModalEvent) { // Renamed auctionModalEvent to avoid conflict
+                  if (auctionModalEvent.target === modal) {
+                    modal.style.display = 'none';
+                  }
+                };
+              };
+            }
+            
+            auctionEl.addEventListener('click', createAuctionClickHandler(auction)); // Renamed
+            
+            cell.appendChild(auctionEl); // Renamed
+          }
+          
+          if (dayAuctions.length > auctionsToShow) { // Renamed
+            const moreEl = document.createElement('div');
+            moreEl.className = 'calendar-auction more-auctions'; // Renamed
+            moreEl.textContent = `+${dayAuctions.length - auctionsToShow} more`; // Renamed
+            moreEl.addEventListener('click', function() {
+              const allAuctionsModal = document.getElementById('auctionModal'); // Renamed
+              const modalTitle = allAuctionsModal.querySelector('.auction-modal-title'); // Renamed
+              const modalMeta = allAuctionsModal.querySelector('.auction-modal-meta'); // Renamed
+              const modalDescription = allAuctionsModal.querySelector('.auction-modal-description'); // Renamed
+              
+              modalTitle.textContent = `Auctions on ${monthNames[currentMonth]} ${day}, ${currentYear}`; // Renamed
+              modalMeta.innerHTML = '';
+              
+              let auctionsListHTML = '<ul class="auctions-list">'; // Renamed
+              dayAuctions.forEach(auction => { // Renamed
+                // Adjust for auction data fields
+                let auctionHouseInfoList = '';
+                if (auction.auctionHouse && auction.auctionHouse.auctionHouseName) {
+                    auctionHouseInfoList = `<p><strong>Auction House:</strong> ${auction.auctionHouse.auctionHouseName}</p>`;
+                }
+                let locationInfoList = '';
+                 if (auction.auctionVenue && auction.auctionVenue.venueCity && auction.auctionVenue.venueState) {
+                    locationInfoList = `<p><strong>Location:</strong> ${auction.auctionVenue.venueCity}, ${auction.auctionVenue.venueState}</p>`;
+                } else if (auction.auctionLocation) { 
+                    locationInfoList = `<p><strong>Location:</strong> ${auction.auctionLocation}</p>`;
+                }
+
+                auctionsListHTML += `
+                  <li class="auction-list-item">
+                    <h4>${auction.auctionTitle}</h4>
+                    <p><strong>Time:</strong> ${auction.parsedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                    ${auctionHouseInfoList}
+                    ${locationInfoList}
+                    ${auction.auctionDescription ? `<p>${auction.auctionDescription.substring(0,150)}...</p>` : ''}
+                    <div style="margin-top: 15px; text-align: center;">
+                      <a href="/auctions/${auction.auctionSlug}/" class="button button-secondary" style="display: inline-block; padding: 8px 15px; font-size: 13px;">View Details</a>
+                    </div>
+                  </li>
+                `;
+              });
+              auctionsListHTML += '</ul>';
+              
+              modalDescription.innerHTML = auctionsListHTML;
+              
+              allAuctionsModal.style.display = 'block';
+            });
+            
+            cell.appendChild(moreEl);
+          }
+        }
+        
+        calendar.appendChild(cell);
+      }
+      
+      const totalCells = firstDay.getDay() + lastDay.getDate();
+      const remainingCells = 7 - (totalCells % 7);
+      if (remainingCells < 7) {
+        for (let i = 0; i < remainingCells; i++) {
+          const emptyCell = document.createElement('div');
+          emptyCell.className = 'calendar-day empty';
+          calendar.appendChild(emptyCell);
+        }
+      }
+    }
+    
+    prevMonthBtn.addEventListener('click', function() {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderCalendar();
+    });
+    
+    nextMonthBtn.addEventListener('click', function() {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderCalendar();
+    });
+    
+    renderCalendar();
+    // Ensure calendar is visible by default if it's the active view
+    if (calendarViewBtn && calendarViewBtn.classList.contains('active-view')) {
+        auctionsCalendarView.style.display = 'block';
+        auctionsCardsView.style.display = 'none';
+    } else if (cardsViewBtn) { // Default to cards if calendar isn't explicitly active (should not happen with current setup)
+        auctionsCardsView.style.display = 'block';
+        auctionsCalendarView.style.display = 'none';
+    }
+
+
+  });
+</script>

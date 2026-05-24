@@ -1,0 +1,606 @@
+---
+layout: layouts/base.njk
+pagination:
+  data: showcaseClubs
+  size: 1
+  alias: club
+eleventyComputed:
+  title: "{{ club.title }} (Showcase)"
+  description: "Discover the premium showcase page for {{ club.title }}."
+  loadGoogleMaps: "{{ club.map != undefined }}"
+permalink: "/showcase/{{ club.slug | slugify }}/"
+---
+
+
+{# DEBUG: Output current club's slug and showcase value #}
+{# The pagination alias sets 'club', so we don't need to set it here #}
+{% set breadcrumbs = [
+  { url: '/club-directory/', label: 'Club Directory' },
+  { url: '/showcase/spirit-motor-club/', label: showcaseClub.title + ' (Showcase)' }
+] %}
+
+{# Breadcrumbs #}
+{% set breadcrumbs = [
+  { url: '/club-directory/', label: 'Club Directory' },
+  { url: '/showcase/' + club.slug | slugify + '/', label: club.title + ' (Showcase)' }
+] %}
+
+<div class="hero-section-showcase">
+  <img src="{{ club.showcaseBanner or club.imageUrl }}" alt="{{ club.title }} Banner" class="showcase-banner">
+  <div class="showcase-header-overlay"></div>
+  {% if club.showcaseBadge %}
+    <span class="club-showcase-badge">Showcase Club</span>
+  {% endif %}
+  <div class="showcase-header-content">
+    {% if club.showcaseLogo %}
+      <img class="showcase-logo" src="{{ club.showcaseLogo }}" alt="{{ club.title }} Logo" style="max-width:120px;margin-bottom:1rem;">
+    {% endif %}
+    <h1 style="font-weight:700;margin-bottom:0.5rem;">{{ club.title }}</h1>
+    <div style="font-size:1.2rem;margin-bottom:0.5rem;">{{ club.city or club.state or club.quickFacts.location }}</div>
+    
+    <div class="breadcrumbs" style="display:flex;gap:0.5rem;margin-bottom:1rem;font-size:0.9rem;opacity:0.9;">
+      <a href="/" style="color:#fff;text-decoration:none;">Home</a>
+      <span style="color:#fff;">/</span>
+      <a href="/showcase/" style="color:#fff;text-decoration:none;">Showcase</a>
+      <span style="color:#fff;">/</span>
+      <span style="color:#fff;opacity:0.7;">{{ club.title }}</span>
+    </div>
+
+    <div class="showcase-social-links" style="margin-top:1rem;display:flex;gap:1rem;">
+      {% if club.facebook %}
+        <a href="{{ club.facebook }}" target="_blank" rel="noopener" aria-label="Facebook" style="color:#fff;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M22.675 0h-21.35C.597 0 0 .597 0 1.333v21.333C0 23.403.597 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.466.099 2.797.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.763v2.31h3.59l-.467 3.622h-3.123V24h6.116c.73 0 1.324-.597 1.324-1.334V1.333C24 .597 23.403 0 22.675 0z"/>
+          </svg>
+        </a>
+      {% endif %}
+      {% if club.instagram %}
+        <a href="{{ club.instagram }}" target="_blank" rel="noopener" aria-label="Instagram" style="color:#fff;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 2A3.75 3.75 0 004 7.75v8.5A3.75 3.75 0 007.75 20h8.5a3.75 3.75 0 003.75-3.75v-8.5A3.75 3.75 0 0016.25 4h-8.5zm8.75 1.5a1 1 0 110 2 1 1 0 010-2zM12 7a5 5 0 110 10 5 5 0 010-10zm0 2a3 3 0 100 6 3 3 0 000-6z"/>
+          </svg>
+        </a>
+      {% endif %}
+      {% if club.linkedin %}
+        <a href="{{ club.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn" style="color:#fff;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.354V9h3.414v1.561h.049c.476-.9 1.637-1.852 3.37-1.852 3.602 0 4.268 2.37 4.268 5.455v6.288zM5.337 7.433a2.07 2.07 0 11.001-4.139 2.07 2.07 0 01-.001 4.139zm1.777 13.019H3.56V9h3.554v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/>
+          </svg>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<div class="showcase-main container" style="margin-top:2rem;">
+  <div class="showcase-facts-about" style="display:flex;gap:2rem;flex-wrap:wrap;">
+    {% if club.quickFacts and (club.quickFacts.members or club.quickFacts.founded or club.quickFacts.notableMember or club.quickFacts.location) %}
+      <div class="showcase-quick-facts" style="flex:1;min-width:260px;">
+        <h2>Quick Facts</h2>
+        <ul style="list-style:none;padding:0;">
+        {% if club.marque %}
+            <li><strong>Marque:</strong> {{ club.marque }}</li>
+          {% endif %}
+          {% if club.quickFacts.members %}
+            <li><strong>Members:</strong> {{ club.quickFacts.members }}</li>
+          {% endif %}
+          {% if club.quickFacts.founded %}
+            <li><strong>Founded:</strong> {{ club.quickFacts.founded }}</li>
+          {% endif %}
+          {% if club.quickFacts.notableMember %}
+            <li><strong>Partnerships:</strong> {{ club.quickFacts.notableMember | safe}}</li>
+          {% endif %}
+          {% if club.quickFacts.location %}
+            <li><strong>Location:</strong> {{ club.quickFacts.location }}</li>
+          {% endif %}
+        </ul>
+      </div>
+    {% endif %}
+    {% if club.aboutExpanded %}
+      <div class="showcase-about-expanded" style="flex:2;min-width:320px;">
+       
+        {{ club.aboutExpanded | safe }}
+      </div>
+    {% endif %}
+    {% if club.clubEthos %}
+      <div class="showcase-about-expanded" style="flex:2;min-width:320px;">
+       <h2>Club Ethos</h2>
+        {{ club.clubEthos | safe }}
+      </div>
+    {% endif %}
+  </div>
+
+  {% if (club.quickFacts and (club.quickFacts.members or club.quickFacts.founded or club.quickFacts.notableMember or club.quickFacts.location)) or club.aboutExpanded %}
+    <hr style="margin:2rem 0;">
+  {% endif %}
+
+  {% if club.curatedEvents and club.curatedEvents.length %}
+    <div class="showcase-events-carousel" style="margin-bottom:2rem;">
+      <h2>Club Events</h2>
+      <div class="events-view-toggle" style="display:flex;gap:1rem;margin-bottom:1rem;">
+        <button id="carouselViewBtn" class="button button-primary active-view">Carousel View</button>
+        <button id="calendarViewBtn" class="button button-secondary">Calendar View</button>
+      </div>
+      
+      <div id="eventsCarouselView" class="events-carousel" style="display:flex;gap:1.5rem;overflow-x:auto;">
+        {% for event in club.curatedEvents %}
+          {% if club.eventsPageUrl %}
+            <a href="{{ club.eventsPageUrl }}" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:inherit;min-width:220px;">
+              <div class="event-card" style="min-width:220px;background:#f8f8f8;padding:1rem;border-radius:8px;transition:transform 0.2s ease, box-shadow 0.2s ease;height:100%;">
+                <h3 style="margin-top:0;">{{ event.title }}</h3>
+                <div style="font-size:0.95rem;color:#b77d00;">{{ event.date }} | {{ event.location }}</div>
+                <p style="margin:0.5rem 0 0 0;">{{ event.description }}</p>
+              </div>
+            </a>
+          {% else %}
+            <div class="event-card" style="min-width:220px;background:#f8f8f8;padding:1rem;border-radius:8px;">
+              <h3 style="margin-top:0;">{{ event.title }}</h3>
+              <div style="font-size:0.95rem;color:#b77d00;">{{ event.date }} | {{ event.location }}</div>
+              <p style="margin:0.5rem 0 0 0;">{{ event.description }}</p>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      
+      <div id="eventsCalendarView" style="display:none;">
+        <div class="calendar-controls" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+          <button id="prevMonth" class="button button-secondary" style="min-width:auto;padding:0.5rem 1rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+            </svg>
+          </button>
+          <h3 id="calendarTitle" style="margin:0;">May 2024</h3>
+          <button id="nextMonth" class="button button-secondary" style="min-width:auto;padding:0.5rem 1rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="calendar-grid">
+          <div id="calendar" style="display:grid;grid-template-columns:repeat(7,1fr);gap:0.5rem;">
+            <!-- Calendar cells will be generated by JavaScript -->
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if club.curatedEvents and club.curatedEvents.length %}
+    <hr style="margin:2rem 0;">
+  {% endif %}
+
+  {% if club.mediaGallery and club.mediaGallery.length %}
+    <div class="showcase-media-gallery" style="margin-bottom:2rem;">
+      <h2>Media Gallery</h2>
+      <div class="media-carousel" style="display:flex;gap:1.5rem;overflow-x:auto;">
+        {% for img in club.mediaGallery %}
+          <img src="{{ img }}" alt="{{ club.title }} Gallery image" style="max-height:350px;border-radius:8px;">
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if club.mediaGallery and club.mediaGallery.length %}
+    <hr style="margin:2rem 0;">
+  {% endif %}
+
+  {% if club.map %}
+    <div class="showcase-map" style="margin-bottom:2rem;">
+      <h2>Maps</h2>
+      <div>
+        <strong>Club HQ:</strong> {{ club.map.hq }}<br>
+        {% if club.map.venues and club.map.venues.length %}
+          <strong style="padding-top: 2px; padding-bottom: 2px; display: block;">Popular Venues:</strong>
+          <ul>
+            {% for venue in club.map.venues %}
+              <li>{{ venue.name }} ({{ venue.lat }}, {{ venue.lng }})</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+      {# Placeholder for actual map integration #}
+      <div id="showcase-map-container" style="height: 400px; margin-top: 1rem; border-radius: 8px;"></div>
+    </div>
+  {% endif %}
+
+  {% if club.map %}
+    <script>
+      function initMap() {
+        console.log('Initializing showcase map');
+        // Make sure Google Maps is loaded
+        if (!window.google || !window.google.maps) {
+          console.log('Google Maps not yet loaded for showcase, will initialize later');
+          return; // Exit if Google Maps isn't loaded yet - will be called by initAllMaps
+        }
+        
+        const mapData = {{ club.map | json | safe }};
+        if (!mapData) return;
+
+        const mapOptions = {
+          center: { lat: parseFloat(mapData.hqLat) || 0, lng: parseFloat(mapData.hqLng) || 0 }, // Use HQ coords or default
+          zoom: 12, // Default zoom level
+        };
+        
+        // Check if map container exists
+        const mapElement = document.getElementById("showcase-map-container");
+        if (!mapElement) {
+          console.error('Showcase map container not found');
+          return;
+        }
+
+        const map = new google.maps.Map(mapElement, mapOptions);
+
+        // Add HQ marker
+        if (mapData.hqLat && mapData.hqLng) {
+          new google.maps.Marker({
+            position: { lat: parseFloat(mapData.hqLat), lng: parseFloat(mapData.hqLng) },
+            map: map,
+            title: mapData.hq || 'Club HQ',
+          });
+        }
+
+        // Add venue markers
+        if (mapData.venues && mapData.venues.length) {
+          mapData.venues.forEach(venue => {
+            if (venue.lat && venue.lng) {
+              new google.maps.Marker({
+                position: { lat: parseFloat(venue.lat), lng: parseFloat(venue.lng) },
+                map: map,
+                title: venue.name || 'Venue',
+              });
+            }
+          });
+        }
+        
+        console.log('Showcase map initialized successfully');
+      }
+
+      // Try to initialize the map if Google Maps is already loaded
+      if (window.googleMapsLoaded && window.google && window.google.maps) {
+        setTimeout(initMap, 100); // Small delay to ensure DOM is ready
+      }
+    </script>
+    <hr style="margin:2rem 0;">
+  {% endif %}
+
+  {% if club.ctas and club.ctas.length %}
+    <div class="showcase-ctas" style="margin-bottom:2rem;">
+      <h2>Quick Links</h2>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+        {% for cta in club.ctas %}
+          {% if cta.url and cta.label %}
+             <a href="{{ cta.url }}" class="button button-primary" style="min-width:120px;text-align:center;" target="_blank" rel="noopener noreferrer">{{ cta.label }}</a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  {% if club.ctas and club.ctas.length %}
+    <hr style="margin:2rem 0;">
+  {% endif %}
+
+  {% set relatedShowcaseClubs = [] %}
+  {% for clubItem in clubs %} {# Iterate over global clubs data #}
+    {% if clubItem.showcase and clubItem.slug !== pagination.items[0].slug %} {# Access properties directly #}
+      {% set relatedShowcaseClubs = (relatedShowcaseClubs.push(clubItem), relatedShowcaseClubs) %}
+    {% endif %}
+  {% endfor %}
+
+  {% if relatedShowcaseClubs and relatedShowcaseClubs.length %}
+    <div class="showcase-related-clubs" style="margin-bottom:2rem;">
+      <h2>Related Showcase Clubs</h2>
+      <ul>
+        {% for relatedClub in relatedShowcaseClubs %}
+          <li><a href="/showcase/{{ relatedClub.slug | slugify }}/">{{ relatedClub.title }}</a></li>
+        {% endfor %}
+      </ul>
+      <div style="font-size:0.95rem;color:#888;margin-top:0.5rem;">
+        Promote discovery & add further value to Showcase clubs' premium status.
+      </div>
+    </div>
+  {% endif %}
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Toggle between carousel and calendar views
+      const carouselViewBtn = document.getElementById('carouselViewBtn');
+      const calendarViewBtn = document.getElementById('calendarViewBtn');
+      const eventsCarouselView = document.getElementById('eventsCarouselView');
+      const eventsCalendarView = document.getElementById('eventsCalendarView');
+      
+      // Create modal for event details
+      const eventModal = document.createElement('div');
+      eventModal.className = 'event-modal';
+      eventModal.innerHTML = `
+        <div class="event-modal-content">
+          <span class="close-modal">&times;</span>
+          <h3 class="event-modal-title"></h3>
+          <div class="event-modal-meta"></div>
+          <div class="event-modal-description"></div>
+        </div>
+      `;
+      document.body.appendChild(eventModal);
+      
+      // Modal functionality
+      const closeModal = eventModal.querySelector('.close-modal');
+      closeModal.addEventListener('click', function() {
+        eventModal.style.display = 'none';
+      });
+      
+      window.addEventListener('click', function(event) {
+        if (event.target === eventModal) {
+          eventModal.style.display = 'none';
+        }
+      });
+      
+      if (carouselViewBtn && calendarViewBtn) {
+        carouselViewBtn.addEventListener('click', function() {
+          eventsCarouselView.style.display = 'flex';
+          eventsCalendarView.style.display = 'none';
+          carouselViewBtn.classList.add('active-view');
+          carouselViewBtn.classList.remove('button-secondary');
+          carouselViewBtn.classList.add('button-primary');
+          calendarViewBtn.classList.remove('active-view');
+          calendarViewBtn.classList.remove('button-primary');
+          calendarViewBtn.classList.add('button-secondary');
+        });
+        
+        calendarViewBtn.addEventListener('click', function() {
+          eventsCarouselView.style.display = 'none';
+          eventsCalendarView.style.display = 'block';
+          calendarViewBtn.classList.add('active-view');
+          calendarViewBtn.classList.remove('button-secondary');
+          calendarViewBtn.classList.add('button-primary');
+          carouselViewBtn.classList.remove('active-view');
+          carouselViewBtn.classList.remove('button-primary');
+          carouselViewBtn.classList.add('button-secondary');
+        });
+      }
+      
+      // Calendar functionality
+      const calendar = document.getElementById('calendar');
+      const calendarTitle = document.getElementById('calendarTitle');
+      const prevMonthBtn = document.getElementById('prevMonth');
+      const nextMonthBtn = document.getElementById('nextMonth');
+      
+      if (!calendar || !calendarTitle || !prevMonthBtn || !nextMonthBtn) return;
+      
+      let currentDate = new Date();
+      let currentMonth = currentDate.getMonth();
+      let currentYear = currentDate.getFullYear();
+      
+      // Parse events from club data
+      const events = [];
+      {% if club.curatedEvents and club.curatedEvents.length %}
+        {% for event in club.curatedEvents %}
+          events.push({
+            title: "{{ event.title | safe }}",
+            date: "{{ event.date }}",
+            location: "{{ event.location }}",
+            description: "{{ event.description | safe }}"{% if club.eventsPageUrl %},
+            website: "{{ club.eventsPageUrl }}"{% endif %}
+          });
+        {% endfor %}
+      {% endif %}
+      
+      // Format events with proper Date objects
+      const formattedEvents = events.map(event => {
+        // Try to parse the date from the event.date string
+        let eventDate;
+        // Support various date formats
+        if (event.date.includes('/')) {
+          // Format: MM/DD/YYYY or DD/MM/YYYY
+          const parts = event.date.split('/');
+          if (parts.length === 3) {
+            // Assume MM/DD/YYYY for US format
+            eventDate = new Date(parts[2], parts[0]-1, parts[1]);
+          }
+        } else if (event.date.includes('-')) {
+          // ISO format: YYYY-MM-DD
+          eventDate = new Date(event.date);
+        } else {
+          // Try to parse natural language dates
+          const monthNames = ["January", "February", "March", "April", "May", "June", 
+                             "July", "August", "September", "October", "November", "December"];
+          
+          const dateParts = event.date.split(' ');
+          if (dateParts.length >= 2) {
+            const monthIndex = monthNames.findIndex(m => 
+              event.date.toLowerCase().includes(m.toLowerCase())
+            );
+            
+            if (monthIndex !== -1) {
+              // Extract day if possible
+              const dayMatch = event.date.match(/\b(\d{1,2})(st|nd|rd|th)?\b/);
+              const day = dayMatch ? parseInt(dayMatch[1]) : 1;
+              
+              // Extract year if possible, otherwise use current year
+              const yearMatch = event.date.match(/\b(20\d{2})\b/);
+              const year = yearMatch ? parseInt(yearMatch[1]) : currentYear;
+              
+              eventDate = new Date(year, monthIndex, day);
+            }
+          }
+        }
+        
+        // If we couldn't parse the date, default to today
+        if (!eventDate || isNaN(eventDate.getTime())) {
+          eventDate = new Date();
+        }
+        
+        return {
+          ...event,
+          parsedDate: eventDate
+        };
+      });
+      
+      function renderCalendar() {
+        // Clear previous calendar
+        calendar.innerHTML = '';
+        
+        // Update header
+        const monthNames = ["January", "February", "March", "April", "May", "June", 
+                           "July", "August", "September", "October", "November", "December"];
+        calendarTitle.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+        
+        // Add day headers
+        const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        dayNames.forEach(day => {
+          const dayHeader = document.createElement('div');
+          dayHeader.className = 'calendar-day-header';
+          dayHeader.textContent = day;
+          dayHeader.style.fontWeight = 'bold';
+          dayHeader.style.textAlign = 'center';
+          dayHeader.style.padding = '0.5rem';
+          dayHeader.style.background = '#f5f5f5';
+          calendar.appendChild(dayHeader);
+        });
+        
+        // Get first day of month and last day of month
+        const firstDay = new Date(currentYear, currentMonth, 1);
+        const lastDay = new Date(currentYear, currentMonth + 1, 0);
+        
+        // Add empty cells for days before the first day of the month
+        for (let i = 0; i < firstDay.getDay(); i++) {
+          const emptyCell = document.createElement('div');
+          emptyCell.className = 'calendar-day empty';
+          emptyCell.style.minHeight = '80px';
+          emptyCell.style.background = '#f9f9f9';
+          emptyCell.style.border = '1px solid #eee';
+          calendar.appendChild(emptyCell);
+        }
+        
+        // Add cells for each day of the month
+        for (let day = 1; day <= lastDay.getDate(); day++) {
+          const cell = document.createElement('div');
+          cell.className = 'calendar-day';
+          cell.style.minHeight = '80px';
+          cell.style.border = '1px solid #eee';
+          cell.style.padding = '0.5rem';
+          cell.style.position = 'relative';
+          
+          // Add day number
+          const dayNumber = document.createElement('div');
+          dayNumber.className = 'day-number';
+          dayNumber.textContent = day;
+          dayNumber.style.fontSize = '1rem';
+          dayNumber.style.fontWeight = 'bold';
+          dayNumber.style.marginBottom = '0.5rem';
+          cell.appendChild(dayNumber);
+          
+          // Check if there are events on this day
+          const dayEvents = formattedEvents.filter(event => {
+            return event.parsedDate.getDate() === day && 
+                   event.parsedDate.getMonth() === currentMonth && 
+                   event.parsedDate.getFullYear() === currentYear;
+          });
+          
+          // Add events to the cell
+          if (dayEvents.length > 0) {
+            cell.style.background = '#f0f7f0';
+            
+            dayEvents.forEach(event => {
+              const eventEl = document.createElement('div');
+              eventEl.className = 'calendar-event';
+              eventEl.textContent = event.title;
+              eventEl.style.fontSize = '0.8rem';
+              eventEl.style.padding = '0.25rem 0.5rem';
+              eventEl.style.marginBottom = '0.25rem';
+              eventEl.style.background = 'var(--button-colour)';
+              eventEl.style.color = 'white';
+              eventEl.style.borderRadius = '3px';
+              eventEl.style.overflow = 'hidden';
+              eventEl.style.textOverflow = 'ellipsis';
+              eventEl.style.whiteSpace = 'nowrap';
+              
+              // Create tooltip with event details
+              eventEl.title = `${event.title} | ${event.date} | ${event.location}`;
+              
+              // Add click functionality to show event details
+              eventEl.style.cursor = 'pointer';
+              eventEl.addEventListener('click', function() {
+                // Update and show modal instead of alert
+                const modalTitle = eventModal.querySelector('.event-modal-title');
+                const modalMeta = eventModal.querySelector('.event-modal-meta');
+                const modalDescription = eventModal.querySelector('.event-modal-description');
+                
+                modalTitle.textContent = event.title;
+                modalMeta.innerHTML = `<strong>Date:</strong> ${event.date} | <strong>Location:</strong> ${event.location}`;
+                modalDescription.innerHTML = event.description;
+                
+                // Add "Visit Club Events Page" button if website URL is available
+                if (event.website) {
+                  // Create a container div for the button with proper spacing
+                  const buttonContainer = document.createElement('div');
+                  buttonContainer.style.marginTop = "30px";
+                  buttonContainer.style.textAlign = "center";
+                  
+                  // Create the button
+                  const websiteButton = document.createElement('a');
+                  websiteButton.href = event.website;
+                  websiteButton.target = "_blank";
+                  websiteButton.rel = "noopener noreferrer";
+                  websiteButton.className = "button button-primary";
+                  websiteButton.style.display = "inline-block";
+                  websiteButton.style.padding = "12px 25px";
+                  websiteButton.style.fontSize = "16px";
+                  websiteButton.style.textTransform = "uppercase";
+                  websiteButton.style.fontWeight = "bold";
+                  websiteButton.textContent = "Visit Club Events Page";
+                  
+                  // Add the button to the container
+                  buttonContainer.appendChild(websiteButton);
+                  modalDescription.appendChild(buttonContainer);
+                }
+                
+                eventModal.style.display = 'block';
+              });
+              
+              cell.appendChild(eventEl);
+            });
+          }
+          
+          calendar.appendChild(cell);
+        }
+        
+        // Add empty cells for days after the last day of the month
+        const totalCells = firstDay.getDay() + lastDay.getDate();
+        const remainingCells = 7 - (totalCells % 7);
+        if (remainingCells < 7) {
+          for (let i = 0; i < remainingCells; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.className = 'calendar-day empty';
+            emptyCell.style.minHeight = '80px';
+            emptyCell.style.background = '#f9f9f9';
+            emptyCell.style.border = '1px solid #eee';
+            calendar.appendChild(emptyCell);
+          }
+        }
+      }
+      
+      // Navigation between months
+      prevMonthBtn.addEventListener('click', function() {
+        currentMonth--;
+        if (currentMonth < 0) {
+          currentMonth = 11;
+          currentYear--;
+        }
+        renderCalendar();
+      });
+      
+      nextMonthBtn.addEventListener('click', function() {
+        currentMonth++;
+        if (currentMonth > 11) {
+          currentMonth = 0;
+          currentYear++;
+        }
+        renderCalendar();
+      });
+      
+      // Initial render
+      renderCalendar();
+    });
+  </script>
+</div>

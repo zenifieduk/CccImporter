@@ -1,0 +1,18 @@
+---
+permalink: debug-collections/index.html
+eleventyExcludeFromCollections: true
+---
+
+<h1>Collections.all</h1>
+
+<ul>
+{% for page in collections.all %}
+  <li>
+    {{ page.url }} — 
+    {{ page.inputPath }}
+    {% if page.data.sitemap and page.data.sitemap.exclude %}
+      (excluded)
+    {% endif %}
+  </li>
+{% endfor %}
+</ul>

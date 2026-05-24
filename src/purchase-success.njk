@@ -1,0 +1,40 @@
+---
+layout: layouts/page.njk
+title: Subscription Success
+description: Thank you for your subscription with Classic Car Clubs UK.
+eleventyComputed:
+  purchaseType: "{{ query.type }}"
+  sessionId: "{{ query.session_id }}"
+---
+
+<div style="width: 100%; display: flex; flex-direction: column; align-items: center; padding: 4rem 1rem; max-width: 100%;">
+  <h1 style="font-size: 3rem; margin-bottom: 2rem; text-align: center; color: #1b5e20; font-weight: bold;">Thank you!</h1>
+  
+  <div style="background-color: #ffffff; border: 2px solid #e0e0e0; border-radius: 8px; padding: 3rem; text-align: center; width: 100%; max-width: 600px; margin: 0 auto;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#1b5e20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 1.5rem auto; display: block;">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    
+    <h2 style="text-align: center; margin-bottom: 1.5rem; color: #444;">Subscription Confirmed</h2>
+    
+    {% if purchaseType == 'featured' %}
+      <p style="font-size: 1.2rem; margin-bottom: 2rem; text-align: center; line-height: 1.5;">
+        Thank you for subscribing to a Featured listing! We'll be in touch shortly to help you set up your enhanced club profile.
+      </p>
+    {% elseif purchaseType == 'showcase' %}
+      <p style="font-size: 1.2rem; margin-bottom: 2rem; text-align: center; line-height: 1.5;">
+        Thank you for subscribing to a Showcase listing! Our team will contact you within 24 hours to begin curating your premium club profile.
+      </p>
+    {% else %}
+      <p style="font-size: 1.2rem; margin-bottom: 2rem; text-align: center; line-height: 1.5;">
+        Thank you for your subscription! We'll be in touch shortly to help you with your listing.
+      </p>
+    {% endif %}
+    
+    <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+      <a href="/" class="button" style="min-width: 160px;">Return to Home</a>
+      <a href="/club-directory/" class="button button-secondary" style="min-width: 160px;">Explore Car Clubs</a>
+    </div>
+  </div>
+</div> 

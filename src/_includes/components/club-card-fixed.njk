@@ -1,15 +1,29 @@
-{% if club.featured %}
+{% if club.featured or club.showcase %}
 <div class="club-card featured-club-card">
-  <div class="club-featured">Featured</div>
-  
+  {% if club.showcase %}
+    <div class="club-showcase-badge">Showcased</div>
+  {% elseif club.featured %}
+    <div class="club-featured">Featured</div>
+  {% endif %}
+
   <div class="club-image">
+    {# Generate conditional URL #}
+    {% set clubUrl = "/club-directory/" ~ (club.slug | slugify) ~ "/" %}
+    {% if club.showcase %}
+      {% set clubUrl = "/showcase/" ~ (club.slug | slugify) ~ "/" %}
+    {% endif %}
+    
     {% if club.imageUrl %}
-      <img src="{{ club.imageUrl }}" alt="{{ club.title }}">
+      <a href="{{ clubUrl }}" aria-label="View details for {{ club.title }}">
+        <img src="{{ club.imageUrl }}" alt="{{ club.title }}">
+      </a>
     {% else %}
-      <img src="/assets/images/club-placeholder.jpg" alt="{{ club.title }}">
+      <a href="{{ clubUrl }}" aria-label="View details for {{ club.title }}">
+        <img src="/assets/images/club-placeholder.jpg" alt="{{ club.title }}">
+      </a>
     {% endif %}
   </div>
-  
+
   <div class="club-content">
     <h3 class="club-title">{{ club.title }}</h3>
     
@@ -36,7 +50,8 @@
   </div>
   
   <div class="club-actions">
-    <a href="/club-directory/{{ club.slug | slugify }}/" class="button button-primary">View Details</a>
+    {# Use the same conditional URL for the button #}
+    <a href="{{ clubUrl }}" class="button button-primary">View Details</a>
     {% if club.website %}
      <!-- <a href="{{ club.website }}" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
     {% endif %}
@@ -70,7 +85,7 @@
   </div>
   
   <div class="club-actions">
-    <a href="/club-directory/{{ club.slug | slugify }}/" class="button button-primary">View Details</a>
+    <a href="{{ baseUrl | default('/club-directory/') }}{{ club.slug | slugify }}/" class="button button-primary">View Details</a>
     {% if club.website %}
      <!-- <a href="{{ club.website }}" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
     {% endif %}

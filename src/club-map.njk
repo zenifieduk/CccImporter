@@ -1,0 +1,229 @@
+---
+layout: layouts/base.njk
+title: UK Classic Car and Motorcycle Clubs Map
+description: Find classic car and motorcycle clubs across the UK on our interactive map
+permalink: /club-map/
+eleventyNavigation:
+  key: Club Map
+  order: 5
+---
+
+<div class="container mx-auto px-4 py-8 mt-8" style="padding-top:40px">
+  <h1 class="text-3xl font-bold mb-4">UK Classic Car & Motorcycle Clubs Map</h1>
+  <p class="mb-6">Browse classic vehicle clubs across the UK. Click on clusters to zoom in and see individual clubs, or click on markers to view club details.</p>
+  
+  <div class="search-container mb-6">
+    <form class="search-form">
+      <div class="search-grid">
+        <div class="custom-search-group">
+          <label for="categoryFilter">Category</label>
+          <div class="input-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+            <select id="categoryFilter" class="custom-search-input">
+              <option value="">All Categories</option>
+              <!-- Categories will be populated by JS -->
+            </select>
+          </div>
+        </div>
+
+        <div class="custom-search-group">
+          <label for="statusFilter">Listing Type</label>
+          <div class="input-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+            </svg>
+            <select id="statusFilter" class="custom-search-input">
+              <option value="">All Clubs</option>
+              <option value="true">Featured or Showcase</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="custom-search-group">
+          <label for="searchBox">Club Name or City</label>
+          <div class="input-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="input-icon">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="searchBox" class="custom-search-input" placeholder="Enter club name or city...">
+          </div>
+        </div>
+        <!-- Note: Search/Reset buttons from the component are omitted for now -->
+      </div>
+    </form>
+  </div>
+
+  <div id="clubMap" style="width: 100%; height: 600px; border: 1px solid #ccc; background-color: #f8f8f8;" class="rounded-lg shadow-lg mb-6"></div>
+  
+  <div class="bg-gray-100 p-4 rounded-lg mb-6">
+    <h2 class="text-xl font-semibold mb-2" style="Padding-top:40px;">About This Map</h2>
+    <p id="mapClubCount">This map displays the locations of {{ clubs.length }} classic car and motorcycle clubs across the United Kingdom. Clubs are grouped into clusters when zoomed out to improve visibility.</p>
+    <p class="mt-2">Can't find what you're looking for? <a href="/club-directory/" class="text-blue-600 hover:underline">Browse our complete club directory</a>.</p>
+  </div>
+</div>
+
+<!-- Load Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+<!-- Load MarkerCluster CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+
+<!-- Load Leaflet and MarkerCluster JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    console.log('Map initialization starting...');
+    
+    const map = L.map('clubMap').setView([54.5, -3.5], 6);
+    console.log('Map created');
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+    }).addTo(map);
+    console.log('Map tiles added');
+    
+    const markers = L.markerClusterGroup({
+      chunkedLoading: true,
+      maxClusterRadius: 50,
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false
+    });
+    map.addLayer(markers); // Add the cluster group to the map once
+
+    let allClubsData = []; // To store all clubs with valid coordinates
+    const categoryFilterEl = document.getElementById('categoryFilter');
+    const statusFilterEl = document.getElementById('statusFilter'); // Renamed from featuredFilterEl
+    const searchBoxEl = document.getElementById('searchBox');
+    const clubCountEl = document.getElementById('mapClubCount');
+
+    function populateCategoryFilter(clubs) {
+      const categories = [...new Set(clubs.map(club => club.category).filter(Boolean))].sort();
+      categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categoryFilterEl.appendChild(option);
+      });
+    }
+
+    function applyFiltersAndSearch() {
+      const selectedCategory = categoryFilterEl.value;
+      const selectedStatus = statusFilterEl.value; // "true" or ""
+      const searchTerm = searchBoxEl.value.toLowerCase().trim();
+
+      // Diagnostic log
+      const countFeaturedInAllClubsData = allClubsData.filter(c => c.featured === true).length;
+      const countShowcaseInAllClubsData = allClubsData.filter(c => c.showcase === true).length;
+      const countFeaturedOrShowcaseInAllClubsData = allClubsData.filter(c => c.featured === true || c.showcase === true).length;
+      console.log(`DEBUG: Clubs with coords: Featured=${countFeaturedInAllClubsData}, Showcase=${countShowcaseInAllClubsData}, FeaturedOrShowcase=${countFeaturedOrShowcaseInAllClubsData}`);
+
+      let filteredClubs = allClubsData.filter(club => {
+        if (selectedCategory && club.category !== selectedCategory) {
+          return false;
+        }
+        if (selectedStatus === 'true') { // Check for "Featured or Showcase"
+          if (!(club.featured === true || club.showcase === true)) {
+            return false;
+          }
+        }
+        if (searchTerm) {
+          const inTitle = club.title && club.title.toLowerCase().includes(searchTerm);
+          const inCity = club.city && club.city.toLowerCase().includes(searchTerm);
+          if (!inTitle && !inCity) {
+            return false;
+          }
+        }
+        return true;
+      });
+
+      markers.clearLayers();
+
+      filteredClubs.forEach(club => {
+        const popupContent = `
+          <div class="club-popup">
+            <h3 class="font-bold text-lg">${club.title}</h3>
+            <p class="text-sm">${club.category || ''}</p>
+            ${club.city ? `<p class="text-sm">${club.city}${club.state ? ', ' + club.state : ''}</p>` : ''}
+            ${club.website ? `<a href="${club.website}" class="text-blue-600 hover:underline text-sm" target="_blank" rel="noopener noreferrer">Visit Website</a>` : ''}
+            <a href="/club-directory/${club.slug}/" class="text-blue-600 hover:underline text-sm block mt-1">View Club Details</a>
+          </div>
+        `;
+        const marker = L.marker([club.lat, club.lng]).bindPopup(popupContent);
+        markers.addLayer(marker);
+      });
+      
+      if (clubCountEl) {
+        clubCountEl.textContent = `Displaying ${filteredClubs.length} Classic Vehicle Clubs with coordinates. `;
+      }
+      console.log(`Displayed ${filteredClubs.length} clubs after filtering/searching. Total with coords: ${allClubsData.length}`);
+    }
+
+    fetch('/clubs.json')
+      .then(response => response.json())
+      .then(clubs => {
+        const allFetchedClubs = clubs; // All clubs from JSON
+        allClubsData = allFetchedClubs.filter(club =>
+          club.lat && club.lng &&
+          !isNaN(parseFloat(club.lat)) && !isNaN(parseFloat(club.lng))
+        );
+
+        // --- Enhanced Diagnostic Logging ---
+        const featuredInFetched = allFetchedClubs.filter(c => c.featured === true).map(c => c.title);
+        console.log(`DEBUG: Titles of ALL featured clubs in clubs.json (${featuredInFetched.length}):`, featuredInFetched);
+
+        const featuredWithCoords = allClubsData.filter(c => c.featured === true).map(c => c.title);
+        console.log(`DEBUG: Titles of featured clubs WITH VALID COORDINATES (${featuredWithCoords.length}):`, featuredWithCoords);
+
+        const featuredMissingCoords = featuredInFetched.filter(title => !featuredWithCoords.includes(title));
+        if (featuredMissingCoords.length > 0) {
+          console.warn(`DEBUG: Titles of featured clubs MISSING COORDINATES (${featuredMissingCoords.length}):`, featuredMissingCoords);
+        } else {
+          console.log("DEBUG: All featured clubs have coordinates.");
+        }
+        // --- End Enhanced Diagnostic Logging ---
+        
+        populateCategoryFilter(allClubsData);
+        applyFiltersAndSearch(); // Initial display
+
+        categoryFilterEl.addEventListener('change', applyFiltersAndSearch);
+        statusFilterEl.addEventListener('change', applyFiltersAndSearch); // Renamed from featuredFilterEl
+        searchBoxEl.addEventListener('input', applyFiltersAndSearch);
+        
+        console.log(`Loaded ${allClubsData.length} clubs with valid coordinates out of ${allFetchedClubs.length} total.`);
+      })
+      .catch(error => {
+        console.error('Error loading club data:', error);
+        if (clubCountEl) {
+            clubCountEl.textContent = 'Error loading map data.';
+        }
+        document.getElementById('clubMap').innerHTML = '<div class="p-4 bg-red-100 text-red-700 rounded">Error loading map data. Please try again later.</div>';
+      });
+  });
+</script>
+
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-container">
+      <h2 class="cta-title">Can't find your club?</h2>
+      <p class="cta-text">If you run or know of a classic car club that's not listed in our directory, we'd love to include it.</p>
+      <a href="/pricing/" class="button button-primary cta-button">Submit Your Club</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .leaflet-popup-content {
+    min-width: 200px;
+  }
+  .club-popup h3 {
+    margin-bottom: 4px;
+  }
+</style> 

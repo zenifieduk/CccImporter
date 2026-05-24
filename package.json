@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": ".eleventy.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "eleventy --serve"
   },
   "keywords": [],
   "author": "",
@@ -12,12 +13,25 @@
   "dependencies": {
     "@11ty/eleventy": "^3.0.0",
     "@11ty/eleventy-img": "^6.0.1",
+    "@fullcalendar/core": "^6.1.14",
+    "@fullcalendar/daygrid": "^6.1.14",
     "@sendgrid/mail": "^8.1.4",
     "alpinejs": "^3.14.9",
+    "axios": "^1.9.0",
     "body-parser": "^2.2.0",
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.5.0",
     "express": "^4.21.2",
+    "jsdom": "^26.1.0",
     "luxon": "^3.6.0",
     "nunjucks": "^3.2.4",
     "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "@11ty/eleventy-plugin-rss": "^2.0.3",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^5.0.0",
+    "esbuild": "^0.25.3",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0"
   }
 }

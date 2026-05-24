@@ -9,15 +9,35 @@
     <nav class="desktop-nav">
       <ul>
         {% for item in site.navigation %}
-          <li>
-            <a href="{{ item.url }}" {% if page.url === item.url %}aria-current="page"{% endif %}>
-              {{ item.label }}
-            </a>
+          <li {% if item.children %}class="has-dropdown"{% endif %}>
+            {% if item.children %}
+              <a href="{{ item.url }}" class="dropdown-toggle">
+                {{ item.label }} <span class="dropdown-arrow">▼</span>
+              </a>
+              <div class="dropdown-menu">
+                {% if item.url %}
+                  <a href="{{ item.url | url }}" {% if page.url === item.url %}aria-current="page"{% endif %}>
+                    All {{ item.label }}
+                  </a>
+                {% endif %}
+                {% for child in item.children %}
+                  <a href="{{ child.url }}" {% if page.url === child.url %}aria-current="page"{% endif %}>
+                    {{ child.label }}
+                  </a>
+                {% endfor %}
+              </div>
+            {% else %}
+              <a href="{{ item.url }}" {% if page.url === item.url %}aria-current="page"{% endif %}>
+                {{ item.label }}
+              </a>
+            {% endif %}
           </li>
         {% endfor %}
       </ul>
     </nav>
     
+    <a href="/pricing/" class="button button-primary header-cta-button desktop-only">Submit Your Club</a>
+
     <button class="mobile-menu-toggle" @click="toggle" aria-label="Toggle menu">
       <span class="hamburger-icon">
         <span class="bar"></span>
@@ -47,15 +67,56 @@
         <nav class="mobile-nav">
           <ul>
             {% for item in site.navigation %}
+              <li x-data="{ mobileDropdownOpen: false }">
+                {% if item.children %}
+                  <a href="javascript:void(0)" class="has-dropdown mobile-dropdown-toggle" @click="mobileDropdownOpen = !mobileDropdownOpen">
+                    {{ item.label }}
+                    <svg class="arrow-icon" :class="{ 'rotate': mobileDropdownOpen }" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </a>
+                  <div class="mobile-dropdown-menu" x-show="mobileDropdownOpen" x-cloak>
+                    {% if item.label == 'Auctions' %}
+                      <a href="{{ item.url }}" @click="close">
+                        All Auctions
+                        <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                          <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                      </a>
+                    {% endif %}
+                    {% for child in item.children %}
+                      <a href="{{ child.url }}" @click="close" {% if page.url === child.url %}aria-current="page"{% endif %}>
+                        {{ child.label }}
+                        <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                          <line x1="5" y1="12" x2="19" y2="12"></line>
+                          <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                      </a>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  <a href="{{ item.url }}" @click="close" {% if page.url === item.url %}aria-current="page"{% endif %}>
+                    {{ item.label }}
+                    <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </a>
+                {% endif %}
+              </li>
+              {% if item.label == 'Club Directory' %}
               <li>
-                <a href="{{ item.url }}" @click="close" {% if page.url === item.url %}aria-current="page"{% endif %}>
-                  {{ item.label }}
+                <a href="/pricing/" @click="close">
+                  Submit Your Club
                   <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                     <polyline points="12 5 19 12 12 19"></polyline>
                   </svg>
                 </a>
               </li>
+              {% endif %}
             {% endfor %}
           </ul>
         </nav>

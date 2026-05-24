@@ -1,0 +1,750 @@
+---
+layout: layouts/page.njk
+pagination:
+  data: auctions
+  size: 1
+  alias: auction
+permalink: "auctions/{{ auction.auctionSlug }}/"
+loadGoogleMaps: true
+eleventyComputed:
+  title: "{{ auction.auctionTitle }}"
+  description: "Information about {{ auction.auctionTitle }}, including date, location, auction house, and more."
+  featuredImage: "{{ auction.auctionImageUrl }}"
+---
+
+{% set breadcrumbs = [
+  { url: '/auctions/', label: 'Auctions' },
+  { url: '/auctions/' + auction.auctionSlug + '/', label: auction.auctionTitle }
+] %}
+
+<div class="detail-header">
+  <div class="container">
+    <div class="breadcrumbs-container">
+      <ul class="breadcrumbs">
+        <li><a href="/">Home</a></li>
+        {% for crumb in breadcrumbs %}
+          <li><a href="{{ crumb.url }}">{{ crumb.label }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    
+    <h1 class="detail-title">{{ auction.auctionTitle }}</h1>
+    
+    {# <div class="detail-meta" x-data="eventDisplay">
+      <div class="detail-meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        {% if auction.auctionStartDateTime %}
+          <span style="padding-right:4px;" x-text="formatDay(auction.auctionStartDateTime)"> </span>
+          <span style="padding-right:4px;" x-text="formatMonth(auction.auctionStartDateTime)"> </span>
+          <span>{{ auction.auctionStartDateTime | substring(4, 8) }}</span>
+          <span style="padding-left:4px;" x-text="formatTime(auction.auctionStartDateTime)"></span>
+        {% else %}
+          Date TBD
+        {% endif %}
+      </div>
+      
+      {% if auction.auctionCity or auction.auctionState %}
+        <div class="detail-meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          {% if auction.auctionCity %}{{ auction.auctionCity }}{% endif %}
+          {% if auction.auctionCity and auction.auctionState %}, {% endif %}
+          {% if auction.auctionState %}{{ auction.auctionState }}{% endif %}
+          {% if auction.auctionHouse %}
+            <span style="opacity: 0.85; margin-left: 4px;">({{ auction.auctionHouse }})</span>
+          {% endif %}
+        </div>
+      {% elif auction.auctionHouse %}
+        <div class="detail-meta-item">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          <a href="/auction-houses/{% if auction.auctionHouse == "H&H Classics" %}h-and-h-classics{% else %}{{ auction.auctionHouse | slugify }}{% endif %}/">{{ auction.auctionHouse }}</a>
+        </div>
+      {% endif %}
+    </div> #}
+  </div>
+</div>
+
+<div class="detail-content">
+  <div class="detail-main">
+    {% if auction.auctionHouse %}
+      <div class="auction-gallery" style="margin: 2rem 0; text-align: center;" x-data="{
+        getAuctionHouseLogo(auctionHouseName) {
+          if (!auctionHouseName) {
+            return '/assets/images/auction-houses/auction-house-hero.avif';
+          }
+          
+          const auctionHouseLogos = {
+            'Anglia Car Auctions': 'anglia-car-auctions-logo.avif',
+            'Brightwells': 'brightwells-auctions-logo.avif',
+            'H&H Classics': 'h-and-h-classics-logo.avif',
+            'Manor Park Classics': 'manor-park-classics-logo.avif',
+            'Mathewsons': 'mathewsons-auction-house-logo.avif',
+            'Car & Classic': 'car-and-classic-logo.avif',
+            'Morris Leslie': 'morris-leslie-logo.avif',
+            'Humbert & Ellis': 'humbert-ellis-logo.avif',
+            'Historics': 'historics-logo.avif',
+            'Hampson Marketplace': 'hampson-marketplace-logo.avif',
+            'Ewbank\'s': 'ewbanks-logo.avif',
+            'Ewbanks': 'ewbanks-logo.avif',
+            'DVCA': 'dvca-logo.avif',
+            'Classic Car Auctions': 'classic-car-auctions-logo.avif',
+            'Charterhouse': 'charterhouse-auctions-logo.avif',
+            'Dore & Rees': 'dore-and-rees-logo.avif',
+            'Iconic Auctioneers': 'auction-house-hero.avif'
+          };
+          
+          const logoFilename = auctionHouseLogos[auctionHouseName];
+          
+          if (logoFilename) {
+            return `/assets/images/auction-houses/${logoFilename}`;
+          }
+          
+          return '/assets/images/auction-houses/auction-house-hero.avif';
+        }
+      }">
+        <img :src="getAuctionHouseLogo('{{ auction.auctionHouse }}')" alt="{{ auction.auctionHouse }} Logo" style="max-width: 400px; max-height: 200px; object-fit: contain; border-radius: 8px;">
+      </div>
+    {% endif %}
+    
+    <div class="auction-details">
+      <h2>Auction Details</h2>
+      
+      {% if auction.auctionCategory %}
+        <div style="margin-top: 1.5rem;">
+          <h3>Auction Category</h3>
+          <div class="club-category">
+            <a href="/auctions/?category={{ auction.auctionCategory | urlencode }}" class="category-tag">{{ auction.auctionCategory }}</a>
+          </div>
+        </div>
+      {% endif %}
+
+      {% if auction.auctionHouse %}
+        <div style="margin-top: 1.5rem;">
+          <h3>Auction House</h3>
+          <p><a href="/auction-houses/{% if auction.auctionHouse == "H&H Classics" %}h-and-h-classics{% else %}{{ auction.auctionHouse | slugify }}{% endif %}/">{{ auction.auctionHouse }}</a></p>
+        </div>
+      {% endif %}
+      
+      <div style="margin-top: 1.5rem;">
+        <h3>Date and Time</h3>
+        <p>
+          {% if auction.auctionStartDateTime %}
+            {{ auction.auctionStartDateTime | substring(0, 2) }} 
+            {% if auction.auctionStartDateTime | substring(2, 4) == "01" %}January
+            {% elif auction.auctionStartDateTime | substring(2, 4) == "02" %}February
+            {% elif auction.auctionStartDateTime | substring(2, 4) == "03" %}March
+            {% elif auction.auctionStartDateTime | substring(2, 4) == "04" %}April
+            {% elif auction.auctionStartDateTime | substring(2, 4) == "05" %}May
+            {% elif auction.auctionStartDateTime | substring(2, 4) == "06" %}June
+            {% elif auction.auctionStartDateTime | substring(2, 4) == "07" %}July
+            {% elif auction.auctionStartDateTime | substring(2, 4) == "08" %}August
+            {% elif auction.auctionStartDateTime | substring(2, 4) == "09" %}September
+            {% elif auction.auctionStartDateTime | substring(2, 4) == "10" %}October
+            {% elif auction.auctionStartDateTime | substring(2, 4) == "11" %}November
+            {% elif auction.auctionStartDateTime | substring(2, 4) == "12" %}December
+            {% endif %}
+            {{ auction.auctionStartDateTime | substring(4, 8) }} at 
+            {{ auction.auctionStartDateTime | substring(9, 11) }}:{{ auction.auctionStartDateTime | substring(12, 14) }}
+          {% else %}
+            Date and time to be announced
+          {% endif %}
+        </p>
+      </div>
+      
+      {% if auction.auctionHighlightsHtml %}
+        <div style="margin-top: 1.5rem;">
+          <h3>Featured Lots</h3>
+          <p>{{ auction.auctionHighlightsHtml | safe }}</p>
+        </div>
+      {% elif auction.auctionHighlights %}
+        <div style="margin-top: 1.5rem;">
+          <h3>Featured Lots</h3>
+          <p>{{ auction.auctionHighlights }}</p>
+        </div>
+      {% endif %}
+      
+      {% if auction.auctionHouse %}
+        {% set currentAuctionHouseName = auction.auctionHouse %}
+        {% set houseData = null %}
+        {% for ah in auctionHouses %}
+          {% if ah.name == currentAuctionHouseName %}
+            {% set houseData = ah %}
+          {% endif %}
+        {% endfor %}
+
+        {% if houseData and houseData.description %}
+          <div style="margin-top: 1.5rem;">
+            <h3>About {{ houseData.name }}</h3>
+            <p>{{ houseData.description | safe }}</p>
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+  
+  <div class="detail-sidebar">
+    <div class="detail-sidebar-section">
+      <h3 class="detail-sidebar-title">Location</h3>
+      <p>{{ auction.auctionAddress }}</p>
+      <div id="auction-map" style="height: 300px; background-color: #eee; border-radius: 8px; margin-bottom: 1rem;"></div>
+      <a href="https://maps.google.com/?q={{ auction.auctionAddress | urlencode }}" target="_blank" rel="noopener" class="button button-secondary" style="width: 100%; text-align: center;">Get Directions</a>
+    </div>
+    
+    <div class="detail-sidebar-section">
+      <h3 class="detail-sidebar-title">Add to Calendar</h3>
+      <div class="calendar-buttons" x-data="calendarData()" x-init="init()">
+        <div class="calendar-dropdown" style="position: relative;">
+          <button @click="showDropdown = !showDropdown" class="button button-secondary" style="width: 100%; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+            Add to Calendar
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" :style="'transform: rotate(' + (showDropdown ? '180deg' : '0deg') + ')'">
+              <polyline points="6,9 12,15 18,9"></polyline>
+            </svg>
+          </button>
+          
+          <div x-show="showDropdown" x-transition class="calendar-dropdown-menu" style="position: absolute; top: 100%; left: 0; right: 0; background: white; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); z-index: 1000; margin-top: 4px;">
+            <a :href="googleCalendarUrl" target="_blank" rel="noopener" class="calendar-option" style="display: flex; align-items: center; padding: 12px 16px; text-decoration: none; color: #333; border-bottom: 1px solid #eee;">
+              <svg width="20" height="20" viewBox="0 0 24 24" style="margin-right: 12px; flex-shrink: 0;">
+                <rect x="3" y="4" width="18" height="16" rx="2" ry="2" fill="#fff" stroke="#dadce0" stroke-width="1"/>
+                <rect x="3" y="4" width="18" height="4" rx="2" ry="2" fill="#4285f4"/>
+                <circle cx="7" cy="6" r="0.5" fill="#fff"/>
+                <circle cx="12" cy="6" r="0.5" fill="#fff"/>
+                <circle cx="17" cy="6" r="0.5" fill="#fff"/>
+                <rect x="6" y="10" width="2" height="1.5" fill="#dadce0"/>
+                <rect x="10" y="10" width="2" height="1.5" fill="#dadce0"/>
+                <rect x="14" y="10" width="2" height="1.5" fill="#4285f4"/>
+                <rect x="6" y="13" width="2" height="1.5" fill="#dadce0"/>
+                <rect x="10" y="13" width="2" height="1.5" fill="#dadce0"/>
+                <rect x="14" y="13" width="2" height="1.5" fill="#dadce0"/>
+                <rect x="6" y="16" width="2" height="1.5" fill="#dadce0"/>
+                <rect x="10" y="16" width="2" height="1.5" fill="#dadce0"/>
+              </svg>
+              <div>
+                <div style="font-weight: 500;">Google Calendar</div>
+                <div style="font-size: 0.85em; color: #666;">Opens in browser</div>
+              </div>
+            </a>
+            
+            <a @click.prevent="downloadIcs()" href="#" class="calendar-option" style="display: flex; align-items: center; padding: 12px 16px; text-decoration: none; color: #333; border-bottom: 1px solid #eee; cursor: pointer;">
+              <svg width="20" height="20" viewBox="0 0 24 24" style="margin-right: 12px; flex-shrink: 0;">
+                <path fill="#007AFF" d="M18.71,19.5C17.88,20.74 17,21.95 15.66,21.97C14.32,22 13.89,21.18 12.37,21.18C10.84,21.18 10.37,21.95 9.09,22C7.85,22.05 6.8,20.68 5.96,19.47C4.25,17 2.94,12.45 4.7,9.39C5.57,7.87 7.13,6.91 8.82,6.88C10.1,6.86 11.32,7.75 12.11,7.75C12.89,7.75 14.37,6.68 15.92,6.84C16.57,6.87 18.39,7.1 19.56,8.82C19.47,8.88 17.39,10.1 17.41,12.63C17.44,15.65 20.06,16.66 20.09,16.67C20.06,16.74 19.67,18.11 18.71,19.5M13,3.5C13.73,2.67 14.94,2.04 15.94,2C16.07,3.17 15.6,4.35 14.9,5.19C14.21,6.04 13.07,6.7 11.95,6.61C11.8,5.46 12.36,4.26 13,3.5Z"/>
+              </svg>
+              <div>
+                <div style="font-weight: 500;">Apple Calendar</div>
+                <div style="font-size: 0.85em; color: #666;">Downloads .ics file</div>
+              </div>
+            </a>
+            
+            <a :href="outlookWebUrl" target="_blank" rel="noopener" class="calendar-option" style="display: flex; align-items: center; padding: 12px 16px; text-decoration: none; color: #333; border-bottom: 1px solid #eee;">
+              <svg width="20" height="20" viewBox="0 0 24 24" style="margin-right: 12px; flex-shrink: 0;">
+                <path fill="#0078d4" d="M7,5V19L21,17V7L7,5M8,6.5L20,8V16.5L8,17.5V6.5M12,8A3,3 0 0,0 9,11A3,3 0 0,0 12,14A3,3 0 0,0 15,11A3,3 0 0,0 12,8M12,9.5A1.5,1.5 0 0,1 13.5,11A1.5,1.5 0 0,1 12,12.5A1.5,1.5 0 0,1 10.5,11A1.5,1.5 0 0,1 12,9.5M3,6V16H6V6H3Z"/>
+              </svg>
+              <div>
+                <div style="font-weight: 500;">Outlook</div>
+                <div style="font-size: 0.85em; color: #666;">Opens in browser</div>
+              </div>
+            </a>
+            
+            <a :href="yahooCalendarUrl" target="_blank" rel="noopener" class="calendar-option" style="display: flex; align-items: center; padding: 12px 16px; text-decoration: none; color: #333;">
+              <svg width="20" height="20" viewBox="0 0 24 24" style="margin-right: 12px; flex-shrink: 0;">
+                <path fill="#6001d1" d="M2.5,2V22H21.5V2H2.5M20.5,21H3.5V3H20.5V21M12.03,7.5L14.47,12.94H16.03L12.53,5.5H11.47L7.97,12.94H9.53L12.03,7.5M8.84,15.5V17H15.22V15.5H8.84Z"/>
+              </svg>
+              <div>
+                <div style="font-weight: 500;">Yahoo Calendar</div>
+                <div style="font-size: 0.85em; color: #666;">Opens in browser</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="detail-sidebar-section">
+      <h3 class="detail-sidebar-title">Share This Auction</h3>
+      <div class="social-share" style="display: flex; gap: 1rem; margin-top: 1rem;">
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ site.url }}{{ page.url | urlencode }}" target="_blank" rel="noopener" style="color: #3b5998; font-size: 1.5rem;" aria-label="Share on Facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.77,7.46H14.5v-1.9c0-0.9,0.6-1.1,1-1.1h3V0.3h-4.1C10.8,0.3,9.5,2.4,9.5,5.3v2.1h-3v4h3v12h5v-12h3.85l0.42-4H14.5z"/>
+          </svg>
+        </a>
+        <a href="https://twitter.com/intent/tweet?text={{ auction.auctionTitle | urlencode }}&url={{ site.url }}{{ page.url | urlencode }}" target="_blank" rel="noopener" style="color: #1da1f2; font-size: 1.5rem;" aria-label="Share on Twitter">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M23.44,4.83c-0.8,0.35-1.66,0.59-2.58,0.69c0.93-0.56,1.64-1.43,1.98-2.49c-0.87,0.52-1.83,0.89-2.85,1.09 C19.1,3.07,17.9,2.5,16.56,2.5c-2.57,0-4.65,2.08-4.65,4.65c0,0.36,0.04,0.72,0.12,1.06C8.04,8.05,4.5,6.2,2.16,3.51 C1.78,4.19,1.56,4.99,1.56,5.83c0,1.61,0.82,3.03,2.07,3.86C2.87,9.67,2.14,9.47,1.5,9.14v0.06c0,2.25,1.6,4.12,3.72,4.55 c-0.39,0.11-0.8,0.16-1.22,0.16c-0.3,0-0.59-0.03-0.87-0.08c0.59,1.84,2.31,3.19,4.34,3.22c-1.59,1.25-3.59,1.99-5.77,1.99 c-0.37,0-0.74-0.02-1.11-0.07c2.06,1.32,4.5,2.09,7.13,2.09c8.55,0,13.24-7.09,13.24-13.24c0-0.2,0-0.4-0.01-0.6 C22.06,6.5,22.83,5.72,23.44,4.83z"/>
+          </svg>
+        </a>
+        <a href="mailto:?subject={{ auction.auctionTitle | urlencode }}&body={{ auction.auctionHighlights | urlencode }}%0A%0A{{ site.url }}{{ page.url | urlencode }}" style="color: #ea4335; font-size: 1.5rem;" aria-label="Share via Email">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+        </a>
+      </div>
+    </div>
+    
+    <div class="detail-sidebar-section">
+      <h3 class="detail-sidebar-title">Auction House</h3>
+      <p>{{ auction.auctionHouse or 'Not specified' }}</p>
+      <p>For more information about this auction, please visit the <a href="{{ auction.auctionWebsite }}" target="_blank" rel="noopener">official website</a>.</p>
+    </div>
+    
+    <div class="detail-sidebar-section">
+      <a href="{{ auction.auctionWebsite }}" target="_blank" rel="noopener" class="button button-primary" style="width: 100%; text-align: center;">Visit Website / Register to Bid</a>
+    </div>
+  </div>
+</div>
+
+{# Section for More Auctions from the Same Auction House #}
+{% set currentAuctionHouse = auction.auctionHouse %}
+{% set currentAuctionSlug = auction.auctionSlug %}
+{% set sameHouseAuctionsFiltered = [] %}
+{% if auctions %}
+  {% for item in auctions %}
+    {% if item.auctionHouse == currentAuctionHouse and item.auctionSlug != currentAuctionSlug %}
+      {% set sameHouseAuctionsFiltered = sameHouseAuctionsFiltered.concat(item) %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+
+{% if sameHouseAuctionsFiltered.length > 0 %}
+<div class="container auction-page" style="margin-top: 3rem; padding-top:1px;">
+  <div class="section-header">
+    <h2 class="section-title">More from {{ currentAuctionHouse }}</h2>
+  </div>
+  <div class="auction-grid">
+    {% for relatedAuction in sameHouseAuctionsFiltered | limit(3) %}
+      <div class="event-card" x-data="eventDisplay">
+        {% if relatedAuction.auctionFeatured %}
+          <div class="event-featured">Featured</div>
+        {% endif %}
+        
+        <div style="padding: 20px; text-align: center; background-color: #f0f0f0; min-height: 150px; display: flex; align-items: center; justify-content: center; position: relative;">
+          <div class="event-date" style="position: absolute; top: 10px; left: 10px; background-color: var(--primary-color); color: white; padding: 5px 10px; border-radius: 4px; text-align: center; min-width: 50px; z-index: 1;">
+            {% if relatedAuction.auctionStartDateTime %}
+              <span class="event-month" x-text="formatMonth('{{ relatedAuction.auctionStartDateTime }}')"></span>
+              <span class="event-day" x-text="formatDay('{{ relatedAuction.auctionStartDateTime }}')"></span>
+            {% endif %}
+          </div>
+          <h4 style="margin: 0; font-size: 1.2em;">{{ relatedAuction.auctionHouse }}</h4>
+        </div>
+        
+        <div class="event-content">
+          <h3 class="event-title"><a href="/auctions/{{ relatedAuction.auctionSlug | url }}/">{{ relatedAuction.auctionTitle }}</a></h3>
+          
+          {% if relatedAuction.auctionCity or relatedAuction.auctionState %}
+            <div class="event-location">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              {% if relatedAuction.auctionCity %}{{ relatedAuction.auctionCity }}{% endif %}{% if relatedAuction.auctionCity and relatedAuction.auctionState %}, {% endif %}{% if relatedAuction.auctionState %}{{ relatedAuction.auctionState }}{% endif %}
+            </div>
+          {% endif %}
+          
+          <div class="event-time">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            {% if relatedAuction.auctionStartDateTime %}
+              <span x-text="formatDay('{{ relatedAuction.auctionStartDateTime }}')"></span>&nbsp;<span x-text="formatMonth('{{ relatedAuction.auctionStartDateTime }}')"></span>&nbsp;<span>{{ relatedAuction.auctionStartDateTime | substring(4, 8) }}</span>&nbsp;<span x-text="formatTime('{{ relatedAuction.auctionStartDateTime }}')"></span>
+            {% else %}
+              Date TBD
+            {% endif %}
+          </div>
+
+          <a href="/auctions/{{ relatedAuction.auctionSlug | url }}/" class="button button-secondary event-button">View Auction</a>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+{# End Section for More Auctions from the Same Auction House #}
+
+<div class="container auction-page" style="margin-top: 3rem;">
+  <div class="section-header">
+    <h2 class="section-title">Other Upcoming Auctions</h2>
+  </div>
+  
+  <div class="auction-grid">
+    {% set otherAuctionsFiltered = [] %}
+    {% if auctions %}
+      {% for item in auctions %}
+        {# Only include auctions that are not the current auction or same auction house #}
+        {% if item.auctionSlug != currentAuctionSlug and item.auctionHouse != currentAuctionHouse %}
+          {% set otherAuctionsFiltered = otherAuctionsFiltered.concat(item) %}
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+
+    {% set displayedCount = 0 %}
+    {% if otherAuctionsFiltered.length > 0 %}
+      {% for otherAuctionItem in otherAuctionsFiltered %}
+        {% if displayedCount < 6 %}
+          {% set displayedCount = displayedCount + 1 %}
+          <div class="event-card" x-data="eventDisplay">
+            {% if otherAuctionItem.auctionFeatured %}
+              <div class="event-featured">Featured</div>
+            {% endif %}
+            
+            <div style="padding: 20px; text-align: center; background-color: #f0f0f0; min-height: 150px; display: flex; align-items: center; justify-content: center; position: relative;">
+              <div class="event-date" style="position: absolute; top: 10px; left: 10px; background-color: var(--primary-color); color: white; padding: 5px 10px; border-radius: 4px; text-align: center; min-width: 50px; z-index: 1;">
+                {% if otherAuctionItem.auctionStartDateTime %}
+                  <span class="event-month" x-text="formatMonth('{{ otherAuctionItem.auctionStartDateTime }}')"></span>
+                  <span class="event-day" x-text="formatDay('{{ otherAuctionItem.auctionStartDateTime }}')"></span>
+                {% endif %}
+              </div>
+              <h4 style="margin: 0; font-size: 1.2em;">{{ otherAuctionItem.auctionHouse }}</h4>
+            </div>
+            
+            <div class="event-content">
+              <h3 class="event-title"><a href="/auctions/{{ otherAuctionItem.auctionSlug | url }}/">{{ otherAuctionItem.auctionTitle }}</a></h3>
+              
+              {% if otherAuctionItem.auctionCity or otherAuctionItem.auctionState %}
+                <div class="event-location">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  {% if otherAuctionItem.auctionCity %}{{ otherAuctionItem.auctionCity }}{% endif %}{% if otherAuctionItem.auctionCity and otherAuctionItem.auctionState %}, {% endif %}{% if otherAuctionItem.auctionState %}{{ otherAuctionItem.auctionState }}{% endif %}
+                </div>
+              {% endif %}
+              
+              <div class="event-time">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                {% if otherAuctionItem.auctionStartDateTime %}
+                  <span x-text="formatDay('{{ otherAuctionItem.auctionStartDateTime }}')"></span>&nbsp;<span x-text="formatMonth('{{ otherAuctionItem.auctionStartDateTime }}')"></span>&nbsp;<span>{{ otherAuctionItem.auctionStartDateTime | substring(4, 8) }}</span>&nbsp;<span x-text="formatTime('{{ otherAuctionItem.auctionStartDateTime }}')"></span>
+                {% else %}
+                  Date TBD
+                {% endif %}
+              </div>
+
+              <a href="/auctions/{{ otherAuctionItem.auctionSlug | url }}/" class="button button-secondary event-button">View Auction</a>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+    
+    {% if displayedCount == 0 %}
+      <p>No other upcoming auctions found at this time.</p>
+    {% endif %}
+  </div>
+  
+  <div style="text-align: center; margin-top: 2rem;">
+    <a href="/auctions/" class="button button-primary">View All Auctions</a>
+  </div>
+</div>
+
+<style>
+/* Calendar dropdown styling */
+.calendar-dropdown-menu {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.calendar-option {
+  transition: background-color 0.2s ease;
+}
+
+.calendar-option:hover {
+  background-color: #f8f9fa !important;
+  color: #333 !important;
+}
+
+.calendar-option:last-child {
+  border-bottom: none !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Close dropdown on mobile when clicked outside */
+@media (max-width: 768px) {
+  .calendar-dropdown-menu {
+    position: fixed;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90%;
+    max-width: 300px;
+  }
+}
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "{{ auction.auctionTitle }}",
+  "startDate": "{% if auction.auctionStartDateTime %}{{ auction.auctionStartDateTime | substring(4, 8) }}-{{ auction.auctionStartDateTime | substring(2, 4) }}-{{ auction.auctionStartDateTime | substring(0, 2) }}T{{ (auction.auctionStartDateTime | substring(9)) | slice(0,5) }}{% else %}{% endif %}",
+  "location": {
+    "@type": "Place",
+    "name": "{{ auction.auctionAddress }}",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "{{ auction.auctionAddress }}",
+      "addressLocality": "{{ auction.auctionCity }}",
+      "postalCode": "{{ auction.auctionPostalCode }}",
+      "addressCountry": "{{ auction.auctionCountryCode }}"
+    }
+  },
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "description": "{{ auction.auctionHighlights }}",
+  "eventType": "Auction",
+  "organizer": {
+    "@type": "Organization",
+    "name": "{{ auction.auctionHouse }}",
+    "url": "{{ auction.auctionWebsite }}"
+  }{% if auction.auctionImageUrl %},
+  "image": "https://classiccarclubs.uk{{ auction.auctionImageUrl }}"
+  {% endif %}
+}
+</script>
+
+{% if auction.auctionAddress or (auction.auctionLat and auction.auctionLng) %}
+  <script>
+    function initAuctionMap() {
+      console.log('Initializing auction map');
+      // Make sure Google Maps is loaded
+      if (!window.google || !window.google.maps) {
+        console.log('Google Maps not yet loaded, will initialize later');
+        return; // Exit if Google Maps isn't loaded yet - will be called by initAllMaps
+      }
+      
+      var mapOptions = {
+        zoom: 14,
+        center: {
+          lat: {{ auction.auctionLat or 51.509865 }}, // Default to London if not set
+          lng: {{ auction.auctionLng or -0.118092 }}
+        }
+      };
+      
+      // Check if map container exists
+      var mapElement = document.getElementById('auction-map');
+      if (!mapElement) {
+        console.error('Map container not found');
+        return;
+      }
+      
+      var map = new google.maps.Map(mapElement, mapOptions);
+      var marker = new google.maps.Marker({
+        position: mapOptions.center,
+        map: map,
+        title: "{{ auction.auctionTitle | escape }}"
+      });
+      
+      console.log('Auction map initialized successfully');
+    }
+    
+    // Try to initialize the map if Google Maps is already loaded
+    if (window.googleMapsLoaded && window.google && window.google.maps) {
+      setTimeout(initAuctionMap, 100); // Small delay to ensure DOM is ready
+    }
+  </script>
+{% endif %}
+
+<script>
+  document.addEventListener('alpine:init', () => {
+    // Calendar functionality
+    Alpine.data('calendarData', () => ({
+      showDropdown: false,
+      googleCalendarUrl: '',
+      appleCalendarUrl: '',
+      outlookWebUrl: '',
+      yahooCalendarUrl: '',
+      
+      init() {
+        // Parse auction date and create calendar URLs
+        const auctionDateTime = '{{ auction.auctionStartDateTime }}';
+        const title = `{{ auction.auctionTitle | replace("'", "\\'") }}`;
+        const location = '{{ auction.auctionAddress | replace("'", "\\'") }}';
+        const description = `{{ auction.auctionHighlights | replace("'", "\\'") | striptags | replace("\n", " ") | replace("\r", " ") }}`;
+        const website = '{{ auction.auctionWebsite }}';
+        
+        if (auctionDateTime) {
+          // Parse DDMMYYYY:HH:MM:SS format
+          const day = auctionDateTime.substring(0, 2);
+          const month = auctionDateTime.substring(2, 4);
+          const year = auctionDateTime.substring(4, 8);
+          const time = auctionDateTime.substring(9);
+          
+          const startDate = new Date(`${year}-${month}-${day}T${time}`);
+          // Assume 3-hour duration for auction
+          const endDate = new Date(startDate.getTime() + (3 * 60 * 60 * 1000));
+          
+          // Format dates for different calendar systems
+          const formatDateGoogle = (date) => {
+            return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+          };
+          
+          const formatDateICS = (date) => {
+            return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+          };
+          
+          const formatDateOutlook = (date) => {
+            return date.toISOString();
+          };
+          
+          // Google Calendar URL
+          this.googleCalendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(title)}&dates=${formatDateGoogle(startDate)}/${formatDateGoogle(endDate)}&details=${encodeURIComponent(description + ' - More info: ' + website)}&location=${encodeURIComponent(location)}`;
+          
+          // Apple Calendar (.ics file)
+          this.appleCalendarUrl = `/calendar/${encodeURIComponent('{{ auction.auctionSlug }}')}.ics`;
+          
+          // Outlook Web URL
+          this.outlookWebUrl = `https://outlook.live.com/calendar/0/deeplink/compose?subject=${encodeURIComponent(title)}&startdt=${formatDateOutlook(startDate)}&enddt=${formatDateOutlook(endDate)}&body=${encodeURIComponent(description + ' - More info: ' + website)}&location=${encodeURIComponent(location)}`;
+          
+          // Yahoo Calendar URL
+          this.yahooCalendarUrl = `https://calendar.yahoo.com/?v=60&view=d&type=20&title=${encodeURIComponent(title)}&st=${formatDateGoogle(startDate)}&et=${formatDateGoogle(endDate)}&desc=${encodeURIComponent(description + ' - More info: ' + website)}&in_loc=${encodeURIComponent(location)}`;
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!e.target.closest('.calendar-dropdown')) {
+            this.showDropdown = false;
+          }
+        });
+      },
+
+      // Parse auction date from DDMMYYYY:HH:MM:SS format
+      parseAuctionDate(dateStr) {
+        if (!dateStr) return new Date();
+        const day = dateStr.substring(0, 2);
+        const month = dateStr.substring(2, 4);
+        const year = dateStr.substring(4, 8);
+        const time = dateStr.substring(9);
+        return new Date(`${year}-${month}-${day}T${time}`);
+      },
+
+      // Generate ICS file content for Apple Calendar and Outlook downloads
+      generateIcsContent() {
+        const auctionDateTime = '{{ auction.auctionStartDateTime }}';
+        const title = `{{ auction.auctionTitle | replace("'", "\\'") }}`;
+        const location = '{{ auction.auctionAddress | replace("'", "\\'") }}';
+        const description = `{{ auction.auctionHighlights | replace("'", "\\'") | striptags | replace("\n", " ") | replace("\r", " ") }}`;
+        const website = '{{ auction.auctionWebsite }}';
+        const auctionHouse = '{{ auction.auctionHouse }}';
+        
+        const now = new Date();
+        const formatDate = (date) => {
+          return date.getFullYear().toString() +
+                 (date.getMonth() + 1).toString().padStart(2, '0') +
+                 date.getDate().toString().padStart(2, '0') + 'T' +
+                 date.getHours().toString().padStart(2, '0') +
+                 date.getMinutes().toString().padStart(2, '0') +
+                 date.getSeconds().toString().padStart(2, '0') + 'Z';
+        };
+
+        const startDate = this.parseAuctionDate(auctionDateTime);
+        const endDate = new Date(startDate.getTime() + (3 * 60 * 60 * 1000)); // 3 hours later
+        
+        const icsContent = [
+          'BEGIN:VCALENDAR',
+          'VERSION:2.0',
+          'PRODID:-//Classic Car Clubs UK//Auction Calendar//EN',
+          'CALSCALE:GREGORIAN',
+          'METHOD:PUBLISH',
+          'BEGIN:VEVENT',
+          `UID:auction-${Math.random().toString(36).substr(2, 9)}@classiccarclubs.uk`,
+          `DTSTART:${formatDate(startDate)}`,
+          `DTEND:${formatDate(endDate)}`,
+          `DTSTAMP:${formatDate(now)}`,
+          `CREATED:${formatDate(now)}`,
+          `LAST-MODIFIED:${formatDate(now)}`,
+          'SEQUENCE:0',
+          `SUMMARY:${title.replace(/,/g, '\\,').replace(/;/g, '\\;')}`,
+          `DESCRIPTION:Classic Car Auction: ${description.replace(/,/g, '\\,').replace(/;/g, '\\;').replace(/\n/g, '\\n')}\\n\\nAuction House: ${auctionHouse}\\n\\nMore information: ${website}`,
+          `LOCATION:${location.replace(/,/g, '\\,').replace(/;/g, '\\;')}`,
+          'STATUS:CONFIRMED',
+          'TRANSP:OPAQUE',
+          'CLASS:PUBLIC',
+          'CATEGORIES:AUCTION,CLASSIC CARS,AUTOMOTIVE',
+          `URL:${website}`,
+          'END:VEVENT',
+          'END:VCALENDAR'
+        ].join('\r\n');
+
+        return icsContent;
+      },
+
+      // Download ICS file for Apple Calendar/Outlook
+      downloadIcs() {
+        const title = `{{ auction.auctionTitle | replace("'", "\\'") }}`;
+        const icsContent = this.generateIcsContent();
+        const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `auction-${title.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.ics`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+        this.showDropdown = false; // Close dropdown after download
+      }
+    }));
+
+    // Define the eventDisplay Alpine component for auction date formatting
+    Alpine.data('eventDisplay', () => ({
+      formatMonth(dateStr) {
+        // Convert a date string in "DDMMYYYY:HH:MM:SS" format to a valid Date object.
+        const day = dateStr.substring(0, 2);
+        const month = dateStr.substring(2, 4);
+        const year = dateStr.substring(4, 8);
+        const time = dateStr.substring(9); // time starts after the colon at index 8
+        const date = new Date(year + '-' + month + '-' + day + 'T' + time);
+        return date.toLocaleString('default', { month: 'short' });
+      },
+      formatDay(dateStr) {
+        const day = dateStr.substring(0, 2);
+        const month = dateStr.substring(2, 4);
+        const year = dateStr.substring(4, 8);
+        const time = dateStr.substring(9);
+        const date = new Date(year + '-' + month + '-' + day + 'T' + time);
+        return date.getDate();
+      },
+      formatTime(dateStr) {
+        const day = dateStr.substring(0, 2);
+        const month = dateStr.substring(2, 4);
+        const year = dateStr.substring(4, 8);
+        const time = dateStr.substring(9);
+        const date = new Date(year + '-' + month + '-' + day + 'T' + time);
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
+    }));
+  });
+</script>
+
+<div class="auction-cta-section" style="background-color: #f9f9f9; width: 100vw; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); margin-top: 40px; margin-bottom: 0; padding: 4rem 0 4rem; text-align: center;">
+  <div class="container">
+    <h2 style="font-size: 2.5rem; margin-bottom: 1.5rem;">Add your Auction</h2>
+    <p style="font-size: 1.125rem; max-width: 800px; margin: 0 auto 2rem;">Get discovered by thousands of classic car collectors actively searching for their next purchase. Join our directory and connect with serious buyers today.</p>
+    <a href="/contact/" class="button button-primary">SUBMIT YOUR AUCTION</a>
+  </div>
+</div>

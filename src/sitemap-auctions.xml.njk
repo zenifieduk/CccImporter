@@ -1,0 +1,22 @@
+---
+permalink: sitemap-auctions.xml
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>{{ site.url }}/auctions/</loc>
+    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  {% for auction in auctions %}
+  <url>
+    <loc>{{ site.url }}/auctions/{{ auction.auctionSlug }}/</loc>
+    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  {% endfor %}
+</urlset> 

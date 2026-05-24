@@ -1,0 +1,558 @@
+---
+layout: layouts/page.njk
+title: Classic Car Auctions Calendar UK
+description: "View the UK's most comprehensive classic car auction calendar. Find upcoming classic and vintage car auctions, dates, and locations all in one place."
+eleventyNavigation:
+  key: Auction Calendar
+  parent: Auctions
+  order: 2
+---
+
+{% set breadcrumbs = [
+  { url: '/auctions/', label: 'Auctions' },
+  { url: page.url, label: title }
+] %}
+
+<div class="container" style="margin-bottom: 2rem; padding-top: 40px;">
+  <div class="breadcrumbs-container">
+    <ul class="breadcrumbs">
+      <li><a href="/">Home</a></li>
+      {% for crumb in breadcrumbs %}
+        <li><a href="{{ crumb.url | url }}">{{ crumb.label }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+  
+  <h1 style="margin-top: 1rem;">Classic Car Auctions Calendar UK</h1>
+  <p style="font-size: 1.125rem; margin-top: 1rem;">
+    Welcome to the UK's most up-to-date <strong>classic car auctions calendar</strong>. Explore upcoming auction dates, venues, and trusted auction houses nationwide. Whether you're searching for a rare classic car, motorcycle, or automobilia, our calendar helps you plan your next bidding adventure.
+  </p>
+
+  <h2 style="margin-top: 2rem;">UK Classic Car Auctions Calendar 2025</h2>
+  <p style="font-size: 1.125rem; margin-top: 1rem;">
+    Browse the interactive calendar below to view all upcoming <strong>classic car auctions</strong> across the UK. Click on any event for more details, including location, auction house, and featured lots.
+  </p>
+</div>
+
+<!-- Calendar View -->
+<div class="container">
+  <div id="auctionsCalendarView" style="margin-bottom:2rem; display:block;"> {# Ensure this is visible by default #}
+    <div class="calendar-controls">
+      <button id="prevMonthAuction" class="button button-secondary" style="min-width:auto;padding:0.5rem 1rem;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+        </svg>
+      </button>
+      <h3 id="calendarTitleAuction" style="margin:0;">Month Year</h3>
+      <button id="nextMonthAuction" class="button button-secondary" style="min-width:auto;padding:0.5rem 1rem;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+          <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="calendar-grid">
+      <div id="calendarAuction" class="responsive-calendar"></div>
+    </div>
+  </div>
+</div>
+
+<!-- New Links Section -->
+<div class="container" style="margin-top: 2rem; margin-bottom: 2rem; text-align: center;">
+  <p style="font-size: 1.125rem;">
+    For a complete list of auction houses, visit our <a href="/auction-houses/">Classic Car Auction Houses Directory</a>.
+    <br>See all current and upcoming auctions on our <a href="/auctions/">Auctions Listings</a> page.
+  </p>
+</div>
+
+<!-- Auction Modal (Copied from auctions.njk) -->
+<div id="auctionModal" class="auction-modal" style="display: none;">
+  <div class="auction-modal-content">
+    <span class="close-modal-auction">&times;</span>
+    <h3 class="auction-modal-title"></h3>
+    <div class="auction-modal-meta"></div>
+    <div class="auction-modal-description"></div>
+  </div>
+</div>
+
+<!-- Further Content Section -->
+<div class="container" style="margin-top: 3rem; margin-bottom: 3rem; padding-bottom: 40px;">
+  <h2>More About Classic Car Auctions in the UK</h2>
+  <p>
+    Classic car auctions offer enthusiasts and collectors the chance to discover rare vehicles and unique finds. Whether you're a first-time bidder or a seasoned expert, attending UK classic car auctions is an exciting way to experience the automotive world. Get tips on auction registration, bidding strategies, and what to expect at your next classic car auction.
+  </p>
+
+  <h2 style="margin-top: 2.5rem;">Frequently Asked Questions</h2>
+  <ul style="font-size: 1.125rem; list-style-type: none; padding-left: 0;">
+    <li style="margin-bottom: 1.5rem;"><strong>How do I find upcoming classic car auctions in the UK?</strong><br>
+        Use our <strong>classic car auctions calendar</strong> to see all scheduled events and locations across the country.
+    </li>
+    <li style="margin-bottom: 1.5rem;"><strong>What types of vehicles are sold at UK classic car auctions?</strong><br>
+        Most auctions feature classic cars, motorcycles, and automobilia.
+    </li>
+    <li><strong>How can I participate in a classic car auction?</strong><br>
+        Visit our <a href="/auction-houses/">auction houses directory</a> for registration information and bidding guides.
+    </li>
+  </ul>
+</div>
+
+<!-- Calendar Responsive Styles (Copied from auctions.njk) -->
+<style>
+  .responsive-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    width: 100%;
+  }
+  
+  .calendar-day-header {
+    font-weight: bold;
+    text-align: center;
+    padding: 8px 4px;
+    background: #f5f5f5;
+    border-bottom: 2px solid var(--button-colour); /* Assuming --button-colour is defined globally */
+    font-family: var(--font-sans); /* Assuming --font-sans is defined globally */
+    font-size: 0.9rem;
+  }
+  
+  .calendar-day {
+    min-height: 90px;
+    border: 1px solid #eee;
+    padding: 8px;
+    position: relative;
+    background: white;
+    transition: background-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .calendar-day.empty {
+    background: #f9f9f9;
+    min-height: 90px;
+  }
+  
+  .calendar-day.has-auctions {
+    background: #f0f7f0;
+  }
+  
+  .day-number {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  .calendar-auction {
+    font-size: 0.8rem;
+    padding: 6px 8px;
+    margin-bottom: 6px;
+    background: var(--button-colour); /* Assuming --button-colour is defined globally */
+    color: white;
+    border-radius: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    word-break: break-word;
+  }
+  
+  .calendar-auction:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  @media (max-width: 768px) {
+    .responsive-calendar {
+      gap: 2px;
+    }
+    
+    .calendar-day-header {
+      padding: 4px 2px;
+      font-size: 0.8rem;
+    }
+    
+    .calendar-day, .calendar-day.empty {
+      min-height: 80px;
+      padding: 4px;
+    }
+    
+    .day-number {
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    
+    .calendar-auction {
+      font-size: 0.75rem;
+      padding: 4px 6px;
+      margin-bottom: 4px;
+      white-space: normal;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      line-height: 1.2;
+      height: auto;
+      max-height: 3.6em;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .responsive-calendar {
+      gap: 1px;
+    }
+    
+    .calendar-day-header {
+      font-size: 0.7rem;
+      padding: 3px 1px;
+    }
+    
+    .calendar-day, .calendar-day.empty {
+      min-height: 60px;
+      padding: 3px;
+    }
+    
+    .day-number {
+      font-size: 0.8rem;
+      margin-bottom: 2px;
+    }
+    
+    .calendar-auction {
+      font-size: 0.7rem;
+      padding: 2px 4px;
+      margin-bottom: 2px;
+    }
+    
+    .auction-modal-content {
+      width: 90%;
+      margin: 15% auto;
+      padding: 15px;
+    }
+  }
+  
+  .auction-modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+  
+  .auction-modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .close-modal-auction {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close-modal-auction:hover,
+  .close-modal-auction:focus {
+    color: black;
+    text-decoration: none;
+  }
+  
+  .auction-modal-title {
+    margin-top: 0;
+    color: var(--button-colour);
+  }
+  
+  .auction-modal-meta {
+    margin-bottom: 15px;
+    color: #666;
+  }
+  
+  .calendar-auction.more-auctions {
+    background: #e5e5e5;
+    color: #333;
+    text-align: center;
+    font-style: italic;
+    font-size: 0.75rem;
+  }
+  
+  .auctions-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .auction-list-item {
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+    margin-bottom: 10px;
+  }
+  
+  .auction-list-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+  
+  .auction-list-item h4 {
+    margin-top: 0;
+    color: var(--button-colour);
+  }
+</style>
+
+<!-- Calendar Scripts -->
+<script>
+  // Make auction data available to the calendar script
+  var auctionsData = {{ auctions | dump | safe }};
+  console.log('Initial auctionsData:', auctionsData); // Debug log
+
+  // Helper function to parse auctionStartDateTime (copied from auctions.njk)
+  function parseAuctionDate(dateStr) {
+    if (!dateStr) return null;
+    const day = dateStr.substring(0, 2);
+    const month = dateStr.substring(2, 4);
+    const year = dateStr.substring(4, 8);
+    const time = dateStr.substring(9);
+    return new Date(year + '-' + month + '-' + day + 'T' + time);
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const auctionModal = document.getElementById('auctionModal');
+    const closeModal = document.querySelector('.close-modal-auction');
+    
+    if (closeModal && auctionModal) {
+      closeModal.addEventListener('click', function() {
+        auctionModal.style.display = 'none';
+      });
+      window.addEventListener('click', function(event) { // Changed variable name to avoid conflict with auction item
+        if (event.target === auctionModal) {
+          auctionModal.style.display = 'none';
+        }
+      });
+    }
+    
+    const calendar = document.getElementById('calendarAuction');
+    const calendarTitle = document.getElementById('calendarTitleAuction');
+    const prevMonthBtn = document.getElementById('prevMonthAuction');
+    const nextMonthBtn = document.getElementById('nextMonthAuction');
+    
+    if (!calendar || !calendarTitle || !prevMonthBtn || !nextMonthBtn) {
+        console.error("Calendar elements not found for standalone calendar page!");
+        return;
+    }
+    
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
+    
+    function formatAuctions() {
+      return auctionsData.map(auction => {
+        let auctionDateVal;
+        try {
+          auctionDateVal = parseAuctionDate(auction.auctionStartDateTime);
+        } catch (error) {
+          console.error('Error parsing auction date:', auction.auctionStartDateTime, error);
+          auctionDateVal = new Date(); 
+        }
+        return { ...auction, parsedDate: auctionDateVal };
+      });
+    }
+    
+    function renderCalendar() {
+      console.log('renderCalendar called. auctionsData:', auctionsData); // Debug log
+      console.log('Current month:', currentMonth, 'Current year:', currentYear); // Debug log
+      calendar.innerHTML = '';
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      calendarTitle.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+      
+      const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      dayNames.forEach(day => {
+        const dayHeader = document.createElement('div');
+        dayHeader.className = 'calendar-day-header';
+        dayHeader.textContent = day;
+        calendar.appendChild(dayHeader);
+      });
+      
+      const firstDay = new Date(currentYear, currentMonth, 1);
+      const lastDay = new Date(currentYear, currentMonth + 1, 0);
+      
+      for (let i = 0; i < firstDay.getDay(); i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'calendar-day empty';
+        calendar.appendChild(emptyCell);
+      }
+      
+      const formattedAuctions = formatAuctions();
+      
+      for (let day = 1; day <= lastDay.getDate(); day++) {
+        const cell = document.createElement('div');
+        cell.className = 'calendar-day';
+        
+        const dayNumber = document.createElement('div');
+        dayNumber.className = 'day-number';
+        dayNumber.textContent = day;
+        cell.appendChild(dayNumber);
+        
+        const dayAuctions = formattedAuctions.filter(auction => 
+          auction.parsedDate && // Ensure parsedDate is valid
+          auction.parsedDate.getDate() === day && 
+          auction.parsedDate.getMonth() === currentMonth && 
+          auction.parsedDate.getFullYear() === currentYear
+        );
+        
+        if (dayAuctions.length > 0) {
+          cell.classList.add('has-auctions');
+          dayAuctions.sort((a, b) => (a.parsedDate && b.parsedDate) ? a.parsedDate.getTime() - b.parsedDate.getTime() : 0);
+          
+          const isMobile = window.innerWidth <= 768;
+          const auctionsToShow = isMobile ? Math.min(2, dayAuctions.length) : dayAuctions.length;
+          
+          for (let i = 0; i < auctionsToShow; i++) {
+            const auctionItem = dayAuctions[i]; // Renamed to avoid conflict
+            const auctionEl = document.createElement('div');
+            auctionEl.className = 'calendar-auction';
+            auctionEl.textContent = auctionItem.auctionTitle;
+            
+            function createAuctionClickHandler(currentAuctionItem) { // Renamed to avoid conflict
+              return function() {
+                const modal = document.getElementById('auctionModal');
+                const modalTitle = modal.querySelector('.auction-modal-title');
+                const modalMeta = modal.querySelector('.auction-modal-meta');
+                const modalDescription = modal.querySelector('.auction-modal-description');
+                
+                modalTitle.textContent = currentAuctionItem.auctionTitle;
+                const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const formattedDate = currentAuctionItem.parsedDate.toLocaleDateString('en-US', dateOptions);
+                
+                let auctionHouseInfo = '';
+                if (currentAuctionItem.auctionHouse) { // Simplified check
+                    auctionHouseInfo = `<p><strong>Auction House:</strong> ${currentAuctionItem.auctionHouse}</p>`;
+                }
+                
+                let locationInfo = '';
+                 if (currentAuctionItem.auctionCity && currentAuctionItem.auctionState) {
+                    locationInfo = `<p><strong>Location:</strong> ${currentAuctionItem.auctionCity}, ${currentAuctionItem.auctionState}</p>`;
+                } else if (currentAuctionItem.auctionAddress) { 
+                    locationInfo = `<p><strong>Location:</strong> ${currentAuctionItem.auctionAddress}</p>`;
+                }
+
+                modalMeta.innerHTML = `
+                  <p><strong>Date:</strong> ${formattedDate}</p>
+                  <p><strong>Time:</strong> ${currentAuctionItem.parsedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                  ${auctionHouseInfo}
+                  ${locationInfo}
+                `;
+                
+                modalDescription.innerHTML = currentAuctionItem.auctionHighlightsHtml ? currentAuctionItem.auctionHighlightsHtml : (currentAuctionItem.auctionHighlights || '<p>No highlights available</p>');
+                
+                const buttonContainer = document.createElement('div');
+                buttonContainer.style.marginTop = "30px";
+                buttonContainer.style.textAlign = "center";
+                const detailsButton = document.createElement('a');
+                detailsButton.href = `/auctions/${currentAuctionItem.auctionSlug}/`;
+                detailsButton.className = "button button-primary";
+                detailsButton.style.display = "inline-block";
+                detailsButton.style.padding = "12px 25px";
+                detailsButton.style.fontSize = "16px";
+                detailsButton.style.textTransform = "uppercase";
+                detailsButton.style.fontWeight = "bold";
+                detailsButton.textContent = "View Auction Details";
+                
+                const existingButtonContainer = modalDescription.querySelector('div[style*="margin-top: 30px"]');
+                if (existingButtonContainer) existingButtonContainer.remove();
+                buttonContainer.appendChild(detailsButton);
+                modalDescription.appendChild(buttonContainer);
+                                
+                modal.style.display = 'block';
+              };
+            }
+            
+            auctionEl.addEventListener('click', createAuctionClickHandler(auctionItem));
+            cell.appendChild(auctionEl);
+          }
+          
+          if (dayAuctions.length > auctionsToShow) {
+            const moreEl = document.createElement('div');
+            moreEl.className = 'calendar-auction more-auctions';
+            moreEl.textContent = `+${dayAuctions.length - auctionsToShow} more`;
+            moreEl.addEventListener('click', function() {
+              const allAuctionsModal = document.getElementById('auctionModal');
+              const modalTitle = allAuctionsModal.querySelector('.auction-modal-title');
+              const modalMeta = allAuctionsModal.querySelector('.auction-modal-meta');
+              const modalDescription = allAuctionsModal.querySelector('.auction-modal-description');
+              
+              modalTitle.textContent = `Auctions on ${monthNames[currentMonth]} ${day}, ${currentYear}`;
+              modalMeta.innerHTML = '';
+              let auctionsListHTML = '<ul class="auctions-list">';
+              dayAuctions.forEach(auctionListItem => { // Renamed to avoid conflict
+                let auctionHouseInfoList = '';
+                if (auctionListItem.auctionHouse) { // Simplified check
+                    auctionHouseInfoList = `<p><strong>Auction House:</strong> ${auctionListItem.auctionHouse}</p>`;
+                }
+                let locationInfoList = '';
+                if (auctionListItem.auctionCity && auctionListItem.auctionState) {
+                    locationInfoList = `<p><strong>Location:</strong> ${auctionListItem.auctionCity}, ${auctionListItem.auctionState}</p>`;
+                } else if (auctionListItem.auctionAddress) {
+                    locationInfoList = `<p><strong>Location:</strong> ${auctionListItem.auctionAddress}</p>`;
+                }
+
+                auctionsListHTML += `
+                  <li class="auction-list-item">
+                    <h4>${auctionListItem.auctionTitle}</h4>
+                    <p><strong>Time:</strong> ${auctionListItem.parsedDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                    ${auctionHouseInfoList}
+                    ${locationInfoList}
+                    ${(auctionListItem.auctionHighlightsHtml ? auctionListItem.auctionHighlightsHtml : (auctionListItem.auctionHighlights || '')).substring(0,150)}...
+                    <div style="margin-top: 15px; text-align: center;">
+                      <a href="/auctions/${auctionListItem.auctionSlug}/" class="button button-secondary" style="display: inline-block; padding: 8px 15px; font-size: 13px;">View Details</a>
+                    </div>
+                  </li>
+                `;
+              });
+              auctionsListHTML += '</ul>';
+              modalDescription.innerHTML = auctionsListHTML;
+              allAuctionsModal.style.display = 'block';
+            });
+            cell.appendChild(moreEl);
+          }
+        }
+        calendar.appendChild(cell);
+      }
+      
+      const totalCells = firstDay.getDay() + lastDay.getDate();
+      const remainingCells = 7 - (totalCells % 7);
+      if (remainingCells < 7) {
+        for (let i = 0; i < remainingCells; i++) {
+          const emptyCell = document.createElement('div');
+          emptyCell.className = 'calendar-day empty';
+          calendar.appendChild(emptyCell);
+        }
+      }
+    }
+    
+    // Initial render
+    if (auctionsData && auctionsData.length > 0) {
+        renderCalendar();
+    } else {
+        if(calendar) calendar.innerHTML = '<p style="text-align:center; grid-column: 1 / span 7; padding: 2rem;">No auctions data found to display in the calendar.</p>';
+    }
+
+    prevMonthBtn.addEventListener('click', function() {
+      currentMonth--;
+      if (currentMonth < 0) { currentMonth = 11; currentYear--; }
+      renderCalendar();
+    });
+    
+    nextMonthBtn.addEventListener('click', function() {
+      currentMonth++;
+      if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+      renderCalendar();
+    });
+  });
+</script> 

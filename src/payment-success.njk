@@ -1,0 +1,31 @@
+---
+title: Payment Successful
+layout: layouts/base.njk
+permalink: /payment-success/index.html
+---
+
+<section style="text-align: center; padding: 4rem 1rem;">
+  <h1>Payment Successful!</h1>
+  <p>Thank you for your payment. We are now redirecting you to the club submission form...</p>
+  <p><small>If you are not redirected automatically, <a id="redirect-link" href="/submit-form/">click here</a>.</small></p>
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const plan = urlParams.get('plan') || 'standard'; // Default to 'standard'
+
+    // Construct the target URL
+    const targetUrl = `/submit-form/?plan=${encodeURIComponent(plan)}`;
+
+    // Update the fallback link href
+    const fallbackLink = document.getElementById('redirect-link');
+    if (fallbackLink) {
+      fallbackLink.href = targetUrl;
+    }
+
+    // Redirect the user
+    // Using replace so the redirect page isn't in browser history
+    window.location.replace(targetUrl);
+  });
+</script> 

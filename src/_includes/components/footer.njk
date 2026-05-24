@@ -1,18 +1,19 @@
 <footer class="site-footer">
   <div class="container">
-    <div class="footer-content">
-      <div class="logo-column">
-        <div class="footer-logo">
-          <h3>CLASSIC CAR CLUBS</h3>
-          <p class="tagline">UK NETWORK</p>
-        </div>
-        <p class="footer-blurb">
-          Your ultimate resource for connecting with classic car enthusiasts across the 
-          United Kingdom. Find clubs dedicated to vintage marques, iconic eras, and 
-          specific regions.
-        </p>
+    <!-- Logo and blurb in their own row -->
+    <div class="footer-branding">
+      <div class="footer-logo">
+        <h3>CLASSIC CAR CLUBS</h3>
+        <p class="tagline">UK NETWORK</p>
       </div>
-      
+      <p class="footer-blurb">
+        Your ultimate resource for connecting with classic car & vehicle enthusiasts across the 
+        United Kingdom. Find clubs dedicated to vintage marques, iconic eras, and 
+        specific regions.
+      </p>
+    </div>
+    
+    <div class="footer-content">
       {% for sectionName, links in site.footerLinks %}
         <div class="footer-column">
           <h4>{{ sectionName }}</h4>
@@ -28,7 +29,149 @@
     </div>
     
     <div class="footer-bottom">
-      <p>&copy; 2025 Classic Car Clubs UK. All rights reserved. Website by <a href="https://zenified.uk" target="_blank" rel="noopener">Zenified.uk</a></p>
+      <span class="footer-legal-links">
+        <a href="/privacy-policy/">Privacy Policy</a>
+        <span class="separator">|</span>
+        <a href="/disclaimer/">Disclaimer</a>
+        <span class="separator">|</span>
+        <a href="/terms-of-use/">Terms of Use</a>
+      </span>
+      <span class="footer-copyright">
+        &copy; {{ site.buildTime | date('yyyy') }} {{ site.title }}. All rights reserved. Website by <a href="https://zenified.uk" target="_blank" rel="noopener">Zenified.uk</a>
+      </span>
     </div>
   </div>
 </footer>
+
+<style>
+  /* General Footer Styling */
+  .site-footer {
+    padding: 2rem 0;
+    background-color: #000000; /* Black background */
+    color: #E0E0E0; /* Light grey default text color for the footer */
+    line-height: 1.6;
+  }
+
+  /* Footer Branding Area (Logo and Blurb) */
+  .footer-branding {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .footer-logo h3 {
+    margin-bottom: 0.25rem;
+    color: #FFFFFF;
+    font-size: 1.5em; /* Adjust as needed */
+  }
+
+  .footer-logo .tagline {
+    font-size: 0.9em;
+    color: #AAAAAA;
+    margin-top: 0;
+  }
+
+  .footer-blurb {
+    font-size: 0.95em;
+    max-width: 600px; /* Adjust as needed */
+    margin-left: auto;
+    margin-right: auto;
+    color: #CCCCCC;
+  }
+
+  /* Main Footer Columns Area */
+  .footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1.5rem; /* Space between columns */
+    margin-bottom: 2rem; /* Space before the footer-bottom row */
+  }
+
+  .footer-column {
+    flex: 1 1 180px;
+    min-width: 160px;
+  }
+
+  .footer-column h4 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: 1.05em;
+    font-weight: 600;
+    color: #FFFFFF; /* White for column titles */
+  }
+
+  .footer-column ul.footer-links {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+  }
+
+  .footer-column ul.footer-links li {
+    margin-bottom: 0.4rem;
+  }
+
+  .footer-column a {
+    text-decoration: none;
+    color: inherit; /* Inherits light grey from .site-footer */
+  }
+  .footer-column a:hover {
+    text-decoration: underline;
+    color: #FFFFFF; /* Brighter on hover */
+  }
+
+  /* Footer Bottom: Legal Links and Copyright */
+  .footer-bottom {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #333333; /* Darker border for dark theme */
+    font-size: 0.875em;
+    display: flex;
+    flex-direction: column; /* Stack by default for mobile-first */
+    align-items: center; /* Center items when stacked */
+    text-align: center;
+    gap: 0.5rem; /* Gap between stacked items */
+  }
+
+  .footer-legal-links,
+  .footer-copyright {
+    color: #CCCCCC; /* Light grey for non-link text in this area */
+    font-size: 0.9em; 
+  }
+
+  /* Styles for links within .footer-copyright (e.g., Zenified.uk) */
+  .footer-copyright a,
+  .footer-copyright a:visited { /* Target visited state explicitly */
+    color: #FFFFFF; /* White */
+    text-decoration: none;
+  }
+  .footer-copyright a:hover {
+    text-decoration: underline;
+    /* Optional: different hover color if desired, e.g., #E0E0E0 */
+  }
+
+  /* Styles for .footer-legal-links (Privacy, Disclaimer, Terms) */
+  .footer-legal-links a,
+  .footer-legal-links a:visited { /* Target visited state explicitly */
+    color: #FFFFFF; /* White */
+    text-decoration: none;
+    margin: 0 0.1em; 
+  }
+  .footer-legal-links a:hover {
+    text-decoration: underline;
+    /* Optional: different hover color if desired, e.g., #E0E0E0 */
+  }
+
+  .footer-legal-links .separator {
+    margin: 0 0.4em; 
+    color: #AAAAAA; /* Color for the pipe separators */
+  }
+
+  /* Desktop layout for footer-bottom: side-by-side */
+  @media (min-width: 769px) {
+    .footer-bottom {
+      flex-direction: row; 
+      justify-content: center; 
+      gap: 1rem; 
+    }
+  }
+</style>

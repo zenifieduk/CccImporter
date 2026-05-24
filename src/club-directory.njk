@@ -1,10 +1,11 @@
 ---
 layout: layouts/page.njk
-title: Classic Car Clubs Directory
-description: Browse our comprehensive directory of classic car clubs across the UK.
+title: Classic Vehicle Clubs Directory
+description: Browse our comprehensive directory of classic vehicle clubs across the UK.
 pagination:
   data: clubs
   size: 4
+permalink: "/club-directory/{% if pagination.pageNumber > 0 %}page/{{ pagination.pageNumber + 1 }}/{% endif %}"
 ---
 
 {% set breadcrumbs = [{ url: '/club-directory/', label: 'Club Directory' }] %}
@@ -21,12 +22,12 @@ pagination:
       </div>
       
       <div class="hero-content club-hero-content">
-        <h1 class="hero-title">Classic Car Clubs Directory</h1>
-        <p class="hero-subtitle">Welcome to our comprehensive classic car clubs directory – your ultimate resource for connecting with classic car enthusiasts across the United Kingdom.</p>
+        <h1 class="hero-title">Classic Vehicle Clubs Directory</h1>
+        <p class="hero-subtitle">Welcome to our comprehensive classic vehicle clubs directory – your ultimate resource for connecting with classic vehicle enthusiasts across the United Kingdom.</p>
         
         <div class="hero-search">
           <div class="search-container event-search">
-            <form class="search-form" @submit.prevent="search()">
+            <form class="search-form">
               <div class="search-grid">
                 <div class="custom-search-group">
                   <label for="search-term">Club Name</label>
@@ -72,7 +73,6 @@ pagination:
                 </div>
                 
                 <div class="search-actions">
-                  <button type="submit" class="search-button">Search</button>
                   <button type="button" class="reset-button" @click.prevent="reset()">Reset</button>
                 </div>
               </div>
@@ -93,7 +93,7 @@ pagination:
         {% endfor %}
       </div>
     </div>
-    
+    <div id="results-section"><br></div>
     <div x-show="letter || searchTerm || category || location" class="search-status">
       <p x-text="`Showing ${filteredClubs.length} clubs ${letter ? `starting with '${letter}'` : ''}`"></p>
       <button @click="resetFilters()" class="exit-search-button">Clear All Filters</button>
@@ -102,16 +102,57 @@ pagination:
     <div x-show="isLoading" class="loading-indicator">Loading...</div>
     
     <div x-cloak x-show="!isLoading">
-      <div class="featured-section" x-show="filteredClubs.some(club => club.featured)">
+      <div class="featured-section" x-show="filteredClubs.some(club => club.showcase)">
+        <h2>Showcase Clubs</h2>
+        
+        <div class="club-grid">
+          <template x-for="club in filteredClubs.filter(c => c.showcase).slice(0, 9)" :key="club.slug">
+            <div class="club-card featured-club-card">
+              <div class="club-showcase-badge">Showcased</div>
+              
+              <div class="club-image">
+                <a :href="`/showcase/${club.slug.split('-').filter(part => isNaN(parseInt(part))).join('-')}/`" :aria-label="`View details for ${club.title}`">
+                  <img :src="club.imageUrl || '/assets/images/club-placeholder.jpg'" :alt="club.title">
+                </a>
+              </div>
+              
+              <div class="club-content">
+                <h3 class="club-title" x-text="club.title"></h3>
+                
+                <div class="club-location" x-show="club.city || club.state">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                  </svg>
+                  <span x-text="[club.city, club.state].filter(Boolean).join(', ')"></span>
+                </div>
+                
+                <div class="club-category" x-show="club.category">
+                  <span class="category-tag" x-text="club.category"></span>
+                  <span class="category-tag" x-text="club.marque" x-show="club.marque"></span>
+                </div>
+              </div>
+              
+              <div class="club-actions">
+                <a :href="`/showcase/${club.slug.split('-').filter(part => isNaN(parseInt(part))).join('-')}/`" class="button button-primary">View Details</a>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <div class="featured-section" x-show="filteredClubs.some(club => club.featured && !club.showcase)">
         <h2>Featured Clubs</h2>
         
         <div class="club-grid">
-          <template x-for="club in filteredClubs.filter(c => c.featured).slice(0, 9)" :key="club.slug">
+          <template x-for="club in filteredClubs.filter(c => c.featured && !c.showcase).slice(0, 9)" :key="club.slug">
             <div class="club-card featured-club-card">
               <div class="club-featured">Featured</div>
               
               <div class="club-image">
-                <img :src="club.imageUrl || '/assets/images/club-placeholder.jpg'" :alt="club.title">
+                <a :href="`/club-directory/${club.slug}/`" :aria-label="`View details for ${club.title}`">
+                  <img :src="club.imageUrl || '/assets/images/club-placeholder.jpg'" :alt="club.title">
+                </a>
               </div>
               
               <div class="club-content">
@@ -139,10 +180,11 @@ pagination:
         </div>
       </div>
       
-      <!-- Ad Banner Section -->
+      <div x-data="pagination" x-effect="items = filteredClubs.filter(c => !c.featured && !c.showcase)" id="club-list-section">
+
+       <!-- Ad Banner Section -->
       {% include "components/ad-banner.njk" %}
-      
-      <div x-data="pagination" x-effect="items = filteredClubs.filter(c => !c.featured)" id="club-list-section">
+
         <h2>Club List</h2>
         <div class="club-grid" x-show="paginatedItems.length > 0">
           <template x-for="club in paginatedItems" :key="club.slug">
@@ -242,4 +284,12 @@ pagination:
       </div>
     </div>
   </div>
+</div>
+
+<section>
+  <div class="container">
+    <iframe src="https://embeds.beehiiv.com/e6b43c29-16f4-4e4f-972d-540b14478731" data-test-id="beehiiv-embed" width="100%" height="320" frameborder="0" scrolling="no" style="border-radius: 4px; border: 2px solid #e5e7eb; margin: 0; background-color: transparent;"></iframe>
+  </div>
+</section>
+
 </div>

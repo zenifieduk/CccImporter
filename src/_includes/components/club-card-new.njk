@@ -1,6 +1,6 @@
-{% if club.featured %}
+{% if club.featured or club.showcase %}
 <div class="club-card featured-club-card">
-  <div class="club-featured">Featured</div>
+  <div class="club-showcase-badge">Showcased</div>
   
   <div class="club-image">
     {% if club.imageUrl %}
@@ -36,7 +36,7 @@
   </div>
   
   <div class="club-actions">
-    <a href="/club-directory/{{ club.slug | slugify }}-{{ club.id }}/" class="button button-primary">View Details</a>
+    <a href="/showcase/{{ club.slug | slugify }}/" class="button button-primary">View Details</a>
     {% if club.website %}
      <!-- <a href="{{ club.website }}" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
     {% endif %}
@@ -70,7 +70,7 @@
   </div>
   
   <div class="club-actions">
-    <a href="/club-directory/{{ club.slug | slugify }}-{{ club.id }}/" class="button button-primary">View Details</a>
+    <a href="{{ baseUrl | default('/club-directory/') }}{{ club.slug | slugify }}/" class="button button-primary">View Details</a>
     {% if club.website %}
      <!-- <a href="{{ club.website }}" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
     {% endif %}

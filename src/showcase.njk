@@ -1,0 +1,58 @@
+---
+layout: layouts/base.njk
+title: Showcase Clubs
+description: Discover all the classic car clubs featured in our premium showcase.
+eleventyNavigation:
+  key: Showcase
+  order: 3
+---
+
+{% set breadcrumbs = [
+  { url: '/', label: 'Home' },
+  { url: '/showcase/', label: 'Showcase' }
+] %}
+
+<div class="hero-section secondary-hero-section" style="background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('/assets/images/classic-car-clubs-london.avif'); background-size: cover; background-position: center;">
+  <div class="hero-overlay"></div>
+  <div class="container">
+    <div class="breadcrumbs-container">
+      <ul class="breadcrumbs">
+        <li><a href="/" style="color: white;">Home</a></li>
+        <li><a href="/showcase/" style="color: white;">Showcase</a></li>
+      </ul>
+    </div>
+
+    <div class="hero-content club-hero-content">
+      <h1 class="hero-title">Showcase Clubs</h1>
+      <p class="hero-subtitle">Discover all the classic car clubs featured in our premium showcase.</p>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <section class="featured-section">
+    <div class="section-header">
+      <h2 class="section-title">Featured Showcase Clubs</h2>
+      <p class="section-subtitle">These featured showcase clubs offer exceptional experiences and vibrant communities. From specialist marque clubs to regional historic vehicle gatherings, each provides unique opportunities for members to engage deeply with their automotive passion.</p>
+    </div>
+
+    <div class="club-grid">{% for club in showcaseClubs %}
+      {% set baseUrl = "/showcase/" %}
+      {% include "components/club-card-new.njk" %}
+    {% endfor %}
+    </div>
+  </section>
+
+  <section class="featured-section">
+    <div class="section-header">
+      <h2 class="section-title">Explore More Showcase Clubs</h2>
+      <p class="section-subtitle">Explore a wider selection of showcase clubs, each with a unique focus and community. Find the perfect club to share your passion for classic cars.</p>
+    </div>
+    <!-- Potentially add another club list or other content here if needed in the future -->
+  </section>
+
+  <!-- Ad Banner Section -->
+  <section>
+    {% include "components/ad-banner.njk" %}
+  </section>
+</div>

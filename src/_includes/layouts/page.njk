@@ -3,5 +3,10 @@ layout: layouts/base.njk
 ---
 
 <div class="container">
+  {% if eleventyNavigationBreadcrumb %}
+  <nav aria-label="Breadcrumb" class="breadcrumb-nav">
+    {{ eleventyNavigationBreadcrumb(page) | safe }}
+  </nav>
+  {% endif %}
   {{ content | safe }}
 </div>

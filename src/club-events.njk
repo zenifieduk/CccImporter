@@ -4,9 +4,347 @@ title: Classic Car Events
 description: Browse upcoming classic car shows, meets, and events across the UK.
 ---
 
+<!-- Import events data from _data/events.js -->
+<script>
+  // The "events" variable is automatically available from _data/events.js.
+  var eventsData = {{ events | dump | safe }};
+</script>
+
+<script>
+  // Convert a date string in "DDMMYYYY:HH:MM:SS" format to a valid Date object.
+  function parseEventDate(dateStr) {
+    // Extract day, month, year, and time parts.
+    var day = dateStr.substring(0, 2);
+    var month = dateStr.substring(2, 4);
+    var year = dateStr.substring(4, 8);
+    var time = dateStr.substring(9); // time starts after the colon at index 8
+    return new Date(year + '-' + month + '-' + day + 'T' + time);
+  }
+
+  document.addEventListener('alpine:init', () => {
+    Alpine.data('eventSearch', () => ({
+      searchTerm: '',
+      category: '',
+      location: '',
+      filteredEvents: [],
+      allEvents: [],
+      isLoading: true,
+      availableCategories: [],
+      availableLocations: [],
+      allCategories: [],
+      allLocations: [],
+      
+      init() {
+        // Start loading
+        this.isLoading = true;
+        
+        // Load events from eventsData and sort them by start date (earliest first)
+        this.allEvents = [...eventsData];
+        this.allEvents.sort((a, b) => parseEventDate(a.eventStartDateTime) - parseEventDate(b.eventStartDateTime));
+        
+        // Initialize filtered results with all events
+        this.filteredEvents = [...this.allEvents];
+        
+        // Extract unique categories and locations
+        this.extractCategoriesAndLocations();
+        
+        // Get URL params if any
+        const urlParams = new URLSearchParams(window.location.search);
+        this.searchTerm = urlParams.get('search') || '';
+        this.category = urlParams.get('category') || '';
+        this.location = urlParams.get('location') || '';
+        
+        // Apply filters if we have URL parameters
+        if (this.searchTerm || this.category || this.location) {
+          this.filter();
+        }
+        
+        // Finished loading
+        this.isLoading = false;
+        
+        // Add watchers for real-time filter updates
+        this.$watch('category', () => {
+          if (this.category !== undefined) {
+            console.log("Category changed to:", this.category);
+            this.search();
+          }
+        });
+        
+        this.$watch('location', () => {
+          if (this.location !== undefined) {
+            console.log("Location changed to:", this.location);
+            this.search();
+          }
+        });
+        
+        this.$watch('searchTerm', () => {
+          if (this.searchTerm !== undefined) {
+            console.log("Search term changed to:", this.searchTerm);
+            this.search(); // Also trigger search on searchTerm change
+          }
+        });
+      },
+      
+      // Extract unique categories and locations from events
+      extractCategoriesAndLocations() {
+        const categorySet = new Set();
+        const locationSet = new Set();
+        
+        this.allEvents.forEach(event => {
+          // Handle categories
+          if (Array.isArray(event.eventCategory)) {
+            event.eventCategory.forEach(category => {
+              if (category && category.trim() !== '') {
+                categorySet.add(category.trim());
+              }
+            });
+          } else if (typeof event.eventCategory === 'string' && event.eventCategory.trim() !== '') {
+            categorySet.add(event.eventCategory.trim());
+          }
+          
+          // Only use eventState for locations (county/region), not city
+          if (event.eventState && event.eventState.trim() !== '') {
+            locationSet.add(event.eventState.trim());
+          }
+        });
+        
+        // Convert to sorted arrays and store as the full set of options
+        this.allCategories = [...categorySet].sort();
+        this.allLocations = [...locationSet].sort();
+        
+        // Initialize available options to all options
+        this.availableCategories = [...this.allCategories];
+        this.availableLocations = [...this.allLocations];
+        
+        console.log("All categories:", this.allCategories);
+        console.log("All locations:", this.allLocations);
+      },
+      
+      // Main filtering function
+      filter() {
+        console.log("Filtering events...");
+        console.log("Terms:", this.searchTerm, this.category, this.location);
+        
+        // Start with all events
+        let filtered = [...this.allEvents];
+        
+        // Filter by search term
+        if (this.searchTerm && this.searchTerm.trim() !== '') {
+          const term = this.searchTerm.toLowerCase().trim();
+          console.log("Filtering by term:", term);
+          
+          filtered = filtered.filter(event => {
+            return event.eventTitle && event.eventTitle.toLowerCase().includes(term);
+          });
+          
+          console.log("After term filtering:", filtered.length);
+        }
+        
+        // Filter by category
+        if (this.category && this.category.trim() !== '') {
+          const categoryValue = this.category.toLowerCase().trim();
+          console.log("Filtering by category:", categoryValue);
+          
+          filtered = filtered.filter(event => {
+            if (Array.isArray(event.eventCategory)) {
+              return event.eventCategory.some(cat => 
+                cat && cat.toLowerCase().trim() === categoryValue);
+            } else if (typeof event.eventCategory === 'string') {
+              return event.eventCategory.toLowerCase().trim() === categoryValue;
+            }
+            return false;
+          });
+          
+          console.log("After category filtering:", filtered.length);
+        }
+        
+        // Filter by location (state/county only)
+        if (this.location && this.location.trim() !== '') {
+          const locationValue = this.location.toLowerCase().trim();
+          console.log("Filtering by location:", locationValue);
+          
+          filtered = filtered.filter(event => {
+            // Only check state/county match
+            return event.eventState && 
+                   event.eventState.toLowerCase().trim() === locationValue;
+          });
+          
+          console.log("After location filtering:", filtered.length);
+        }
+        
+        // Update filtered events
+        this.filteredEvents = filtered;
+        console.log("Final filtered count:", this.filteredEvents.length);
+        
+        // Update available options based on filters
+        this.updateAvailableOptions();
+      },
+      
+      // Handle search form submission
+      search() {
+        console.log("Search function called");
+        
+        // Update URL params
+        const urlParams = new URLSearchParams();
+        if (this.searchTerm) urlParams.set('search', this.searchTerm);
+        if (this.category) urlParams.set('category', this.category);
+        if (this.location) urlParams.set('location', this.location);
+        
+        const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+        window.history.pushState({}, '', newUrl);
+        
+        // Apply filters
+        this.filter();
+      },
+      
+      // Reset all filters
+      reset() {
+        console.log("Reset called");
+        this.searchTerm = '';
+        this.category = '';
+        this.location = '';
+        
+        // Update URL - remove all params
+        window.history.pushState({}, '', window.location.pathname);
+        
+        // Reset to all events
+        this.filteredEvents = [...this.allEvents];
+        
+        // Reset available options to all options
+        this.availableCategories = [...this.allCategories];
+        this.availableLocations = [...this.allLocations];
+      },
+      
+      // Alias for reset (for UI consistency)
+      resetFilters() {
+        this.reset();
+      },
+      
+      // Update available dropdown options based on current filters
+      updateAvailableOptions() {
+        const categories = new Set();
+        const locations = new Set(); // For eventState
+
+        // Determine current filters for concise checking
+        const currentSearchTerm = this.searchTerm ? this.searchTerm.toLowerCase().trim() : null;
+        const currentCategory = this.category ? this.category.toLowerCase().trim() : null;
+        const currentLocation = this.location ? this.location.toLowerCase().trim() : null;
+
+        this.allEvents.forEach(event => {
+            // Populate categories based on current filters (excluding category itself)
+            let passesCategoryPopulationFilter = true;
+            if (currentSearchTerm) {
+                if (!event.eventTitle || !event.eventTitle.toLowerCase().includes(currentSearchTerm)) {
+                    passesCategoryPopulationFilter = false;
+                }
+            }
+            if (currentLocation) {
+                if (typeof event.eventState === 'string') {
+                    if (event.eventState.toLowerCase().trim() !== currentLocation) passesCategoryPopulationFilter = false;
+                } else if (Array.isArray(event.eventState)) { // Though current data is string, plan for future
+                    if (!event.eventState.some(s => s.toLowerCase().trim() === currentLocation)) passesCategoryPopulationFilter = false;
+                } else { passesCategoryPopulationFilter = false; }
+            }
+
+            if (passesCategoryPopulationFilter && event.eventCategory) {
+                if (typeof event.eventCategory === 'string') {
+                    const cat = event.eventCategory.trim();
+                    if (cat) categories.add(cat);
+                } else if (Array.isArray(event.eventCategory)) {
+                    event.eventCategory.forEach(cat => {
+                        if (typeof cat === 'string') {
+                            const trimmedCat = cat.trim();
+                            if (trimmedCat) categories.add(trimmedCat);
+                        }
+                    });
+                }
+            }
+
+            // Populate locations (eventState) based on current filters (excluding location itself)
+            let passesLocationPopulationFilter = true;
+            if (currentSearchTerm) {
+                if (!event.eventTitle || !event.eventTitle.toLowerCase().includes(currentSearchTerm)) {
+                    passesLocationPopulationFilter = false;
+                }
+            }
+            if (currentCategory) {
+                if (typeof event.eventCategory === 'string') {
+                    if (event.eventCategory.toLowerCase().trim() !== currentCategory) passesLocationPopulationFilter = false;
+                } else if (Array.isArray(event.eventCategory)) {
+                    if (!event.eventCategory.some(c => c.toLowerCase().trim() === currentCategory)) passesLocationPopulationFilter = false;
+                } else { passesLocationPopulationFilter = false; }
+            }
+
+            if (passesLocationPopulationFilter && event.eventState) {
+                if (typeof event.eventState === 'string') {
+                    const loc = event.eventState.trim();
+                    if (loc) locations.add(loc);
+                } else if (Array.isArray(event.eventState)) { // Future-proofing for array locations
+                    event.eventState.forEach(loc => {
+                        if (typeof loc === 'string') {
+                            const trimmedLoc = loc.trim();
+                            if (trimmedLoc) locations.add(trimmedLoc);
+                        }
+                    });
+                }
+            }
+        });
+
+        this.availableCategories = [...categories].sort();
+        this.availableLocations = [...locations].sort();
+        
+        console.log("Available Categories updated:", this.availableCategories);
+        console.log("Available Locations updated:", this.availableLocations);
+      }
+    }));
+
+    Alpine.data('eventDisplay', () => ({
+      formatMonth(dateStr) {
+        const date = parseEventDate(dateStr);
+        return date.toLocaleString('default', { month: 'short' });
+      },
+      formatDay(dateStr) {
+        const date = parseEventDate(dateStr);
+        return date.getDate();
+      },
+      formatTime(dateStr) {
+        const date = parseEventDate(dateStr);
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
+    }));
+
+    Alpine.data('pagination', () => ({
+      items: [],
+      currentPage: 1,
+      perPage: 10,
+      get totalItems() {
+        return this.items.length;
+      },
+      get totalPages() {
+        return Math.ceil(this.totalItems / this.perPage);
+      },
+      get paginatedItems() {
+        const start = (this.currentPage - 1) * this.perPage;
+        return this.items.slice(start, start + this.perPage);
+      },
+      get startIndex() {
+        return (this.currentPage - 1) * this.perPage + 1;
+      },
+      get endIndex() {
+        return Math.min(this.currentPage * this.perPage, this.totalItems);
+      },
+      goToPage(page) {
+        if (page >= 1 && page <= this.totalPages) {
+          this.currentPage = page;
+        }
+      }
+    }));
+  });
+</script>
+
 {% set breadcrumbs = [{ url: '/club-events/', label: 'Club Events' }] %}
 
-<div x-data="eventSearch" id="event-directory-app" x-init="init()">
+<div x-data="eventSearch" id="event-directory-app" class="club-events-page" x-init="init()">
   <section class="hero-section event-hero-section">
     <div class="hero-overlay"></div>
     <div class="container">
@@ -23,7 +361,7 @@ description: Browse upcoming classic car shows, meets, and events across the UK.
         
         <div class="hero-search">
           <div class="search-container event-search">
-            <form class="search-form" @submit.prevent="search()">
+            <form class="search-form" @submit.prevent="search">
               <div class="search-grid">
                 <div class="custom-search-group">
                   <label for="search-term">Event Title</label>
@@ -70,7 +408,6 @@ description: Browse upcoming classic car shows, meets, and events across the UK.
                 </div>
                 
                 <div class="search-actions">
-                  <button type="submit" class="search-button">Search</button>
                   <button type="button" class="reset-button" @click.prevent="reset()">Reset</button>
                 </div>
               </div>
@@ -82,179 +419,727 @@ description: Browse upcoming classic car shows, meets, and events across the UK.
   </section>
 
   <div class="container">
-    <div x-show="searchTerm || category || location" class="search-status">
-      <p x-text="`Showing ${filteredEvents.length} events`"></p>
-      <button @click="resetFilters()" class="exit-search-button">Clear All Filters</button>
+    <div class="search-status" x-show="searchTerm || category || location" style="background-color: #fff3cd; padding: 10px 15px; border-radius: 4px; margin: 25px 0 20px; display: flex; justify-content: space-between; align-items: center;">
+      <p style="margin: 0; color: #856404;">
+        <span x-text="`Showing upcoming events (${filteredEvents.filter(e => parseEventDate(e.eventStartDateTime) >= new Date()).length} found)`"></span>
+        <span style="font-size: 0.9em; display: block; margin-top: 2px;">Past events are still visible in calendar view</span>
+      </p>
+      <button @click="resetFilters()" class="exit-search-button" style="background-color: #856404; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Clear All Filters</button>
     </div>
     
     <div x-show="isLoading" class="loading-indicator">Loading...</div>
     
     <div x-cloak x-show="!isLoading">
-      <div class="featured-section" x-show="filteredEvents.some(event => event.eventFeatured)">
-        <h2>Featured Events</h2>
+      <!-- View Toggle -->
+      <div class="events-view-toggle" style="display:flex;gap:1rem;margin-bottom:1.5rem;margin-top:2rem;">
+        <button id="cardsViewBtn" class="button button-primary active-view">Cards View</button>
+        <button id="calendarViewBtn" class="button button-secondary">CALENDAR (ALL EVENTS)</button>
+      </div>
+
+      <!-- Calendar View -->
+      <div id="eventsCalendarView" style="display:none;margin-bottom:2rem;">
+        <div class="calendar-controls">
+          <button id="prevMonth" class="button button-secondary" style="min-width:auto;padding:0.5rem 1rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"/>
+            </svg>
+          </button>
+          <h3 id="calendarTitle" style="margin:0;">May 2024</h3>
+          <button id="nextMonth" class="button button-secondary" style="min-width:auto;padding:0.5rem 1rem;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
+          </button>
+        </div>
         
-        <div class="event-grid">
-          <template x-for="event in filteredEvents.filter(e => e.eventFeatured).slice(0, 8)" :key="event.eventSlug">
-            <div class="event-card" x-data="eventDisplay">
-              <div x-show="event.eventFeatured" class="event-featured">Featured</div>
-              
-              <div class="event-image">
-                <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
-                
-                <div class="event-date">
-                  <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
-                  <span class="event-day" x-text="formatDay(event.eventStartDateTime)"></span>
-                </div>
-              </div>
-              
-              <div class="event-content">
-                <h3 class="event-title" x-text="event.eventTitle"></h3>
-                
-                <div class="event-location" x-show="event.eventCity || event.eventState">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  <span x-text="[event.eventCity, event.eventState].filter(Boolean).join(', ')"></span>
-                </div>
-                
-                <div class="event-time">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
-                  </svg>
-                  <span x-text="formatTime(event.eventStartDateTime)"></span>
-                </div>
-                
-                <div class="event-price" x-show="event.eventTicketPrice" x-text="event.eventTicketPrice"></div>
-              </div>
-              
-              <div class="event-actions">
-                <a :href="'/club-events/' + event.eventSlug + '/'" class="button button-primary">View Details</a>
-               <!-- <a x-show="event.eventWebsite" :href="event.eventWebsite" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>-->
-              </div>
-            </div>
-          </template>
+        <div class="calendar-grid">
+          <div id="calendar" class="responsive-calendar"></div>
         </div>
       </div>
-      
-      <!-- Ad Banner Section -->
-      {% include "components/ad-banner.njk" %}
-      
-      <div x-data="pagination" x-effect="items = filteredEvents.filter(e => !e.eventFeatured)" id="event-list-section">
-        <h2>Upcoming Events</h2>
-        
-        <div class="event-grid" x-show="paginatedItems.length > 0">
-          <template x-for="event in paginatedItems" :key="event.eventSlug">
-            <div class="event-card" x-data="eventDisplay">
-              <div class="event-image">
-                <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
+
+      <!-- Cards View -->
+      <div id="eventsCardsView">
+        <!-- Featured Events Section -->
+        <div class="featured-section" x-show="filteredEvents.some(event => event.eventFeatured)">
+          <h2>Upcoming Featured Events</h2>
+          
+          <div class="event-grid">
+            <template x-for="event in filteredEvents.filter(e => e.eventFeatured)
+                                            .filter(e => {
+                                              // Filter out past events by comparing with current date
+                                              const now = new Date();
+                                              const eventDate = parseEventDate(e.eventStartDateTime);
+                                              return eventDate >= now; // Only include events from today or in the future
+                                            })
+                                            .sort((a, b) => parseEventDate(a.eventStartDateTime) - parseEventDate(b.eventStartDateTime))
+                                            .slice(0, 8)" :key="event.eventSlug">
+              <div class="event-card" x-data="eventDisplay">
+                <div x-show="event.eventFeatured" class="event-featured">Featured</div>
                 
-                <div class="event-date">
-                  <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
-                  <span class="event-day" x-text="formatDay(event.eventStartDateTime)"></span>
-                </div>
-              </div>
-              
-              <div class="event-content">
-                <h3 class="event-title" x-text="event.eventTitle"></h3>
-                
-                <div class="event-location" x-show="event.eventCity || event.eventState">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  <span x-text="[event.eventCity, event.eventState].filter(Boolean).join(', ')"></span>
-                </div>
-                
-                <div class="event-time">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
-                  </svg>
-                  <span x-text="formatTime(event.eventStartDateTime)"></span>
+                <div class="event-image">
+                  <a :href="'/club-events/' + event.eventSlug + '/'" :aria-label="`View details for ${event.eventTitle}`">
+                    <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
+                  </a>
+                  <div class="event-date">
+                    <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
+                    <span class="event-day" x-text="formatDay(event.eventStartDateTime)"></span>
+                  </div>
                 </div>
                 
-                <div class="event-price" x-show="event.eventTicketPrice" x-text="event.eventTicketPrice"></div>
+                <div class="event-content">
+                  <h3 class="event-title" x-text="event.eventTitle"></h3>
+                  
+                  <div class="event-location" x-show="event.eventCity || event.eventState">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <span x-text="[event.eventCity, event.eventState].filter(Boolean).join(', ')"></span>
+                  </div>
+                  
+                  <div class="event-time">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span x-text="formatTime(event.eventStartDateTime)"></span>
+                  </div>
+                  
+                  <div class="event-price" x-show="event.eventTicketPrice" x-text="event.eventTicketPrice">Tickets: </div>
+                </div>
+                
+                <div class="event-actions">
+                  <a :href="'/club-events/' + event.eventSlug + '/'" class="button button-primary">View Details</a>
+                </div>
               </div>
-              
-              <div class="event-actions">
-                <a :href="'/club-events/' + event.eventSlug + '/'" class="button button-primary">View Details</a>
-              <!--  <a x-show="event.eventWebsite" :href="event.eventWebsite" target="_blank" rel="noopener" class="button button-secondary">Visit Website</a>-->
-              </div>
-            </div>
-          </template>
+            </template>
+          </div>
         </div>
         
-        <div x-show="paginatedItems.length === 0" class="no-results">
-          <p>No events found matching your criteria. Please try different search terms or <button @click="reset" class="reset-link">reset filters</button>.</p>
-        </div>
+        <!-- Results Section (Scrollable) -->
+        <div id="results-section" style="max-height: 800px; overflow-y: auto; margin-bottom: 30px;"></div>
         
-        <div class="pagination" x-show="totalPages > 1">
-          <div class="pagination-controls">
-            <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="pagination-arrow pagination-prev" :class="{ 'disabled': currentPage === 1 }">
-              &laquo; Previous
-            </button>
-            
-            <div class="pagination-numbers">
-              <!-- Display first page -->
-              <button 
-                @click="goToPage(1)" 
-                class="pagination-number" 
-                :class="{ 'active': currentPage === 1 }"
-              >1</button>
-              
-              <!-- Display ellipsis if needed -->
-              <span class="pagination-ellipsis" x-show="currentPage > 3">...</span>
-              
-              <!-- Display page before current if not first or second page -->
-              <button 
-                x-show="currentPage > 2" 
-                @click="goToPage(currentPage - 1)" 
-                class="pagination-number"
-              >
-                <span x-text="currentPage - 1"></span>
-              </button>
-              
-              <!-- Display current page if not first page -->
-              <button 
-                x-show="currentPage !== 1 && currentPage !== totalPages" 
-                class="pagination-number active"
-              >
-                <span x-text="currentPage"></span>
-              </button>
-              
-              <!-- Display page after current if not last or second-to-last page -->
-              <button 
-                x-show="currentPage < totalPages - 1" 
-                @click="goToPage(currentPage + 1)" 
-                class="pagination-number"
-              >
-                <span x-text="currentPage + 1"></span>
-              </button>
-              
-              <!-- Display ellipsis if needed -->
-              <span class="pagination-ellipsis" x-show="currentPage < totalPages - 2">...</span>
-              
-              <!-- Display last page if more than one page -->
-              <button 
-                x-show="totalPages > 1" 
-                @click="goToPage(totalPages)" 
-                class="pagination-number" 
-                :class="{ 'active': currentPage === totalPages }"
-              >
-                <span x-text="totalPages"></span>
-              </button>
-            </div>
-            
-            <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-arrow pagination-next" :class="{ 'disabled': currentPage === totalPages }">
-              Next &raquo;
-            </button>
+        <!-- Ad Banner Section -->
+        {% include "components/ad-banner.njk" %}
+        
+        <!-- All Upcoming Events Section -->
+        <div x-data="pagination" x-effect="items = filteredEvents
+                                .filter(e => parseEventDate(e.eventStartDateTime) >= new Date())
+                                .filter(e => !e.eventFeatured) // Filter out featured events
+                                .sort((a, b) => parseEventDate(a.eventStartDateTime) - parseEventDate(b.eventStartDateTime))">
+          <h2>All Upcoming Events</h2>
+          
+          <div class="event-grid" x-show="paginatedItems.length > 0">
+            <template x-for="event in paginatedItems" :key="event.eventSlug">
+              <div class="event-card" x-data="eventDisplay">
+                <div class="event-image">
+                  <a :href="'/club-events/' + event.eventSlug + '/'" :aria-label="`View details for ${event.eventTitle}`">
+                    <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
+                  </a>
+                  <div class="event-date">
+                    <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
+                    <span class="event-day" x-text="formatDay(event.eventStartDateTime)"></span>
+                  </div>
+                </div>
+                
+                <div class="event-content">
+                  <h3 class="event-title" x-text="event.eventTitle"></h3>
+                  
+                  <div class="event-location" x-show="event.eventCity || event.eventState">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                      <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    <span x-text="[event.eventCity, event.eventState].filter(Boolean).join(', ')"></span>
+                  </div>
+                  
+                  <div class="event-time">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span x-text="formatTime(event.eventStartDateTime)"></span>
+                  </div>
+                  
+                  <div class="event-price" x-show="event.eventTicketPrice" x-text="event.eventTicketPrice">Tickets: </div>
+                </div>
+                
+                <div class="event-actions">
+                  <a :href="'/club-events/' + event.eventSlug + '/'" class="button button-primary">View Details</a>
+                </div>
+              </div>
+            </template>
           </div>
           
-          <div class="pagination-info" x-text="`Showing ${startIndex} to ${endIndex} of ${totalItems} events`"></div>
+          <div x-show="paginatedItems.length === 0" class="no-results">
+            <p>No events found matching your criteria. Please try different search terms or <button @click="reset" class="reset-link">reset filters</button>.</p>
+          </div>
+          
+          <div class="pagination" x-show="totalPages > 1">
+            <div class="pagination-controls">
+              <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" class="pagination-arrow pagination-prev" :class="{ 'disabled': currentPage === 1 }">
+                &laquo; Previous
+              </button>
+              
+              <div class="pagination-numbers">
+                <button @click="goToPage(1)" class="pagination-number" :class="{ 'active': currentPage === 1 }">1</button>
+                <span class="pagination-ellipsis" x-show="currentPage > 3">...</span>
+                <button x-show="currentPage > 2" @click="goToPage(currentPage - 1)" class="pagination-number">
+                  <span x-text="currentPage - 1"></span>
+                </button>
+                <button x-show="currentPage !== 1 && currentPage !== totalPages" class="pagination-number active">
+                  <span x-text="currentPage"></span>
+                </button>
+                <button x-show="currentPage < totalPages - 1" @click="goToPage(currentPage + 1)" class="pagination-number">
+                  <span x-text="currentPage + 1"></span>
+                </button>
+                <span class="pagination-ellipsis" x-show="currentPage < totalPages - 2">...</span>
+                <button x-show="totalPages > 1" @click="goToPage(totalPages)" class="pagination-number" :class="{ 'active': currentPage === totalPages }">
+                  <span x-text="totalPages"></span>
+                </button>
+              </div>
+              
+              <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" class="pagination-arrow pagination-next" :class="{ 'disabled': currentPage === totalPages }">
+                Next &raquo;
+              </button>
+            </div>
+            
+            <div class="pagination-info" x-text="`Showing ${startIndex} to ${endIndex} of ${totalItems} events`"></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Event Modal -->
+<div id="eventModal" class="event-modal" style="display: none;">
+  <div class="event-modal-content">
+    <span class="close-modal">&times;</span>
+    <h3 class="event-modal-title"></h3>
+    <div class="event-modal-meta"></div>
+    <div class="event-modal-description"></div>
+  </div>
+</div>
+
+<!-- Calendar Responsive Styles -->
+<style>
+  .responsive-calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    width: 100%;
+  }
+  
+  .calendar-day-header {
+    font-weight: bold;
+    text-align: center;
+    padding: 8px 4px;
+    background: #f5f5f5;
+    border-bottom: 2px solid var(--button-colour);
+    font-family: var(--font-sans);
+    font-size: 0.9rem;
+  }
+  
+  .calendar-day {
+    min-height: 90px;
+    border: 1px solid #eee;
+    padding: 8px;
+    position: relative;
+    background: white;
+    transition: background-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .calendar-day.empty {
+    background: #f9f9f9;
+    min-height: 90px;
+  }
+  
+  .calendar-day.has-events {
+    background: #f0f7f0;
+  }
+  
+  .day-number {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  .calendar-event {
+    font-size: 0.8rem;
+    padding: 6px 8px;
+    margin-bottom: 6px;
+    background: var(--button-colour);
+    color: white;
+    border-radius: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    word-break: break-word;
+  }
+  
+  .calendar-event:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Mobile Specific Styles */
+  @media (max-width: 768px) {
+    .responsive-calendar {
+      gap: 2px;
+    }
+    
+    .calendar-day-header {
+      padding: 4px 2px;
+      font-size: 0.8rem;
+    }
+    
+    .calendar-day, .calendar-day.empty {
+      min-height: 80px;
+      padding: 4px;
+    }
+    
+    .day-number {
+      font-size: 0.9rem;
+      margin-bottom: 4px;
+    }
+    
+    .calendar-event {
+      font-size: 0.75rem;
+      padding: 4px 6px;
+      margin-bottom: 4px;
+      white-space: normal;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      line-height: 1.2;
+      height: auto;
+      max-height: 2.4em;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .responsive-calendar {
+      gap: 1px;
+    }
+    
+    .calendar-day-header {
+      font-size: 0.7rem;
+      padding: 3px 1px;
+    }
+    
+    .calendar-day, .calendar-day.empty {
+      min-height: 60px;
+      padding: 3px;
+    }
+    
+    .day-number {
+      font-size: 0.8rem;
+      margin-bottom: 2px;
+    }
+    
+    .calendar-event {
+      font-size: 0.7rem;
+      padding: 2px 4px;
+      margin-bottom: 2px;
+    }
+    
+    .event-modal-content {
+      width: 90%;
+      margin: 15% auto;
+      padding: 15px;
+    }
+  }
+  
+  /* Modal Styles */
+  .event-modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  }
+  
+  .event-modal-content {
+    background-color: #fefefe;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 600px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .close-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close-modal:hover,
+  .close-modal:focus {
+    color: black;
+    text-decoration: none;
+  }
+  
+  .event-modal-title {
+    margin-top: 0;
+    color: var(--button-colour);
+  }
+  
+  .event-modal-meta {
+    margin-bottom: 15px;
+    color: #666;
+  }
+  
+  .calendar-event.more-events {
+    background: #e5e5e5;
+    color: #333;
+    text-align: center;
+    font-style: italic;
+    font-size: 0.75rem;
+  }
+  
+  .events-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .event-list-item {
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+    margin-bottom: 10px;
+  }
+  
+  .event-list-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+  
+  .event-list-item h4 {
+    margin-top: 0;
+    color: var(--button-colour);
+  }
+  
+  /* Mobile Specific Styles */
+</style>
+
+<!-- Calendar Script -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Toggle between views
+    const cardsViewBtn = document.getElementById('cardsViewBtn');
+    const calendarViewBtn = document.getElementById('calendarViewBtn');
+    const eventsCardsView = document.getElementById('eventsCardsView');
+    const eventsCalendarView = document.getElementById('eventsCalendarView');
+    const eventModal = document.getElementById('eventModal');
+    const closeModal = document.querySelector('.close-modal');
+    
+    if (cardsViewBtn && calendarViewBtn) {
+      cardsViewBtn.addEventListener('click', function() {
+        eventsCardsView.style.display = 'block';
+        eventsCalendarView.style.display = 'none';
+        cardsViewBtn.classList.add('active-view');
+        cardsViewBtn.classList.remove('button-secondary');
+        cardsViewBtn.classList.add('button-primary');
+        calendarViewBtn.classList.remove('active-view');
+        calendarViewBtn.classList.remove('button-primary');
+        calendarViewBtn.classList.add('button-secondary');
+      });
+      
+      calendarViewBtn.addEventListener('click', function() {
+        eventsCardsView.style.display = 'none';
+        eventsCalendarView.style.display = 'block';
+        calendarViewBtn.classList.add('active-view');
+        calendarViewBtn.classList.remove('button-secondary');
+        calendarViewBtn.classList.add('button-primary');
+        cardsViewBtn.classList.remove('active-view');
+        cardsViewBtn.classList.remove('button-primary');
+        cardsViewBtn.classList.add('button-secondary');
+      });
+    }
+    
+    // Close modal when clicking X or outside modal
+    if (closeModal) {
+      closeModal.addEventListener('click', function() {
+        eventModal.style.display = 'none';
+      });
+    }
+    
+    window.addEventListener('click', function(event) {
+      if (event.target === eventModal) {
+        eventModal.style.display = 'none';
+      }
+    });
+    
+    // Calendar functionality
+    const calendar = document.getElementById('calendar');
+    const calendarTitle = document.getElementById('calendarTitle');
+    const prevMonthBtn = document.getElementById('prevMonth');
+    const nextMonthBtn = document.getElementById('nextMonth');
+    
+    if (!calendar || !calendarTitle || !prevMonthBtn || !nextMonthBtn) return;
+    
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
+    
+    // Format events for the calendar
+    function formatEvents() {
+      return eventsData.map(event => {
+        let eventDate;
+        try {
+          // Parse the date from DDMMYYYY:HH:MM:SS format
+          const day = event.eventStartDateTime.substring(0, 2);
+          const month = event.eventStartDateTime.substring(2, 4);
+          const year = event.eventStartDateTime.substring(4, 8);
+          const time = event.eventStartDateTime.substring(9);
+          eventDate = new Date(year + '-' + month + '-' + day + 'T' + time);
+        } catch (error) {
+          // If parsing fails, default to today
+          eventDate = new Date();
+        }
+        
+        return {
+          ...event,
+          parsedDate: eventDate
+        };
+      });
+    }
+    
+    function renderCalendar() {
+      // Clear previous calendar
+      calendar.innerHTML = '';
+      
+      // Update header
+      const monthNames = ["January", "February", "March", "April", "May", "June", 
+                         "July", "August", "September", "October", "November", "December"];
+      calendarTitle.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+      
+      // Add day headers
+      const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      dayNames.forEach(day => {
+        const dayHeader = document.createElement('div');
+        dayHeader.className = 'calendar-day-header';
+        dayHeader.textContent = day;
+        calendar.appendChild(dayHeader);
+      });
+      
+      // Get first day of month and last day of month
+      const firstDay = new Date(currentYear, currentMonth, 1);
+      const lastDay = new Date(currentYear, currentMonth + 1, 0);
+      
+      // Add empty cells for days before the first day of the month
+      for (let i = 0; i < firstDay.getDay(); i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = 'calendar-day empty';
+        calendar.appendChild(emptyCell);
+      }
+      
+      // Get formatted events
+      const formattedEvents = formatEvents();
+      
+      // Add cells for each day of the month
+      for (let day = 1; day <= lastDay.getDate(); day++) {
+        const cell = document.createElement('div');
+        cell.className = 'calendar-day';
+        
+        // Add day number
+        const dayNumber = document.createElement('div');
+        dayNumber.className = 'day-number';
+        dayNumber.textContent = day;
+        cell.appendChild(dayNumber);
+        
+        // Check if there are events on this day
+        const dayEvents = formattedEvents.filter(event => {
+          return event.parsedDate.getDate() === day && 
+                 event.parsedDate.getMonth() === currentMonth && 
+                 event.parsedDate.getFullYear() === currentYear;
+        });
+        
+        // Add events to the cell
+        if (dayEvents.length > 0) {
+          cell.classList.add('has-events');
+          
+          // Sort events by time if available
+          dayEvents.sort((a, b) => {
+            if (a.parsedDate && b.parsedDate) {
+              return a.parsedDate.getTime() - b.parsedDate.getTime();
+            }
+            return 0;
+          });
+          
+          // Limit number of displayed events on small screens
+          const isMobile = window.innerWidth <= 768;
+          const eventsToShow = isMobile ? Math.min(2, dayEvents.length) : dayEvents.length;
+          
+          for (let i = 0; i < eventsToShow; i++) {
+            const event = dayEvents[i];
+            const eventEl = document.createElement('div');
+            eventEl.className = 'calendar-event';
+            eventEl.textContent = event.eventTitle;
+            
+            // Function to create event click handler
+            function createEventClickHandler(event) {
+              return function() {
+                // Populate modal with event details
+                const modal = document.getElementById('eventModal');
+                const modalTitle = modal.querySelector('.event-modal-title');
+                const modalMeta = modal.querySelector('.event-modal-meta');
+                const modalDescription = modal.querySelector('.event-modal-description');
+                
+                modalTitle.textContent = event.eventTitle;
+                
+                // Format date for display
+                const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const formattedDate = event.parsedDate.toLocaleDateString('en-US', dateOptions);
+                
+                modalMeta.innerHTML = `
+                  <p><strong>Date:</strong> ${formattedDate}</p>
+                  ${event.eventLocation ? `<p><strong>Location:</strong> ${event.eventLocation}</p>` : ''}
+                  ${event.eventTime ? `<p><strong>Time:</strong> ${event.eventTime}</p>` : ''}
+                  ${event.eventTicketPrice ? `<p><strong>Price:</strong> ${event.eventTicketPrice}</p>` : ''}
+                `;
+                
+                modalDescription.innerHTML = event.eventDescription || '<p>No description available</p>';
+                
+                // Add external website button if available
+                if (event.eventWebsite) {
+                  // Create a container div for the button with proper spacing
+                  const buttonContainer = document.createElement('div');
+                  buttonContainer.style.marginTop = "30px";
+                  buttonContainer.style.textAlign = "center";
+                  
+                  // Create the button
+                  const websiteButton = document.createElement('a');
+                  websiteButton.href = event.eventWebsite;
+                  websiteButton.target = "_blank";
+                  websiteButton.rel = "noopener noreferrer";
+                  websiteButton.className = "button button-primary";
+                  websiteButton.style.display = "inline-block";
+                  websiteButton.style.padding = "12px 25px";
+                  websiteButton.style.fontSize = "16px";
+                  websiteButton.style.textTransform = "uppercase";
+                  websiteButton.style.fontWeight = "bold";
+                  websiteButton.textContent = "Visit Event Website";
+                  
+                  // Add the button to the container and the container to the modal
+                  buttonContainer.appendChild(websiteButton);
+                  modalDescription.appendChild(buttonContainer);
+                }
+                
+                // Show modal
+                modal.style.display = 'block';
+                
+                // Close modal when clicking on the close button
+                const closeBtn = modal.querySelector('.close-modal');
+                closeBtn.onclick = function() {
+                  modal.style.display = 'none';
+                };
+                
+                // Close modal when clicking outside of it
+                window.onclick = function(event) {
+                  if (event.target === modal) {
+                    modal.style.display = 'none';
+                  }
+                };
+              };
+            }
+            
+            // Add click functionality to show event details
+            eventEl.addEventListener('click', createEventClickHandler(event));
+            
+            cell.appendChild(eventEl);
+          }
+          
+          // Show "+X more" if there are more events
+          if (dayEvents.length > eventsToShow) {
+            const moreEl = document.createElement('div');
+            moreEl.className = 'calendar-event more-events';
+            moreEl.textContent = `+${dayEvents.length - eventsToShow} more`;
+            moreEl.addEventListener('click', function() {
+              // Create a temporary list of all events for this day
+              const allEventsModal = document.getElementById('eventModal');
+              const modalTitle = allEventsModal.querySelector('.event-modal-title');
+              const modalMeta = allEventsModal.querySelector('.event-modal-meta');
+              const modalDescription = allEventsModal.querySelector('.event-modal-description');
+              
+              modalTitle.textContent = `Events on ${monthNames[currentMonth]} ${day}, ${currentYear}`;
+              modalMeta.innerHTML = '';
+              
+              // List all events
+              let eventsList = '<ul class="events-list">';
+              dayEvents.forEach(event => {
+                eventsList += `
+                  <li class="event-list-item">
+                    <h4>${event.eventTitle}</h4>
+                    ${event.eventTime ? `<p><strong>Time:</strong> ${event.eventTime}</p>` : ''}
+                    ${event.eventLocation ? `<p><strong>Location:</strong> ${event.eventLocation}</p>` : ''}
+                    ${event.eventTicketPrice ? `<p><strong>Price:</strong> ${event.eventTicketPrice}</p>` : ''}
+                    ${event.eventDescription ? `<p>${event.eventDescription}</p>` : ''}
+                    ${event.eventWebsite ? `<div style="margin-top: 25px; text-align: center;"><a href="${event.eventWebsite}" target="_blank" rel="noopener noreferrer" class="button button-primary" style="display: inline-block; padding: 10px 20px; font-size: 14px; text-transform: uppercase; font-weight: bold;">Visit Event Website</a></div>` : ''}
+                  </li>
+                `;
+              });
+              eventsList += '</ul>';
+              
+              modalDescription.innerHTML = eventsList;
+              
+              // Show modal
+              allEventsModal.style.display = 'block';
+            });
+            
+            cell.appendChild(moreEl);
+          }
+        }
+        
+        calendar.appendChild(cell);
+      }
+      
+      // Add empty cells for days after the last day of the month
+      const totalCells = firstDay.getDay() + lastDay.getDate();
+      const remainingCells = 7 - (totalCells % 7);
+      if (remainingCells < 7) {
+        for (let i = 0; i < remainingCells; i++) {
+          const emptyCell = document.createElement('div');
+          emptyCell.className = 'calendar-day empty';
+          calendar.appendChild(emptyCell);
+        }
+      }
+    }
+    
+    // Navigation between months
+    prevMonthBtn.addEventListener('click', function() {
+      currentMonth--;
+      if (currentMonth < 0) {
+        currentMonth = 11;
+        currentYear--;
+      }
+      renderCalendar();
+    });
+    
+    nextMonthBtn.addEventListener('click', function() {
+      currentMonth++;
+      if (currentMonth > 11) {
+        currentMonth = 0;
+        currentYear++;
+      }
+      renderCalendar();
+    });
+    
+    // Initial render
+    renderCalendar();
+  });
+</script>

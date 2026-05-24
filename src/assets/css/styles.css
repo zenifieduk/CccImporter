@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Display&family=Public+Sans:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+ 
+/* Alpine.js utilities */
+[x-cloak] { display: none !important; }
 
 :root {
   --primary-color: #000000;
@@ -8,6 +11,9 @@
   --background-color: #ffffff;
   --border-color: #e0e0e0;
   --shadow-color: rgba(0, 0, 0, 0.1);
+  --font-serif: "EB Garamond";
+  --font-sans:"Public Sans", "Inter Tight", sans-serif;
+  --button-colour: #09484A;
 }
 
 * {
@@ -16,11 +22,19 @@
   padding: 0;
 }
 
+.main {
+  padding-bottom: 40px !important;
+}
+
+.site-footer { 
+ margin-top: 40px !important;
+}
+
 body {
-  font-family: 'Noto Serif Display', Georgia, serif;
+  font-family: var(--font-serif), Times New Roman, Times, serif;
   line-height: 1.6;
   color: var(--text-color);
-  background-color: #f5f5f5;
+  background-color: #fff;
   margin: 0;
   padding: 0;
 }
@@ -35,8 +49,7 @@ h1, h2, h3, h4, h5, h6,
 .hero-buttons,
 .site-header .desktop-nav a,
 .site-header .mobile-nav a {
-  font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: var(--font-sans), sans-serif;
   font-weight: 500;
 }
 
@@ -60,7 +73,7 @@ a:hover {
 .container {
   max-width: 1360px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 2rem;
 }
 
 .hero-section {
@@ -71,6 +84,7 @@ a:hover {
   margin-left: -50vw;
   margin-right: -50vw;
   padding: 0;
+  margin-top: 0;
   box-sizing: border-box;
 }
 
@@ -89,19 +103,20 @@ a:hover {
 
 /* Header styles */
 .site-header {
-  background: #009294;
   color: white;
   padding: 1rem 0;
   position: relative;
   z-index: 1000;
+  background: linear-gradient(135deg, #09484ad6 0%, #09484A 100%);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Transparent header for homepage */
 .home .site-header {
-  background: linear-gradient(135deg, rgb(48 126 116 / 52%) 0%, rgb(6 54 49 / 68%) 100%);
   position: absolute;
   width: 100%;
+  top: 0;
+  left: 0;
   box-shadow: none;
 }
 
@@ -130,24 +145,32 @@ a:hover {
   list-style: none;
   margin: 0;
   padding: 0;
+  height: 100%;
 }
 
 .site-header .desktop-nav li {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
   margin-left: 1.5rem;
 }
 
-.site-header .desktop-nav a {
-    color: white;
-    text-decoration: none;
-    font-weight: 100 !important;
-    transition: opacity 0.2s;
-    position: relative;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 0.02rem;
+.site-header .desktop-nav a,
+.site-header .desktop-nav .dropdown-toggle {
+  color: white;
+  text-decoration: none;
+  transition: opacity 0.2s;
+  position: relative;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.02rem;
+  padding: 0.75rem 0; /* Add consistent padding */
+  display: inline-block; /* Change to inline-block */
 }
 
-.site-header .desktop-nav a:hover {
+.site-header .desktop-nav a:hover,
+.site-header .desktop-nav .dropdown-toggle:hover {
   opacity: 0.8;
 }
 
@@ -156,14 +179,71 @@ a:hover {
   position: absolute;
   width: 0;
   height: 2px;
-  bottom: -5px;
+  bottom: 0;
   left: 0;
-  background-color: #000;
+  background-color: white;
   transition: width 0.3s;
 }
 
 .site-header .desktop-nav a:hover::after {
   width: 100%;
+}
+
+/* Prevent the underline effect on dropdown toggle */
+.site-header .desktop-nav .dropdown-toggle::after {
+  display: none;
+}
+
+/* Dropdown specific styles */
+.site-header .desktop-nav .has-dropdown {
+  position: relative;
+}
+
+.site-header .desktop-nav .dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+}
+
+.site-header .desktop-nav .dropdown-arrow {
+  margin-left: 5px;
+  font-size: 10px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.site-header .desktop-nav .dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+  z-index: 1000;
+}
+
+.site-header .desktop-nav .has-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.site-header .desktop-nav .dropdown-menu a {
+  display: block;
+  padding: 8px 16px;
+  color: #333;
+  white-space: nowrap;
+  text-transform: none;
+  font-size: 0.9rem;
+}
+
+.site-header .desktop-nav .dropdown-menu a:hover {
+  background-color: #f5f5f5;
 }
 
 /* Mobile menu toggle button */
@@ -179,7 +259,7 @@ a:hover {
   display: block;
   position: relative;
   width: 30px;
-  height: 24px;
+  height: 20px;
 }
 
 .site-header .bar {
@@ -200,11 +280,15 @@ a:hover {
 }
 
 .site-header .bar:nth-child(2) {
-  top: 10px;
+  top: 6px;
 }
 
 .site-header .bar:nth-child(3) {
-  top: 20px;
+  top: 12px;
+}
+
+.site-header .bar:nth-child(4) {
+  top: 18px;
 }
 
 /* Full screen mobile menu */
@@ -214,7 +298,7 @@ a:hover {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #0a3410 0%, #051a08 100%);
+  background: #096459;
   z-index: 2000;
   opacity: 0;
   visibility: hidden;
@@ -278,17 +362,24 @@ a:hover {
 
 /* Footer styles */
 .site-footer {
-  background: var(--primary-color); /* Changed background to black */
+  background: #000000;
   color: white;
   padding: 3rem 0 1.5rem;
   margin-top: 3rem;
 }
 
+.site-footer .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
 .site-footer .footer-content {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
   gap: 2rem;
   margin-bottom: 2rem;
+  align-items: start;
 }
 
 .site-footer .logo-column {
@@ -314,22 +405,19 @@ a:hover {
   opacity: 0.85;
 }
 
+.site-footer .footer-column {
+  text-align: left !important;
+}
+
 .site-footer .footer-column h4 {
-  margin-top: 0;
-  margin-bottom: 1.25rem;
-  font-size: 1.1rem;
-  position: relative;
-  padding-bottom: 0.5rem;
+  text-align: left !important;
+  display: flex;
+  align-items: center;
+  padding-left: 0;
 }
 
 .site-footer .footer-column h4::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 40px;
-  height: 2px;
-  background-color: rgba(255, 255, 255, 0.4);
+  display: none !important;
 }
 
 .site-footer .footer-links {
@@ -350,7 +438,7 @@ a:hover {
 }
 
 .site-footer .footer-links a:hover {
-  color: white;
+  color: #9ee0d8;
   padding-left: 5px;
 }
 
@@ -363,28 +451,29 @@ a:hover {
 }
 
 .site-footer .footer-bottom a {
-    color: #c85dfe;
+    color: #ffffff;
     text-decoration: none;
 }
 
 /* Responsive Styles */
-@media (max-width: 992px) {
+@media (max-width: 1200px) {
   .site-footer .footer-content {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1.5fr 1fr 1fr 1fr;
   }
-
-  .site-footer .logo-column {
-    grid-column: span 2;
+  
+  .site-footer .footer-column:nth-child(5) {
+    grid-column: 1 / -1;
+    text-align: left;
   }
 }
 
-@media (max-width: 768px) {
-  .site-header .desktop-nav {
-    display: none;
+@media (max-width: 992px) {
+  .site-footer .footer-content {
+    grid-template-columns: 1fr 1fr;
   }
-
-  .site-header .mobile-menu-toggle {
-    display: block;
+  
+  .site-footer .logo-column {
+    grid-column: span 2;
   }
 }
 
@@ -392,27 +481,32 @@ a:hover {
   .site-footer .footer-content {
     grid-template-columns: 1fr;
   }
-
   .site-footer .logo-column {
     grid-column: span 1;
   }
-
   .site-footer .footer-column h4::after {
-    left: 50%;
-    transform: translateX(-50%);
+    display: none !important;
   }
-
-  .site-footer .footer-column {
-    text-align: center;
+  .site-footer .footer-column,
+  .site-footer .footer-links,
+  .site-footer .footer-links li,
+  .site-footer .footer-links a {
+    text-align: left !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    justify-content: flex-start !important;
+  }
+  .site-footer .footer-bottom {
+    text-align: left;
   }
 }
 
+/* Auction Card Styles */
+@import "auction-card.css";
 /* Club Card Styles */
 .club-card {
   background-color: white;
-  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: relative;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
@@ -425,13 +519,65 @@ a:hover {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
+/*Showcase styles*/
+.club-showcase-badge {
+  position: absolute;
+  /*top: -5px;*/
+  right: 0px;
+  background-color: #09484A;
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+  z-index: 10;
+  font-style: italic;
+  /* display: none; */
+  width: 100%;
+  text-align: center;
+}
+
+/* Top banner badge for showcase club pages */
+.hero-section-showcase .club-showcase-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #09484A;
+  color: #fff;
+  padding: 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 700;
+  z-index: 20;
+  font-style: italic;
+  text-align: center;
+}
+
+/* Featured badge shown on cards */
+.club-card .club-showcase-badge {
+  width: 100%;
+  left: 0;
+  right: auto;
+  top: 0;
+  text-align: center;
+}
+
+.showcase-about-expanded ul, .showcase-map ul, .showcase-related-clubs ul {
+  list-style: square;
+  padding-left: 20px;
+  padding-bottom: 20px;
+}
+
+.showcase-about-expanded ul li::marker, .showcase-map ul li::marker, .showcase-related-clubs ul li::marker {
+  color: var(--button-colour)
+}
+
 /* Featured Club Card Styles */
 .featured-club-card {
   border: 1px solid #e0e0e0;
 }
 
 .featured-club-card .club-image {
-  height: 235px;
+  height: 265px;
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -465,7 +611,7 @@ a:hover {
 }
 
 .club-title {
-  font-size: 1.25rem;
+  font-size: 1.45rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
   line-height: 1.3;
@@ -505,8 +651,7 @@ a:hover {
   background-color: #FFD700;
   color: #333;
   padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: 700;
   z-index: 10;
 }
@@ -523,7 +668,6 @@ a:hover {
   align-items: center;
   justify-content: center;
   padding: 0.5rem 1.5rem;
-  border-radius: 0;
   font-weight: 600;
   font-size: 0.8rem;
   cursor: pointer;
@@ -535,28 +679,40 @@ a:hover {
 }
 
 .button-primary {
-  background-color: #9ee0d8; 
-  color: #333;
-  border: none;
-  font-family: 'Noto Serif Display', Georgia, serif;
-  text-transform: none;
-  letter-spacing: normal;
-  font-weight: 500;
+  background-color: var(--button-colour);
+  color: white;
+  text-transform: uppercase; /* Making text uppercase */
+  font-family: var(--font-sans), sans-serif; /* Using Public Sans for button text */
+}
+
+a.button.button-primary.header-cta-button.desktop-only {
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  text-transform: uppercase;
+  font-family: var(--font-sans), sans-serif;
+  border-radius: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+  border-image: initial;
 }
 
 .button-primary:hover {
-  background-color: #8BC4BE;
+  background-color: #8cceC6; /* Slightly darker shade on hover */
+  color: black;
   text-decoration: none;
+  border-color: #8cceC6;
 }
 
 .button-secondary {
-  background-color: transparent;
-  color: white;
-  border: 1px solid white;
+    background-color: white; /* Changed to white */
+    color: black; /* Changed text to black */
+    border: 1px solid black; /* Added border for consistency */
 }
 
 .button-secondary:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #eee;
+  color: black;
   text-decoration: none;
 }
 
@@ -567,15 +723,58 @@ a:hover {
 
 /* Event Card Styles */
 .event-card {
-  background-color: white;
+  background-color: #09484A !important;
+  color: white;
   border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: visible;
+  box-shadow: none !important;
   position: relative;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
   height: 100%;
+  /* margin-bottom: 60px; */
+}
+
+/* Club Events Listing page specific style */
+.club-events-page .event-card {
+  background-color: white !important;
+  color: #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.club-events-page .event-card .event-title a {
+  color: #333;
+}
+
+.club-events-page .event-card .event-meta {
+  color: #555;
+}
+
+.club-events-page .event-card .event-location, 
+.club-events-page .event-card .event-time {
+  color: #555;
+}
+
+.club-events-page .event-card .event-categories .event-category {
+  background-color: rgba(56, 142, 60, 0.1);
+  color: #1b5e20;
+}
+
+/* Auction Listing page specific style */
+.auction-page .event-card {
+  background-color: white !important;
+  color: #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.auction-page .event-card .event-title {
+  color: #333;
+}
+
+.auction-page .event-card .event-location,
+.auction-page .event-card .event-time {
+  color: #555;
 }
 
 .event-card:hover {
@@ -584,7 +783,7 @@ a:hover {
 }
 
 .event-image {
-  height: 180px;
+  height: 270px;
   overflow: hidden;
   position: relative;
 }
@@ -612,7 +811,7 @@ a:hover {
   position: absolute;
   top: 10px;
   left: 10px;
-  background-color: var(--primary-color);
+  background-color: var(--button-colour);
   color: white;
   border-radius: 4px;
   text-align: center;
@@ -733,14 +932,14 @@ a:hover {
 }
 
 select.custom-search-input {
-  appearance: auto;
-  -webkit-appearance: menulist;
-  -moz-appearance: menulist;
-  color: #333;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  color: #000;
   background-image: none;
   background-repeat: no-repeat;
   background-position: right center;
-  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  padding: 0.75rem 1rem 0.75rem 2.5rem !important;
 }
 
 select.custom-search-input option {
@@ -749,12 +948,14 @@ select.custom-search-input option {
   padding: 0.5rem;
 }
 
+
+
 .input-icon {
   position: absolute;
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: #666;
+  color: #000;
   z-index: 1;
   pointer-events: none;
 }
@@ -775,7 +976,7 @@ select.custom-search-input option {
 
 .search-button {
   padding: 0.75rem 1.5rem;
-  background-color: #438981;
+  background-color: var(--button-colour);
   color: white;
   border: none;
   border-radius: 1px;
@@ -814,6 +1015,17 @@ select.custom-search-input option {
   .custom-search-group {
     width: 100%;
   }
+
+  select#search-category, select#search-location {
+    min-height: 50px;
+    padding: 0.75rem 1rem 0.75rem 2.5rem !important;
+  }
+  .auction-hero-section {
+    position: relative;
+    height: 70vh !important;
+    min-height: 450px;
+    padding: 0;
+}
 }
 
 /* Pagination Styles */
@@ -1197,14 +1409,14 @@ font-size:1.2rem
   }
 }
 
-/* Breadcrumb Styles */
 .breadcrumbs {
   list-style: none;
   display: flex;
   flex-wrap: wrap;
   padding: 0;
-  margin: 0 0 20px 0;
+  margin: 0 0 5px 0;
   font-size: 14px;
+  margin-left: 2px;
 }
 
 .breadcrumbs li {
@@ -1251,7 +1463,7 @@ font-size:1.2rem
 .hero-section {
   position: relative;
   height: 60vh;
-  min-height: 750px;
+  min-height: 850px;
   display: flex;
   align-items: flex-end;
   color: white;
@@ -1342,6 +1554,55 @@ font-size:1.2rem
   padding: 0;
 }
 
+.hero-section-showcase {
+  position: relative;
+  height: 30vh;
+  min-height: 450px;
+  display: flex;
+  align-items: center;
+  color: white;
+  overflow: hidden;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(/assets/images/hero-background.jpg);
+  background-size: cover;
+  background-position: center;
+}
+
+/* Add this new style for the showcase banner image */
+.showcase-banner {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Add styling for showcase header overlay */
+.showcase-header-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+/* Style for showcase header content */
+.showcase-header-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  z-index: 2;
+}
+
 .hero-search {
   margin-top: 2rem;
   width: 100%;
@@ -1361,6 +1622,7 @@ font-size:1.2rem
 
 .event-search .custom-search-input {
   background-color: rgba(255, 255, 255, 0.9);
+  min-height: 40px;
 }
 
 .event-search label {
@@ -1381,11 +1643,12 @@ font-size:1.2rem
 }
 
 .hero-title {
-  font-size: 4rem;
-  font-weight: 700;
+  font-size: 5rem;
+  font-weight: 500;
   margin-bottom: 0.1rem;
-  line-height: 1.2;
-  /*text-transform:uppercase;*/
+  line-height: 0.9;
+  text-transform: uppercase;
+  margin-left: -6px;
 }
 
 .hero-subtitle {
@@ -1402,11 +1665,33 @@ font-size:1.2rem
   }
 
   .hero-title {
-    font-size: 2rem;
-  }
+    font-size: 3rem;
+    line-height: 3rem;
+  } 
 
   .hero-subtitle {
     font-size: 1rem;
+  }
+  .home-hero-content {
+    padding-bottom: 0px;
+  }
+  
+  /* Add this new style for mobile hero-section-showcase */
+  .hero-section-showcase {
+    height: auto;
+    min-height: 350px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Ensure the showcase banner fully covers on mobile */
+  .showcase-banner {
+    height: 100%;
+    object-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-height: 100%;
   }
 }
 
@@ -1414,6 +1699,7 @@ font-size:1.2rem
 .club-grid,
 .club-grid.standard-club-grid,
 .event-grid,
+.auction-grid,
 .featured-clubs .club-grid,
 .featured-clubs-section .club-grid,
 .featured-section .featured-grid,
@@ -1426,11 +1712,25 @@ font-size:1.2rem
   margin: 1.5rem 0;
 }
 
+/* Fix for "Other Upcoming Auctions" on single auction page */
+.detail-content + .container .auction-grid {
+  max-width: 100%;
+}
+
+.detail-content + .container .auction-grid .auction-card {
+  max-width: 100%;
+}
+
+.detail-content + .container .auction-grid .auction-image {
+  height: 180px;
+}
+
 /* Update responsive breakpoints for all grids */
 @media (max-width: 1024px) {
   .club-grid,
   .club-grid.standard-club-grid,
   .event-grid,
+  .auction-grid,
   .featured-clubs .club-grid,
   .featured-clubs-section .club-grid,
   .featured-section .featured-grid,
@@ -1444,6 +1744,7 @@ font-size:1.2rem
   .club-grid,
   .club-grid.standard-club-grid,
   .event-grid,
+  .auction-grid,
   .featured-clubs .club-grid,
   .featured-clubs-section .club-grid,
   .featured-section .featured-grid,
@@ -1465,14 +1766,20 @@ font-size:1.2rem
 }
 
 .section-title {
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
   color: #000;
+  line-height: 3rem;
 }
 
 .section-subtitle {
-  color: #000;
+  color: #353535;
+  font-size: clamp(1.375rem, 1.1667rem + .9259vw, 1.4rem);
+  line-height: 1.7rem;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 3.5rem;
 }
 
 /* A-Z Filter */
@@ -1563,10 +1870,9 @@ font-size:1.2rem
 
 /* Detail Page Styles */
 .detail-header {
-  padding: 2rem 0;
+  padding: 2rem 0rem 0rem 0rem;
   margin-bottom: 2rem;
   background-color: white;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .detail-title {
@@ -1593,13 +1899,21 @@ font-size:1.2rem
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 2rem;
+  padding: 0 1rem;
+}
+
+.auction-details h3 {
+  margin-bottom: 0px;
+}
+
+.auction-details h2 {
+  border-bottom: 1px solid #dfdfdf;
 }
 
 .detail-main {
   background-color: white;
   border-radius: 8px;
-  padding: 2rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
 }
 
 .detail-sidebar {
@@ -1625,6 +1939,18 @@ font-size:1.2rem
   border-bottom: 1px solid #f0f0f0;
 }
 
+.club-highlights {
+  padding-top: 20px;
+}
+
+.club-highlights ul {
+  padding: 2px 0px 20px 20px;
+}
+
+.club-highlights ul li::marker {
+  color: #009294;
+}
+
 @media (max-width: 992px) {
   .detail-content {
     grid-template-columns: 1fr;
@@ -1634,6 +1960,9 @@ font-size:1.2rem
 @media (max-width: 768px) {
   .detail-title {
     font-size: 1.75rem;
+  }
+  .detail-main {
+    padding: 0.2rem;
   }
 }
 
@@ -1890,15 +2219,33 @@ font-size:1.2rem
 }
 
 /* Mobile Menu with Circled Arrows */
-@media (max-width: 767px) {
-  .mobile-nav .arrow-icon {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-    padding: 4px;
+@media (max-width: 1080px) {
+  .site-header .desktop-nav {
+    display: none;
   }
+
+  .site-header .mobile-menu-toggle {
+    display: block !important;
+  }
+  
+  .header-cta-button,
+  .header-cta-button.desktop-only {
+    display: none !important;
+  }
+  
+  .site-header .hamburger-icon {
+    display: block !important;
+  }
+  
+  .site-header .bar {
+    display: block !important;
+  }
+  .auction-hero-section {
+    position: relative;
+    height: 50vh;
+    min-height: 450px;
+    padding: 0;
+}
 }
 
 /* Additional club grid settings */
@@ -1907,33 +2254,6 @@ font-size:1.2rem
   margin-left: auto;
   margin-right: auto;
   margin-top: 2rem;
-}
-
-.button-primary {
-  background-color: #9ee0d8; /* Updated to turquoise */
-  color: black; /* Changed text color to black for contrast */
-  border: 1px solid #9ee0d8; /* Matching border */
-  text-transform: uppercase; /* Making text uppercase */
-  font-family: 'Playfair Display', serif; /* Serif font */
-}
-
-.button-primary:hover {
-  background-color: #8cceC6; /* Slightly darker shade on hover */
-  color: black;
-  text-decoration: none;
-  border-color: #8cceC6;
-}
-
-.button-secondary {
-    background-color: white; /* Changed to white */
-    color: black; /* Changed text to black */
-    border: 1px solid black; /* Added border for consistency */
-}
-
-.button-secondary:hover {
-  background-color: #eee;
-  color: black;
-  text-decoration: none;
 }
 
 .site-nav,
@@ -1957,4 +2277,450 @@ font-size:1.2rem
 
 section.standard-section {
     padding-top: 3rem;
+}
+
+/* Remove global padding */
+/* main {
+    padding-top: 110px; 
+} */
+
+/* Add padding only to non-home pages */
+/* body:not(.home) main {
+    padding-top: 110px; 
+} */
+
+.site-header .bar:nth-child(1) {
+  top: 0px;
+}
+
+/* Add negative margin ONLY to specific hero sections on non-home pages */
+.event-hero-section,
+.club-hero-section,
+.advertise-hero-section,
+.contact-hero-section,
+.showcase-hero-section {
+    position: relative; /* Ensure stacking context if needed */
+    z-index: 5; /* Ensure it's behind the header (z-index 1000) */
+}
+
+/* Apply negative margin only on larger screens */
+@media (min-width: 769px) { /* Use breakpoint just above mobile */
+  .event-hero-section,
+  .club-hero-section,
+  .advertise-hero-section,
+  .contact-hero-section,
+  .showcase-hero-section {
+    margin-top: -104px; /* Adjust value as needed */
+  }
+}
+
+/* Ensure no negative margin on the homepage hero */
+.home-hero-section {
+    margin-top: 0; /* Override if needed */
+}
+
+/* Section Styling */
+.showcase-section,
+.featured-section,
+.standard-clubs-section,
+.event-section,
+.about-section,
+.club-types-section,
+.cta-section,
+.features-section,
+.pricing-section,
+.contact-section,
+.newsletter-section {
+  margin: 3rem 0;
+}
+
+/* Remove potential duplicate margin from featured-section if it exists below */
+/* .featured-section {
+  margin: 3rem 0;
+} */
+
+
+/* Calendar View Styles */
+.events-view-toggle {
+  margin-bottom: 1.5rem;
+}
+
+.events-view-toggle .button.active-view {
+  border-bottom: 3px solid var(--button-colour);
+}
+
+.calendar-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+#calendar {
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.calendar-day-header {
+  font-weight: bold;
+  text-align: center;
+  padding: 0.75rem 0.5rem;
+  background: #f5f5f5;
+  border-bottom: 2px solid var(--button-colour);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+}
+
+.calendar-day {
+  min-height: 100px;
+  border: 1px solid #eee;
+  padding: 0.5rem;
+  position: relative;
+  background: white;
+  transition: background-color 0.2s ease;
+}
+
+.calendar-day:hover {
+  background-color: #f9f9f9;
+}
+
+.calendar-day.empty {
+  background: #f9f9f9;
+}
+
+.day-number {
+  font-size: 1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.calendar-event {
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+  margin-bottom: 0.25rem;
+  background: var(--button-colour);
+  color: white;
+  border-radius: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.calendar-event:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal for event details */
+.event-modal {
+  display: none;
+  position: fixed;
+  z-index: 2000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  overflow: auto;
+}
+
+.event-modal-content {
+  background-color: white;
+  margin: 10% auto;
+  padding: 2rem;
+  border-radius: 8px;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.close-modal {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.event-modal-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.event-modal-meta {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.event-modal-description {
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  #calendar {
+    grid-template-columns: repeat(7, 1fr);
+    font-size: 0.9rem;
+    gap: 0.25rem;
+  }
+  
+  .calendar-day {
+    min-height: 80px;
+    padding: 0.25rem;
+  }
+  
+  .day-number {
+    font-size: 0.9rem;
+  }
+  
+  .calendar-event {
+    padding: 0.15rem 0.25rem;
+    font-size: 0.7rem;
+  }
+  
+  .calendar-day-header {
+    padding: 0.5rem 0.25rem;
+    font-size: 0.8rem;
+  }
+}
+
+.secondary-hero-section {
+  height: 30vh;
+  min-height: 450px;
+}
+
+@media (max-width: 1080px) {
+  .site-header .desktop-nav {
+    display: none;
+  }
+
+  .site-header .mobile-menu-toggle {
+    display: block !important;
+  }
+  
+  .header-cta-button,
+  .header-cta-button.desktop-only {
+    display: none !important;
+  }
+  
+  .site-header .hamburger-icon {
+    display: block !important;
+  }
+  
+  .site-header .bar {
+    display: block !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 0.7rem;
+  }
+}
+
+.auction-hero-section {
+  position: relative;
+  height: 50vh;
+  min-height: 450px;
+  padding: 0;
+}
+
+/* Specific background for auction listings */
+.auction-page .auction-hero-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url('/assets/images/auctions/classic-car-auctions.avif');
+  background-size: cover;
+  background-position: top;
+}
+
+/* Specific background for auction houses listings */
+.auction-houses-page .auction-hero-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)), url('/assets/images/auction-houses/auction-house-hero.avif');
+  background-size: cover;
+  background-position: top;
+}
+
+/* Dropdown menu styling */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+.dropdown-arrow {
+  margin-left: 0.3rem;
+  font-size: 0.7rem;
+  transition: transform 0.2s ease;
+}
+
+.dropdown-arrow.rotate {
+  transform: rotate(180deg);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 180px;
+  background-color: #27595b;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.dropdown-menu a {
+  display: block;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-menu a:hover {
+  background-color: #27595b;
+}
+
+/* Mobile dropdown adjustments */
+@media (max-width: 1080px) {
+  .dropdown {
+    width: 100%;
+  }
+  
+  .dropdown-toggle {
+    width: 100%;
+    padding: 1rem 1.5rem;
+  }
+  
+  .dropdown-menu {
+    position: static;
+    width: 100%;
+    box-shadow: none;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 0;
+  }
+  
+  .dropdown-menu a {
+    padding: 0.75rem 2rem;
+    color: white;
+  }
+  
+  .dropdown-menu a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Ensure [x-cloak] elements are hidden until Alpine.js initializes */
+[x-cloak] {
+  display: none !important;
+}
+
+/* Update desktop nav for dropdowns */
+.site-header .desktop-nav .has-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.site-header .desktop-nav .dropdown-toggle {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.site-header .desktop-nav li {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.site-header .desktop-nav a {
+  display: flex;
+  align-items: center;
+}
+
+.site-header .desktop-nav .dropdown-arrow {
+  margin-left: 5px;
+  font-size: 10px;
+  margin-bottom: 1px;
+}
+
+.site-header .desktop-nav .dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background-color: #27595b;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 8px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: opacity 0.2s, visibility 0.2s, transform 0.2s;
+  z-index: 1000;
+}
+
+.site-header .desktop-nav .has-dropdown:hover .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.site-header .desktop-nav .dropdown-menu a {
+  display: block;
+  padding: 8px 16px;
+  color: #fff;
+  white-space: nowrap;
+  text-transform: none;
+  font-size: 0.9rem;
+}
+
+.site-header .desktop-nav .dropdown-menu a:hover {
+  background-color: #27595b;
+}
+
+/* Mobile dropdown items */
+.mobile-nav .mobile-dropdown-menu {
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.mobile-nav .mobile-dropdown-toggle {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mobile-nav .arrow-icon.rotate {
+  transform: rotate(90deg);
+}
+
+/* Mobile Menu with Circled Arrows */
+@media (max-width: 1080px) {
+  .mobile-nav .arrow-icon {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    padding: 4px;
+  }
+  .section-subtitle {
+    font-size: 1.2rem;
+  }
 }

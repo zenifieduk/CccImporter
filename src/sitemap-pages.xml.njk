@@ -1,0 +1,93 @@
+---
+permalink: sitemap-pages.xml
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Home page -->
+  <url>
+    <loc>{{ site.url }}/</loc>
+    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+
+  <!-- Static pages that we know exist -->
+  <url>
+    <loc>{{ site.url }}/club-directory/</loc>
+    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  
+  <url>
+    <loc>{{ site.url }}/club-map/</loc>
+    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  
+  <url>
+    <loc>{{ site.url }}/showcase/</loc>
+    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  
+  <url>
+    <loc>{{ site.url }}/club-events/</loc>
+    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  
+  <url>
+    <loc>{{ site.url }}/auctions/</loc>
+    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  
+  <url>
+    <loc>{{ site.url }}/auction-houses/</loc>
+    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <priority>0.7</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  
+  <url>
+    <loc>{{ site.url }}/chronicle/</loc>
+    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <priority>0.8</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+  
+  <!-- About pages -->
+  <url>
+    <loc>{{ site.url }}/pricing/</loc>
+    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  
+  <url>
+    <loc>{{ site.url }}/club-websites/</loc>
+    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  
+  <url>
+    <loc>{{ site.url }}/advertise/</loc>
+    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  
+  <url>
+    <loc>{{ site.url }}/contact/</loc>
+    <lastmod>{{ site.buildTime.toISOString() }}</lastmod>
+    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+</urlset>

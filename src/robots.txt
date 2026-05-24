@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /thank-you/
+Disallow: /debug-collections/
+Allow: /
+
+Sitemap: https://classiccars.club/sitemap.xml

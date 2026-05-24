@@ -1,10 +1,16 @@
-{% if club.featured %}
+{% if club.showcase or club.featured %}
 <div class="club-card featured-club-card">
-  <div class="club-featured">Featured</div>
+  <div class="club-featured">
+    {% if club.showcase %}
+      Showcased
+    {% else %}
+      Featured
+    {% endif %}
+  </div>
   
   <div class="club-image">
     {% if club.imageUrl %}
-      <img src="{{ club.imageUrl }}" alt="{{ club.title }}">
+      <img src="{{ club.imageUrl.startsWith('/assets/images/clubs/') ? club.imageUrl : '/assets/images/clubs/' ~ club.imageUrl }}" alt="{{ club.title }}">
     {% else %}
       <img src="/assets/images/club-placeholder.jpg" alt="{{ club.title }}">
     {% endif %}
@@ -36,7 +42,7 @@
   </div>
   
   <div class="club-actions">
-    <a href="/club-directory/{{ club.slug | slugify }}/" class="button button-primary">View Details</a>
+    <a href="{% if club.showcase %}/showcase/{{ club.slug | slugify }}/{% else %}/club-directory/{{ club.slug | slugify }}/{% endif %}" class="button button-primary">View Details</a>
     {% if club.website %}
      <!-- <a href="{{ club.website }}" target="_blank" rel="noopener" class="button button-secondary">Visit</a>-->
     {% endif %}

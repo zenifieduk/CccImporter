@@ -1,0 +1,39 @@
+---
+pagination:
+  data: auctions
+  size: 1
+  alias: auction
+permalink: "calendar/{{ auction.auctionSlug }}.ics"
+---
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Classic Car Clubs UK//Auction Calendar//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:auction-{{ auction.auctionSlug }}-{{ "now" | date("Ymd") }}@classiccarclubs.uk
+{% if auction.auctionStartDateTime %}
+DTSTART:{{ auction.auctionStartDateTime | substring(4, 8) }}{{ auction.auctionStartDateTime | substring(2, 4) }}{{ auction.auctionStartDateTime | substring(0, 2) }}T{{ auction.auctionStartDateTime | substring(9) | replace(":", "") }}00
+DTEND:{{ auction.auctionStartDateTime | substring(4, 8) }}{{ auction.auctionStartDateTime | substring(2, 4) }}{{ auction.auctionStartDateTime | substring(0, 2) }}T170000
+{% else %}
+DTSTART:{{ "now" | date("Ymd") }}T120000
+DTEND:{{ "now" | date("Ymd") }}T150000
+{% endif %}
+DTSTAMP:{{ "now" | date("Ymd") }}T{{ "now" | date("His") }}Z
+CREATED:{{ "now" | date("Ymd") }}T{{ "now" | date("His") }}Z
+LAST-MODIFIED:{{ "now" | date("Ymd") }}T{{ "now" | date("His") }}Z
+SEQUENCE:0
+SUMMARY:{{ auction.auctionTitle | replace(",", "\\,") | replace(";", "\\;") | replace("\\", "\\\\") | replace("\n", "\\n") | replace("\r", "") }}
+DESCRIPTION:Classic Car Auction: {{ (auction.auctionHighlights or auction.auctionTitle) | striptags | replace(",", "\\,") | replace(";", "\\;") | replace("\\", "\\\\") | replace("\n", "\\n") | replace("\r", "") }}\\n\\nAuction House: {{ auction.auctionHouse }}\\n\\nMore information: {{ auction.auctionWebsite }}
+LOCATION:{{ auction.auctionAddress | replace(",", "\\,") | replace(";", "\\;") | replace("\\", "\\\\") | replace("\n", "\\n") | replace("\r", "") }}
+STATUS:CONFIRMED
+TRANSP:OPAQUE
+CLASS:PUBLIC
+CATEGORIES:AUCTION,CLASSIC CARS,AUTOMOTIVE
+URL:{{ auction.auctionWebsite }}
+ORGANIZER;CN="{{ auction.auctionHouse | replace(",", "\\,") | replace(";", "\\;") | replace("\\", "\\\\") | replace("\n", "\\n") | replace("\r", "") }}":MAILTO:info@classiccarclubs.uk
+{% if auction.auctionLat and auction.auctionLng %}
+GEO:{{ auction.auctionLat }};{{ auction.auctionLng }}
+{% endif %}
+END:VEVENT
+END:VCALENDAR 

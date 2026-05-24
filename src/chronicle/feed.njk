@@ -1,0 +1,36 @@
+---
+permalink: /chronicle/feed.xml
+eleventyExcludeFromCollections: true
+layout: false
+metadata:
+  contentType: "application/xml"
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+  <title>{{ site.title }} - The Classic Chronicle</title>
+  <subtitle>{{ site.description }}</subtitle>
+  <link href="{{ site.url }}/chronicle/feed.xml" rel="self"/>
+  <link href="{{ site.url }}"/>
+  <updated>2025-05-05T12:00:00Z</updated>
+  <id>{{ site.url }}/</id>
+  <author>
+    <name>{{ site.author }}</name>
+    <email>{{ site.email }}</email>
+  </author>
+  {%- for post in collections.chronicle | reverse %}
+  <entry>
+    <title>{{ post.data.title }}</title>
+    <link href="{{ site.url }}{{ post.url }}"/>
+    <updated>{% if post.date %}{{ post.date | date("yyyy-MM-dd") }}T12:00:00Z{% else %}2025-05-01T12:00:00Z{% endif %}</updated>
+    <id>{{ site.url }}{{ post.url }}</id>
+    {% if post.data.featuredImage %}
+    <media:thumbnail url="{{ site.url }}{{ post.data.featuredImage }}" />
+    {% endif %}
+    <content type="html">
+      <![CDATA[
+      {{ post.templateContent | htmlToAbsoluteUrls(site.url) | safe }}
+      ]]>
+    </content>
+  </entry>
+  {%- endfor %}
+</feed> 

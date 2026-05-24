@@ -1,0 +1,46 @@
+---
+permalink: /club-directory/feed.xml
+eleventyExcludeFromCollections: true
+layout: false
+metadata:
+  contentType: "application/xml"
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+  <title>{{ site.title }} - Club Directory</title>
+  <subtitle>Latest club additions to the Classic Car Clubs UK directory</subtitle>
+  <link href="{{ site.url }}/club-directory/feed/" rel="self"/>
+  <link href="{{ site.url }}/club-directory/"/>
+  <updated>{{ page.date.toISOString() }}</updated>
+  <id>{{ site.url }}/club-directory/feed/</id>
+  <author>
+    <name>{{ site.author }}</name>
+    <email>{{ site.email }}</email>
+  </author>
+  
+  {%- for club in collections.clubs | reverse %}
+  <entry>
+    <title>{{ club.title }}</title>
+    <link href="{{ site.url }}/club-directory/{{ club.slug }}/"/>
+    <updated>{{ page.date.toISOString() }}</updated>
+    <id>{{ site.url }}/club-directory/{{ club.slug }}/</id>
+    {% if club.logo %}
+    <media:thumbnail url="{{ site.url }}{{ club.logo }}" />
+    {% elif club.featuredImage %}
+    <media:thumbnail url="{{ site.url }}{{ club.featuredImage }}" />
+    {% endif %}
+    <content type="html">
+      <![CDATA[
+      <p><strong>{{ club.title }}</strong>{% if club.location %} - {{ club.location }}{% endif %}</p>
+      {% if club.description %}{{ club.description }}{% endif %}
+      <p>
+        {% if club.category %}Category: {{ club.category }}<br>{% endif %}
+        {% if club.marque %}Marque: {{ club.marque }}<br>{% endif %}
+        {% if club.website %}<a href="{{ club.website }}">Visit Website</a>{% endif %}
+      </p>
+      <p><a href="{{ site.url }}/club-directory/{{ club.slug }}/">View full club details</a></p>
+      ]]>
+    </content>
+  </entry>
+  {%- endfor %}
+</feed> 

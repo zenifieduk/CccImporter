@@ -1,0 +1,345 @@
+---
+title: Submit Your Club
+layout: layouts/base.njk
+---
+
+<section class="club-submission-section">
+  <h1>Showcase Club Submission</h1>
+  <form id="club-submission-form" method="POST" action="https://primary-production-a47e.up.railway.app/webhook/club-submission" enctype="multipart/form-data">
+
+    <h2>Club Details</h2>
+    <div class="form-group">
+      <label for="clubTitle">Club Title *</label>
+      <input type="text" id="clubTitle" name="clubTitle" required>
+    </div>
+    <div class="form-group">
+        <label for="marque">Marque (Optional)</label>
+        <input type="text" id="marque" name="marque">
+        <small>E.g., Ford, MG, Jaguar, Multi-Marque</small>
+    </div>
+     <div class="form-group">
+      <label for="category">Category *</label>
+      <select id="category" name="category" required>
+        <option value="">Select club type</option>
+        {# Get all categories, sort them, then filter for uniqueness in the loop #}
+        {% set allCategories = [] %}
+        {% for club in clubs %}
+          {% if club.category %}
+            {% set allCategories = allCategories.concat([club.category]) %}
+          {% endif %}
+        {% endfor %}
+        {% set sortedCategories = allCategories | sort %}
+        {% set lastCategory = "" %}
+        {% for category in sortedCategories %}
+          {% if category != lastCategory %}
+            <option value="{{ category }}">{{ category }}</option>
+            {% set lastCategory = category %}
+          {% endif %}
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+        <label for="memberCount">Number of Members (Optional)</label>
+        <input type="text" id="memberCount" name="memberCount">
+        <small>Approximate number is fine (e.g., 50, 100+, 200-300)</small>
+    </div>
+      <div class="form-group">
+        <label>Do you have a club website?</label>
+        <div class="radio-group">
+            <label><input type="radio" name="hasWebsite" value="yes" checked> Yes</label> {# Default to Yes #}
+            <label><input type="radio" name="hasWebsite" value="no"> No</label>
+        </div>
+    </div>
+    <div class="form-group" id="website-url-group" style="display: none;">
+      <label for="websiteUrl">Website URL</label>
+      <input type="url" id="websiteUrl" name="websiteUrl">
+      </div>
+      <div class="form-group">
+        <label for="emailAddress">Email Address *</label>
+        <input type="email" id="emailAddress" name="emailAddress" required>
+      </div>
+
+    <h2>Club Location</h2>
+    <div class="form-group">
+      <label for="address">Address</label>
+      <textarea id="address" name="address"></textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="city">City *</label>
+        <input type="text" id="city" name="city" required>
+      </div>
+      <div class="form-group">
+        <label for="postalCode">Postal Code</label>
+        <input type="text" id="postalCode" name="postalCode">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="country">Country</label>
+      <input type="text" id="country" name="country">
+    </div>
+    <div class="form-group">
+        <label for="phoneNumber">Phone Number (Optional)</label>
+        <input type="text" id="phoneNumber" name="phoneNumber">
+    </div>
+    {# Showcase only field #}
+    <div class="form-group" id="meeting-location-group" style="display: none;">
+        <label for="meetingLocation">Regular Meeting Location (Showcase Only)</label>
+        <textarea id="meetingLocation" name="meetingLocation" rows="3"></textarea>
+        <small>Optional: Add the name and address of your regular meeting venue.</small>
+    </div>
+
+    <h2>Club Brand</h2>
+     <div class="form-group" id="logo-upload-group">
+      <label for="clubLogo">Club Logo (Optional)</label>
+      <input type="file" id="clubLogo" name="clubLogo" accept=".png,.jpg,.jpeg,.avif">
+    </div>
+    <div class="form-group" id="image-upload-group">
+      <label for="clubImage">Club Image (Optional)</label>
+      <input type="file" id="clubImage" name="clubImage" accept=".png,.jpg,.jpeg,.avif,.webp">
+      <small>Max size: 10MB.</small>
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const plan = urlParams.get('plan'); // e.g., 'featured', 'showcase', 'standard'
+  const heading = document.querySelector('.club-submission-section h1');
+
+  if (heading) {
+    let title = "Submit Your Club"; // Default title
+    let instructionsContent = ""; // Initialize instructions HTML
+
+    if (plan === 'featured') {
+      title = "Featured Club Submission";
+      instructionsContent = `
+        <p><strong>Thank you for subscribing to our Featured plan!</strong></p>
+        <p>Please complete the form below to submit your club details. Fields marked with * are required.</p>
+        <p>Alternatively, if you prefer to send the information and images via email, please check the inbox for <strong>the email address used for payment</strong>. Instructions have been sent there.</p>
+      `;
+    } else if (plan === 'showcase') {
+      title = "Showcase Club Submission";
+      instructionsContent = `
+        <p><strong>Thank you for subscribing to our Showcase plan!</strong></p>
+        <p>Please complete the form below to submit your club details. Fields marked with * are required.</p>
+        <p>Alternatively, if you prefer to send the information and images via email, please check the inbox for <strong>the email address used for payment</strong>. Instructions have been sent there.</p>
+        <p><strong>Regarding Club Events:</strong> Don\'t worry about adding event details now. Once your club information is processed, our team will either gather event details from your website or contact you to add them to your listing.</p>
+      `;
+    } else if (plan === 'free') {
+      title = "Submit for a Free Listing";
+      instructionsContent = `
+        <p><strong>Submit your club for a free listing!</strong></p>
+        <p>Please provide the essential details below. Fields marked with * are required for a basic listing.</p>
+        <p>Want more visibility? Consider upgrading to our <a href="/pricing/">Featured or Showcase plans</a> to add logos, images, and more.</p>
+      `;
+    } else {
+      title = "Standard Club Submission";
+      instructionsContent = `
+        <p><strong>Thank you for subscribing to our Standard plan!</strong></p>
+        <p>Please complete the form below to submit your club details. Fields marked with * are required.</p>
+        <p>Alternatively, if you prefer to send the information and images via email, please check the inbox for <strong>the email address used for payment</strong>. Instructions have been sent there.</p>
+      `;
+    }
+    heading.textContent = title;
+
+    // --- Website URL conditional logic ---
+    const websiteRadios = document.querySelectorAll('input[name="hasWebsite"]');
+    const websiteUrlGroup = document.getElementById('website-url-group');
+    const websiteUrlInput = document.getElementById('websiteUrl');
+
+    // Function to toggle website URL field visibility
+    const toggleWebsiteUrl = () => {
+        const selectedValue = document.querySelector('input[name="hasWebsite"]:checked').value;
+        if (selectedValue === 'yes') {
+            websiteUrlGroup.style.display = 'block';
+        } else {
+            websiteUrlGroup.style.display = 'none';
+            if (websiteUrlInput) {
+                websiteUrlInput.value = ''; // Clear the input when hiding
+            }
+        }
+    };
+
+    // Add event listeners to radio buttons
+    websiteRadios.forEach(radio => {
+        radio.addEventListener('change', toggleWebsiteUrl);
+    });
+
+    // Initial check in case the default is 'yes' or for future use
+    toggleWebsiteUrl(); // Default is now Yes, so ensure field is shown initially
+    // --- End Website URL --- 
+
+    // Add instructions block before the form
+    const formElement = document.getElementById('club-submission-form');
+    // Conditionally show Showcase-only fields
+    if (plan === 'showcase') {
+        const meetingGroup = document.getElementById('meeting-location-group');
+        if (meetingGroup) {
+            meetingGroup.style.display = 'block';
+        }
+        // Add logic here for any other showcase-only fields in the future
+    }
+
+    // Conditionally hide fields for Free plan
+    if (plan === 'free') {
+        const logoGroup = document.getElementById('logo-upload-group');
+        const imageGroup = document.getElementById('image-upload-group');
+        if (logoGroup) logoGroup.style.display = 'none';
+        if (imageGroup) imageGroup.style.display = 'none';
+        // Also hide the Meeting Location if plan is free (should already be hidden, but good to be explicit)
+        const meetingGroup = document.getElementById('meeting-location-group');
+        if (meetingGroup) meetingGroup.style.display = 'none'; 
+    }
+
+    if (formElement) {
+      const instructionsDiv = document.createElement('div');
+      instructionsDiv.className = 'submission-instructions';
+
+      // Set the generated content
+      instructionsDiv.innerHTML = instructionsContent;
+
+      formElement.before(instructionsDiv);
+    }
+  }
+});
+
+document.getElementById('club-submission-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const form = e.target;
+  const data = new FormData(form);
+
+  // Get plan from URL and add to FormData
+  const urlParams = new URLSearchParams(window.location.search);
+  const planValue = urlParams.get('plan') || 'standard'; // Default to 'standard'
+  data.append('plan', planValue);
+
+  // Check club image size
+  const imageInput = document.getElementById('clubImage');
+  if (imageInput.files.length > 0) {
+    const file = imageInput.files[0];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      alert('Club Image file size exceeds 10MB limit.');
+      return; // Stop form submission
+    }
+  }
+
+  // Check if the form contains image data - if not, use a different submission method
+  // This ensures plan value is properly included
+  let hasFiles = false;
+  const logoInput = document.getElementById('clubLogo');
+  
+  if ((logoInput && logoInput.files.length > 0) || (imageInput && imageInput.files.length > 0)) {
+    hasFiles = true;
+  }
+
+  let response;
+  if (hasFiles) {
+    // If we have file inputs, use the multipart/form-data as originally intended
+    response = await fetch(form.action, {
+      method: 'POST',
+      body: data
+    });
+  } else {
+    // If we don't have any files, convert to JSON to ensure all fields (including plan) are included
+    const formObject = {};
+    for (const [key, value] of data.entries()) {
+      formObject[key] = value;
+    }
+
+    response = await fetch(form.action, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(formObject)
+    });
+  }
+
+  if (response.ok) {
+    window.location.href = '/club-submitted/'; // Redirect to thank you page
+  } else {
+    alert('There was a problem submitting your form. Please try again.');
+  }
+});
+</script>
+
+<style>
+.club-submission-section {
+  max-width: 700px; /* Slightly wider */
+  margin: 3rem auto; /* More vertical margin */
+  background: #fff;
+  padding: 2rem 3rem; /* More padding */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08); /* Slightly stronger shadow */
+}
+
+.club-submission-section h1 {
+    margin-bottom: 2rem; /* Add space below heading */
+    text-align: center;
+}
+
+.club-submission-section .form-group {
+    margin-bottom: 1.5rem; /* Ensure consistent bottom margin */
+}
+
+.club-submission-section label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.club-submission-section input,
+.club-submission-section select,
+.club-submission-section textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  /* margin-bottom: 1rem; Removed in favour of form-group margin */
+}
+.club-submission-section .form-row {
+  display: flex;
+  gap: 1rem;
+}
+.club-submission-section .form-row .form-group {
+  flex: 1;
+}
+.club-submission-section button {
+  background: #009294;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  display: block; /* Make button block */
+  width: 100%;  /* Make button full width */
+  font-weight: 600;
+  cursor: pointer;
+}
+.club-submission-section button:hover {
+  background: #007a7a;
+}
+
+.submission-instructions {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: #f8f9fa; /* Light background */
+    border-left: 4px solid #009294; /* Accent border */
+    border-radius: 4px;
+}
+
+.radio-group label {
+    display: inline-block;
+    margin-right: 1.5rem;
+    font-weight: normal; /* Override default label weight */
+}
+.radio-group input[type="radio"] {
+    width: auto; /* Override default input width */
+    margin-right: 0.5rem;
+}
+</style> 

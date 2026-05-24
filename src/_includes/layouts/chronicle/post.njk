@@ -1,0 +1,133 @@
+---
+layout: layouts/base.njk
+---
+
+<link rel="stylesheet" href="/assets/css/chronicle.css">
+
+<section class="chronicle-hero chronicle-post-template" {% if featuredImage %}style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('{{ featuredImage }}'); background-size: cover; background-position: center;"{% endif %}>
+  <div class="container">
+    <div class="breadcrumbs-container">
+      <ul class="breadcrumbs">
+        <li><a href="/">Home</a></li>
+        <li><a href="/chronicle/">The Classic Chronicle</a></li>
+        <li><a href="/chronicle/{{ slug }}/">{{ title }}</a></li>
+      </ul>
+    </div>
+
+    <div class="chronicle-hero-content">
+      <h1 class="chronicle-hero-title">{{ title }}</h1>
+      {% if subtitle %}<p class="chronicle-hero-subtitle">{{ subtitle }}</p>{% endif %}
+      
+      <div class="chronicle-meta">
+        <span class="chronicle-date">{{ date | chronicleDate }}</span>
+        <span class="chronicle-author">By {{ author }}</span>
+        <span class="chronicle-reading-time">{{ content | readingTime }} min read</span>
+      </div>
+      
+      {% if tags %}
+        <div class="chronicle-tags">
+          {% for tag in tags %}
+            {% if tag != "chronicle" %}
+              <a href="/chronicle/tags/{{ tag | slug }}/" class="tag">{{ tag }}</a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<article class="chronicle-post">
+  <div class="container">
+    <div class="chronicle-content">
+      {{ content | safe }}
+    </div>
+    
+    <div class="chronicle-share">
+      <h3>Share this article</h3>
+      <div class="share-links">
+        <a href="https://twitter.com/intent/tweet?text={{ title | urlencode }}&url=https://classiccarclubs.uk{{ page.url | urlencode }}" target="_blank" rel="noopener noreferrer" aria-label="Share on X">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+        </a>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https://classiccarclubs.uk{{ page.url | urlencode }}" target="_blank" rel="noopener noreferrer" aria-label="Share on Facebook">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M9.198 21.5h4v-8.01h3.604l.396-3.98h-4V7.5a1 1 0 0 1 1-1h3v-4h-3a5 5 0 0 0-5 5v2.01h-2l-.396 3.98h2.396v8.01z" />
+          </svg>
+        </a>
+        <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://classiccarclubs.uk{{ page.url | urlencode }}&title={{ title | urlencode }}" target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M6.5 21.5h-5v-13h5v13zM4 6.5C2.5 6.5 1.5 5.3 1.5 4s1-2.4 2.5-2.4c1.6 0 2.5 1 2.6 2.5 0 1.4-1 2.5-2.6 2.5zm11.5 6c-1 0-2 1-2 2v7h-5v-13h5v1.5c1-1 2.7-2 4-2 3 0 5 2.2 5 6.3v7.2h-5V13c0-2-1-2.5-2-2.5z" />
+          </svg>
+        </a>
+      </div>
+      <div class="followit-container" style="margin-top: 1.5rem;">
+        <a href="https://follow.it/classic-car-clubs-uk?leanpub" target="_blank" rel="noopener noreferrer nofollow">
+          <img src="/assets/images/followit-button.png" alt="Follow it" style="max-width: 200px;">
+        </a>
+      </div>
+    </div>
+    
+    {% if collections.chronicle.length > 1 %}
+      <div class="related-posts">
+        <h3>Related Articles</h3>
+        <div class="chronicle-grid">
+          {% set relatedPosts = collections.chronicle | filterOutCurrent(slug) | limit(3) %}
+          {% for post in relatedPosts %}
+            <div class="chronicle-card">
+              {% if post.data.featuredImage %}
+                <div class="chronicle-card-image">
+                  <img src="{{ post.data.featuredImage }}" alt="{{ post.data.title }}">
+                </div>
+              {% endif %}
+              <div class="chronicle-card-content">
+                <h4><a href="{{ post.url }}">{{ post.data.title }}</a></h4>
+                <div class="chronicle-card-meta">
+                  <span class="chronicle-date">{{ post.date | chronicleDate }}</span>
+                  <span class="chronicle-reading-time">{% if post.data.readingTime %}{{ post.data.readingTime }}{% else %}5{% endif %} min read</span>
+                </div>
+                <p>{{ post.data.excerpt }}</p>
+                <a href="{{ post.url }}" class="read-more">Read More</a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    {% endif %}
+  </div>
+  
+  <!-- Script to fix table of contents links -->
+  <script src="/assets/js/toc-fix.js"></script>
+</article>
+
+<!-- Schema.org structured data for blog post -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "{{ title }}",
+  "description": "{% if excerpt %}{{ excerpt | excerpt }}{% elif description %}{{ description | excerpt }}{% else %}{{ content | excerpt }}{% endif %}",
+  "image": "{% if featuredImage %}{{ featuredImage }}{% endif %}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ author }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Classic Car Clubs UK",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://classiccarclubs.uk/assets/images/logo.png"
+    }
+  },
+  "url": "https://classiccarclubs.uk{{ page.url }}",
+  "mainEntityOfPage": "https://classiccarclubs.uk{{ page.url }}",
+  "datePublished": "{{ date | date('yyyy-MM-dd') }}",
+  "dateModified": "{{ page.date | date('yyyy-MM-dd') }}",
+  {% if tags and tags.length > 0 %}
+  "keywords": "{{ tags | join(', ') }}",
+  {% endif %}
+  "articleSection": "The Classic Chronicle"
+}
+</script> 

@@ -1,0 +1,78 @@
+---
+permalink: /feed.xml
+eleventyExcludeFromCollections: true
+metadata:
+  contentType: "application/xml"
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/">
+  <title>{{ site.title }}</title>
+  <subtitle>{{ site.description }}</subtitle>
+  <link href="{{ site.url }}/feed.xml" rel="self"/>
+  <link href="{{ site.url }}"/>
+  <updated>2025-05-06T00:00:00Z</updated>
+  <id>{{ site.url }}/</id>
+  <author>
+    <name>{{ site.author }}</name>
+    <email>{{ site.email }}</email>
+  </author>
+  
+  <!-- Available feeds announcement -->
+  <entry>
+    <title>Site Feeds Available</title>
+    <link href="{{ site.url }}/"/>
+    <updated>2025-05-06T00:00:00Z</updated>
+    <id>{{ site.url }}/feed/announcement</id>
+    {% if site.logo %}
+    <media:thumbnail url="{{ site.url }}{{ site.logo }}" width="144" height="144" />
+    {% endif %}
+    <content type="html">
+      <![CDATA[
+      <p>Welcome to {{ site.title }} RSS feeds. We offer specialized feeds for different sections of our site:</p>
+      <ul>
+        <li><a href="{{ site.url }}/chronicle/feed.xml">The Classic Chronicle</a> - Latest articles and news</li>
+        <li><a href="{{ site.url }}/club-directory/feed/">Club Directory</a> - Latest club additions</li>
+      </ul>
+      <p>Visit <a href="{{ site.url }}">{{ site.title }}</a> for more information.</p>
+      ]]>
+    </content>
+  </entry>
+  
+  <!-- Latest chronicle posts -->
+  {%- for post in collections.chronicle | reverse | limit(5) %}
+  <entry>
+    <title>[Article] {{ post.data.title }}</title>
+    <link href="{{ site.url }}{{ post.url }}"/>
+    <updated>{% if post.date %}{{ post.date | date("yyyy-MM-dd") }}T00:00:00Z{% else %}2025-05-01T00:00:00Z{% endif %}</updated>
+    <id>{{ site.url }}{{ post.url }}</id>
+    {% if post.data.featuredImage %}
+    <media:thumbnail url="{{ site.url }}{{ post.data.featuredImage }}" />
+    {% endif %}
+    <content type="html">
+      <![CDATA[
+      {{ post.templateContent | htmlToAbsoluteUrls(site.url) | safe }}
+      ]]>
+    </content>
+  </entry>
+  {%- endfor %}
+  
+  <!-- Latest club additions -->
+  {%- for club in collections.clubs | reverse | limit(5) %}
+  <entry>
+    <title>[Club] {{ club.title }}</title>
+    <link href="{{ site.url }}/club-directory/{{ club.slug }}/"/>
+    <updated>2025-05-01T00:00:00Z</updated>
+    <id>{{ site.url }}/club-directory/{{ club.slug }}/</id>
+    {% if club.featuredImage %}
+    <media:thumbnail url="{{ site.url }}{{ club.featuredImage }}" />
+    {% endif %}
+    <content type="html">
+      <![CDATA[
+      <p>New club added: <strong>{{ club.title }}</strong>{% if club.location %} - {{ club.location }}{% endif %}</p>
+      {% if club.description %}{{ club.description }}{% endif %}
+      <p><a href="{{ site.url }}/club-directory/{{ club.slug }}/">View club details</a></p>
+      ]]>
+    </content>
+  </entry>
+  {%- endfor %}
+</feed> 
