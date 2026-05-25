@@ -165,3 +165,83 @@
   color: #999;
   font-size: 0.9rem;
 }
+
+/* Brand-coloured placeholder: shown when the event has no bespoke artwork
+   and the data file points at /assets/images/events/event-placeholder-brand.svg.
+   The event's own title is rendered on the green panel so it's clear the
+   listing is the event, not a Classic Car Clubs UK production. */
+.event-image-brand-placeholder {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(135deg, #1b5e20 0%, #0e3a13 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 1.5rem;
+  box-sizing: border-box;
+  position: relative;
+}
+.event-image-brand-placeholder::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+}
+.event-image-brand-title {
+  color: #ffffff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-size: 1.35rem;
+  line-height: 1.25;
+  text-align: center;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  position: relative;
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+
+/* Larger variant used on the event detail page (full-width hero) */
+.event-gallery-brand-placeholder {
+  background: linear-gradient(135deg, #1b5e20 0%, #0e3a13 100%);
+  border-radius: 8px;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 2rem;
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+.event-gallery-brand-placeholder::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+.event-gallery-brand-title {
+  color: #ffffff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  line-height: 1.2;
+  text-align: center;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  position: relative;
+  max-width: 90%;
+}

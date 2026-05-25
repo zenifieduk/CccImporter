@@ -4,12 +4,16 @@
   {% endif %}
   
   <div class="event-image">
-    {% if event.eventImageUrl %}
+    {% if event.eventImageUrl and 'event-placeholder-brand.svg' in event.eventImageUrl %}
+      <div class="event-image-brand-placeholder" role="img" aria-label="{{ event.eventTitle }}">
+        <span class="event-image-brand-title">{{ event.eventTitle }}</span>
+      </div>
+    {% elif event.eventImageUrl %}
       <img src="{{ event.eventImageUrl }}" alt="{{ event.eventTitle }}">
     {% else %}
       <img src="/assets/images/event-placeholder.jpg" alt="{{ event.eventTitle }}">
     {% endif %}
-    
+
     <div class="event-date">
       <span class="event-month" x-text="formatMonth('{{ event.eventStartDateTime }}')"></span>
       <span class="event-day" x-text="formatDay('{{ event.eventStartDateTime }}')"></span>

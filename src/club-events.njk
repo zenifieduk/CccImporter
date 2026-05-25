@@ -478,7 +478,14 @@ description: Browse upcoming classic car shows, meets, and events across the UK.
                 
                 <div class="event-image">
                   <a :href="'/club-events/' + event.eventSlug + '/'" :aria-label="`View details for ${event.eventTitle}`">
-                    <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
+                    <template x-if="event.eventImageUrl && event.eventImageUrl.indexOf('event-placeholder-brand.svg') !== -1">
+                      <div class="event-image-brand-placeholder" role="img" :aria-label="event.eventTitle">
+                        <span class="event-image-brand-title" x-text="event.eventTitle"></span>
+                      </div>
+                    </template>
+                    <template x-if="!(event.eventImageUrl && event.eventImageUrl.indexOf('event-placeholder-brand.svg') !== -1)">
+                      <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
+                    </template>
                   </a>
                   <div class="event-date">
                     <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
@@ -534,7 +541,14 @@ description: Browse upcoming classic car shows, meets, and events across the UK.
               <div class="event-card" x-data="eventDisplay">
                 <div class="event-image">
                   <a :href="'/club-events/' + event.eventSlug + '/'" :aria-label="`View details for ${event.eventTitle}`">
-                    <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
+                    <template x-if="event.eventImageUrl && event.eventImageUrl.indexOf('event-placeholder-brand.svg') !== -1">
+                      <div class="event-image-brand-placeholder" role="img" :aria-label="event.eventTitle">
+                        <span class="event-image-brand-title" x-text="event.eventTitle"></span>
+                      </div>
+                    </template>
+                    <template x-if="!(event.eventImageUrl && event.eventImageUrl.indexOf('event-placeholder-brand.svg') !== -1)">
+                      <img :src="event.eventImageUrl || '/assets/images/event-placeholder.jpg'" :alt="event.eventTitle">
+                    </template>
                   </a>
                   <div class="event-date">
                     <span class="event-month" x-text="formatMonth(event.eventStartDateTime)"></span>
