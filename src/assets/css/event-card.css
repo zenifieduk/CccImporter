@@ -169,17 +169,23 @@
 /* Brand-coloured placeholder: shown when the event has no bespoke artwork
    and the data file points at /assets/images/events/event-placeholder-brand.svg.
    The event's own title is rendered on the green panel so it's clear the
-   listing is the event, not a Classic Car Clubs UK production. */
-.event-image-brand-placeholder {
-  height: 100%;
-  width: 100%;
+   listing is the event, not a Classic Car Clubs UK production.
+   Positioned absolute against .event-image (which is position: relative)
+   because the wrapping <a> is inline and would collapse height: 100% to 0. */
+.event-card .event-image .event-image-brand-placeholder {
+  position: absolute;
+  inset: 0;
   background: linear-gradient(135deg, #1b5e20 0%, #0e3a13 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 1.25rem 1.5rem;
   box-sizing: border-box;
-  position: relative;
+}
+.event-card .event-image > a {
+  display: block;
+  height: 100%;
+  width: 100%;
 }
 .event-image-brand-placeholder::before {
   content: "";
@@ -191,7 +197,7 @@
   background-size: 40px 40px;
   pointer-events: none;
 }
-.event-image-brand-title {
+.event-card .event-image .event-image-brand-title {
   color: #ffffff;
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 700;
@@ -208,6 +214,7 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
   overflow: hidden;
+  text-decoration: none;
 }
 
 /* Larger variant used on the event detail page (full-width hero) */
