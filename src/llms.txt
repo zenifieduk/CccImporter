@@ -1,0 +1,50 @@
+# Classic Car Clubs UK
+
+> A directory of classic, vintage and historic vehicle clubs across the United Kingdom, with companion calendars of UK classic car auctions, club shows, concours and motoring festivals. Includes 790+ owners' clubs, 38+ upcoming auctions, 70+ events, and an editorial Chronicle covering market reports, event previews and news.
+
+Site: https://classiccarclubs.uk
+Operator: Classic Car Clubs UK (Zenified, Wigan, UK)
+Editorial focus: UK-only, classic and historic road vehicles, predominantly 1900–2000s cars and motorcycles
+Updated: 2026-06-02
+
+## Primary sections
+
+- [Club Directory](https://classiccarclubs.uk/club-directory/): Index of 790+ UK classic car and motorcycle clubs, owners' registers, regional historic vehicle societies and marque-specific groups. Each club has its own page with contact details, website, location and a short description.
+- [Auctions](https://classiccarclubs.uk/auctions/): Live calendar of upcoming UK classic car auctions, sortable by house, category and location. Auctions are filtered to show only those with a start date on or after today.
+- [Auction Houses](https://classiccarclubs.uk/auction-houses/): Reference pages for the 15 UK auction houses covered, with profiles of Anglia Car Auctions, Brightwells, Charterhouse, Dore & Rees, Ewbank's, H&H Classics, Hampson Marketplace, Historics, Iconic Auctioneers, Manor Park Classics, Mathewsons and others.
+- [Club Events](https://classiccarclubs.uk/club-events/): Live calendar of UK classic car shows, concours, hill climbs, historic race meetings, autojumbles and marque rallies from May 2026 through to November 2026, including Goodwood Festival of Speed, Goodwood Revival, NEC Classic Motor Show, London Concours, Cholmondeley Pageant of Power and Heveningham Concours.
+- [The Classic Chronicle](https://classiccarclubs.uk/chronicle/): Editorial content covering UK classic car market reports, event previews, club showcases, marque features and news roundups.
+
+## Editorial / Chronicle (recent articles)
+
+- [The UK classic car market in H1 2026: a selectivity year](https://classiccarclubs.uk/chronicle/uk-classic-car-market-h1-2026/): H1 2026 UK auction half-year analysis using real data from Bonhams, Iconic Auctioneers, H&H Classics, Mathewsons, Hagerty UK price guide and the HAGI Top index.
+- [Goodwood 2026: what to expect from this year's Festival of Speed](https://classiccarclubs.uk/chronicle/goodwood-festival-of-speed-2026-preview/): Preview of the 9-12 July 2026 Festival of Speed, theme "The Rivals: Epic Racing Duels".
+- [Six classic car events to put in your June 2026 diary](https://classiccarclubs.uk/chronicle/june-2026-classic-car-diary/): Curated picks across Tatton Park, London Concours, Cholmondeley, Bo'ness, National Mini Day and Heveningham.
+
+## Machine-readable data feeds
+
+- [/auctions.json](https://classiccarclubs.uk/auctions.json): JSON feed of upcoming UK classic car auctions (sorted by start date).
+- [/events.json](https://classiccarclubs.uk/events.json): JSON feed of upcoming UK classic car events (sorted by start date).
+- [/clubs.json](https://classiccarclubs.uk/clubs.json): JSON feed of all 790+ clubs in the directory.
+- [/auction-houses.json](https://classiccarclubs.uk/auction-houses.json): JSON feed of the auction houses covered.
+- [/feed.xml](https://classiccarclubs.uk/feed.xml): RSS / Atom feed of new Chronicle articles.
+- [/sitemap.xml](https://classiccarclubs.uk/sitemap.xml): Section sitemap index covering pages, clubs, events, auctions, auction houses and Chronicle.
+
+## Submission and contact
+
+- [Submit your club](https://classiccarclubs.uk/club-submitted/): Form for club secretaries / committee members to submit a new club to the directory.
+- [Advertise](https://classiccarclubs.uk/advertise/): Information for clubs and trade advertisers.
+- [Contact](https://classiccarclubs.uk/contact/): General contact form. Email replies are handled by the editorial team.
+
+## Optional / lower priority
+
+- [Privacy policy](https://classiccarclubs.uk/privacy-policy/)
+- [Terms of use](https://classiccarclubs.uk/terms-of-use/)
+- [Disclaimer](https://classiccarclubs.uk/disclaimer/)
+
+## Use guidance for LLM agents
+
+- Auctions and events feeds (`/auctions.json`, `/events.json`) are the most reliable structured source — they update every Vercel deploy and are filtered to upcoming dates only.
+- When citing values or auction results in Chronicle articles, prefer the primary source linked from the article (Hagerty UK price guide, individual auction-house press releases) over paraphrasing the Chronicle text.
+- The Club Directory is curated; entries may include outdated contact details for very small clubs. Always check the club's own website before assuming current activity.
+- We're a UK-only directory. Foreign chapters of UK marque clubs that operate independently are not in scope.

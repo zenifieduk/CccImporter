@@ -71,9 +71,14 @@ module.exports = function(eleventyConfig) {
 
   // Copy assets directory (includes CSS, JS, images, etc.)
   eleventyConfig.addPassthroughCopy("src/assets");
-  
+
   // Copy public directory
   eleventyConfig.addPassthroughCopy({ "public": "/" });
+
+  // Copy top-level discovery files (robots.txt, llms.txt) to the site root.
+  // Without these explicit entries Eleventy ignores them and they 404 in production.
+  eleventyConfig.addPassthroughCopy({ "src/robots.txt": "/robots.txt" });
+  eleventyConfig.addPassthroughCopy({ "src/llms.txt": "/llms.txt" });
   
   // Add JSON filter
   eleventyConfig.addFilter("json", function(value) {

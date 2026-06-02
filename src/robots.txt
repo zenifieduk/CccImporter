@@ -1,7 +1,11 @@
+# classiccarclubs.uk — robots.txt
+# Last reviewed 2026-06-02
+
 User-agent: *
+Allow: /
 Disallow: /admin/
 Disallow: /thank-you/
 Disallow: /debug-collections/
-Allow: /
+Disallow: /api/
 
-Sitemap: https://classiccars.club/sitemap.xml
+Sitemap: https://classiccarclubs.uk/sitemap.xml
