@@ -65,18 +65,18 @@ The categories where buyers have stepped back hardest:
 
 Hagerty UK published its annual ten cars to watch list in January. The list is a five-year view, not a six-month one, and the names tell the same story as the H1 data:
 
-| Car | Excellent value | 5-yr change |
-|-----|-----------------|-------------|
-| Ferrari F430 Spider (2004-09) | £95,400 | +19% |
-| Toyota Supra A80 (1993-2002) | £40,000 | +41.8% |
-| Vauxhall Viva HC 1300 (1971-79) | £4,300 | -23.2% |
-| VW Golf GTI Mk2 8V | £15,300 | -1.9% |
-| MG MGA 1600 Coupe | £25,700 | -10.7% |
-| Riley Nine Imp | £60,100 | -20% |
-| Ford Transit Mk1 2.0 (1965-77) | £17,200 | +6.2% |
-| Porsche 996 C2 3.4 coupe (1997-2006) | £17,800 | -2.2% |
-| Mercedes-Benz SLK R171 200 Kompressor | £5,200 | 0% |
-| Alfa Romeo 2000 Spider Veloce (1970s) | £21,200 | -8.6% |
+| Car                                    | Excellent value | 5-yr change |
+|----------------------------------------|----------------:|------------:|
+| Ferrari F430 Spider (2004-09)          |         £95,400 |        +19% |
+| Toyota Supra A80 (1993-2002)           |         £40,000 |      +41.8% |
+| Vauxhall Viva HC 1300 (1971-79)        |          £4,300 |      -23.2% |
+| VW Golf GTI Mk2 8V                     |         £15,300 |       -1.9% |
+| MG MGA 1600 Coupe                      |         £25,700 |      -10.7% |
+| Riley Nine Imp                         |         £60,100 |        -20% |
+| Ford Transit Mk1 2.0 (1965-77)         |         £17,200 |       +6.2% |
+| Porsche 996 C2 3.4 coupe (1997-2006)   |         £17,800 |       -2.2% |
+| Mercedes-Benz SLK R171 200 Kompressor  |          £5,200 |          0% |
+| Alfa Romeo 2000 Spider Veloce (1970s)  |         £21,200 |       -8.6% |
 
 The two big gainers, F430 and Supra A80, are the modern Japanese and modern Italian story repeating. The 996 has the highest "collectability" score on the list despite a flat-to-down recent run; Hagerty is calling the bottom on it. The pre-war British names on the list (Riley, Viva, MGA) are explicitly there as "watch lists"; Hagerty is flagging them as undervalued, not as confirmed up-trends.
 

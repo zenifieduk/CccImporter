@@ -231,6 +231,69 @@ h6:hover .direct-link {
   list-style: auto;
 }
 
+/* Tables: market-report / data-grid styling. Markdown tables otherwise
+   render with no borders or padding. Brand-green header, zebra rows,
+   tidy cell padding, responsive horizontal scroll on narrow screens. */
+.chronicle-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  font-size: 1rem;
+  line-height: 1.5;
+  background-color: #ffffff;
+  border: 1px solid #e6e6e6;
+  border-radius: 6px;
+  overflow: hidden;
+  display: table;
+}
+.chronicle-content thead {
+  background-color: #235759;
+  color: #ffffff;
+}
+.chronicle-content thead th {
+  padding: 0.85rem 1rem;
+  font-weight: 700;
+  text-align: left;
+  font-family: "Public Sans", sans-serif;
+  letter-spacing: 0.3px;
+  border: none;
+  white-space: nowrap;
+}
+.chronicle-content tbody tr {
+  border-bottom: 1px solid #ececec;
+}
+.chronicle-content tbody tr:last-child {
+  border-bottom: none;
+}
+.chronicle-content tbody tr:nth-child(even) {
+  background-color: #f6f8f7;
+}
+.chronicle-content tbody td {
+  padding: 0.75rem 1rem;
+  vertical-align: top;
+  color: #3b3b3b;
+  border: none;
+}
+/* Right-align cells in columns the author marked with `|---:|` in markdown.
+   markdown-it emits style="text-align:right" on those cells; respect it. */
+.chronicle-content table th[style*="right"],
+.chronicle-content table td[style*="right"] {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.chronicle-content table th[style*="center"],
+.chronicle-content table td[style*="center"] {
+  text-align: center;
+}
+/* Mobile: let very wide tables scroll horizontally inside the article column */
+@media (max-width: 640px) {
+  .chronicle-content table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 .chronicle-content blockquote {
   border-left: 4px solid #666;
   padding-left: 1.5rem;
