@@ -2,7 +2,7 @@
 title: "The UK classic car market in H1 2026: a selectivity year"
 date: 2026-06-03
 tags: ["News", "Market Report"]
-excerpt: Hagerty's Best of British index is at its lowest point since launch, Jaguar values are off 21%, and yet Iconic Auctioneers sold 93% of the collectors' cars at Race Retro. The H1 2026 picture isn't a crash — it's a fork in the road.
+excerpt: Hagerty's Best of British index is at its lowest point since launch, Jaguar values are off 21%, and yet Iconic Auctioneers sold 93% of the collectors' cars at Race Retro. The H1 2026 picture isn't a crash; it's a fork in the road.
 featuredImage: /assets/images/news/q2-2026-uk-classic-car-market.avif
 featured: true
 author: James Williams
@@ -24,21 +24,21 @@ The data below covers Bonhams Cars (UK), Iconic Auctioneers, H&H Classics, Brigh
 
 ## The top-line picture: prices flatter, sales harder
 
-Hagerty UK's Best of British index — the broad gauge of how British classics are tracking — is at its lowest reading since the index launched in 2018, sitting at just over 80% of the 2018 baseline. That's an eight-year low on the headline number that most owners of British cars instinctively look at.
+Hagerty UK's Best of British index, the broad gauge of how British classics are tracking, is at its lowest reading since the index launched in 2018, sitting at just over 80% of the 2018 baseline. That's an eight-year low on the headline number that most owners of British cars instinctively look at.
 
-The underlying twelve-month-rolling data tells the same story. Nearly 80% of UK classic car values either fell or held flat in the twelve months to December 2025, the data set feeding the H1 2026 commentary. Of the modern-classic categories — broadly post-2000 — only Porsche, Mercedes-Benz and Ferrari posted year-on-year growth. Every other modern-classic marque was flat or down.
+The underlying twelve-month-rolling data tells the same story. Nearly 80% of UK classic car values either fell or held flat in the twelve months to December 2025, the data set feeding the H1 2026 commentary. Of the modern-classic categories, broadly post-2000, only Porsche, Mercedes-Benz and Ferrari posted year-on-year growth. Every other modern-classic marque was flat or down.
 
-The worst performer by marque was Jaguar at minus 21.4%, dragged heavily by a £3.6 million reduction in the mean value of the XKSS. That's a single-car-class effect, but it filters down through the rest of the Jaguar curve — XKs and E-Types of the right vintage have softened in lock-step, and the Series 3 E-Type 2+2 Coupe is now occasionally trading sub-£32k. Iconic sold a 1973 example at the Supercar Fest sale on 16 May for £31,500, which would have been an aberration five years ago and is now an unremarkable result.
+The worst performer by marque was Jaguar at minus 21.4%, dragged heavily by a £3.6 million reduction in the mean value of the XKSS. That's a single-car-class effect, but it filters down through the rest of the Jaguar curve. XKs and E-Types of the right vintage have softened in lock-step, and the Series 3 E-Type 2+2 Coupe is now occasionally trading sub-£32k. Iconic sold a 1973 example at the Supercar Fest sale on 16 May for £31,500, which would have been an aberration five years ago and is now an unremarkable result.
 
 The HAGI Top index (50 benchmark models from 19 marques, the long-running gold standard for blue-chip collector cars) has also continued its slide since the 2024-25 peak. Mid-market Mercedes "Pagoda" SLs and standard 911 variants are reportedly down 20-30% over that window. Hard Q1 2026 readings are subscriber-only and not in our hands, but the trend direction is consistent with everything the salerooms reported.
 
 ## The sell-through split
 
-The most useful single data point in any half-year is sell-through — how many of the lots brought to auction actually found a buyer. H1 2026 sell-through split sharply along two lines: volume versus premium, and well-presented versus optimistically estimated.
+The most useful single data point in any half-year is sell-through, how many of the lots brought to auction actually found a buyer. H1 2026 sell-through split sharply along two lines: volume versus premium, and well-presented versus optimistically estimated.
 
 Volume-led, sensibly-estimated houses cleared rooms. Mathewsons' three-day classic vehicle sale in March (the kind of mixed sale where lot 47 is a £150 Toyota Hi-Ace and lot 240 is a £36k Triumph Dolomite) recorded a 98% sell-through rate on £1.79 million total. Iconic Auctioneers' Race Retro collectors' cars sale in February cleared 93% of 150 lots at £7 million across all three sessions. H&H's Pavilion Gardens Buxton sale in April booked £1.6 million and shifted a 1924 Rolls-Royce Silver Ghost that needed restoration for £37,125, well over its low estimate.
 
-Premium and competition houses had to work harder. Bonhams' Goodwood Members' Meeting in April totalled £3.06 million across 78 cars at a 71% sell-through rate — perfectly respectable as a number, but with 33% of the catalogue selling under low estimate and only 19% over high. The 2000 Porsche 911 (996) GT3 RSR, a Daytona class winner with an estimate of £190,000 to £250,000, failed to meet reserve. The Iconic Race Retro competition cars sale managed 60% sell-through with eight £100,000-plus competition lots passing in — including an ex-Rob Walker 1954 Connaught Type B and an ex-John Price Renault 5 Maxi Turbo.
+Premium and competition houses had to work harder. Bonhams' Goodwood Members' Meeting in April totalled £3.06 million across 78 cars at a 71% sell-through rate, perfectly respectable as a number, but with 33% of the catalogue selling under low estimate and only 19% over high. The 2000 Porsche 911 (996) GT3 RSR, a Daytona class winner with an estimate of £190,000 to £250,000, failed to meet reserve. The Iconic Race Retro competition cars sale managed 60% sell-through with eight £100,000-plus competition lots passing in, including an ex-Rob Walker 1954 Connaught Type B and an ex-John Price Renault 5 Maxi Turbo.
 
 Rob Hubbard of Iconic put it bluntly in the post-sale notes: *"The market is selective, but when cars are presented properly, estimated sensibly and backed by complete history, buyers respond."* That is the through-line of the half-year in a sentence.
 
@@ -46,10 +46,10 @@ Rob Hubbard of Iconic put it bluntly in the post-sale notes: *"The market is sel
 
 The categories with the cleanest tailwinds in H1 2026:
 
-- 1990s and early 2000s Japanese performance cars. Iconic sold a 1998 Subaru Impreza 22B-STi for £187,875 at Race Retro — 25% above the high estimate and believed to be a UK record for a non-McRae 22B. A 1996 Honda NSX-T (manual) made £73,125 at Sywell, 33% over the high estimate. The R34 GT-R market remains strong even where individual cars stall on the day.
+- 1990s and early 2000s Japanese performance cars. Iconic sold a 1998 Subaru Impreza 22B-STi for £187,875 at Race Retro, 25% above the high estimate and believed to be a UK record for a non-McRae 22B. A 1996 Honda NSX-T (manual) made £73,125 at Sywell, 33% over the high estimate. The R34 GT-R market remains strong even where individual cars stall on the day.
 - Hot hatches and homologation specials. The Hagerty Hot Hatch and RADwood indices are the only two showing meaningful year-on-year growth. The 1987 Renault 5 Turbo "Superproduction" ex-Erik Comas made a live-auction world record of £331,895 at Race Retro. A 1991 VW Golf GTI Rivage Cabriolet set another at £36,000. Ford Cosworths still trade strongly though, in Iconic's read, "with less of a bidding frenzy" than 2024.
-- Late air-cooled and early water-cooled Porsche. The 993 Carrera 2 is still hitting £60k+ at Iconic — a 1996 example made £61,875 at Sywell. The 911 996 C2 3.4 is on Hagerty's 2026 Bull Market List with the highest collectability score of any car on the list, despite a small five-year value decline. Buyers are positioning.
-- Hypercar-era moderns (selectively). The 1988 Lamborghini Countach 5000 Quattrovalvole at £512,500, the 2020 Ferrari 488 Pista Piloti at £489,166 (sold pre-sale), and the 2002 Lamborghini Murciélago manual at £264,500 from Bonhams Goodwood — manual Murciélagos are 18% above high estimate, manual gated supercars broadly are the strongest single sub-category in the modern space.
+- Late air-cooled and early water-cooled Porsche. The 993 Carrera 2 is still hitting £60k-plus at Iconic; a 1996 example made £61,875 at Sywell. The 911 996 C2 3.4 is on Hagerty's 2026 Bull Market List with the highest collectability score of any car on the list, despite a small five-year value decline. Buyers are positioning.
+- Hypercar-era moderns (selectively). The 1988 Lamborghini Countach 5000 Quattrovalvole made £512,500, the 2020 Ferrari 488 Pista Piloti went pre-sale at £489,166, and the 2002 Lamborghini Murciélago manual hit £264,500 at Bonhams Goodwood. Manual Murciélagos are running 18% above high estimate; manual-gated supercars broadly are the strongest single sub-category in the modern space.
 
 ## What's softening: pre-war British, Jaguar broadly, early air-cooled
 
@@ -78,11 +78,11 @@ Hagerty UK published its annual ten cars to watch list in January. The list is a
 | Mercedes-Benz SLK R171 200 Kompressor | £5,200 | 0% |
 | Alfa Romeo 2000 Spider Veloce (1970s) | £21,200 | -8.6% |
 
-The two big gainers — F430 and Supra A80 — are the modern Japanese and modern Italian story repeating. The 996 has the highest "collectability" score on the list despite a flat-to-down recent run; Hagerty is calling the bottom on it. The pre-war British names on the list (Riley, Viva, MGA) are explicitly there as "watch lists" — Hagerty is flagging them as undervalued, not as confirmed up-trends.
+The two big gainers, F430 and Supra A80, are the modern Japanese and modern Italian story repeating. The 996 has the highest "collectability" score on the list despite a flat-to-down recent run; Hagerty is calling the bottom on it. The pre-war British names on the list (Riley, Viva, MGA) are explicitly there as "watch lists"; Hagerty is flagging them as undervalued, not as confirmed up-trends.
 
 ## Why the data feels worse than the room does
 
-If you've been at any of the UK fixtures over the last five months, you'll have noticed the contrast: the data reads softer than the rooms have felt. Race Retro at 93% on the collectors' sale, H&H's record motorcycle sale at the National Motorcycle Museum (£1.8 million across 301 lots, the house's biggest two-wheel sale ever), Mathewsons at 98% sell-through — these are robust numbers. The salerooms have been busy.
+If you've been at any of the UK fixtures over the last five months, you'll have noticed the contrast: the data reads softer than the rooms have felt. Race Retro at 93% on the collectors' sale, H&H's record motorcycle sale at the National Motorcycle Museum (£1.8 million across 301 lots, the house's biggest two-wheel sale ever), Mathewsons at 98% sell-through: these are robust numbers. The salerooms have been busy.
 
 Three things explain that disconnect:
 
@@ -97,12 +97,10 @@ The second half of the year carries the heaviest UK auction calendar of the cycl
 - H&H's flagship Kelham Hall sale on 17 June with a 1965 Ferrari 330 GT 2+2 at £180-220k and a 1950 Jaguar XK120 Roadster at £80-100k. Strong test of where the upper-middle Italian and British numbers actually settle.
 - Anglia's two-day Norfolk classic sale from 20 June with a 1959 Aston Martin DB4 Series 2 LHD at a quarter-of-a-million-pound estimate.
 - Bonhams Goodwood Revival sale in September. The 2025 Revival sale reportedly hit its lowest total since 2016. Whether 2026 reverses or extends that trend will be one of the most-watched data points of the year.
-- The Iconic Sale at the BRDC Classic on 24-25 July — a first-running event at Silverstone, and an interesting consignment test in its own right.
-- RM Sotheby's London Auction on 31 October at The Peninsula London — the year's flagship UK boutique sale, tied to London-Brighton Veteran Run weekend.
+- The Iconic Sale at the BRDC Classic on 24-25 July, a first-running event at Silverstone, and an interesting consignment test in its own right.
+- RM Sotheby's London Auction on 31 October at The Peninsula London, the year's flagship UK boutique sale, tied to London-Brighton Veteran Run weekend.
 - Bonhams Bond Street on 11 December with a 1928 Mercedes-Benz 36/220 S-Type Sports Tourer at £1.25-1.75 million, ex-Sir Peter Ustinov. Year-end signal at the top end.
 
 Our [updated 2026 auctions page](/auctions/) carries the full list of forty UK sales between 25 May and 31 December. If you're tracking specific marque values, the published catalogues from H&H, Iconic and Bonhams over the next twelve weeks are where the next reliable data points will come from.
 
 The short version: H1 2026 has been a year for buyers, not for sellers expecting last-cycle estimates. The summer is when we find out if Q3 confirms the trend or breaks it.
-
-*— James Williams*
