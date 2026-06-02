@@ -1,7 +1,7 @@
-# classiccarclubs.uk — robots.txt
-# Last reviewed 2026-06-02
-
+# Robots.txt for Classic Car Clubs UK — https://classiccarclubs.uk
+# We want to be indexed and cited by search and AI answer engines.
 User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
 Allow: /
 Disallow: /admin/
 Disallow: /thank-you/
