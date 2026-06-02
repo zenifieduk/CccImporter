@@ -19,6 +19,7 @@ Updated: 2026-06-02
 
 - [The UK classic car market in H1 2026: a selectivity year](https://classiccarclubs.uk/chronicle/uk-classic-car-market-h1-2026/): H1 2026 UK auction half-year analysis using real data from Bonhams, Iconic Auctioneers, H&H Classics, Mathewsons, Hagerty UK price guide and the HAGI Top index.
 - [Goodwood 2026: what to expect from this year's Festival of Speed](https://classiccarclubs.uk/chronicle/goodwood-festival-of-speed-2026-preview/): Preview of the 9-12 July 2026 Festival of Speed, theme "The Rivals: Epic Racing Duels".
+- [Goodwood Revival 2026: what to expect from the La Dolce Vita weekend](https://classiccarclubs.uk/chronicle/goodwood-revival-2026-preview/): Preview of the 18-20 September 2026 Goodwood Revival, theme "La Dolce Vita", covering the Vespa 80th Track Opening Parade, the returning Lavant Cup and F1 champions Button and Villeneuve in the RAC TT Celebration.
 - [Six classic car events to put in your June 2026 diary](https://classiccarclubs.uk/chronicle/june-2026-classic-car-diary/): Curated picks across Tatton Park, London Concours, Cholmondeley, Bo'ness, National Mini Day and Heveningham.
 
 ## Machine-readable data feeds
