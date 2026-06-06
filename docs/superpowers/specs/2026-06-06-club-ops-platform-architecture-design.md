@@ -94,7 +94,7 @@ committee), ship one wedge not a feature pile, and lean on owned distribution.**
 flowchart TB
     subgraph DB["Supabase"]
         PG[("Postgres\nclubs · members · vehicles\nmembership_types · memberships\npayments · events · import_jobs\n+ Row-Level Security")]
-        AUTH["Supabase Auth"]
+        AUTH["NextAuth (Auth.js)\n+ Prisma adapter"]
         STORE["Supabase Storage\n(imports, images, docs)"]
     end
 
@@ -134,20 +134,51 @@ club-critical is trapped inside page components.
 
 ## 6. Tech stack
 
+**House stack** — aligned to the existing `prospect` app (app.prospectps.co.uk),
+so conventions, components, and muscle memory carry across. Pinned to
+**Next.js 16+** (prospect runs 15; this build starts on 16).
+
 | Concern | Choice | Why |
 |---|---|---|
-| Web framework | **Next.js (App Router)** | SSR/ISR for SEO-critical public pages, server actions for admin, one codebase for all web surfaces. |
-| Database | **Supabase Postgres** | Relational fit for members/subs/payments; row-level security gives clean multi-tenancy. |
-| Auth | **Supabase Auth** | Magic-link + password; integrates with RLS; supports member + committee personas. |
+| Web framework | **Next.js 16+ (App Router)** + **React 19** + **TypeScript** | SSR/ISR for SEO public pages, server actions for admin, one codebase for all web surfaces. Pinned to 16+. |
+| Styling / UI | **Tailwind v4** + **shadcn/ui** (Radix + CVA + lucide-react + cmdk) | Same component vocabulary as prospect; fast to build the master-detail UI. |
+| Database | **Supabase Postgres** via **Prisma 6 (ORM)** | Relational fit for members/subs/payments; Prisma matches house pattern; Supabase for managed Postgres + storage. |
+| Auth | **NextAuth / Auth.js** (Prisma adapter) | Matches prospect; magic-link + password; supports member + committee personas and role gating. |
+| Data fetching | **@tanstack/react-query** + **zod** | House pattern; typed, cached client data. |
 | File/image storage | **Supabase Storage** | Spreadsheet uploads for migration, club/member images, documents. |
 | Card payments | **Stripe** | Already partially wired; best UX for one-off and card subs. |
 | Direct Debit | **GoCardless** | UK clubs strongly prefer DD for annual subs; lower fees; reduces failed renewals. |
-| AI migration | **Claude API** | Parse/clean/map arbitrary member spreadsheets to the schema. |
-| Email | Transactional via existing SendGrid; bulk comms TBD in v1.1 | Reuse what exists; defer bulk. |
+| AI migration | **@anthropic-ai/sdk** (Claude) | Already in the house stack; parse/clean/map arbitrary member spreadsheets to the schema. |
+| Email | Transactional via existing SendGrid; bulk comms deferred to v1.1 | Reuse what exists; defer bulk. |
+| Testing | **Vitest** | House pattern. |
 | Hosting | **Vercel** (matches current deploy) | Existing familiarity; ISR + on-demand revalidation support. |
 | Mobile (Phase 4) | **Expo / React Native** | Single API client; reuses the service layer. |
 
 ---
+
+## 6.1 UI & layout conventions (reference: `prospect` /vehicles)
+
+The admin UI follows the proven master-detail pattern from the `prospect` app's
+`/vehicles` "Helm" page (`/Users/james/prospect/src/app/vehicles`). Detailed UI
+design happens later, but the conventions are fixed now:
+
+- **App shell:** a collapsible **left-aligned nav** (`AppLayout` +
+  `sidebar-context`), grouped sections, persistent across the app.
+- **Master-detail body** for every list-heavy area (members, later events):
+  - **Left panel:** searchable, status-filtered **queue of cards** with live
+    counts (e.g. All / Active / Lapsed / Pending). Search is instant
+    (client-side); status filter is server-side.
+  - **Right panel:** a full **workspace** for the selected record, composed of
+    **collapsible "section-shell" cards** (e.g. Member · Contact · Vehicles ·
+    Membership · Payments), mirroring prospect's Workflow / Vehicle identity /
+    Condition sections.
+- **Role gating:** committee roles (owner / treasurer / secretary / events)
+  gate access and disable sections per role, exactly as prospect gates
+  ADMIN / VALUER.
+- **Components:** reuse the shadcn/ui + Tailwind v4 vocabulary from prospect.
+
+This pattern is the direct visual template for the member database, which is the
+heart of the MVP.
 
 ## 7. Core data model
 
@@ -179,7 +210,7 @@ erDiagram
         jsonb branding
     }
     USER {
-        uuid id PK "Supabase auth"
+        uuid id PK "NextAuth"
         text email
     }
     CLUB_ADMIN {
@@ -267,10 +298,14 @@ Notes:
 
 ## 8. Multi-tenancy, auth & roles
 
-- **Tenant = club.** Row-Level Security policies restrict every tenant table by
-  `club_id`. A committee admin can read/write only clubs they administer; a
-  member can read/write only their own records within their club.
-- **Two personas, one identity.** A `USER` (Supabase Auth) may be a committee
+- **Tenant = club.** Tenancy is enforced in the **service layer**: every Prisma
+  query is scoped by the authenticated user's club context (committee membership
+  or member record), derived from the NextAuth session. Postgres Row-Level
+  Security is added as **defence-in-depth**, not the primary mechanism (the house
+  stack uses NextAuth + Prisma, not Supabase Auth, so RLS cannot key off a
+  Supabase JWT). This keeps the tenancy rules in one place that both web and the
+  future mobile API share.
+- **Two personas, one identity.** A `USER` (NextAuth) may be a committee
   admin of one club and a member of another. Roles are expressed via
   `CLUB_ADMIN.role` (committee) and `MEMBER.user_id` (member portal access).
 - **Member accounts are optional.** Imported members exist without a `user_id`;
@@ -404,7 +439,10 @@ flowchart TB
 1. **Pricing exact points.** Direction agreed: transparent, per-member, premium
    over CROSSMEMBER, well under sheepCRM (~£1–£1.50/member/yr with sensible
    min/max). Exact tiers to confirm against a few real club sizes.
-2. **House stack alignment.** Confirm Supabase vs any qubeOS standard stack.
+2. ~~House stack alignment.~~ **Resolved:** match the `prospect` house stack
+   (Next.js 16+, React 19, TS, Tailwind v4, shadcn/ui, Prisma + Supabase
+   Postgres, NextAuth, react-query, zod, Anthropic SDK, Vitest). UI follows the
+   prospect /vehicles master-detail pattern (see §6.1).
 3. **Validation step.** Which ~10 clubs from the directory to interview/show the
    spec to before building, and how (email via directory, calls).
 4. **Claim verification.** How strict to make club-claim verification at launch
