@@ -13,7 +13,7 @@
 ## Decisions locked for this plan
 
 - **Repo location:** new repo at `/Users/james/classiccarclubs-app` (separate from the 11ty directory at `/Users/james/Desktop/CLASSICCC`). Deploys to `app.classiccarclubs.uk` on Vercel. *(If you'd rather monorepo it, change before Task 1; everything downstream uses this path.)*
-- **Auth:** Auth.js v5 with Prisma adapter + Nodemailer email provider (magic link) pointed at SendGrid SMTP. Foundation tests cover route protection only (no email send required).
+- **Auth:** Auth.js v5 with Prisma adapter + **Resend** email provider (magic link). Foundation tests cover route protection only (no email send required).
 - **DB:** Supabase Postgres. `DATABASE_URL` = pooled connection (port 6543, `pgbouncer=true`); `DIRECT_URL` = direct (port 5432) for migrations.
 - **This plan is foundation only.** No club/member/payments domain logic beyond a `Club` stub needed by the schema and the tenancy helper. Those are Plans 2–6.
 
@@ -343,8 +343,8 @@ DIRECT_URL="postgresql://USER:PASSWORD@HOST:5432/postgres"
 AUTH_SECRET="generate with: npx auth secret"
 AUTH_URL="http://localhost:3000"
 
-# Email (SendGrid SMTP) for magic-link sign-in
-EMAIL_SERVER="smtp://apikey:SENDGRID_API_KEY@smtp.sendgrid.net:587"
+# Email (Resend) for magic-link sign-in
+AUTH_RESEND_KEY="re_..."
 EMAIL_FROM="noreply@classiccarclubs.uk"
 ```
 Create a real `.env` from this with your Supabase + SendGrid values. Confirm `.env` is in `.gitignore` (create-next-app adds it).
@@ -387,12 +387,14 @@ git commit -q -m "feat: prisma schema (auth tables + club stub) and supabase set
 - Create: `src/lib/auth.ts`, `src/app/api/auth/[...nextauth]/route.ts`, `src/app/signin/page.tsx`, `middleware.ts`
 - Test: `src/lib/__tests__/auth-config.test.ts`
 
-- [ ] **Step 1: Install Auth.js v5 and nodemailer**
+- [ ] **Step 1: Install Auth.js v5 and the Resend SDK**
 
 ```bash
 cd /Users/james/classiccarclubs-app
-npm i next-auth@beta nodemailer
+npm i next-auth@beta resend
 ```
+(The Auth.js Resend provider calls the Resend API directly; the `resend` SDK is
+installed here too for transactional/bulk email in later plans.)
 
 - [ ] **Step 2: Write the failing test for the auth config shape**
 
@@ -425,7 +427,7 @@ Expected: FAIL — cannot resolve `@/lib/auth`.
 ```typescript
 import NextAuth from 'next-auth'
 import { PrismaAdapter } from '@auth/prisma-adapter'
-import Nodemailer from 'next-auth/providers/nodemailer'
+import Resend from 'next-auth/providers/resend'
 import { prisma } from '@/lib/prisma'
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -433,8 +435,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: 'database' },
   pages: { signIn: '/signin' },
   providers: [
-    Nodemailer({
-      server: process.env.EMAIL_SERVER,
+    Resend({
+      apiKey: process.env.AUTH_RESEND_KEY,
       from: process.env.EMAIL_FROM,
     }),
   ],
@@ -476,7 +478,7 @@ export default function SignInPage() {
       <form
         action={async (formData) => {
           'use server'
-          await signIn('nodemailer', {
+          await signIn('resend', {
             email: formData.get('email') as string,
             redirectTo: '/dashboard',
           })
@@ -1004,6 +1006,46 @@ Expected: CI green; Vercel production deploy live.
 - **Spec coverage (Foundation slice):** stack alignment (§6) → Tasks 1–4; NextAuth + service-layer tenancy (§8) → Tasks 5, 7; app shell / master-detail prerequisites (§6.1) → Task 6 (sidebar + AppLayout; the master-detail body itself is Plan 4); hosting (§6 Vercel, §11) → Task 9; API-first seam (§5) → Task 7 `requireClubContext`. Domain models (members, vehicles, payments, events, import) are intentionally deferred to Plans 2–6 and only the `Club`/`ClubAdmin` stub needed by auth + tenancy is created here.
 - **No placeholders:** every code step contains complete code; config tasks use exact commands with expected output.
 - **Type consistency:** `requireClubContext` returns `{ userId, clubIds, roleFor }` used consistently; `Club`/`ClubAdmin`/`ClubRole` names match the schema in Task 4 and the spec ERD.
+
+## Execution log — 2026-06-06 (Tasks 1–8 done; Task 9 deferred)
+
+Built at `/Users/james/classiccarclubs-app` (its own git repo, not yet pushed to
+GitHub). Final state: type-check clean, lint clean, **7 tests / 5 files green**,
+`npm run build` compiles all routes (`/api/health`, `/dashboard`, `/signin`,
+Proxy middleware). Real-world deviations from the plan as written:
+
+1. **Versions pulled latest, not the plan's pins.** Next **16.2.7**, React
+   **19.2.4**, next-auth **5.0.0-beta.31**, react-query 5.101, zod 4.4.3,
+   vitest 4.1.8.
+2. **Prisma 7 trap → pinned Prisma 6.** `npm i prisma` pulled **Prisma 7.8.0**,
+   which removes `directUrl`, moves the datasource URL into `prisma.config.ts`,
+   and mandates a driver adapter. Reverted and pinned **Prisma 6.19.3** for
+   house consistency (the documented Supabase pooled+`directUrl` pattern). When
+   installing Prisma in later plans, pin `prisma@^6` / `@prisma/client@^6`.
+3. **`middleware.ts` → `src/proxy.ts`.** Next 16 deprecated `middleware.ts` and
+   renamed it `proxy.ts`, which runs on the **Node.js runtime** (not edge). This
+   removes the Auth.js v5 edge gotcha entirely: the full `auth` (Prisma adapter +
+   `database` sessions) works directly in `proxy.ts`, so **no split `auth.config.ts`
+   was needed**. Route protection is `src/proxy.ts` with matcher `/dashboard/:path*`.
+4. **shadcn v4.10 renamed "new-york" → `radix-nova` preset.** `components.json`
+   `style` is set to `new-york` (cosmetic; only hints future `add` runs, of which
+   this plan has none). Base colour neutral, CSS vars, all components present.
+5. **Vitest needed next-auth inlining.** `vitest.config.ts` inlines `next-auth`/
+   `@auth/core` and aliases `next/server` so the auth module loads under the test
+   transform. Documented inline; do not remove.
+6. **Email = Resend** (Auth.js v5 Resend provider), per decision this session.
+7. **Added post-review:** `src/types/next-auth.d.ts` augmenting `Session.user.id`.
+
+### Follow-ups for Plan 2 (from the final code review)
+- **Wire the tenancy seam.** `requireClubContext` is fully unit-tested but not yet
+  called from a page (the dashboard uses `auth()` directly). Plan 2 must add the
+  club create/claim flow AND route domain pages/actions through
+  `requireClubContext`, handling the "No club access" state gracefully (a clubless
+  authenticated user should see an onboarding prompt, not an error).
+- **Pending credentials (Task 9):** a Supabase project (`DATABASE_URL` +
+  `DIRECT_URL`) to run the first `prisma migrate dev`; a Resend `AUTH_RESEND_KEY`
+  for live magic-link; Vercel project + DNS for `app.classiccarclubs.uk`; and a
+  GitHub repo for the app (not yet created).
 
 ## Next plans (not in this document)
 
